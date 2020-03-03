@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='termine2', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+  <meta charset="utf-8">
+  <title>Name des Subsystems</title>
+  <th:block th:fragment="headcontent">
+    <!-- Links, Skripts, Styles hier einfügen! -->
+  </th:block>
+</head>
+<body>
+<header>
+  <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+    <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+      <div align="center">
+  </div>
+  </nav>
+</header>
+<main th:fragment="bodycontent">
+  <!-- Restlichen Inhalt hier einfügen! -->
+      <form>
+      <button class="button" type="submit" formaction="/abstimmungen">Abstimmungen(Link zur abstimmungs-view)</button>
+    </form>		
+  <p>neuen termin anlegen (maske)</p>
+  <p>liste von terminen hier</p>
+</main>
+</body>
+</html>
