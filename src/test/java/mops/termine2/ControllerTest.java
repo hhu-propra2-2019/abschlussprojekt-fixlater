@@ -27,7 +27,13 @@ public class ControllerTest {
     }
 
     @Test
+    void testUmfragenAbstmmung() throws Exception {
+        mvc.perform(get("/umfragen-abstimmung")).andExpect(status().isOk());
+    }
+  
+    @Test
     void testTermineAbstimmung() throws Exception {
         mvc.perform(get("/termine-abstimmung")).andExpect(status().isOk());
     }
+
 }
