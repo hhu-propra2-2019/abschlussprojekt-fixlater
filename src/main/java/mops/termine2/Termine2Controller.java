@@ -16,4 +16,14 @@ public class Termine2Controller {
         return "umfragen-abstimmung";
     }
 
+    @GetMapping("/termine-abstimmung")
+    String index2(Model m) {
+        return "termine-abstimmung";
+    }
+
+    @GetMapping("/termin-neu")
+    String terminNeu(Model m) {
+		return "termin-neu";
+    }	
+	
 }
