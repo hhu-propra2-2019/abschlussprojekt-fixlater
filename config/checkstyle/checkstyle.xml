@@ -110,9 +110,7 @@
 		</module>
 		<module name="LocalFinalVariableName"/>
 		<module name="LambdaParameterName"/>
-		<module name="CatchParameterName">
-		  <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
-		</module>
+		<module name="CatchParameterName" />
 		<module name="ClassTypeParameterName"/>
 		<module name="InterfaceTypeParameterName"/>
 		<module name="MethodTypeParameterName"/>
