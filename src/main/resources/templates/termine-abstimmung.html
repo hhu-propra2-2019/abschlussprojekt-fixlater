@@ -1,13 +1,11 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='Name des Subsystems', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 <head>
     <meta charset="utf-8">
-    Termin-Abstimmung</title>
+    <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
     </th:block>
-
 </head>
 <body>
 <header>
@@ -49,9 +47,7 @@
     </div>
 
     <!-- Optionen für Termine werden in der Tabelle angezeig-->
-
     <form>
-
         <table class="table">
             <thead>
             <tr>
@@ -81,6 +77,20 @@
                 <td><input type=radio name="abstimmung3" value="y"></td>
                 <td><input type=radio name="abstimmung3" value="n"></td>
             </tr>
+
+            <tr>
+                <td>26.11.1997</td>
+                <td>14:14</td>
+                <td><input type=radio name="abstimmung4" value="y"></td>
+                <td><input type=radio name="abstimmung4" value="n"></td>
+            </tr>
+
+            <tr>
+                <td>26.11.1997</td>
+                <td>14:14</td>
+                <td><input type=radio name="abstimmung5" value="y"></td>
+                <td><input type=radio name="abstimmung5" value="n"></td>
+            </tr>
             </tbody>
         </table>
 
@@ -88,7 +98,6 @@
             <button type="submit" class="button">Abstimmen</button>
         </div>
     </form>
-
     <!--Kommentarsektion-->
 
     <br><br>
@@ -134,6 +143,7 @@
                     </div>
                     <hr>
                 </div>
+                <!--Beispiel Kommentare Ende-->
 
                 <!--Ein Kommentar-->
                 <div name="kommentar1">
@@ -155,10 +165,33 @@
                     <hr>
                 </div>
                 <!--Beispiel Kommentare Ende-->
+
+                <!--Ein Kommentar-->
+                <div name="kommentar3">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <!--Name-->
+                            <div class="row">
+                                <h3>DNAPolymerase</h3>
+                            </div>
+                            <!--Kommentartext-->
+                            <div class="row">
+                                Ich kann gut abschreiben
+                            </div>
+                            <!--Datum-->
+                            <div class="row">-dd.mm.yyyy hh:mm</div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!--Beispiel Kommentare Ende-->
             </div>
         </div>
+
+        <!--hier wird ein neuer Kommentar geschrieben-->
         <form method="post">
-            <!--hierein wird ein neuer Kommentar geschrieben-->
+
             <div class="row">
                 <div class="col-sm-3"></div>
                 <div class="form-group col-sm-6">
