@@ -4,8 +4,13 @@
           "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
 	<module name="LineLength">
-		  <property name="max" value="100"/>
-		</module>
+		<property name="max" value="120"/>
+	</module>
+	<module name="NewlineAtEndOfFile"/>
+	
+	<module name="SuppressionSingleFilter">
+	  <property name="files" value=".+\.(?:html|sql|css|properties)$"/>
+	</module>
 
 	<module name="TreeWalker">
 		<module name="AvoidStarImport" />
@@ -48,9 +53,6 @@
 		<!-- Keine inneren Assignments -->
 		<module name="InnerAssignment"/>
 		
-		<!-- Keine Magic Numbers erlaubt -->
-		<module name="MagicNumber"/>
-		
 		<!-- Switches müssen Default Case haben -->
 		<module name="MissingSwitchDefault"/>
 		
@@ -77,8 +79,6 @@
 		<module name="RightCurly"/>
 		<module name="InnerTypeLast"/>
 		<module name="OneTopLevelClass"/>
-		<module name="AvoidDoubleBraceInitialization"/>
-		<module name="MultipleStringLiterals"/>
 		<module name="NoFinalizer"/>
 		<module name="OneStatementPerLine"/>
 		<module name="OverloadMethodsDeclarationOrder"/>
@@ -92,9 +92,10 @@
 		<module name="UnnecessarySemicolonInEnumeration"/>
 		<module name="RedundantImport"/>
 		<module name="UnusedImports"/>
+		<!--
 		<module name="Indentation">
 			<property name="caseIndent" value="0"/>
-		</module>
+		</module> -->
 		<module name="OuterTypeFilename"/>
 		<module name="UpperEll"/>
 		<module name="ModifierOrder"/>
@@ -114,11 +115,25 @@
 		<module name="NoWhitespaceBefore"/>
 		<module name="OperatorWrap"/>
 		<module name="ParenPad"/>
-		<module name="SeparatorWrap"/>
+		<module name="SeparatorWrap">
+		  <property name="tokens" value="DOT"/>
+		  <property name="option" value="nl"/>
+		</module>
+		<module name="SeparatorWrap">
+		  <property name="tokens" value="COMMA"/>
+		  <property name="option" value="eol"/>
+		</module>
 		<module name="SingleSpaceSeparator"/>
 		<module name="TypecastParenPad"/>
 		<module name="WhitespaceAfter"/>
-		<module name="WhitespaceAround"/>
+		<module name="WhitespaceAround">
+			<property name="allowEmptyConstructors" value="true"/>
+			<property name="allowEmptyMethods" value="true"/>
+			<property name="allowEmptyTypes" value="true"/>
+			<property name="allowEmptyLoops" value="true"/>
+			<property name="allowEmptyLambdas" value="true"/>
+			<property name="allowEmptyCatches" value="true"/>
+			<property name="ignoreEnhancedForColon" value="true"/>
+		</module>
 	</module>
-	<module name="NewlineAtEndOfFile"/>
 </module>
