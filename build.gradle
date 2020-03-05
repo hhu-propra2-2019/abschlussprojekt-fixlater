@@ -2,6 +2,9 @@ plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
+    id "com.github.spotbugs" version "3.0.0"
+    id 'pmd'
+    id 'checkstyle'
 }
 
 group = 'mops'
@@ -49,4 +52,30 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+spotbugs {
+   ignoreFailures = true
+   effort = "max"
+   reportLevel = "high"
+}
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        html {
+            enabled = true
+        }
+        xml {
+            enabled = false
+        }
+    }
+}
+
+pmd {
+    ignoreFailures = true
+}
+
+checkstyle {
+    toolVersion = "8.30"
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    ignoreFailures = true
 }
