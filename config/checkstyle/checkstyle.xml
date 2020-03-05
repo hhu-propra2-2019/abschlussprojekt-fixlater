@@ -9,7 +9,7 @@
 	<module name="NewlineAtEndOfFile"/>
 	
 	<module name="SuppressionSingleFilter">
-	  <property name="files" value=".+\.(?:html|sql|css|properties)$"/>
+	  <property name="files" value=".+\.(?:html|sql|css|properties|js|map|yarn-integrity)$"/>
 	</module>
 
 	<module name="TreeWalker">
