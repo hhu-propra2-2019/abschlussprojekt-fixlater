@@ -21,9 +21,15 @@ public class ControllerTest {
     void testIndex() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk());
     }
+    
     @Test
     void testTerminNeu() throws Exception {
         mvc.perform(get("/termin-neu")).andExpect(status().isOk());
+    }
+    
+    @Test
+    void testUmfrageNeu() throws Exception {
+        mvc.perform(get("/umfrage-neu")).andExpect(status().isOk());
     }
 
     @Test

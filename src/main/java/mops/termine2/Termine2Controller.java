@@ -26,4 +26,8 @@ public class Termine2Controller {
 		return "termin-neu";
     }	
 	
+	@GetMapping("/umfrage-neu")
+	String umfrageNeu(Model m) {
+		return "umfrage-neu";
+	}
 }
