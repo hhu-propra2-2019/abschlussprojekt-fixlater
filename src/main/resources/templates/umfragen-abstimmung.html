@@ -1,0 +1,194 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Name des Subsystems', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <title>Name des Subsystems</title>
+    <th:block th:fragment="headcontent">
+        <!-- Links, Skripts, Styles hier einfügen! -->
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <!-- Restlichen Inhalt hier einfügen! -->
+
+
+    <!--Titel der Umfrage und Beschreibung werden angegeben-->
+    <div class="jumbotron" is="mops-div">
+        <div class="container" is="mops-container">
+
+            <h2>Essen bei der Praktikums-Abschluss-Party</h2><br>
+            <div class="row">
+                <div class="col-sm-2"><h3>Beschrebung:</h3></div>
+                <div class="col-sm-6">
+                    <details>
+                        <summary>(öffnen/schließen)</summary>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                        ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                    </details>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Optionen für die Umfrage werden in einer Tabelle angezeig-->
+    <form>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Option</th>
+                <th>Find ich gut</th>
+                <th>Nein auf keinen Fall</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Grillen grillen</td>
+                <td><input type=radio name="abstimmung1" value="y"></td>
+                <td><input type=radio name="abstimmung1" value="n"></td>
+            </tr>
+            <tr>
+                <td>PizzaBananenSuppe</td>
+                <td><input type=radio name="abstimmung2" value="y"></td>
+                <td><input type=radio name="abstimmung2" value="n"></td>
+            </tr>
+
+            <tr>
+                <td>GurkenHotDog</td>
+                <td><input type=radio name="abstimmung3" value="y"></td>
+                <td><input type=radio name="abstimmung3" value="n"></td>
+            </tr>
+
+            <tr>
+                <td>MayonesenMilchSchake</td>
+                <td><input type=radio name="abstimmung4" value="y"></td>
+                <td><input type=radio name="abstimmung4" value="n"></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="align-content-center" is="mops-row">
+            <button type="submit" class="button">Abstimmen(X Stimmen)</button>
+        </div>
+    </form>
+    <!--Kommentarsektion-->
+
+    <br><br>
+    <details>
+        <summary class="text-left">Kommentare</summary>
+        <br><br><br>
+
+        <div name="kommentare">
+
+
+            <div class="container">
+
+                <!--Ein Kommentar-->
+                <div name="kommentar2">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <!--Name-->
+                            <div class="row">
+                                <h3>Benjamin</h3><br>
+                                <!-- Botton zum Löschen , da dies der user Benjamin ist-->
+                                <form>
+                                    ---
+                                    <button>Löschen</button>
+                                </form>
+                            </div>
+                            <!--Kommentartext-->
+                            <div class="row">
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod
+                                tempor
+                                invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+                                accusam et justo
+                                duo
+                                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                                Lorem ipsum
+                                dolor
+                            </div>
+                            <!--Datum-->
+                            <div class="row">-dd.mm.yyyy hh:mm</div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!--Beispiel Kommentare Ende-->
+
+                <!--Ein Kommentar-->
+                <div name="kommentar1">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <!--Name-->
+                            <div class="row">
+                                <h3>Bibi Bloxberg</h3>
+                            </div>
+                            <!--Kommentartext-->
+                            <div class="row">
+                                Haha erster
+                            </div>
+                            <!--Datum-->
+                            <div class="row">-dd.mm.yyyy hh:mm</div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!--Beispiel Kommentare Ende-->
+
+                <!--Ein Kommentar-->
+                <div name="kommentar3">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <!--Name-->
+                            <div class="row">
+                                <h3>DNAPolymerase</h3>
+                            </div>
+                            <!--Kommentartext-->
+                            <div class="row">
+                                Ich kann gut abschreiben
+                            </div>
+                            <!--Datum-->
+                            <div class="row">-dd.mm.yyyy hh:mm</div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!--Beispiel Kommentare Ende-->
+            </div>
+        </div>
+
+        <!--hier wird ein neuer Kommentar geschrieben-->
+        <form method="post">
+
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="form-group col-sm-6">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <label for="pseudonym">Name:</label>
+                    <input id="pseudonym" type="text" placeholder="Benjamin">
+                    <button class="button">Kommentieren</button>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>
+        </form>
+    </details>
+</main>
+</body>
+</html>
