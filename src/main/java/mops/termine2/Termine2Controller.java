@@ -11,4 +11,9 @@ public class Termine2Controller {
 		return "index";
 	}
 
+	@GetMapping("/termin-neu")
+	String terminNeu(Model m) {
+		return "termin-neu";
+	}	
+	
 }
