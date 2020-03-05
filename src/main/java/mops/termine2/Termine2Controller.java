@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Termine2Controller {
     @GetMapping("/")
     String index(Model m) {
-        return "index";
+        return "termine";
     }
 
     @GetMapping("/umfragen-abstimmung")
