@@ -92,15 +92,27 @@
 		<module name="UnnecessarySemicolonInEnumeration"/>
 		<module name="RedundantImport"/>
 		<module name="UnusedImports"/>
-		<!--
-		<module name="Indentation">
-			<property name="caseIndent" value="0"/>
-		</module> -->
 		<module name="OuterTypeFilename"/>
 		<module name="UpperEll"/>
 		<module name="ModifierOrder"/>
 		
 		<module name="ConstantName"/>
+		<module name="StaticVariableName"/>
+		<module name="ParameterName"/>
+		<module name="PackageName">
+		  <property name="format"
+		    value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+		</module>
+		<module name="MethodName"/>
+		<module name="MemberName"/>
+		<module name="LocalVariableName">
+		  <property name="allowOneCharVarInForLoop" value="true"/>
+		</module>
+		<module name="LocalFinalVariableName"/>
+		<module name="LambdaParameterName"/>
+		<module name="CatchParameterName">
+		  <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
+		</module>
 		<module name="ClassTypeParameterName"/>
 		<module name="InterfaceTypeParameterName"/>
 		<module name="MethodTypeParameterName"/>
