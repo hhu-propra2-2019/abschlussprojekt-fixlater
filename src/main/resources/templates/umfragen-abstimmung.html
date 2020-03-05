@@ -23,7 +23,7 @@
 
             <h2>Essen bei der Praktikums-Abschluss-Party</h2><br>
             <div class="row">
-                <div class="col-sm-2"><h3>Beschrebung:</h3></div>
+                <div class="col-sm-3"><h3 class="h3">Beschrebung:</h3></div>
                 <div class="col-sm-6">
                     <details>
                         <summary>(öffnen/schließen)</summary>
@@ -74,7 +74,7 @@
         </table>
 
         <div class="align-content-center" is="mops-row">
-            <button type="submit" class="button">Abstimmen(X Stimmen)</button>
+            <button type="submit" class="btn btn-outline-primary">Abstimmen(X Stimmen)</button>
         </div>
     </form>
     <!--Kommentarsektion-->
@@ -96,12 +96,8 @@
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>Benjamin</h3><br>
+                                <h3 class="h3">Benjamin</h3><br>
                                 <!-- Botton zum Löschen , da dies der user Benjamin ist-->
-                                <form>
-                                    ---
-                                    <button>Löschen</button>
-                                </form>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -118,6 +114,10 @@
                             </div>
                             <!--Datum-->
                             <div class="row">-dd.mm.yyyy hh:mm</div>
+                            <form>
+                                <br>
+                                <button class="btn btn-outline-danger">Löschen</button>
+                            </form>
                         </div>
                     </div>
                     <hr>
@@ -131,7 +131,7 @@
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>Bibi Bloxberg</h3>
+                                <h3 class="h3">Bibi Bloxberg</h3>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -152,7 +152,7 @@
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>DNAPolymerase</h3>
+                                <h3 class="h3">DNAPolymerase</h3>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -183,7 +183,7 @@
                 <div class="col-sm-4">
                     <label for="pseudonym">Name:</label>
                     <input id="pseudonym" type="text" placeholder="Benjamin">
-                    <button class="button">Kommentieren</button>
+                    <button class="btn btn-outline-primary">Kommentieren</button>
                 </div>
                 <div class="col-sm-4"></div>
             </div>
