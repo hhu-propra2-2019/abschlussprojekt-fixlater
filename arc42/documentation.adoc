@@ -10,7 +10,7 @@ Der erste Tag des Projektes begann mit einer Einführung für alle im Hörsaal u
 
 Als Basis des Projekts war die erste Aufgabe, die Geräte richtig zu konfigurieren. Dazu zählte die Installation von Checkstyle, SpotBugs etc. Weiter wurde in GitHub die Branch Protection und GitHub actions aktiviert, welches von Leon erledigt wurde. Anschließend daran wurde das Projekt mit SpringBoot als Gradle Projekt initialisiert. Diesen Teil haben Jan und Thomas übernommen. Der nächste Schritt war nun das Einbinden des Styleguides, welches Julia und Kathi erledigt haben. Danach hat Anton die erste Indexseite erstellt. Dort trat das erste Problem mit dem Logging Fenster auf, denn es war noch keine Security eingerichtet. Aus diesem Grunde wurde diese vorübergehend (in build.gradle) auskommentiert. Zeitgleich hat sich Marcel daran versucht, die docker-compose-Datei und das Dockerfile zu schreiben, welches in den Anforderungen gefragt war. Da es noch Unstimmigkeiten mit der Wahl der Datenbank gab, wurden diese Dateien noch nicht hochgeladen. Zudem wurden von Ingrid erste Konzepte für das Webdesign entwickelt.
 
-**Hier Bilder einfügen**
+image::concept.jpg[]
 
 Zum Abschluss des Tages haben wir uns über die verschiedenen Aufgaben ausgetauscht und die Erfolge bzw. Probleme zusammengetragen. Anschließend erfolgte noch ein kurzes Brainstorming über die anstehenden Aufgaben des nächsten Tages. Da dies sehr gut geklappt hat und einen guten Überblick über die absolvierten und anstehenden Aufgaben geliefert hat, haben wir beschlossen, dies ab jetzt jeden Tag durchzuführen. 
 
