@@ -23,47 +23,55 @@
    	<h1>Neuer Termin:</h1>
 </header>
 
-<div class="form-group ">
-    <label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
+<div>
+	<form method="POST">
+		<div class="form-group ">
+    		<label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
 
-    <div class="col-sm-6">
-		<input id="titel" type="text" required name="titel" class="form-control" value=""/>
-	</div>
+		    <div class="col-sm-6">
+				<input id="titel" type="text" required name="titel" class="form-control" value=""/>
+			</div>
+		</div>
+
+		<div class="form-group ">
+    		<label for="terminOrt" class="col-sm-4 control-label">Ort:</label>
+
+    		<div class="col-sm-6">
+				<input id="ort" type="text" required name="ort" class="form-control" value=""/>
+			</div>
+		</div>
+
+		<div class="form-group ">
+    		<label for="poll_comments" class="col-sm-4 control-label">Terminbeschreibung:</label>
+			<div class="col-sm-6">
+				<textarea id="beschreibung" name="beschreibung" class="form-control" rows="4"></textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+    		<label for="poll_id" class="col-sm-4 control-label">
+        		Sichbarkeit des Termins:
+    		</label>
+    		<div class="col-sm-8">
+        		<div class="radio">
+            		<label>
+                		<input type="radio" name="editable" id="editableByAll" checked value="1">
+                		Gruppenmitglieder
+            		</label>
+            		<label>
+                		<input type="radio" name="editable" value="2">
+                		Link
+            		</label>
+        		</div>
+    		</div>
+    		<button class="button" type="submit">Zeit hinzufügen</button>
+		</div>
+
+		<div>
+			<button class="button" type="submit">Termin erstellen</button>
+		</div>
+	</form>
 </div>
-
-<div class="form-group ">
-    <label for="terminOrt" class="col-sm-4 control-label">Ort:</label>
-
-    <div class="col-sm-6">
-		<input id="ort" type="text" required name="ort" class="form-control" value=""/>
-	</div>
-</div>
-
-<div class="form-group ">
-    <label for="poll_comments" class="col-sm-4 control-label">Terminbeschreibung:</label>
-	<div class="col-sm-6">
-		<textarea id="beschreibung" name="beschreibung" class="form-control" rows="4"></textarea>
-	</div>
-</div>
-
-<div class="form-group">
-    <label for="poll_id" class="col-sm-4 control-label">
-        Sichbarkeit des Termins:
-    </label>
-    <div class="col-sm-8">
-        <div class="radio">
-            <label>
-                <input type="radio" name="editable" id="editableByAll" checked value="1">
-                Gruppenmitglieder
-            </label>
-            <label>
-                <input type="radio" name="editable" value="2">
-                Link
-            </label>
-        </div>
-    </div>
-</div>
-
 
 </main>
 </body>
