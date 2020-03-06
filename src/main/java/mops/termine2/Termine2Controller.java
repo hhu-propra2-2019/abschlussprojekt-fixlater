@@ -22,6 +22,11 @@ public class Termine2Controller {
 		return "termin-neu";
 	}
 	
+	@GetMapping("/umfragen")
+	String umfragen(Model m) {
+		return "umfragen";
+	}
+	
 	@GetMapping("/umfragen-abstimmung")
 	String umfragenAbstimmung(Model m) {
 		return "umfragen-abstimmung";
