@@ -3,11 +3,13 @@ package mops.termine2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/termine2")
 public class Termine2Controller {
 	
-	@GetMapping("/")
+	@GetMapping("")
 	String index(Model m) {
 		return "termine";
 	}
