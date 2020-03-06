@@ -3,7 +3,7 @@
 
 == Tag 1
 
-Der erste Tag des Projektes Begann mit einer Einführung für alle im Hörsaal und bestand insgesamt darin, die ersten Ideen für das System zur Terminfindung zu generieren. Dazu sollten wir ein Werbeplakat gestalten, dass die Hauptideen des Projektes beinhalten sollte.
+Der erste Tag des Projektes begann mit einer Einführung für alle im Hörsaal und bestand insgesamt darin, die ersten Ideen für das System zur Terminfindung zu generieren. Dazu sollten wir ein Werbeplakat gestalten, dass die Hauptideen des Projektes beinhalten sollte.
 
 
 == Tag 2
@@ -20,7 +20,7 @@ Zum Abschluss des Tages haben wir uns über die verschiedenen Aufgaben ausgetaus
 Die erste Aufgabe des Tages war eine gemeinsame erste Erarbeitung des Arc42 Templates. Anschließend haben wir noch einmal kurz die Aufgaben für den Tag auf kleine Gruppen von 2-3 Personen aufgeteilt. 
 
 === Gruppe Checkstyle (Kathi, Leon)
-**text einfügen**
+Leon hatte bereits eine grundlegende Konfigurationsdatei für Checkstyle vorbereitet. Über den Tag sind wir durch die Dokumentation von Checkstyle gegangen und haben für die einzelnen Module entschieden, welche für unser Projekt Sinn machen. Am Ende des Tages sind ein paar Probleme aufgetreten, hauptsächlich bei dem Modul "Indentation", da dieses mit Tabs anders arbeitet als mit Leerzeichen. Wir haben uns entschieden, darüber am nächsten Tag weiter zu diskutieren, wie wir damit weiter vorgehen sollen.
 
 === Gruppe Datenbankmodell (Julia, Thomas, Marcel)
 Unser erster Ansatz für das Datenbankmodell war die Erstellung des ER-Modells. Anschließend erfolgte eine erste Datenbankmodellierung mit MySQL Workbench. Nach dem ersten Upload des ER-Modells auf GitHub wurden wir von den Tutoren auf eine ungünstige Beziehung hingewiesen. Dies ist uns vorher nicht aufgefallen und wurde auch beim Datenbankschema umgesetzt. Daraufhin haben wir über eine alternative Modellierung nachgedacht und die Änderungen aus Zeitmangel auf den nächsten Tag verschoben.
@@ -33,7 +33,9 @@ Unser erster Ansatz für das Datenbankmodell war die Erstellung des ER-Modells. 
 Die Aufgaben vom Vortag wurden größtenteils in den Gruppen fortgesetzt.
 
 === Gruppe Checkstyle (Kathi, Leon)
-Checkstyle fertig gestellt, kleine Änderungen, in Master gemerged, Formatierung in IDE fertig **ausformulieren**
+Heute haben wir ein paar Kleinigkeiten an der Checkstyle Konfigurationsdatei geändert. Unter anderem, dass eine Zeile bis zu 120 Zeichen enthalten werden darf und nur .java Dateien überprüft werden sollen. Die Module "MagicNumbers" und "MultipleStringLiterals" wurden auch rausgenommen, da dies für uns zu streng war. Das Modul "AvoidDoubleBraceInitialization" hat zu Problemen mit dem eclipse Checkstyle Plugin geführt, weswegen auch dieses rausgenommen wurde.
+Außerdem wurden Module hinzugefügt, die die Namen von Variablen, Methoden etc überprüfen. 
+Als wir damit fertig waren, haben wir eclipse und IntelliJ so eingestellt, dass die automatische Formatierung der IDE zu keinen Fehlern mit Checkstyle führt und die entstandenden Dateien an die anderen Mitglieder des Teams verteilt, sodass der Umsprung auf das neue Format ohne Probleme erfolgen kann.
 
 === Gruppe Datenbankmodell (Julia, Thomas, Marcel)
 Die Aufgabe des Tages war, das Datenbankmodell erneut zu diskutieren, da das alte Modell verworfen wurde. Die Idee ist nun, von der Geschäftslogik ausgehend die Struktur zu modellieren, und sich danach Gedanken über das konkrete Datenbankmodell Gedanken zu machen.
