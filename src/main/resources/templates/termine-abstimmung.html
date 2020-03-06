@@ -18,17 +18,17 @@
 
 
     <!--Titel der Umfrage ort und Beschreibung werden angegeben-->
-    <div class="jumbotron" is="mops-div">
-        <div class="container" is="mops-container">
+    <div class="jumbotron">
+        <div class="container">
 
-            <h2>Wir basteln uns eine Terminplanung</h2><br>
+            <h2 class="h2">Wir basteln uns eine Terminplanung</h2><br>
             <div class="row">
-                <div class="col-sm-2"><h3>Ort:</h3></div>
+                <div class="col-sm-3"><h3 class="h3">Ort:</h3></div>
                 <div class="col-sm-6">25.13.U1.24</div>
             </div>
 
             <div class="row">
-                <div class="col-sm-2"><h3>Beschrebung:</h3></div>
+                <div class="col-sm-3"><h3 class="h3">Beschreibung:</h3></div>
                 <div class="col-sm-6">
                     <details>
                         <summary>(öffnen/schließen)</summary>
@@ -95,7 +95,7 @@
         </table>
 
         <div class="align-content-center" is="mops-row">
-            <button type="submit" class="button">Abstimmen</button>
+            <button type="submit" class="btn btn-outline-primary">Abstimmen</button>
         </div>
     </form>
     <!--Kommentarsektion-->
@@ -105,24 +105,19 @@
         <summary class="text-left">Kommentare</summary>
         <br><br><br>
 
-        <div name="kommentare">
-
-
+        <!--Hierein kommen alle Kommentare-->
+        <div>
             <div class="container">
 
                 <!--Ein Kommentar-->
-                <div name="kommentar2">
+                <div>
                     <div class="row">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>Benjamin</h3><br>
+                                <h3 class="h3">Benjamin</h3><br>
                                 <!-- Botton zum Löschen , da dies der user Benjamin ist-->
-                                <form>
-                                    ---
-                                    <button>Löschen</button>
-                                </form>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -139,6 +134,10 @@
                             </div>
                             <!--Datum-->
                             <div class="row">-dd.mm.yyyy hh:mm</div>
+                            <form>
+                                <br>
+                                <button class="btn btn-outline-danger">Löschen</button>
+                            </form>
                         </div>
                     </div>
                     <hr>
@@ -146,13 +145,13 @@
                 <!--Beispiel Kommentare Ende-->
 
                 <!--Ein Kommentar-->
-                <div name="kommentar1">
+                <div>
                     <div class="row">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>Bibi Bloxberg</h3>
+                                <h3 class="h3">Bibi Bloxberg</h3>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -167,13 +166,13 @@
                 <!--Beispiel Kommentare Ende-->
 
                 <!--Ein Kommentar-->
-                <div name="kommentar3">
+                <div>
                     <div class="row">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-6">
                             <!--Name-->
                             <div class="row">
-                                <h3>DNAPolymerase</h3>
+                                <h3 class="h3">DNAPolymerase</h3>
                             </div>
                             <!--Kommentartext-->
                             <div class="row">
@@ -204,7 +203,7 @@
                 <div class="col-sm-4">
                     <label for="pseudonym">Name:</label>
                     <input id="pseudonym" type="text" placeholder="Benjamin">
-                    <button class="button">Kommentieren</button>
+                    <button class="btn btn-outline-primary">Kommentieren</button>
                 </div>
                 <div class="col-sm-4"></div>
             </div>
