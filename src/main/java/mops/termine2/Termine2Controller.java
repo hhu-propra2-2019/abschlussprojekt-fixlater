@@ -17,9 +17,9 @@ public class Termine2Controller {
 		return "termine-abstimmung";
 	}
 	
-	@GetMapping("/termin-neu")
+	@GetMapping("/termine-neu")
 	String terminNeu(Model m) {
-		return "termin-neu";
+		return "termine-neu";
 	}
 	
 	@GetMapping("/umfragen")
@@ -32,9 +32,9 @@ public class Termine2Controller {
 		return "umfragen-abstimmung";
 	}
 	
-	@GetMapping("/umfrage-neu")
+	@GetMapping("/umfragen-neu")
 	String umfrageNeu(Model m) {
-		return "umfrage-neu";
+		return "umfragen-neu";
 	}
 	
 }
