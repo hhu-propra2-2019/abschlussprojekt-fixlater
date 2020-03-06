@@ -11,3 +11,5 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Run Command
+        run: gradle check
