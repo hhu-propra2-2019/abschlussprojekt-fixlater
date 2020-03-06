@@ -24,7 +24,7 @@ configurations {
 repositories {
     mavenCentral()
     maven {
-        url="https://s3.cs.hhu.de/public/mops/"
+        url = "https://s3.cs.hhu.de/public/mops/"
         metadataSources {
             artifact()
         }
@@ -55,9 +55,9 @@ test {
 }
 
 spotbugs {
-   ignoreFailures = true
-   effort = "max"
-   reportLevel = "high"
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
 }
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
@@ -71,11 +71,11 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 pmd {
-    ignoreFailures = true
+    ignoreFailures = false
 }
 
 checkstyle {
     toolVersion = "8.30"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    ignoreFailures = true
+    ignoreFailures = false
 }
