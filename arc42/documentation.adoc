@@ -3,7 +3,7 @@
 
 == Tag 1
 
-Der erste Tag des Projektes Begann mit einer Einführung für alle im Hörsaal und bestand insgesamt darin, die ersten Ideen für das System zur Terminfindung zu generieren. Dazu sollten wir ein Werbeplakat gestalten, dass die Hauptideen des Projektes beinhalten sollte.
+Der erste Tag des Projektes begann mit einer Einführung für alle im Hörsaal und bestand insgesamt darin, die ersten Ideen für das System zur Terminfindung&Umfragen zu generieren. Dazu sollten wir ein Werbeplakat gestalten, dass die Hauptideen des Projektes beinhalten sollte und einen Bogen ausfüllen der uns geholfen hat unsere Ideen/Diskussion zu strukturieren.
 
 
 == Tag 2
@@ -26,7 +26,10 @@ Die erste Aufgabe des Tages war eine gemeinsame erste Erarbeitung des Arc42 Temp
 Unser erster Ansatz für das Datenbankmodell war die Erstellung des ER-Modells. Anschließend erfolgte eine erste Datenbankmodellierung mit MySQL Workbench. Nach dem ersten Upload des ER-Modells auf GitHub wurden wir von den Tutoren auf eine ungünstige Beziehung hingewiesen. Dies ist uns vorher nicht aufgefallen und wurde auch beim Datenbankschema umgesetzt. Daraufhin haben wir über eine alternative Modellierung nachgedacht und die Änderungen aus Zeitmangel auf den nächsten Tag verschoben.
 
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
-**text einfügen**
+Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 Stück) so aufgeteilt dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
+Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir schon abgesprochen haben Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 Stück) so aufgeteilt dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
+Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir vorher schon mit allen abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
+
 
 == Tag 4
 
@@ -41,4 +44,7 @@ Die Aufgabe des Tages war, das Datenbankmodell erneut zu diskutieren, da das alt
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
 Terminübersicht, Frist erkennbar, Link neuer Termin, Buttons, insgesamt UI, Abstimmung zu Umfragen**ausformulieren**
 
-Zusätzlich dazu haben Marcel und Julia die Dokumentation für Tag 1-3 zusammengestellt und die Art und Weise geplant, wie die Dokumentation fortlaufend erweitert wird. Außerdem haben Thomas und Jan die ersten Entitäten mithilfe von Spring Data JPA erstellt (und annotiert), sodass demnächst die Datenbank dazu modelliert werden kann. 
+Zusätzlich dazu haben Marcel und Julia die Dokumentation für Tag 1-3 zusammengestellt und die Art und Weise geplant, wie die Dokumentation fortlaufend erweitert wird. Außerdem haben Thomas und Jan die ersten Entitäten mithilfe von Spring Data JPA erstellt (und annotiert), sodass demnächst die Datenbank dazu modelliert werden kann.
+
+== Tag 5
+
