@@ -31,8 +31,8 @@ Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht ferti
 Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir vorher schon mit allen abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
 
 === Gruppe Klassen (Thomas,Jan)
-Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen, welche Klassen
-benötigt werden um das gewünschte verhalten zu ermöglichen. Wir orientierten uns dabei aber noch immer zu sehr am datenbank Modell.  
+Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen welche Klassen
+benötigt werden um das gewünschte Verhalten zu ermöglichen. Wir orientierten uns dabei aber noch immer zu sehr am Datenbankmodell.  
 
 == Tag 4
 
