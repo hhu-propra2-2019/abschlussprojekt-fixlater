@@ -30,6 +30,9 @@ Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 S
 Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir schon abgesprochen haben Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 Stück) so aufgeteilt dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
 Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir vorher schon mit allen abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
 
+=== Gruppe Klassen (Thomas,Jan)
+Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen, welche Klassen
+benötigt werden um das gewünschte verhalten zu ermöglichen. Wir orientierten uns dabei aber noch immer zu sehr am datenbank Modell.  
 
 == Tag 4
 
@@ -38,7 +41,7 @@ Die Aufgaben vom Vortag wurden größtenteils in den Gruppen fortgesetzt.
 === Gruppe Checkstyle (Kathi, Leon)
 Checkstyle fertig gestellt, kleine Änderungen, in Master gemerged, Formatierung in IDE fertig **ausformulieren**
 
-=== Gruppe Datenbankmodell (Julia, Thomas, Marcel)
+=== Gruppe Datenbankmodell/Klassen (Julia, Thomas, Marcel)
 Die Aufgabe des Tages war, das Datenbankmodell erneut zu diskutieren, da das alte Modell verworfen wurde. Die Idee ist nun, von der Geschäftslogik ausgehend die Struktur zu modellieren, und sich danach Gedanken über das konkrete Datenbankmodell Gedanken zu machen.
 
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
