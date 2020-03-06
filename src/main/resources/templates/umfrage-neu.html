@@ -23,41 +23,59 @@
    	<h1>Neue Umfrage:</h1>
 </header>
 
-<div class="form-group ">
-    <label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
-
-    <div class="col-sm-6">
-		<input id="titel" type="text" required name="titel" class="form-control" value=""/>
-	</div>
-</div>
-
-<div class="form-group ">
-    <label for="poll_comments" class="col-sm-4 control-label">Beschreibung:</label>
-	<div class="col-sm-6">
-		<textarea id="beschreibung" name="beschreibung" class="form-control" rows="4"></textarea>
-	</div>
-</div>
-
-<div class="form-group">
-    <label for="poll_id" class="col-sm-4 control-label">
-        Sichbarkeit der Umfrage:
-    </label>
-    <div class="col-sm-8">
-        <div class="radio">
-            <label>
-                <input type="radio" name="editable" id="editableByAll" checked value="1">
-                Gruppenmitglieder
-            </label>
-            <label>
-                <input type="radio" name="editable" value="2">
-                Link
-            </label>
-        </div>
-    </div>
-</div>
-
 <div>
-	<button class="button" type="submit">Umfrage erstellen</button>
+	<form method="POST">
+
+		<div class="form-group ">
+    		<label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
+
+    		<div class="col-sm-6">
+				<input id="titel" type="text" required name="titel" class="form-control" value=""/>
+			</div>
+		</div>
+
+		<div class="form-group ">
+    		<label for="poll_comments" class="col-sm-4 control-label">Beschreibung:</label>
+			<div class="col-sm-6">
+				<textarea id="beschreibung" name="beschreibung" class="form-control" rows="4"></textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+    		<label for="poll_id" class="col-sm-4 control-label">
+        		Sichbarkeit der Umfrage:
+    		</label>
+    		<div class="col-sm-8">
+        		<div class="radio">
+            		<label>
+                		<input type="radio" name="editable" id="editableByAll" checked value="1">
+                		Gruppenmitglieder
+            		</label>
+            		<label>
+                		<input type="radio" name="editable" value="2">
+                		Link
+            		</label>
+        		</div>
+    		</div>
+		</div>
+		
+		<div class="form-group ">
+    		<label for="poll_comments" class="col-sm-4 control-label">Option 1:</label>
+			<div class="col-sm-6">
+				<textarea id="beschreibung" name="beschreibung" class="form-control" rows="2"></textarea>
+				<button class="button" type="submit">Option hinzufügen</button>
+			</div>
+		</div>
+
+		<div>
+			
+		</div>
+
+		<div>
+			<button class="button" type="submit">Umfrage erstellen</button>
+		</div>
+
+	</form>
 </div>
 
 </main>
