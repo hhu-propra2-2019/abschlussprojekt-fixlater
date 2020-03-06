@@ -26,8 +26,7 @@ Unser erster Ansatz für das Datenbankmodell war die Erstellung des ER-Modells. 
 
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
 Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 Stück) so aufgeteilt dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
-Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir schon abgesprochen haben Da die Views einen uniformen visuellen Stil haben müssen, haben wir unsere (6 Stück) so aufgeteilt dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
-Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir vorher schon mit allen abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
+Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir schon abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
 
 === Gruppe Klassen (Thomas,Jan)
 Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen welche Klassen
