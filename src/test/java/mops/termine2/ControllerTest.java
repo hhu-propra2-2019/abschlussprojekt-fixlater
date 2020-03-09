@@ -27,7 +27,7 @@ public class ControllerTest {
 	
 	@Test
 	void testTerminNeu() throws Exception {
-		mvc.perform(get("/termine2/termin-neu")).andExpect(status().isOk());
+		mvc.perform(get("/termine2/termine-neu")).andExpect(status().isOk());
 	}
 	
 	@Test

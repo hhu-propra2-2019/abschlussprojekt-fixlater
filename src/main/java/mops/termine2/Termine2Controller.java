@@ -23,7 +23,7 @@ public class Termine2Controller {
 	
 	@GetMapping("/termin-neu")
 	String terminNeu(Model m) {
-		return "termin-neu";
+		return "termine-neu";
 	}
 	
 	@GetMapping("/umfragen-abstimmung")
