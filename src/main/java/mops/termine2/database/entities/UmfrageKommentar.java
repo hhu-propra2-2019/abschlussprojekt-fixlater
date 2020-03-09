@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,7 +22,7 @@ public class UmfrageKommentar {
 	@ManyToOne
 	private Umfrage umfrage;
 	
-	private Date erstellungsdatum;
+	private LocalDateTime erstellungsdatum;
 	
 	private String inhalt;
 }

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,9 +21,9 @@ public class Umfrage {
 	
 	private String link;
 	
-	private Date frist;
+	private LocalDateTime frist;
 	
-	private Date loeschdatum;
+	private LocalDateTime loeschdatum;
 	
 	private String ersteller;
 	
