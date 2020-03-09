@@ -66,8 +66,14 @@ Fehler aus HTML entfernt, Git Actions aktualisiert/verbessert, RequestMapping hi
 
 - Formatänderungen, Recherche, URL-Änderungen, Fehlercorrektur
 
+== Tag 6
+
+application.properties mit H2 für development vorbereitet (Thomas, Anton),
+thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben (Anton),
+
+
 ////
-Aufgaben für Montag:
+Ziele für die Woche:
 - Review für das Datenbankmodell
 - Zusammen erläutern der Aufteilung der Klassen
 - Fake Initializer programmieren für Dummy Daten und Tests
