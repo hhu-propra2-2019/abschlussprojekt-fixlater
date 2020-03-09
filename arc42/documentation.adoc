@@ -42,7 +42,7 @@ Außerdem wurden Module hinzugefügt, die die Namen von Variablen, Methoden etc 
 Als wir damit fertig waren, haben wir eclipse und IntelliJ so eingestellt, dass die automatische Formatierung der IDE zu keinen Fehlern mit Checkstyle führt und die entstandenden Dateien an die anderen Mitglieder des Teams verteilt, sodass der Umsprung auf das neue Format ohne Probleme erfolgen kann.
 
 === Gruppe Datenbankmodell/Klassen (Julia, Thomas, Marcel)
-Die Aufgabe des Tages war, das Datenbankmodell erneut zu diskutieren, da das alte Modell verworfen wurde. Die Idee ist nun, von der Geschäftslogik ausgehend die Struktur zu modellieren, und sich danach Gedanken über das konkrete Datenbankmodell Gedanken zu machen.
+Die Aufgabe des Tages war, das Datenbankmodell erneut zu diskutieren, da das alte Modell verworfen wurde. Die Idee ist nun, von der Geschäftslogik ausgehend die Struktur zu modellieren, und sich danach Gedanken über das konkrete Datenbankmodell zu machen.
 
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
 Terminübersicht, Frist erkennbar, Link neuer Termin, Buttons, insgesamt UI, Abstimmung zu Umfragen**ausformulieren**
