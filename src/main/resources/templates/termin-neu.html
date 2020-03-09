@@ -64,8 +64,18 @@
             		</label>
         		</div>
     		</div>
+    		
+    		<ul th:remove="all-but-first">
+				<li th:each="zeit : ${zeiten}">
+					<label>
+						<input name="Zeit" type="checkbox">
+						<span th:text="${zeit}">placeholder 1</span>
+					</label>
+				</li>
+			</ul>
     		<button class="button" type="submit">Zeit hinzufügen</button>
-		</div>
+    		
+			</div>
 
 		<div>
 			<button class="button" type="submit">Termin erstellen</button>
