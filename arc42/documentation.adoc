@@ -52,8 +52,31 @@ Zusätzlich dazu haben Marcel und Julia die Dokumentation für Tag 1-3 zusammeng
 == Tag 5
 
 === Gruppe Config (Leon)
+Checkstyle korrigiert, hier und da ausgeholfen, reviewed
 
 === Gruppe Gruppe Datenbankmodell/Klassen (Julia, Kathi, Thomas, Marcel)
+Heute haben wir uns überlegt, wie man die Modell-Klassen anhand der Geschäftslogik am besten modellieren kann.
+Anschließend wurden diese erstellt. Zudem wurden die Entities und Repositories geschrieben.
+Zum Schluss haben wir über erste Testansätze gesprochen und entschlossen, am nächsten
+Praktikumstag einen Database-Initializer zu schreiben, der Fake-Daten generiert.
 
 === Gruppe Web-Userinterface (Ingrid, Anton, Jan)
-Formatänderungen, Recherche, URL-Änderungen, Fehlercorrektur
+- UI weiter bearbeitet, Design für später, uniformes Aussehen, Thymeleaf bereit machen
+Fehler aus HTML entfernt, Git Actions aktualisiert/verbessert, RequestMapping hinzugefügt, Ergebnisse in den Umfragelisten einsehbar
+
+- Formatänderungen, Recherche, URL-Änderungen, Fehlercorrektur
+
+////
+Aufgaben für Montag:
+- Review für das Datenbankmodell
+- Zusammen erläutern der Aufteilung der Klassen
+- Fake Initializer programmieren für Dummy Daten und Tests
+- Datenbank aufsetzen (vielleicht mal wirklich!)
+- Webseite testen (POST Controller)
+- Thymeleaf dazu schreiben (Anton, Jan, Ingrid)
+- erste Methoden für Business-Logik schreiben (falls funktionsfähig)
+
+Wochenziel:
+- grundlegende Anwendungen vorhanden
+- Kombi funktioniert
+////
