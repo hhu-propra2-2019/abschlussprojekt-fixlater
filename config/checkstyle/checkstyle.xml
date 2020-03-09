@@ -13,6 +13,11 @@
 	</module>
 
 	<module name="TreeWalker">
+		
+		<!-- Checkstyle ausschalten mit Kommentar "//CHECKSTYLE:OFF" 
+			 wieder einschalten mit "//CHECKSTYLE:ON" -->
+		<module name="SuppressionCommentFilter"/>
+		
 		<module name="AvoidStarImport" />
 		
 		<!-- Höchstens 4 Großbuchstaben als Abkürzung -->
