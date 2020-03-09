@@ -6,7 +6,10 @@ und Die Funktion von Umfragen in ILIAS ist nur für Organisatoren verfügbar.
 Außerdem dauert es lange sich im ILIAS durchzunavigieren.
 
 == Ziele & Features:
-Mit einem Klick auf die Sidebar auf der MOPS Startseite erreicht man die Übersicht 
+Mit einem Klick auf die Sidebar auf der MOPS Startseite erreicht man die Übersicht der Terminfindung wo alle Termineabstimmungen (offene und fertige) zu sehen sind, die für Gruppen sichtbar sind wo der Nutzer ein Mitglied ist, oder die Termineabstimmungen welchen der Nutzer per link beigetreten ist.
+Dadurch ist es schnell und praktisch Gruppentrefffen zu organisieren.
+
+Zusätzlich dazu gibt es eine Seite für generelle Abstimmungen die auch mit einem Klick erreichbar ist. Abstimmungen kann jedes Gruppenmitglied für seine Gruppe esrtellen oder für Nutzer die den generierten Link erhalten
 
 == Hinweise:
 === Arc42 und Dokumentation
