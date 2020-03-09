@@ -3,7 +3,7 @@ package mops.termine2.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Getter
@@ -16,7 +16,7 @@ public class Teilnahme {
 	
 	private String kuerzel;
 	
-	private HashMap<Date, Antwort> antworten;
+	private HashMap<LocalDateTime, Antwort> antworten;
 	
 	private String pseudonym;
 	
