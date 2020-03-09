@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='termine2', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <title>Name des Subsystems</title>
+    <th:block th:fragment="headcontent">
+        <!-- Links, Skripts, Styles hier einfügen! -->
+    </th:block>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+        <div align="center">
+        </div>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+
+    <div class="container">
+        <div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
+            <h1 class="h1">Termine</h1>
+
+            <div class="btn-toolbar" style="font-size: small">
+                <button class="btn btn-outline-secondary dropdown-toggle mx-2">Alle Gruppen</button>
+                <a th:href="@{/termine2/termin-neu}">
+                    <button class="btn btn-primary">Neuer Termin</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <h2 class="h2">Anstehend</h2>
+
+                <!-- Termine sollten in aufsteigender Reihenfolge sortiert sein. -->
+                <!-- <div th:each="anstehenderTermin : ${anstehendeTermine}"> -->
+                <div class="my-3 p-3 bg-light rounded">
+                    <div class="pb-2 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="h3">Titel des Termins</h3>
+                            <span>DD.MM.YYYY, HH:MM</span>
+                        </div>
+                        <span>Ort</span>
+                    </div>
+                    <div class="mt-2" style="font-size: small">
+                        <p>Authors often misinterpret the fibre as a tacky museum, when in actuality it feels more like
+                            a moreish rate. We can assume that any instance of a bestseller can be construed as a chuffy
+                            bucket.</p>
+                        <p>Their prose was, in this moment, a peeling cast. We can assume that any instance of a tuna
+                            can be construed as a ruttish custard.</p>
+                    </div>
+                </div>
+
+                <div class="my-3 p-3 bg-light rounded">
+                    <div class="pb-2 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="h3">Titel des Termins</h3>
+                            <span>DD.MM.YYYY, HH:MM</span>
+                        </div>
+                        <span>Ort</span>
+                    </div>
+                    <div class="mt-2" style="font-size: small">
+                        <p>Framed in a different way, mice are feodal risks. They were lost without the olden brace that
+                            composed their organization. The marrieds could be said to resemble agaze bulldozers.
+                        <p>Some streets are thought of simply as icons. Those zones are nothing more than grenades.</p>
+                    </div>
+                </div>
+
+                <div style="font-size: xx-large; text-align: center">…</div>
+                <!-- </div> -->
+            </div>
+
+            <div class="col-md-4 order-md-2">
+                <h2 class="h2">Offen</h2>
+
+                <!-- Termine solletn aufsteigend nach ihrer Frist sortiert sein. -->
+                <!-- <div th:each="offenerTermin : ${offeneTermine}"> -->
+                <div class="my-3 p-3 bg-light rounded">
+                    <div class="pb-2 border-bottom">
+                        <h3 class="h3">ATMs</h3>
+                        <span>from the right perspective</span>
+                    </div>
+                    <div class="mt-2 border-bottom" style="font-size: small">
+                        <p>An ATM is a crib from the right perspective.</p>
+                    </div>
+                    <div class="mt-2 text-secondary" style="font-size: small; text-align: center">offen bis DD.MM.YYYY,
+                        HH:MM
+                    </div>
+                    <div class="mt-2" style="text-align: center">
+                        <!-- falls der Nutzer schon an der Abstimmung teilgenommen hat -->
+                        <span class="btn btn-outline-info" style="font-size: small">Details</span>
+                    </div>
+                </div>
+
+                <div class="my-3 p-3 bg-light rounded">
+                    <div class="pb-2 border-bottom">
+                        <h3 class="h3">Prayerless Mayonnaise</h3>
+                        <span>at church</span>
+                    </div>
+                    <div class="mt-2 border-bottom" style="font-size: small">
+                        <p>Some posit the prayerless mayonnaise to be more than risky.</p>
+                    </div>
+                    <div class="mt-2 text-secondary" style="font-size: small; text-align: center">offen bis DD.MM.YYYY,
+                        HH:MM
+                    </div>
+                    <div class="mt-2" style="text-align: center">
+                        <!-- falls der Nutzer noch an der Abstimmung teilnehmen kann -->
+                        <span class="btn btn-primary" style="font-size: small">Abstimmen</span>
+                    </div>
+                </div>
+
+                <div style="font-size: xx-large; text-align: center">…</div>
+                <!-- </div> -->
+            </div>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>
+
