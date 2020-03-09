@@ -21,10 +21,6 @@ public class Terminfindung {
 	
 	private String ort;
 	
-	private String benutzer;
-	
-	private String pseudonym;
-	
 	private String link;
 	
 	private Date frist;

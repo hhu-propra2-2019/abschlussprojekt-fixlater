@@ -19,10 +19,6 @@ public class Umfrage {
 	
 	private String auswahlmoeglichkeit;
 	
-	private String benutzer;
-	
-	private String pseudonym;
-	
 	private String link;
 	
 	private Date frist;
