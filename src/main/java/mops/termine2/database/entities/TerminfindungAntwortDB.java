@@ -11,16 +11,16 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Data
-public class UmfrageAntwort {
+public class TerminfindungAntwortDB {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long umfrageAntwortId;
+	private Long terminfindungAntwortId;
 	
 	private String benutzer;
 	
 	@ManyToOne
-	private Umfrage umfrage;
+	private TerminfindungDB terminfindung;
 	
 	private Antwort antwort;
 	

@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class Gruppe {
+public class GruppeDB {
 	
 	@Id
 	private Long gruppeId;

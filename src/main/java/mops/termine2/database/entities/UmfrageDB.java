@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Umfrage {
+public class UmfrageDB {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
