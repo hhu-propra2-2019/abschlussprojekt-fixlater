@@ -74,7 +74,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 	 * @param http
 	 * @throws Exception
 	 */
-	private void forceHTTPS(HttpSecurity http) throws Exception {
+	private void /*CHECKSTYLE:OFF*/ forceHTTPS /*CHECKSTYLE:ON*/(HttpSecurity http) throws Exception {
 		http.requiresChannel()
 			.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
 			.requiresSecure();

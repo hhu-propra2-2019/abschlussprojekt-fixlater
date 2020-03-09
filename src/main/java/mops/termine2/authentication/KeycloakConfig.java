@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
 public class KeycloakConfig {
 	
 	@Bean
-	public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+	
+	public KeycloakSpringBootConfigResolver /*CHECKSTYLE:OFF*/ KeycloakConfigResolver() /*CHECKSTYLE:ON*/ {
+		
 		return new KeycloakSpringBootConfigResolver();
 	}
 }
