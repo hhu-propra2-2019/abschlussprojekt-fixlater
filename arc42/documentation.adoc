@@ -70,9 +70,31 @@ Fehler aus HTML entfernt, Git Actions aktualisiert/verbessert, RequestMapping hi
 
 == Tag 6
 
-application.properties mit H2 für development vorbereitet (Thomas, Anton),
-thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben (Anton),
+(Thomas, Anton)
+application.properties mit H2 für development vorbereitet 
 
+(Anton)
+- thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben, UI bei Terminerstellung weiter geklärt
+
+(Thomas)
+- Datenbank, Keycloak configs, Rollen bei Controllern
+- Tests, welche momentan noch zu Problemen führen 
+
+(Kathi, Julia, Jan, Marcel, Leon)
+- grundlegende Überlegungen für den Database-Initializer
+- LocalDateTime in Modellen geändert
+- TerminfindungService Ideen, Methoden 
+- Review für Datenbankmodell
+
+(Ingrid)
+- pull request bearbeitet
+- Probleme mit merge-Konflikt
+- html Dateien überarbeitet
+
+Aufgabe für morgen:
+- Tests zum Laufen bringen
+- Datenbank gepusht, Services schreiben
+- Controller schreiben
 
 ////
 Ziele für die Woche:
