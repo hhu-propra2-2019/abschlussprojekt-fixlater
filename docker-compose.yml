@@ -1,0 +1,11 @@
+version: "3.4"
+services:
+  database:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=geheim"
+      - "MYSQL_DATABASE=termine2"
+      - "allowPublicKeyRetrieval=true"
+      - "useSSL=false"
