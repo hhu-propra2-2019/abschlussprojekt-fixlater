@@ -31,7 +31,7 @@ public class ControllerTest {
 	
 	@Test
 	void testUmfragen() throws Exception {
-		mvc.perform(get("/umfragen")).andExpect(status().isOk());
+		mvc.perform(get("/termine2/umfragen")).andExpect(status().isOk());
 	}
 	
 	@Test
