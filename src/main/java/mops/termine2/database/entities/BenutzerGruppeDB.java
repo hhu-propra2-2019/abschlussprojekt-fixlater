@@ -19,4 +19,6 @@ public class BenutzerGruppeDB {
 	
 	private String benutzer;
 	
+	private String gruppe;
+	
 }
