@@ -2,86 +2,101 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='termine2', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 <head>
-  <meta charset="utf-8">
-  <title>Name des Subsystems</title>
-  <th:block th:fragment="headcontent">
-    <!-- Links, Skripts, Styles hier einfügen! -->
-  </th:block>
+	<meta charset="utf-8">
+	<title>Name des Subsystems</title>
+	<th:block th:fragment="headcontent">
+		<!-- Links, Skripts, Styles hier einfügen! -->
+	</th:block>
 </head>
+
 <body>
-<header>
-  <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-    <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-      <div align="center">
-  </div>
-  </nav>
-</header>
-<main th:fragment="bodycontent">
-  <!-- Restlichen Inhalt hier einfügen! -->
-
-<header>
-   	<h1>Neuer Termin:</h1>
-</header>
-
-<div>
-	<form method="POST">
-		<div class="form-group ">
-    		<label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
-
-		    <div class="col-sm-6">
-				<input id="titel" type="text" required name="titel" class="form-control" value=""/>
+	<header>
+		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<div align="center">
 			</div>
-		</div>
-
-		<div class="form-group ">
-    		<label for="terminOrt" class="col-sm-4 control-label">Ort:</label>
-
-    		<div class="col-sm-6">
-				<input id="ort" type="text" required name="ort" class="form-control" value=""/>
-			</div>
-		</div>
-
-		<div class="form-group ">
-    		<label for="poll_comments" class="col-sm-4 control-label">Terminbeschreibung:</label>
-			<div class="col-sm-6">
-				<textarea id="beschreibung" name="beschreibung" class="form-control" rows="4"></textarea>
-			</div>
-		</div>
-
-		<div class="form-group">
-    		<label for="poll_id" class="col-sm-4 control-label">
-        		Sichbarkeit des Termins:
-    		</label>
-    		<div class="col-sm-8">
-        		<div class="radio">
-            		<label>
-                		<input type="radio" name="editable" id="editableByAll" checked value="1">
-                		Gruppenmitglieder
-            		</label>
-            		<label>
-                		<input type="radio" name="editable" value="2">
-                		Link
-            		</label>
-        		</div>
-    		</div>
-    		<ul th:remove="all-but-first">
-				<li th:each="zeit : ${zeiten}">
-					<label>
-						<input name="Zeit" type="checkbox">
-						<span th:text="${zeit}">placeholder 1</span>
-					</label>
-				</li>
-			</ul>
-    		<button class="button" type="submit">Zeit hinzufügen</button>
-    		<button class="button" type="submit">Zeit hinzufügen</button>
-		</div>
-
+		</nav>
+	</header>
+	
+	<main th:fragment="bodycontent">
+		<!-- Restlichen Inhalt hier einfügen! -->
+		
+		<header>
+			<h1>Neuer Termin:</h1>
+		</header>
+		
 		<div>
-			<button class="button" type="submit">Termin erstellen</button>
+			<form method="POST">
+				<div class="form-group ">
+					<label for="terminTitel" class="col-sm-4 control-label">Titel:</label>
+					
+					<div class="col-sm-6">
+						<input id="titel" type="text" required name="titel" class="form-control"
+						       value=""/>
+					</div>
+				</div>
+				
+				<div class="form-group ">
+					<label for="terminOrt" class="col-sm-4 control-label">Ort:</label>
+					
+					<div class="col-sm-6">
+						<input id="ort" type="text" required name="ort" class="form-control" value=""/>
+					</div>
+				</div>
+				
+				<div class="form-group ">
+					<label for="poll_comments" class="col-sm-4 control-label">
+						Terminbeschreibung:
+					</label>
+					
+					<div class="col-sm-6">
+						<textarea id="beschreibung" name="beschreibung" class="form-control"
+						          rows="4">
+						</textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="poll_id" class="col-sm-4 control-label">
+						Sichbarkeit des Termins:
+					</label>
+					
+					<div class="col-sm-8">
+						<div class="radio">
+							<label>
+								<input type="radio" name="editable" id="editableByAll" checked value="1">
+									Gruppenmitglieder
+								</input>
+							</label>
+							
+							<label>
+								<input type="radio" name="editable" value="2">
+									Link
+								</input>
+							</label>
+						</div>
+					</div>
+					
+					<ul th:remove="all-but-first">
+						<li th:each="zeit : ${zeiten}">
+							<label>
+								<input name="Zeit" type="checkbox">
+									<span th:text="${zeit}">placeholder 1</span>
+								</input>
+							</label>
+						</li>
+					</ul>
+					
+					<button class="button" type="submit">Zeit hinzufügen</button>
+					<button class="button" type="submit">Zeit hinzufügen</button>
+				</div>
+				
+				<div>
+					<button class="button" type="submit">Termin erstellen</button>
+				</div>
+			</form>
 		</div>
-	</form>
-</div>
-
-</main>
+	
+	</main>
 </body>
 </html>
