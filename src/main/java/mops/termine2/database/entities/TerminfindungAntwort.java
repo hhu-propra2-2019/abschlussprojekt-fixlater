@@ -23,4 +23,6 @@ public class TerminfindungAntwort {
 	private Terminfindung terminfindung;
 	
 	private Antwort antwort;
+	
+	private String pseudonym;
 }

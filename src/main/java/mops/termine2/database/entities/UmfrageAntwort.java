@@ -23,4 +23,6 @@ public class UmfrageAntwort {
 	private Umfrage umfrage;
 	
 	private Antwort antwort;
+	
+	private String pseudonym;
 }

@@ -35,4 +35,6 @@ public class Terminfindung {
 	
 	private String beschreibung;
 	
+	private String gruppe;
+	
 }
