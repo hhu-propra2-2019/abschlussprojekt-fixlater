@@ -3,7 +3,7 @@ package mops.termine2.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,13 +18,13 @@ public class Terminfindung {
 	
 	private String beschreibung;
 	
-	private List<Date> vorschlaege;
+	private List<LocalDateTime> vorschlaege;
 	
 	private String ersteller;
 	
-	private Date frist;
+	private LocalDateTime frist;
 	
-	private Date loeschdatum;
+	private LocalDateTime loeschdatum;
 	
 	private Long gruppeId;
 	
