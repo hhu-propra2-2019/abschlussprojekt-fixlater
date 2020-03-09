@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class TerminfindungKommentar {
+public class Kommentar {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
