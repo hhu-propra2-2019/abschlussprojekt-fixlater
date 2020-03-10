@@ -2,6 +2,7 @@ package mops.termine2.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import mops.termine2.enums.Antwort;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
