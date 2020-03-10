@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
@@ -19,7 +21,9 @@ import java.util.stream.IntStream;
 public class DatabaseInitializer implements ServletContextInitializer {
 	
 	public static final int ANZAHL_GRUPPEN = 10;
+	
 	public static final int ANZAHL_BENUTZER = 10;
+	
 	public static final int ANZAHL_OPTIONEN = 10;
 	
 	@Autowired
@@ -45,7 +49,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		System.out.println("Befülle Datenbank!");
 		final Faker faker = new Faker(Locale.GERMAN);
 		IntStream.range(0, ANZAHL_GRUPPEN).forEach(value1 -> {
-		
+			
 			String gruppeName = faker.book().title();
 			Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
 			
@@ -57,7 +61,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				benutzerGruppeDB.setGruppeId(gruppeId);
 				benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
 				
-				if(Math.random() < 0.5) {
+				if (Math.random() < 0.5) {
 					fakeTerminfindungGruppe(faker, benutzerGruppeDB);
 				} else {
 					fakeUmfrageGruppe(faker, benutzerGruppeDB);
@@ -74,18 +78,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String link = faker.funnyName().name();
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
+		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
+				.plusMonths(new Random().nextInt(4));
+		LocalDateTime loeschdatum = frist.plusDays(90);
+		
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final TerminfindungDB terminfindungdb = new TerminfindungDB();
 			terminfindungdb.setBeschreibung(beschreibung);
 			terminfindungdb.setErsteller(benutzerGruppeDB.getBenutzer());
-			//terminfindungdb.setFrist(faker.);
+			terminfindungdb.setFrist(frist);
 			terminfindungdb.setGruppe(benutzerGruppeDB.getGruppe());
 			terminfindungdb.setLink(link);
-			//terminfindungdb.setLoeschdatum();
+			terminfindungdb.setLoeschdatum(loeschdatum);
 			terminfindungdb.setOrt(ort);
 			terminfindungdb.setModus(Modus.GRUPPE);
-			//terminfindungdb.setTermin();
+			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			
 			this.terminfindungRepository.save(terminfindungdb);
@@ -97,16 +105,19 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String beschreibung = faker.lorem().sentence();
 		String link = faker.funnyName().name();
 		String titel = faker.friends().quote();
-		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, 10);
+		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
+		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
+				.plusMonths(new Random().nextInt(4));
+		LocalDateTime loeschdatum = frist.plusDays(90);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final UmfrageDB umfrageDB = new UmfrageDB();
 			umfrageDB.setBeschreibung(beschreibung);
 			umfrageDB.setErsteller(benutzerGruppeDB.getBenutzer());
-			//terminfindungdb.setFrist(faker.);
+			umfrageDB.setFrist(frist);
 			umfrageDB.setGruppe(benutzerGruppeDB.getGruppe());
 			umfrageDB.setLink(link);
-			//terminfindungdb.setLoeschdatum();
+			umfrageDB.setLoeschdatum(loeschdatum);
 			umfrageDB.setModus(Modus.GRUPPE);
 			umfrageDB.setTitel(titel);
 			umfrageDB.setAuswahlmoeglichkeit(faker.harryPotter().spell());
