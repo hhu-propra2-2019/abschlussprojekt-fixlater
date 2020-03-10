@@ -76,9 +76,14 @@ application.properties mit H2 für development vorbereitet
 (Anton)
 - thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben, UI bei Terminerstellung weiter geklärt
 
-(Thomas)
+(Thomas, Leon)
 - Datenbank, Keycloak configs, Rollen bei Controllern
 - Tests, welche momentan noch zu Problemen führen 
+
+Nachdem Keycloak soweit in das Projekt eingebunden war, hat sich Leon zu Thomas gesellt und gemeinsam haben
+sie sich an den Tests versucht, da diese fehlgeschlagen sind. Dies lag daran, dass die Tests nur auf die Webseite
+zugreifen wollten und sich nicht einloggen konnten. Die Versuche, die fehlschlagenden Tests mit @WithMockUser 
+zu beheben, haben noch nicht funktioniert, weswegen wir uns diese Aufgabe für den nächsten Tag vorgenommen haben.
 
 (Kathi, Julia, Jan, Marcel, Leon)
 - grundlegende Überlegungen für den Database-Initializer
