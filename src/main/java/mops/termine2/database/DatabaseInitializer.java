@@ -26,23 +26,25 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	public static final int ANZAHL_OPTIONEN = 10;
 	
-	@Autowired
-	BenutzerGruppeRepository benutzerGruppeRepository;
+	public static final double ENTSCHEIDUNGSWERT = 0.5;
 	
 	@Autowired
-	KommentarRepository kommentarRepository;
+	transient BenutzerGruppeRepository benutzerGruppeRepository;
 	
 	@Autowired
-	TerminfindungAntwortRepository terminfindungAntwortRepository;
+	transient KommentarRepository kommentarRepository;
 	
 	@Autowired
-	TerminfindungRepository terminfindungRepository;
+	transient TerminfindungAntwortRepository terminfindungAntwortRepository;
 	
 	@Autowired
-	UmfrageAntwortRepository umfrageAntwortRepository;
+	transient TerminfindungRepository terminfindungRepository;
 	
 	@Autowired
-	UmfrageRepository umfrageRepository;
+	transient UmfrageAntwortRepository umfrageAntwortRepository;
+	
+	@Autowired
+	transient UmfrageRepository umfrageRepository;
 	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -61,7 +63,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				benutzerGruppeDB.setGruppeId(gruppeId);
 				benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
 				
-				if (Math.random() < 0.5) {
+				if (Math.random() < ENTSCHEIDUNGSWERT) {
 					fakeTerminfindungGruppe(faker, benutzerGruppeDB);
 				} else {
 					fakeUmfrageGruppe(faker, benutzerGruppeDB);
