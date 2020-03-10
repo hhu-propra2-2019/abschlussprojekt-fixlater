@@ -75,6 +75,27 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
 	}
 	
+	@Test
+	public void loadTerminfindungenByErstellerEineTerminfindungVierVorschlaege() {
+		int anzahl = 4;
+		List<TerminfindungDB> terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungMitModusGRUPPE(anzahl);
+		List<String> links = new ArrayList<>();
+		links.add("alleMeineEntchen");
+		when(repository.findLinkByErsteller("reallyuselesscodeANDMarcel297")).thenReturn(links);
+		when(repository.findByLink("alleMeineEntchen")).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByErsteller("reallyuselesscodeANDMarcel297").get(0);
+		
+		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(4);
+		assertThat(ergebnis.getTitel()).isEqualTo("Titel fuer Dummies");
+		assertThat(ergebnis.getBeschreibung()).isEqualTo("Ich mag Zuege");
+		assertThat(ergebnis.getGruppe()).isEqualTo("fixlater");
+		assertThat(ergebnis.getErsteller()).isEqualTo("reallyuselesscodeANDMarcel297");
+		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
+		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
+		assertThat(ergebnis.getLink()).isEqualTo("alleMeineEntchen");
+		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
+	}
+	
 	
 	private Terminfindung erstelleBeispielTermin(int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();
