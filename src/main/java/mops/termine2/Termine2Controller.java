@@ -26,7 +26,9 @@ public class Termine2Controller {
 	
 	public static final String ROLE_STUDENTIN = "ROLE_studentin";
 	
-	private final Counter authenticatedAccess;
+	public static final String ACCOUNT = "account";
+	
+	private final transient Counter authenticatedAccess;
 	
 	public Termine2Controller(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -57,7 +59,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String index(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
@@ -68,7 +70,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String termineAbstimmung(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
@@ -79,7 +81,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String termineNeu(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
@@ -90,7 +92,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String umfragen(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
@@ -101,7 +103,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String umfragenAbstimmung(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
@@ -112,7 +114,7 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	String umfragenNeu(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute("account", createAccountFromPrincipal(p));
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
 		
