@@ -1,13 +1,11 @@
 package mops.termine2.authentication;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-@AllArgsConstructor
 public class Account {
 	
 	private final String name; // Name der angemeldeten Person
@@ -16,6 +14,12 @@ public class Account {
 	
 	private final String image; // Bild (kann für jeden null sein)
 	
-	private final Set<String> roles = new HashSet<>(); // Rollen der Person
+	private Set<String> roles = new HashSet<>(); // Rollen der Person
 	
+	public Account(String name, String email, String image, Set<String> roles) {
+		this.name = name;
+		this.email = email;
+		this.image = image;
+		this.roles = roles;
+	}
 }
