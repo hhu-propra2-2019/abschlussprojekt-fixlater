@@ -101,6 +101,26 @@ Aufgabe für morgen:
 - Datenbank gepusht, Services schreiben
 - Controller schreiben
 
+== Tag 7
+
+(Marcel, Anton, Jan)
+-Services und Tests dafür
+-JPA Queries
+
+(Thomas, Leon)
+-Tests
+-Annotations
+-Fremdschlüssel Korrektur
+-application properties Korrektur
+
+(Kathi, Julia)
+-Initializer
+
+(Ingrid)
+-UI Views
+
+
+
 ////
 Ziele für die Woche:
 - Review für das Datenbankmodell
