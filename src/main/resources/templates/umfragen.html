@@ -22,6 +22,7 @@
 	<main th:fragment="bodycontent">
 		
 		<div class="container">
+			<!-- Header mit Titel und Aktionen -->
 			<div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
 				<h1 class="h1">Umfragen</h1>
 				
@@ -29,26 +30,34 @@
 					<button class="btn btn-outline-secondary dropdown-toggle mx-2">
 						Alle Gruppen
 					</button>
+					
 					<a th:href="@{/termine2/umfragen-neu}">
 						<button class="btn btn-primary">Neue Umfrage</button>
 					</a>
 				</div>
 			</div>
 			
+			<!-- Listen -->
 			<div class="row">
+				<!-- Linke Liste: Umfrageergebnisse -->
 				<div class="col-md-8 order-md-1">
 					<h2 class="h2">Ergebnisse</h2>
 					
 					<!-- Die neusten Abstimmungen sollten oben eingefügt werden. -->
 					<div> <!-- <div th:each="ergebnis : ${ergebnisse}"> -->
 						<div class="my-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<div class="d-flex justify-content-between align-items-center">
 									<h3 class="h3">Titel der Umfrage</h3>
 								</div>
+								
 								<div>Ort</div>
+								
 								<div class="mt-2 text-success">Ergebnis</div>
 							</div>
+							
+							<!-- Beschreibung -->
 							<div class="mt-2 border-bottom" style="font-size: small">
 								<p> Authors often misinterpret the fibre as a tacky museum, when in
 								    actuality it feels more like a moreish rate. We can assume that
@@ -58,6 +67,8 @@
 								    that any instance of a tuna can be construed as a ruttish
 								    custard. </p>
 							</div>
+							
+							<!-- Weitere Aktionen -->
 							<div class="mt-3" style="text-align: center">
 								<!-- leitet an die Ergebnisse der Umfrage weiter -->
 								<!-- <a th:href="@{………}"> -->
@@ -73,9 +84,12 @@
 								<div class="d-flex justify-content-between align-items-center">
 									<h3 class="h3">Titel der Umfrage</h3>
 								</div>
+								
 								<div>Ort</div>
+								
 								<div class="mt-2 text-success">Ergebnis</div>
 							</div>
+							
 							<div class="mt-2 border-bottom" style="font-size: small">
 								<p> Framed in a different way, mice are feodal risks. They were lost
 								    without the olden brace that composed their organization. The
@@ -83,6 +97,7 @@
 								<p> Some streets are thought of simply as icons. Those zones are
 								    nothing more than grenades. </p>
 							</div>
+							
 							<div class="mt-3" style="text-align: center">
 								<!-- leitet an die Ergebnisse der Umfrage weiter -->
 								<!-- <a th:href="@{………}"> -->
@@ -97,48 +112,60 @@
 					</div>
 				</div>
 				
+				<!-- Rechte Liste: Offene Umfragen -->
 				<div class="col-md-4 order-md-2">
 					<h2 class="h2">Offen</h2>
 					
 					<!-- Umfragen sollten aufsteigend nach ihrer Frist sortiert sein. -->
 					<div> <!-- <div th:each="offeneUmfrage : ${offeneUmfragen}"> -->
 						<div class="my-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<h3 class="h3">ATMs</h3>
-								<span>from the right perspective</span>
+								<div>from the right perspective</div>
 							</div>
+							
+							<!-- Beschreibung -->
 							<div class="mt-2 border-bottom" style="font-size: small">
 								<p> An ATM is a crib from the right perspective. </p>
 							</div>
-							<div class="mt-2 text-secondary"
-							     style="font-size: small; text-align: center">
-								offen bis DD.MM.YYYY, HH:MM
-							</div>
-							<div class="mt-2" style="text-align: center">
-								<!-- falls der Nutzer schon an der Umfrage teilgenommen hat -->
-								<span class="btn btn-outline-info" style="font-size: small">
-									Details
-								</span>
+							
+							<!-- Weitere Aktionen -->
+							<div class="mt-2">
+								<div class="text-secondary"
+								     style="font-size: small; text-align: center">
+									offen bis DD.MM.YYYY, HH:MM
+								</div>
+								
+								<div class="mt-2" style="text-align: center">
+									<!-- falls der Nutzer schon an der Umfrage teilgenommen hat -->
+									<button class="btn btn-outline-info" style="font-size: small">
+										Details
+									</button>
+								</div>
 							</div>
 						</div>
 						
 						<div class="my-3 p-3 bg-light rounded">
 							<div class="pb-2 border-bottom">
 								<h3 class="h3">Prayerless Mayonnaise</h3>
-								<span>at church</span>
+								<div>at church</div>
 							</div>
+							
 							<div class="mt-2 border-bottom" style="font-size: small">
 								<p> Some posit the prayerless mayonnaise to be more than risky. </p>
 							</div>
+							
 							<div class="mt-2 text-secondary"
 							     style="font-size: small; text-align: center">
 								offen bis DD.MM.YYYY, HH:MM
 							</div>
+							
 							<div class="mt-2" style="text-align: center">
 								<!-- falls der Nutzer noch an der Umfrage teilnehmen kann -->
-								<span class="btn btn-primary" style="font-size: small">
+								<button class="btn btn-primary" style="font-size: small">
 									Abstimmen
-								</span>
+								</button>
 							</div>
 						</div>
 						
