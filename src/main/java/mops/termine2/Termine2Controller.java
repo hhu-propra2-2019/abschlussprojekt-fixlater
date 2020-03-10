@@ -34,6 +34,72 @@ public class Termine2Controller {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
 	
+	@GetMapping("")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String index(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "termine";
+	}
+	
+	@GetMapping("/termine-abstimmung")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String termineAbstimmung(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "termine-abstimmung";
+	}
+	
+	@GetMapping("/termine-neu")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String termineNeu(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "termine-neu";
+	}
+	
+	@GetMapping("/umfragen")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String umfragen(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "umfragen";
+	}
+	
+	@GetMapping("/umfragen-abstimmung")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String umfragenAbstimmung(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "umfragen-abstimmung";
+	}
+	
+	@GetMapping("/umfragen-neu")
+	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
+	public String umfragenNeu(Principal p, Model m) {
+		if (p != null) {
+			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+		}
+		authenticatedAccess.increment();
+		
+		return "umfragen-neu";
+	}
+	
 	private Account createAccountFromPrincipal(Principal principal) {
 		
 		if (principal instanceof KeycloakAuthenticationToken) {
@@ -55,70 +121,5 @@ public class Termine2Controller {
 		}
 	}
 	
-	@GetMapping("")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String index(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "termine";
-	}
-	
-	@GetMapping("/termine-abstimmung")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String termineAbstimmung(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "termine-abstimmung";
-	}
-	
-	@GetMapping("/termine-neu")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String termineNeu(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "termine-neu";
-	}
-	
-	@GetMapping("/umfragen")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String umfragen(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "umfragen";
-	}
-	
-	@GetMapping("/umfragen-abstimmung")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String umfragenAbstimmung(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "umfragen-abstimmung";
-	}
-	
-	@GetMapping("/umfragen-neu")
-	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
-	String umfragenNeu(Principal p, Model m) {
-		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
-		}
-		authenticatedAccess.increment();
-		
-		return "umfragen-neu";
-	}
 	
 }
