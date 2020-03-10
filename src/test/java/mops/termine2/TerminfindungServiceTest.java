@@ -61,7 +61,7 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungByLinkMitVierVorschlaegen() {
 		int anzahl = 4;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungMitModusGruppe(anzahl);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
 		when(repository.findByLink("alleMeineEntchen")).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLink("alleMeineEntchen");
 		
@@ -80,7 +80,7 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungenByErstellerEineTerminfindungVierVorschlaege() {
 		int anzahl = 4;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungMitModusGruppe(anzahl);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
 		List<String> links = new ArrayList<>();
 		links.add("alleMeineEntchen");
 		when(repository.findLinkByErsteller("reallyuselesscodeANDMarcel297")).thenReturn(links);
@@ -127,7 +127,7 @@ public class TerminfindungServiceTest {
 		return terminVorschleage;
 	}
 	
-	public List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindungMitModusGruppe(int anzahlTermine) {
+	public List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(int anzahlTermine) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		
