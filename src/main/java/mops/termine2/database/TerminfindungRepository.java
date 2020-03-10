@@ -12,4 +12,13 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	
 	@Query
 	List<TerminfindungDB> findByLink(String link);
+	
+	@Query
+	List<String> findLinkByErsteller(String ersteller);
+	
+	/*
+	@Query("select db.link from TerminfindungDB db where db.ersteller like :ersteller")
+	List<String> findLinkByErsteller(@Param("ersteller") String e);
+	
+	 */
 }
