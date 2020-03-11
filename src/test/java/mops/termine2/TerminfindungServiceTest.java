@@ -74,8 +74,7 @@ public class TerminfindungServiceTest {
 	@Test
 	public void saveSingleTerminfndungMitFuenfVorschlaegenModusLink() {
 		int terminAnzahl = 5;
-		Terminfindung termine = erstelleBeispielTermin(terminAnzahl);
-		termine.setGruppe(null);
+		Terminfindung termine = erstelleBeispielTermin(3, terminAnzahl);
 		service.save(termine);
 		Mockito.verify(repository, times(terminAnzahl)).save(any());
 	}
@@ -175,6 +174,31 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnise).isEqualTo(null);
 	}
 	
+	@Test
+	public void load2TerminfindungenByLinks() {
+		int dummie1 = 0;
+		int dummie2 = 1;
+		int anzahl1 = 3;
+		int anzahl2 = 6;
+		List<TerminfindungDB> terminfindungDBs1;
+		List<TerminfindungDB> terminfindungDBs2;
+		terminfindungDBs1 = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie1, anzahl1);
+		terminfindungDBs2 = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie2, anzahl2);
+		List<String> links = new ArrayList<>(
+				Arrays.asList(linkListe.get(dummie1), linkListe.get(dummie2)));
+		when(repository.findByLink(linkListe.get(dummie1))).thenReturn(terminfindungDBs1);
+		when(repository.findByLink(linkListe.get(dummie2))).thenReturn(terminfindungDBs2);
+		List<Terminfindung> erwartet = new ArrayList<>(
+				Arrays.asList(erstelleBeispielTermin(dummie1, anzahl1),
+						erstelleBeispielTermin(dummie2, anzahl2)
+				)
+		);
+		System.out.print(erwartet);
+		
+		List<Terminfindung> ergebnis = service.getTerminfindungenByLinks(links);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
 	
 	private Terminfindung erstelleBeispielTermin(int dummie, int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();

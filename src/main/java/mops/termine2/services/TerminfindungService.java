@@ -78,7 +78,7 @@ public class TerminfindungService {
 		return null;
 	}
 	
-	private List<Terminfindung> getTerminfindungenByLinks(List<String> links) {
+	public List<Terminfindung> getTerminfindungenByLinks(List<String> links) {
 		if (links != null && !links.isEmpty()) {
 			List<Terminfindung> terminfindungen = new ArrayList<>();
 			
