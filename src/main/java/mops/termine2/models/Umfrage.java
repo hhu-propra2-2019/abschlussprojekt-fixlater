@@ -8,17 +8,15 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Terminfindung {
+public class Umfrage {
 	
 	private String link;
 	
 	private String titel;
 	
-	private String ort;
-	
 	private String beschreibung;
 	
-	private List<LocalDateTime> vorschlaege;
+	private List<String> vorschlaege;
 	
 	private String ersteller;
 	
