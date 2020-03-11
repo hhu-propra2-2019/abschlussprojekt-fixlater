@@ -11,12 +11,12 @@ Als Basis des Projekts war die erste Aufgabe, die Geräte richtig zu konfigurier
 
 image::concept.jpg[]
 
-Zum Abschluss des Tages haben wir uns über die verschiedenen Aufgaben ausgetauscht und die Erfolge bzw. Probleme zusammengetragen. Anschließend erfolgte noch ein kurzes Brainstorming über die anstehenden Aufgaben des nächsten Tages. Da dies sehr gut geklappt hat und einen guten Überblick über die absolvierten und anstehenden Aufgaben geliefert hat, haben wir beschlossen, dies ab jetzt jeden Tag durchzuführen. 
+Zum Abschluss des Tages haben wir uns über die verschiedenen Aufgaben ausgetauscht und die Erfolge bzw. Probleme zusammengetragen. Anschließend erfolgte noch ein kurzes Brainstorming über die anstehenden Aufgaben des nächsten Tages. Da dies sehr gut geklappt hat und einen guten Überblick über die absolvierten und anstehenden Aufgaben geliefert hat, haben wir beschlossen, dies ab jetzt jeden Tag durchzuführen.
 
 
 == Tag 3
 
-Die erste Aufgabe des Tages war eine gemeinsame erste Erarbeitung des Arc42 Templates. Anschließend haben wir noch einmal kurz die Aufgaben für den Tag auf kleine Gruppen von 2-3 Personen aufgeteilt. 
+Die erste Aufgabe des Tages war eine gemeinsame erste Erarbeitung des Arc42 Templates. Anschließend haben wir noch einmal kurz die Aufgaben für den Tag auf kleine Gruppen von 2-3 Personen aufgeteilt.
 
 === Gruppe Checkstyle (Kathi, Leon)
 Leon hatte bereits eine grundlegende Konfigurationsdatei für Checkstyle vorbereitet. Über den Tag sind wir durch die Dokumentation von Checkstyle gegangen und haben für die einzelnen Module entschieden, welche für unser Projekt Sinn machen. Am Ende des Tages sind ein paar Probleme aufgetreten, hauptsächlich bei dem Modul "Indentation", da dieses mit Tabs anders arbeitet als mit Leerzeichen. Wir haben uns entschieden, darüber am nächsten Tag weiter zu diskutieren, wie wir damit weiter vorgehen sollen.
@@ -30,7 +30,7 @@ Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht ferti
 
 === Gruppe Klassen (Thomas,Jan)
 Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen welche Klassen
-benötigt werden um das gewünschte Verhalten zu ermöglichen. Wir orientierten uns dabei aber noch immer zu sehr am Datenbankmodell.  
+benötigt werden um das gewünschte Verhalten zu ermöglichen. Wir orientierten uns dabei aber noch immer zu sehr am Datenbankmodell.
 
 == Tag 4
 
@@ -38,7 +38,7 @@ Die Aufgaben vom Vortag wurden größtenteils in den Gruppen fortgesetzt.
 
 === Gruppe Checkstyle (Kathi, Leon)
 Heute haben wir ein paar Kleinigkeiten an der Checkstyle Konfigurationsdatei geändert. Unter anderem, dass eine Zeile bis zu 120 Zeichen enthalten werden darf und nur .java Dateien überprüft werden sollen. Die Module "MagicNumbers" und "MultipleStringLiterals" wurden auch rausgenommen, da dies für uns zu streng war. Das Modul "AvoidDoubleBraceInitialization" hat zu Problemen mit dem eclipse Checkstyle Plugin geführt, weswegen auch dieses rausgenommen wurde.
-Außerdem wurden Module hinzugefügt, die die Namen von Variablen, Methoden etc überprüfen. 
+Außerdem wurden Module hinzugefügt, die die Namen von Variablen, Methoden etc überprüfen.
 Als wir damit fertig waren, haben wir eclipse und IntelliJ so eingestellt, dass die automatische Formatierung der IDE zu keinen Fehlern mit Checkstyle führt und die entstandenden Dateien an die anderen Mitglieder des Teams verteilt, sodass der Umsprung auf das neue Format ohne Probleme erfolgen kann.
 
 === Gruppe Datenbankmodell/Klassen (Julia, Thomas, Marcel)
@@ -71,25 +71,26 @@ Fehler aus HTML entfernt, Git Actions aktualisiert/verbessert, RequestMapping hi
 == Tag 6
 
 (Thomas, Anton)
-application.properties mit H2 für development vorbereitet 
+application.properties mit H2 für development vorbereitet
 
 (Anton)
 - thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben, UI bei Terminerstellung weiter geklärt
 
 (Thomas, Leon)
 - Datenbank, Keycloak configs, Rollen bei Controllern
-- Tests, welche momentan noch zu Problemen führen 
+- Tests, welche momentan noch zu Problemen führen
 
 Nachdem Keycloak soweit in das Projekt eingebunden war, hat sich Leon zu Thomas gesellt und gemeinsam haben
 sie sich an den Tests versucht, da diese fehlgeschlagen sind. Dies lag daran, dass die Tests nur auf die Webseite
-zugreifen wollten und sich nicht einloggen konnten. Die Versuche, die fehlschlagenden Tests mit @WithMockUser 
+zugreifen wollten und sich nicht einloggen konnten. Die Versuche, die fehlschlagenden Tests mit @WithMockUser
 zu beheben, haben noch nicht funktioniert, weswegen wir uns diese Aufgabe für den nächsten Tag vorgenommen haben.
 
-(Kathi, Julia, Jan, Marcel, Leon)
-- grundlegende Überlegungen für den Database-Initializer
-- LocalDateTime in Modellen geändert
-- TerminfindungService Ideen, Methoden 
-- Review für Datenbankmodell
+=== Gruppe Gruppe Datenbankmodell/Klassen/erste Services (Kathi, Julia, Jan, Marcel, Leon)
+Zunächst wurden sich grundlegende Gedanken zu dem Database Initializer gemacht, der am
+Folgetag implementiert werden sollte. Zudem wurden noch kleine Fehlern in den Modell-Klassen korrigiert,
+wie 'Date' zu 'LocalDateTime' geändert.  Insgesamt wurde die Entwicklung des Datenbankmodells mit einer
+Review dieses Modells abgeschlossen. Außerdem wurden erste Ideen zu einem TerminfindungsService gesammelt,
+sowie erste Strukturen dafür entworfen.
 
 (Ingrid)
 - pull request bearbeitet
@@ -113,13 +114,14 @@ Aufgabe für morgen:
 -Fremdschlüssel Korrektur
 -application properties Korrektur
 
-(Kathi, Julia)
--Initializer
+=== Gruppe DB-Initializer (Kathi, Julia)
+Heute wurde damit begonnen, den Database Initializer zu schreiben, der zum Start der Anwendung die
+Datenbank mit ersten Fake-Daten füllt. Insgesamt wurde die Tabelle "BenutzerGruppeDB" mit Daten gefüllt
+und Methoden geschrieben, die eine Erstellung einer Terminfindung bzw. einer Umfrage eines Benutzers
+für eine seiner Gruppen simuliert und die Daten speichert.
 
 (Ingrid)
 -UI Views
-
-
 
 ////
 Ziele für die Woche:
@@ -135,3 +137,16 @@ Wochenziel:
 - grundlegende Anwendungen vorhanden
 - Kombi funktioniert
 ////
+
+
+== Tag 8
+
+=== Gruppe DB-Initializer (Kathi, Julia)
+Zu dem Database-Initializer wurden nun die vorgegebenen Accounts von Keycloak hinzugefügt
+(studentinX und orgaX).
+////
+Zudem gewann der Database-Initializer an Methoden: Nun wurde ermöglicht,
+Terminfindungen bzw. Umfragen für alle Nutzer (nicht auf eine Gruppe beschränkt) zu erstellen und die
+Antworten wurden für Gruppen - Terminfindungen bzw. - Umfragen gespeichert.
+TODO: Antworten für öffentliche Abstimmungen, Kommentare einfügen
+///
