@@ -89,6 +89,26 @@ public class TerminfindungServiceTest {
 	}
 	
 	@Test
+	public void loadTerminfindungByLinkMit14Vorschlaegen() {
+		int anzahl = 14;
+		List<TerminfindungDB> terminfindungDBs;
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
+		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByLink(link);
+		
+		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
+		assertThat(ergebnis.getTitel()).isEqualTo(titel);
+		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
+		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
+		assertThat(ergebnis.getErsteller()).isEqualTo(ersteller);
+		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
+		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
+		assertThat(ergebnis.getLink()).isEqualTo(link);
+		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
+	}
+	
+	
+	@Test
 	public void loadTerminfindungByLinkNichtExistend() {
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
