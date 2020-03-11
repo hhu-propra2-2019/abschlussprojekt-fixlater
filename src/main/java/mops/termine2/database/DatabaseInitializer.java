@@ -50,15 +50,16 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		System.out.println("Befülle Datenbank!");
 		final Faker faker = new Faker(Locale.GERMAN);
-		IntStream.range(0, ANZAHL_GRUPPEN).forEach(value1 -> {
-			
+		int studentenZaehler = 1;
+		for (int value1 = 0; value1 < ANZAHL_GRUPPEN; value1++) {
+			// TODO Rollen: orga, orga1, orga2, orga3, actuator
 			String gruppeName = faker.book().title();
 			Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
 			
-			IntStream.range(0, ANZAHL_BENUTZER).forEach(value2 -> {
-				
+			for (int value2 = 0; value2 < ANZAHL_BENUTZER; value2++) {
 				final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
-				benutzerGruppeDB.setBenutzer(faker.name().username());
+				benutzerGruppeDB.setBenutzer("studentin" + studentenZaehler);
+				studentenZaehler++;
 				benutzerGruppeDB.setGruppe(gruppeName);
 				benutzerGruppeDB.setGruppeId(gruppeId);
 				benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
@@ -70,8 +71,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				}
 				
 				this.benutzerGruppeRepository.save(benutzerGruppeDB);
-			});
-		});
+			}
+		}
 	}
 	
 	public void fakeTerminfindungGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB) {
