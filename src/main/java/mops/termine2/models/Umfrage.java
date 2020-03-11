@@ -3,11 +3,13 @@ package mops.termine2.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Umfrage {
 	
 	private String link;
