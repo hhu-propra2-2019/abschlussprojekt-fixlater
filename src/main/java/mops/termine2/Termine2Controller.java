@@ -16,6 +16,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,17 +58,35 @@ public class Termine2Controller {
 		termin1.setBeschreibung("Dies ist eine Beschreibung für Termin1");
 		termin1.setTitel("Terminfindung 1");
 		termin1.setOrt("Raum 25.12.03.35");
+		termin1.setErgebnis(LocalDateTime.now());
+		
+		Terminfindung termin3 = new Terminfindung();
+		termin3.setErsteller("studentin");
+		termin3.setBeschreibung("Dies ist eine Beschreibung für Termin1 dgaf,gfag fagmadf g afm,g am m,agm,adf g,maf gm, f g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Af g afm,g am m,agm,adf g,maf gm, amg, RJKTG Aamg, RJKTG AJKGNAJFDNGJKDF GJKA BJERAGJK FNKG gjnjiafguierN");
+		termin3.setTitel("Terminfindung 1");
+		termin3.setOrt("Raum 25.12.03.35");
+		termin3.setErgebnis(LocalDateTime.now());
 		
 		terminfindungenTeilgenommen.add(termin1);
+		terminfindungenTeilgenommen.add(termin3);
 		
 		List<Terminfindung> terminfindungenOffen = new ArrayList<Terminfindung>();
 		Terminfindung termin2 = new Terminfindung();
 		termin2.setErsteller("studentin");
-		termin2.setBeschreibung("Dies ist eine Beschreibung für Termin2");
+		termin2.setBeschreibung("Dies ist eine Beschreibung für Termin2 sfg G FDagjk adfgjk dfjkg djfkg FG Jd fgj GJ dfgjk adjkfgkf gjkad gjkdaf gjkf jg dafjk gadjfg jadfg adfj gajdfg djfakg adjkfg adfj gjadf ");
 		termin2.setTitel("Terminfindung 2");
 		termin2.setOrt("Raum 25.12.03.35");
+		termin2.setFrist(LocalDateTime.now());
 		
-		terminfindungenTeilgenommen.add(termin2);
+		Terminfindung termin4 = new Terminfindung();
+		termin4.setErsteller("studentin");
+		termin4.setBeschreibung("Dies ist eine Beschreibung für Termin2 sfg G FDagjk adfgjk dfjkg djfkg FG Jd fgj GJ dfgjk adjkfgkf gjkad gjkdaf gjkf jg dafjk gadjfg jadfg adfj gajdfg djfakg adjkfg adfj gjadf ");
+		termin4.setTitel("Terminfindung 2");
+		termin4.setOrt("Raum 25.12.03.35");
+		termin4.setFrist(LocalDateTime.now());
+		
+		terminfindungenOffen.add(termin2);
+		terminfindungenOffen.add(termin4);
 		
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenTeilgenommen, terminfindungenOffen,
 			gruppen);
