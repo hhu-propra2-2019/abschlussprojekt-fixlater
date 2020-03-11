@@ -161,7 +161,7 @@ public class TerminfindungServiceTest {
 		return terminVorschleage;
 	}
 	
-	public List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(int anzahlTermine) {
+	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(int anzahlTermine) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		
