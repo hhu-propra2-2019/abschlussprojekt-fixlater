@@ -77,7 +77,7 @@ public class TerminfindungServiceTest {
 		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLink(link);
 		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(4);
+		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
 		assertThat(ergebnis.getTitel()).isEqualTo(titel);
 		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
 		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
@@ -86,6 +86,27 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
 		assertThat(ergebnis.getLink()).isEqualTo(link);
 		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
+	}
+	
+	@Test
+	public void loadTerminfindungByLinkNichtExistend() {
+		List<TerminfindungDB> terminfindungDBs;
+		terminfindungDBs = new ArrayList<>();
+		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByLink(link);
+		assertThat(ergebnis).isEqualTo(null);
+	}
+	
+	@Test
+	public void loadTerminfindungenByErstelleNichtExistent() {
+		List<TerminfindungDB> terminfindungDBs;
+		terminfindungDBs = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		when(repository.findLinkByErsteller(ersteller)).thenReturn(links);
+		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
+		List<Terminfindung> ergebnise = service.loadByErsteller(ersteller);
+		
+		assertThat(ergebnise).isEqualTo(null);
 	}
 	
 	@Test
@@ -99,7 +120,7 @@ public class TerminfindungServiceTest {
 		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByErsteller(ersteller).get(0);
 		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(4);
+		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
 		assertThat(ergebnis.getTitel()).isEqualTo(titel);
 		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
 		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
