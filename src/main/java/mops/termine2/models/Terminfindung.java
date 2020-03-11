@@ -26,6 +26,6 @@ public class Terminfindung {
 	
 	private LocalDateTime loeschdatum;
 	
-	private Long gruppeId;
+	private String gruppe;
 	
 }

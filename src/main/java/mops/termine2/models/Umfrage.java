@@ -24,6 +24,6 @@ public class Umfrage {
 	
 	private LocalDateTime loeschdatum;
 	
-	private Long gruppeId;
+	private String gruppe;
 	
 }
