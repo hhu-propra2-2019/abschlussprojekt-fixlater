@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,21 +24,38 @@ import static org.mockito.Mockito.when;
 
 public class TerminfindungServiceTest {
 	
+	private transient List<String> linkListe = new ArrayList<>(
+			Arrays.asList("alleMeineEntchen", "haenzchenKlein", "bruderJakob", "derMondIstAufgegangen"));
+	
+	private transient List<String> erstellerListe = new ArrayList<>(
+			Arrays.asList("Leon", "Marcel", "Thomas", "Anthon"));
+	
+	private transient List<String> gruppenListe = new ArrayList<>(
+			Arrays.asList("G1", "G2", "G3", null));
+	
+	private transient List<String> titelListe = new ArrayList<>(
+			Arrays.asList("Titel1", "Titel2", "Titel3", "Titel4"));
+	
+	private transient List<String> beschreibungsListe = new ArrayList<>(
+			Arrays.asList("B1", "B2", "B3", "B4"));
+	
+	private transient List<String> ortListe = new ArrayList<>(
+			Arrays.asList("O1", "O2", "O3", "O4"));
+	
+	private transient LocalDateTime loeschdatum = LocalDateTime.of(1, 3, 1, 1, 1, 1, 1);
+	
+	private transient LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
+	
+	private transient List<LocalDateTime> loeschdatumListe = new ArrayList<>(
+			Arrays.asList(loeschdatum, loeschdatum, loeschdatum, loeschdatum));
+	
+	private transient List<LocalDateTime> fristListe = new ArrayList<>(
+			Arrays.asList(frist, frist, frist, frist));
+	
+	
 	private transient TerminfindungService service;
 	
 	private transient TerminfindungRepository repository;
-	
-	private transient String link = "alleMeineEntchen";
-	
-	private transient String ersteller = "reallyuselesscodeANDMarcel297";
-	
-	private transient String beschreibung = "Ich mag Zuege";
-	
-	private transient String gruppe = "fixlater";
-	
-	private transient String ort = "25.13.U1.24";
-	
-	private transient String titel = "Titel fuer dummies";
 	
 	@BeforeEach
 	public void setUp() {
@@ -46,9 +64,18 @@ public class TerminfindungServiceTest {
 	}
 	
 	@Test
-	public void saveSingleTerminfndungMitFuenfVorschlaegen() {
+	public void saveSingleTerminfndungMitFuenfVorschlaegenModusGruppe() {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTermin(terminAnzahl);
+		service.save(termine);
+		Mockito.verify(repository, times(terminAnzahl)).save(any());
+	}
+	
+	@Test
+	public void saveSingleTerminfndungMitFuenfVorschlaegenModusLink() {
+		int terminAnzahl = 5;
+		Terminfindung termine = erstelleBeispielTermin(terminAnzahl);
+		termine.setGruppe(null);
 		service.save(termine);
 		Mockito.verify(repository, times(terminAnzahl)).save(any());
 	}
@@ -72,59 +99,49 @@ public class TerminfindungServiceTest {
 	@Test
 	public void loadTerminfindungByLinkMitVierVorschlaegen() {
 		int anzahl = 4;
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLink(link);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
+		when(repository.findByLink(linkListe.get(0))).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByLink(linkListe.get(dummie));
+		Terminfindung erwartet = erstelleBeispielTermin(dummie, anzahl);
 		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
-		assertThat(ergebnis.getTitel()).isEqualTo(titel);
-		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
-		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
-		assertThat(ergebnis.getErsteller()).isEqualTo(ersteller);
-		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLink()).isEqualTo(link);
-		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
 	public void loadTerminfindungByLinkMit14Vorschlaegen() {
 		int anzahl = 14;
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLink(link);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(0, anzahl);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByLink(linkListe.get(dummie));
+		Terminfindung erwartet = erstelleBeispielTermin(0, anzahl);
 		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
-		assertThat(ergebnis.getTitel()).isEqualTo(titel);
-		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
-		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
-		assertThat(ergebnis.getErsteller()).isEqualTo(ersteller);
-		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLink()).isEqualTo(link);
-		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	
 	@Test
 	public void loadTerminfindungByLinkNichtExistend() {
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLink(link);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByLink(linkListe.get(dummie));
 		assertThat(ergebnis).isEqualTo(null);
 	}
 	
 	@Test
 	public void loadTerminfindungenByErstelleNichtExistent() {
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
 		List<String> links = new ArrayList<>();
-		when(repository.findLinkByErsteller(ersteller)).thenReturn(links);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		List<Terminfindung> ergebnise = service.loadByErsteller(ersteller);
+		when(repository.findLinkByErsteller(erstellerListe.get(0))).thenReturn(links);
+		when(repository.findByLink(linkListe.get(0))).thenReturn(terminfindungDBs);
+		List<Terminfindung> ergebnise = service.loadByErsteller(erstellerListe.get(0));
 		
 		assertThat(ergebnise).isEqualTo(null);
 	}
@@ -132,77 +149,52 @@ public class TerminfindungServiceTest {
 	@Test
 	public void loadTerminfindungenByErstellerEineTerminfindungVierVorschlaege() {
 		int anzahl = 4;
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
 		List<String> links = new ArrayList<>();
-		links.add(link);
-		when(repository.findLinkByErsteller(ersteller)).thenReturn(links);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByErsteller(ersteller).get(0);
+		links.add(linkListe.get(dummie));
+		when(repository.findLinkByErsteller(erstellerListe.get(dummie))).thenReturn(links);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		Terminfindung ergebnis = service.loadByErsteller(erstellerListe.get(dummie)).get(0);
+		Terminfindung erwartet = erstelleBeispielTermin(0, anzahl);
 		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
-		assertThat(ergebnis.getTitel()).isEqualTo(titel);
-		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
-		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
-		assertThat(ergebnis.getErsteller()).isEqualTo(ersteller);
-		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLink()).isEqualTo(link);
-		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
-		assertThat(ergebnis.getOrt()).isEqualTo(ort);
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
 	public void loadTerminfindungenByGruppeNichtExistent() {
+		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
 		List<String> links = new ArrayList<>();
-		when(repository.findLinkByGruppe(gruppe)).thenReturn(links);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		List<Terminfindung> ergebnise = service.loadByGruppe(gruppe);
+		when(repository.findLinkByGruppe(gruppenListe.get(dummie))).thenReturn(links);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		List<Terminfindung> ergebnise = service.loadByGruppe(gruppenListe.get(dummie));
 		
 		assertThat(ergebnise).isEqualTo(null);
 	}
 	
-	@Test
-	public void loadTerminfindungenByGrupperEineTerminfindung7Vorschlaege() {
-		int anzahl = 7;
-		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(anzahl);
-		List<String> links = new ArrayList<>();
-		links.add(link);
-		when(repository.findLinkByGruppe(gruppe)).thenReturn(links);
-		when(repository.findByLink(link)).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByGruppe(gruppe).get(0);
-		
-		List<LocalDateTime> enthalteneVorschlaege = erstelleVorschlaege(anzahl);
-		assertThat(ergebnis.getTitel()).isEqualTo(titel);
-		assertThat(ergebnis.getBeschreibung()).isEqualTo(beschreibung);
-		assertThat(ergebnis.getGruppe()).isEqualTo(gruppe);
-		assertThat(ergebnis.getErsteller()).isEqualTo(ersteller);
-		assertThat(ergebnis.getFrist()).isEqualTo(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLoeschdatum()).isEqualTo(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
-		assertThat(ergebnis.getLink()).isEqualTo(link);
-		assertThat(ergebnis.getVorschlaege()).isEqualTo(enthalteneVorschlaege);
-		assertThat(ergebnis.getOrt()).isEqualTo(ort);
-	}
 	
-	
-	private Terminfindung erstelleBeispielTermin(int anzahlTermine) {
+	private Terminfindung erstelleBeispielTermin(int dummie, int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();
-		termine.setBeschreibung(beschreibung);
-		termine.setErsteller(ersteller);
+		termine.setBeschreibung(beschreibungsListe.get(dummie));
+		termine.setErsteller(erstellerListe.get(dummie));
 		
 		LocalDateTime frist = LocalDateTime.now().plusWeeks(2);
-		termine.setLoeschdatum(frist.plusMonths(2));
-		termine.setFrist(frist);
-		termine.setGruppe(gruppe);
-		termine.setLink(link);
-		termine.setOrt(ort);
-		termine.setTitel(titel);
+		termine.setLoeschdatum(loeschdatumListe.get(dummie));
+		termine.setFrist(fristListe.get(dummie));
+		termine.setGruppe(gruppenListe.get(dummie));
+		termine.setLink(linkListe.get(dummie));
+		termine.setOrt(ortListe.get(dummie));
+		termine.setTitel(titelListe.get(dummie));
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		termine.setVorschlaege(terminVorschlaege);
 		return termine;
+	}
+	
+	private Terminfindung erstelleBeispielTermin(int anzahlTermine) {
+		return erstelleBeispielTermin(0, anzahlTermine);
 	}
 	
 	private List<LocalDateTime> erstelleVorschlaege(int anzahlTermine) {
@@ -216,22 +208,27 @@ public class TerminfindungServiceTest {
 		return terminVorschleage;
 	}
 	
-	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindungModusGruppe(int anzahlTermine) {
+	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindung(
+			int dummie, int anzahlTermine) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		
 		for (LocalDateTime termin : terminVorschlaege) {
 			TerminfindungDB terminfindungDB = new TerminfindungDB();
-			terminfindungDB.setTitel(titel);
-			terminfindungDB.setOrt(ort);
-			terminfindungDB.setErsteller(ersteller);
-			terminfindungDB.setFrist(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1));
-			terminfindungDB.setLoeschdatum(LocalDateTime.of(1, 3, 1, 1, 1, 1, 1));
-			terminfindungDB.setLink(link);
-			terminfindungDB.setBeschreibung(beschreibung);
-			terminfindungDB.setGruppe(gruppe);
+			terminfindungDB.setTitel(titelListe.get(dummie));
+			terminfindungDB.setOrt(ortListe.get(dummie));
+			terminfindungDB.setErsteller(erstellerListe.get(dummie));
+			terminfindungDB.setFrist(fristListe.get(dummie));
+			terminfindungDB.setLoeschdatum(loeschdatumListe.get(dummie));
+			terminfindungDB.setLink(linkListe.get(dummie));
+			terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
+			terminfindungDB.setGruppe(gruppenListe.get(dummie));
 			terminfindungDB.setTermin(termin);
-			terminfindungDB.setModus(Modus.GRUPPE);
+			if (terminfindungDB.getGruppe() != null) {
+				terminfindungDB.setModus(Modus.GRUPPE);
+			} else {
+				terminfindungDB.setModus(Modus.LINK);
+			}
 			
 			terminfindungDBs.add(terminfindungDB);
 		}
