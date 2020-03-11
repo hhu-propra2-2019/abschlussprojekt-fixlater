@@ -12,4 +12,6 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	List<UmfrageDB> findByLink(String link);
 	
+	List<String> findLinkByErsteller(String ersteller);
+	
 }

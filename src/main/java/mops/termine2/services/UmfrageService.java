@@ -67,4 +67,16 @@ public class UmfrageService {
 		return null;
 	}
 	
+	public List<Umfrage> loadByErsteller(String ersteller) {
+		List<String> links = umfrageRepository.findLinkByErsteller(ersteller);
+		if (links != null && !links.isEmpty()) {
+			List<Umfrage> umfragen = new ArrayList<Umfrage>();
+			for (String link : links) {
+				umfragen.add(loadByLink(link));
+			}
+			return umfragen;
+		}
+		return null;
+	}
+	
 }
