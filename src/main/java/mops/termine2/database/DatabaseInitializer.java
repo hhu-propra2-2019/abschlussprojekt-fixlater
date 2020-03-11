@@ -29,22 +29,22 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	public static final double ENTSCHEIDUNGSWERT = 0.5;
 	
 	@Autowired
-	transient BenutzerGruppeRepository benutzerGruppeRepository;
+	private transient BenutzerGruppeRepository benutzerGruppeRepository;
 	
 	@Autowired
-	transient KommentarRepository kommentarRepository;
+	private transient KommentarRepository kommentarRepository;
 	
 	@Autowired
-	transient TerminfindungAntwortRepository terminfindungAntwortRepository;
+	private transient TerminfindungAntwortRepository terminfindungAntwortRepository;
 	
 	@Autowired
-	transient TerminfindungRepository terminfindungRepository;
+	private transient TerminfindungRepository terminfindungRepository;
 	
 	@Autowired
-	transient UmfrageAntwortRepository umfrageAntwortRepository;
+	private transient UmfrageAntwortRepository umfrageAntwortRepository;
 	
 	@Autowired
-	transient UmfrageRepository umfrageRepository;
+	private transient UmfrageRepository umfrageRepository;
 	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -78,7 +78,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	public void fakeTerminfindungGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB) {
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.funnyName().name();
+		String link = faker.name().firstName() + benutzerGruppeDB.getId();
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
@@ -106,7 +106,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB) {
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.funnyName().name();
+		String link = faker.name().firstName() + benutzerGruppeDB.getId();
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
