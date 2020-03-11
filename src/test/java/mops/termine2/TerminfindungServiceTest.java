@@ -139,9 +139,9 @@ public class TerminfindungServiceTest {
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
 		List<String> links = new ArrayList<>();
-		when(repository.findLinkByErsteller(erstellerListe.get(0))).thenReturn(links);
-		when(repository.findByLink(linkListe.get(0))).thenReturn(terminfindungDBs);
-		List<Terminfindung> ergebnise = service.loadByErsteller(erstellerListe.get(0));
+		when(repository.findLinkByErsteller(erstellerListe.get(dummie))).thenReturn(links);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		List<Terminfindung> ergebnise = service.loadByErsteller(erstellerListe.get(dummie));
 		
 		assertThat(ergebnise).isEqualTo(null);
 	}
@@ -181,7 +181,6 @@ public class TerminfindungServiceTest {
 		termine.setBeschreibung(beschreibungsListe.get(dummie));
 		termine.setErsteller(erstellerListe.get(dummie));
 		
-		LocalDateTime frist = LocalDateTime.now().plusWeeks(2);
 		termine.setLoeschdatum(loeschdatumListe.get(dummie));
 		termine.setFrist(fristListe.get(dummie));
 		termine.setGruppe(gruppenListe.get(dummie));
