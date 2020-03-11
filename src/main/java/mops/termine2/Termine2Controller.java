@@ -4,6 +4,8 @@ package mops.termine2;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.authentication.Account;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Terminuebersicht;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -41,6 +45,34 @@ public class Termine2Controller {
 			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
+		
+		List<String> gruppen = new ArrayList<String>();
+		gruppen.add("gruppe1");
+		gruppen.add("gruppe2");
+		gruppen.add("gruppe3");
+		
+		List<Terminfindung> terminfindungenTeilgenommen = new ArrayList<Terminfindung>();
+		Terminfindung termin1 = new Terminfindung();
+		termin1.setErsteller("studentin");
+		termin1.setBeschreibung("Dies ist eine Beschreibung für Termin1");
+		termin1.setTitel("Terminfindung 1");
+		termin1.setOrt("Raum 25.12.03.35");
+		
+		terminfindungenTeilgenommen.add(termin1);
+		
+		List<Terminfindung> terminfindungenOffen = new ArrayList<Terminfindung>();
+		Terminfindung termin2 = new Terminfindung();
+		termin2.setErsteller("studentin");
+		termin2.setBeschreibung("Dies ist eine Beschreibung für Termin2");
+		termin2.setTitel("Terminfindung 2");
+		termin2.setOrt("Raum 25.12.03.35");
+		
+		terminfindungenTeilgenommen.add(termin2);
+		
+		Terminuebersicht termine = new Terminuebersicht(terminfindungenTeilgenommen, terminfindungenOffen,
+			gruppen);
+		
+		m.addAttribute("termine", termine);
 		
 		return "termine";
 	}
