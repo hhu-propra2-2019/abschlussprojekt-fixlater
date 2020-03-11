@@ -22,21 +22,21 @@ import static org.mockito.Mockito.when;
 public class UmfrageServiceTest {
 	
 	private static final String TITEL = "Toller Titel";
-
+	
 	private static final long MAXANTWORT = 13L;
-
+	
 	private static final LocalDateTime LOESCHDATUM = LocalDateTime.of(1, 3, 1, 1, 1, 1, 1);
-
+	
 	private static final String LINK = "BruderJakob";
-
-	private static final String GRUPPER = "FIXLATER";
-
+	
+	private static final String GRUPPE = "FIXLATER";
+	
 	private static final LocalDateTime FRIST = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
-
+	
 	private static final String ERSTELLER = "Me";
-
+	
 	private static final String BESCHREIBUNG = "Tolle Beschreibung";
-
+	
 	private transient UmfrageService service;
 	
 	private transient UmfrageRepository repository;
@@ -101,6 +101,21 @@ public class UmfrageServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loadUmfragenByGruppeEineUmfrageDreiVorschlaege() {
+		int anzahl = 3;
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl);
+		List<String> links = new ArrayList<String>();
+		links.add(LINK);
+		when(repository.findLinkByGruppe(GRUPPE)).thenReturn(links);
+		when(repository.findByLink(LINK)).thenReturn(umfrageDBs);
+		Umfrage erwartet = erstelleBeispielUmfrage(anzahl);
+		
+		Umfrage ergebnis = service.loadByGruppe(GRUPPE).get(0);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(int anzahl) {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
 		List<String> vorschlaege = erstelleVorschlaege(anzahl);
@@ -110,7 +125,7 @@ public class UmfrageServiceTest {
 			umfrageDB.setBeschreibung(BESCHREIBUNG);
 			umfrageDB.setErsteller(ERSTELLER);
 			umfrageDB.setFrist(FRIST);
-			umfrageDB.setGruppe(GRUPPER);
+			umfrageDB.setGruppe(GRUPPE);
 			umfrageDB.setLink(LINK);
 			umfrageDB.setLoeschdatum(LOESCHDATUM);
 			umfrageDB.setMaxAntwortAnzahl(13L);
@@ -127,7 +142,7 @@ public class UmfrageServiceTest {
 		umfrage.setBeschreibung(BESCHREIBUNG);
 		umfrage.setErsteller(ERSTELLER);
 		umfrage.setFrist(FRIST);
-		umfrage.setGruppe(GRUPPER);
+		umfrage.setGruppe(GRUPPE);
 		umfrage.setLink(LINK);
 		umfrage.setLoeschdatum(LOESCHDATUM);
 		umfrage.setMaxAntwortAnzahl(MAXANTWORT);
