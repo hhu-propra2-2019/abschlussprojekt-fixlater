@@ -43,6 +43,16 @@ public class TerminfindungService {
 		}
 	}
 	
+	public List<Terminfindung> loadByErsteller(String ersteller) {
+		List<String> links = terminfindungRepo.findLinkByErsteller(ersteller);
+		return getTerminfindungenByLinks(links);
+	}
+	
+	public List<Terminfindung> loadByGruppe(String gruppe) {
+		List<String> links = terminfindungRepo.findLinkByGruppe(gruppe);
+		return getTerminfindungenByLinks(links);
+	}
+	
 	public Terminfindung loadByLink(String link) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
 		if (termineDB != null && !termineDB.isEmpty()) {
@@ -68,8 +78,7 @@ public class TerminfindungService {
 		return null;
 	}
 	
-	public List<Terminfindung> loadByErsteller(String ersteller) {
-		List<String> links = terminfindungRepo.findLinkByErsteller(ersteller);
+	private List<Terminfindung> getTerminfindungenByLinks(List<String> links) {
 		if (links != null && !links.isEmpty()) {
 			List<Terminfindung> terminfindungen = new ArrayList<>();
 			
