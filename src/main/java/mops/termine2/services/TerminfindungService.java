@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class TerminfindungService {
 	
-	private final TerminfindungRepository terminfindungRepo;
+	private transient TerminfindungRepository terminfindungRepo;
 	
 	public TerminfindungService(TerminfindungRepository terminfindungRepo) {
 		this.terminfindungRepo = terminfindungRepo;
