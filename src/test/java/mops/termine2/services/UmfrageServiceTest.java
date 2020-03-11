@@ -51,6 +51,25 @@ public class UmfrageServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loadUmfrageByLinkNichtExistent() {
+		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
+		when(repository.findByLink("BruderJakob")).thenReturn(umfrageDBs);
+		
+		Umfrage ergebnis = service.loadByLink("BruderJakob");
+		
+		assertThat(ergebnis).isEqualTo(null);
+	}
+	
+	@Test
+	public void loadUmfrageByLinkNull() {
+		when(repository.findByLink("BruderJakob")).thenReturn(null);
+		
+		Umfrage ergebnis = service.loadByLink("BruderJakob");
+		
+		assertThat(ergebnis).isEqualTo(null);
+	}
+	
 	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(int anzahl) {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
 		List<String> vorschlaege = erstelleVorschlaege(anzahl);
