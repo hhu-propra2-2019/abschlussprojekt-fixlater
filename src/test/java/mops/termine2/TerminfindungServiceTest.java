@@ -61,11 +61,11 @@ public class TerminfindungServiceTest {
 	@BeforeEach
 	public void setUp() {
 		repository = mock(TerminfindungRepository.class);
-		this.service = new TerminfindungService(repository);
+		service = new TerminfindungService(repository);
 	}
 	
 	@Test
-	public void saveSingleTerminfndungMitFuenfVorschlaegenModusGruppe() {
+	public void saveSingleTerminfndungMit5VorschlaegenModusGruppe() {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
@@ -73,7 +73,7 @@ public class TerminfindungServiceTest {
 	}
 	
 	@Test
-	public void saveSingleTerminfndungMitFuenfVorschlaegenModusLink() {
+	public void saveSingleTerminfndungMit5VorschlaegenModusLink() {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(3, terminAnzahl);
 		service.save(termine);
@@ -81,7 +81,7 @@ public class TerminfindungServiceTest {
 	}
 	
 	@Test
-	public void saveSingleTerminfndungMitZehnVorschlaegen() {
+	public void saveSingleTerminfndungMit10Vorschlaegen() {
 		int terminAnzahl = 10;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
@@ -97,7 +97,7 @@ public class TerminfindungServiceTest {
 	}
 	
 	@Test
-	public void loadTerminfindungByLinkMitVierVorschlaegen() {
+	public void loadTerminfindungByLinkMit4Vorschlaegen() {
 		int anzahl = 4;
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
