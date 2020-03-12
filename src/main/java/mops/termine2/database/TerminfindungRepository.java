@@ -15,12 +15,12 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	
 	@Query("select distinct db.link,db.titel,db.ersteller,db.loeschdatum,db.frist,db.gruppe,db.ort,db.beschreibung"
 			+ " from TerminfindungDB db "
-			+ "where db.ersteller like:ersteller group by db.link order by db.frist")
+			+ "where db.ersteller like:ersteller  order by db.frist")
 	List<TerminfindungDB> findByErstellerOhneTermine(@Param("ersteller") String ersteller);
 	
 	@Query("select distinct db.link,db.titel,db.ersteller,db.loeschdatum,db.frist,db.gruppe,db.ort,db.beschreibung"
 			+ " from TerminfindungDB db "
-			+ "where db.gruppe like:gruppe group by db.link order by db.frist")
+			+ "where db.gruppe like:gruppe  order by db.frist")
 	List<TerminfindungDB> findByGruppeOhneTermine(@Param("gruppe") String gruppe);
 	
 }
