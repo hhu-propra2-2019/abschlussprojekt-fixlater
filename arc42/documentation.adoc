@@ -108,11 +108,9 @@ Aufgabe für morgen:
 -Services und Tests dafür
 -JPA Queries
 
-(Thomas, Leon)
--Tests
--Annotations
--Fremdschlüssel Korrektur
--application properties Korrektur
+=== Gruppe Keycloak (Thomas, Leon)
+Die zuerst verwendeten Annotations in der Controller Test Klasse haben mit Keycloak nicht funktioniert. Diese wurden dann abgeändert und durch @SpringBootTest erweitert. Außerdem wurde die Methode um ein Account-Objekt zu erstellen abgeändert, da bei den Test kein KeycloakToken, sonder ein Principal übergeben wurde und dieses die eMail-Adresse eines Benutzers nicht beinhaltet.
+Leon hat die Fremdschlüsselbeziehungen in der Datenbank durch hinzufügen eines Dialektes in der application.properties hinzugefügt.
 
 === Gruppe DB-Initializer (Kathi, Julia)
 Heute wurde damit begonnen, den Database Initializer zu schreiben, der zum Start der Anwendung die
@@ -128,8 +126,8 @@ für eine seiner Gruppen simuliert und die Daten speichert.
 (Leon, Marcel, Jan)
 Services weitergeschrieben
 
-(Thomas, Anton)
-Thymeleaf für views geschrieben, inclusive erforderlichen Controller Teil
+=== Gruppe Thymeleaf (Thomas, Anton)
+In der Übersicht für Terminfindungen wurden Thymeleaf-Attribute hinzugefügt. Zusätzlich wurden im zugehörigen Controller Testdaten eingefügt, die dann auf der Webseite angezeigt werden können.
 
 (Kathi, Julia)
 DB Initializer geschrieben
