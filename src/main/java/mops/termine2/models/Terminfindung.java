@@ -1,14 +1,12 @@
 package mops.termine2.models;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode
 public class Terminfindung {
 	

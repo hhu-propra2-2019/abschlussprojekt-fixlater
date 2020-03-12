@@ -3,7 +3,6 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id "com.github.spotbugs" version "3.0.0"
-    id 'pmd'
     id 'checkstyle'
 }
 
@@ -70,9 +69,6 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
     }
 }
 
-pmd {
-    ignoreFailures = false
-}
 
 checkstyle {
     toolVersion = "8.30"
