@@ -1,0 +1,20 @@
+package mops.termine2.models;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class Terminuebersicht {
+	
+	private List<Terminfindung> teilgenommen;
+	
+	private List<Terminfindung> offen;
+	
+	private List<String> gruppen;
+	
+}

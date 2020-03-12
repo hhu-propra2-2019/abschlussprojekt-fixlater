@@ -1,24 +1,22 @@
 package mops.termine2.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@EqualsAndHashCode
-public class Terminfindung {
+@Getter
+@Setter
+public class Umfrage {
 	
 	private String link;
 	
 	private String titel;
 	
-	private String ort;
-	
 	private String beschreibung;
 	
-	private List<LocalDateTime> vorschlaege;
+	private List<String> vorschlaege;
 	
 	private String ersteller;
 	
@@ -27,7 +25,5 @@ public class Terminfindung {
 	private LocalDateTime loeschdatum;
 	
 	private String gruppe;
-	
-	private LocalDateTime ergebnis;
 	
 }
