@@ -70,11 +70,11 @@ Fehler aus HTML entfernt, Git Actions aktualisiert/verbessert, RequestMapping hi
 
 == Tag 6
 
-(Thomas, Anton)
-application.properties mit H2 für development vorbereitet
-
 (Anton)
 - thymeleaf für views angefangen, controller mit SessionScope annotiert, README überschrieben, UI bei Terminerstellung weiter geklärt
+
+(Thomas, Anton)
+application.properties mit H2 für development vorbereitet
 
 (Thomas, Leon)
 - Datenbank, Keycloak configs, Rollen bei Controllern
@@ -129,23 +129,26 @@ für eine seiner Gruppen simuliert und die Daten speichert.
 Services weitergeschrieben
 
 (Thomas, Anton)
-Thymeleaf für views geschrieben
+Thymeleaf für views geschrieben, inclusive erforderlichen Controller Teil
 
 (Kathi, Julia)
 DB Initializer geschrieben
+Zu dem Database-Initializer wurden nun die vorgegebenen Accounts von Keycloak hinzugefügt (studentinX und orgaX).
+Zudem gewann der Database-Initializer an Methoden: Nun wurde ermöglicht,
+Terminfindungen bzw. Umfragen für alle Nutzer (nicht auf eine Gruppe beschränkt) zu erstellen und die
+Antworten wurden für Gruppen - Terminfindungen bzw. - Umfragen gespeichert.
 
 (Ingrid)
 An Views weitergearbeitet
-
+Einiges am Design und funktionalität verbessert
 
 ////
 Ziele für die Woche:
 - Review für das Datenbankmodell
 - Zusammen erläutern der Aufteilung der Klassen
-- Fake Initializer programmieren für Dummy Daten und Tests
 - Datenbank aufsetzen (vielleicht mal wirklich!)
 - Webseite testen (POST Controller)
-- Thymeleaf dazu schreiben (Anton, Jan, Ingrid)
+- Thymeleaf dazu schreiben
 - erste Methoden für Business-Logik schreiben (falls funktionsfähig)
 
 Wochenziel:
@@ -153,14 +156,7 @@ Wochenziel:
 - Kombi funktioniert
 ////
 
-
-
 === Gruppe DB-Initializer (Kathi, Julia)
-Zu dem Database-Initializer wurden nun die vorgegebenen Accounts von Keycloak hinzugefügt
-(studentinX und orgaX).
 ////
-Zudem gewann der Database-Initializer an Methoden: Nun wurde ermöglicht,
-Terminfindungen bzw. Umfragen für alle Nutzer (nicht auf eine Gruppe beschränkt) zu erstellen und die
-Antworten wurden für Gruppen - Terminfindungen bzw. - Umfragen gespeichert.
 TODO: Antworten für öffentliche Abstimmungen, Kommentare einfügen
 ///
