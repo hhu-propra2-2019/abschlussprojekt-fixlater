@@ -21,21 +21,23 @@ import static org.mockito.Mockito.when;
 
 public class UmfrageServiceTest {
 	
-	private static final String TITEL = "Toller Titel";
+	private static final String[] TITEL = {"Toller Titel", "Besserer Titel", "Super Titel"};
 	
 	private static final long MAXANTWORT = 13L;
 	
 	private static final LocalDateTime LOESCHDATUM = LocalDateTime.of(1, 3, 1, 1, 1, 1, 1);
 	
-	private static final String LINK = "BruderJakob";
+	private static final String[] LINK = {"BruderJakob", "AlleMeineEntchen", "BieneMaya"};
 	
-	private static final String GRUPPE = "FIXLATER";
+	private static final String[] GRUPPE = {"FIXLATER", "TollEinAndererMachts", "Proprapri"};
 	
 	private static final LocalDateTime FRIST = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
 	
-	private static final String ERSTELLER = "Me";
+	private static final String[] ERSTELLER = {"Me", "You", "He"};
 	
-	private static final String BESCHREIBUNG = "Tolle Beschreibung";
+	private static final String[] BESCHREIBUNG = {"Tolle Beschreibung",
+		"Bessere Beschreibung",
+		"Super Beschreibung"};
 	
 	private transient UmfrageService service;
 	
@@ -50,7 +52,7 @@ public class UmfrageServiceTest {
 	@Test
 	public void saveEineUmfrageMitDreiVorschlaegen() {
 		int anzahl = 3;
-		Umfrage umfrage = erstelleBeispielUmfrage(anzahl);
+		Umfrage umfrage = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		service.save(umfrage);
 		Mockito.verify(repository, times(anzahl)).save(any());
 	}
@@ -58,11 +60,11 @@ public class UmfrageServiceTest {
 	@Test
 	public void loadUmfrageByLinkMitDreiVorschlaegen() {
 		int anzahl = 3;
-		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl);
-		when(repository.findByLink(LINK)).thenReturn(umfrageDBs);
-		Umfrage erwartet = erstelleBeispielUmfrage(anzahl);
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
+		when(repository.findByLink(LINK[0])).thenReturn(umfrageDBs);
+		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		
-		Umfrage ergebnis = service.loadByLink(LINK);
+		Umfrage ergebnis = service.loadByLink(LINK[0]);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -70,83 +72,123 @@ public class UmfrageServiceTest {
 	@Test
 	public void loadUmfrageByLinkNichtExistent() {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
-		when(repository.findByLink(LINK)).thenReturn(umfrageDBs);
+		when(repository.findByLink(LINK[0])).thenReturn(umfrageDBs);
 		
-		Umfrage ergebnis = service.loadByLink(LINK);
+		Umfrage ergebnis = service.loadByLink(LINK[0]);
 		
 		assertThat(ergebnis).isEqualTo(null);
 	}
 	
 	@Test
 	public void loadUmfrageByLinkNull() {
-		when(repository.findByLink(LINK)).thenReturn(null);
+		when(repository.findByLink(LINK[0])).thenReturn(null);
 		
-		Umfrage ergebnis = service.loadByLink(LINK);
+		Umfrage ergebnis = service.loadByLink(LINK[0]);
 		
 		assertThat(ergebnis).isEqualTo(null);
 	}
 	
 	@Test
-	public void loadUmfragenByErstellerEineUmfrageDreiVorschlaege() {
+	public void loadUmfragenByErstellerEineUmfrageKeineVorschlaege() {
 		int anzahl = 3;
-		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl);
-		List<String> links = new ArrayList<String>();
-		links.add(LINK);
-		when(repository.findLinkByErsteller(ERSTELLER)).thenReturn(links);
-		when(repository.findByLink(LINK)).thenReturn(umfrageDBs);
-		Umfrage erwartet = erstelleBeispielUmfrage(anzahl);
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
+		when(repository.findByErsteller(ERSTELLER[0])).thenReturn(umfrageDBs);
+		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
+		erwartet.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis = service.loadByErsteller(ERSTELLER).get(0);
+		Umfrage ergebnis = service.loadByErsteller(ERSTELLER[0]).get(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
-	public void loadUmfragenByGruppeEineUmfrageDreiVorschlaege() {
-		int anzahl = 3;
-		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl);
-		List<String> links = new ArrayList<String>();
-		links.add(LINK);
-		when(repository.findLinkByGruppe(GRUPPE)).thenReturn(links);
-		when(repository.findByLink(LINK)).thenReturn(umfrageDBs);
-		Umfrage erwartet = erstelleBeispielUmfrage(anzahl);
+	public void loadUmfragenByErstellerZweiUmfragenEinErsteller() {
+		List<UmfrageDB> umfrageDBs1 = erstelleUmfrageDBListeGruppe(3, 0, 0, 0, 0, 0);
+		List<UmfrageDB> umfrageDBs2 = erstelleUmfrageDBListeGruppe(3, 1, 0, 1, 1, 1);
+		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>(umfrageDBs1);
+		for (UmfrageDB db : umfrageDBs2) {
+			umfrageDBs.add(db);
+		}
+		when(repository.findByErsteller(ERSTELLER[0])).thenReturn(umfrageDBs);
+		Umfrage erwartet1 = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
+		erwartet1.setVorschlaege(new ArrayList<String>());
+		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 0, 1, 1, 1);
+		erwartet2.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis = service.loadByGruppe(GRUPPE).get(0);
+		Umfrage ergebnis1 = service.loadByErsteller(ERSTELLER[0]).get(0);
+		Umfrage ergebnis2 = service.loadByErsteller(ERSTELLER[0]).get(1);
+		
+		assertThat(erwartet1).isEqualTo(ergebnis1);
+		assertThat(erwartet2).isEqualTo(ergebnis2);
+	}
+	
+	@Test
+	public void loadUmfragenByGruppeEineUmfrageKeineVorschlaege() {
+		int anzahl = 3;
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
+		when(repository.findByGruppe(GRUPPE[0])).thenReturn(umfrageDBs);
+		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
+		erwartet.setVorschlaege(new ArrayList<String>());
+		
+		Umfrage ergebnis = service.loadByGruppe(GRUPPE[0]).get(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
-	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(int anzahl) {
+	@Test
+	public void loadUmfragenByGruppeZweiUmfragenEineGruppe() {
+		List<UmfrageDB> umfrageDBs1 = erstelleUmfrageDBListeGruppe(3, 0, 0, 0, 0, 0);
+		List<UmfrageDB> umfrageDBs2 = erstelleUmfrageDBListeGruppe(3, 1, 1, 0, 1, 1);
+		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>(umfrageDBs1);
+		for (UmfrageDB db : umfrageDBs2) {
+			umfrageDBs.add(db);
+		}
+		when(repository.findByGruppe(GRUPPE[0])).thenReturn(umfrageDBs);
+		Umfrage erwartet1 = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
+		erwartet1.setVorschlaege(new ArrayList<String>());
+		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 1, 0, 1, 1);
+		erwartet2.setVorschlaege(new ArrayList<String>());
+		
+		Umfrage ergebnis1 = service.loadByGruppe(GRUPPE[0]).get(0);
+		Umfrage ergebnis2 = service.loadByGruppe(GRUPPE[0]).get(1);
+		
+		assertThat(erwartet1).isEqualTo(ergebnis1);
+		assertThat(erwartet2).isEqualTo(ergebnis2);
+	}
+	
+	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(int anzahl, int bIndex,
+		int eIndex, int gIndex, int lIndex, int tIndex) {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
 		List<String> vorschlaege = erstelleVorschlaege(anzahl);
 		for (String s : vorschlaege) {
 			UmfrageDB umfrageDB = new UmfrageDB();
 			umfrageDB.setAuswahlmoeglichkeit(s);
-			umfrageDB.setBeschreibung(BESCHREIBUNG);
-			umfrageDB.setErsteller(ERSTELLER);
+			umfrageDB.setBeschreibung(BESCHREIBUNG[bIndex]);
+			umfrageDB.setErsteller(ERSTELLER[eIndex]);
 			umfrageDB.setFrist(FRIST);
-			umfrageDB.setGruppe(GRUPPE);
-			umfrageDB.setLink(LINK);
+			umfrageDB.setGruppe(GRUPPE[gIndex]);
+			umfrageDB.setLink(LINK[lIndex]);
 			umfrageDB.setLoeschdatum(LOESCHDATUM);
 			umfrageDB.setMaxAntwortAnzahl(13L);
 			umfrageDB.setModus(Modus.GRUPPE);
-			umfrageDB.setTitel(TITEL);
+			umfrageDB.setTitel(TITEL[tIndex]);
 			umfrageDBs.add(umfrageDB);
 		}
 		return umfrageDBs;
 		
 	}
 	
-	private Umfrage erstelleBeispielUmfrage(int anzahl) {
+	private Umfrage erstelleBeispielUmfrage(int anzahl, int bIndex, int eIndex,
+		int gIndex, int lIndex, int tIndex) {
 		Umfrage umfrage = new Umfrage();
-		umfrage.setBeschreibung(BESCHREIBUNG);
-		umfrage.setErsteller(ERSTELLER);
+		umfrage.setBeschreibung(BESCHREIBUNG[bIndex]);
+		umfrage.setErsteller(ERSTELLER[eIndex]);
 		umfrage.setFrist(FRIST);
-		umfrage.setGruppe(GRUPPE);
-		umfrage.setLink(LINK);
+		umfrage.setGruppe(GRUPPE[gIndex]);
+		umfrage.setLink(LINK[lIndex]);
 		umfrage.setLoeschdatum(LOESCHDATUM);
 		umfrage.setMaxAntwortAnzahl(MAXANTWORT);
-		umfrage.setTitel(TITEL);
+		umfrage.setTitel(TITEL[tIndex]);
 		List<String> vorschlaege = erstelleVorschlaege(anzahl);
 		umfrage.setVorschlaege(vorschlaege);
 		return umfrage;

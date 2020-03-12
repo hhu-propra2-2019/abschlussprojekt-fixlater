@@ -68,25 +68,45 @@ public class UmfrageService {
 	}
 	
 	public List<Umfrage> loadByErsteller(String ersteller) {
-		List<String> links = umfrageRepository.findLinkByErsteller(ersteller);
-		return findUmfragenByLinks(links);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
+		return findUmfragenByLink(umfrageDBs);
 	}
 	
 	public List<Umfrage> loadByGruppe(String gruppe) {
-		List<String> links = umfrageRepository.findLinkByGruppe(gruppe);
-		return findUmfragenByLinks(links);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
+		return findUmfragenByLink(umfrageDBs);
 	}
 	
-	public List<Umfrage> findUmfragenByLinks(List<String> links) {
-		if (links != null && !links.isEmpty()) {
-			List<Umfrage> umfragen = new ArrayList<Umfrage>();
-			for (String link : links) {
-				umfragen.add(loadByLink(link));
+	public List<Umfrage> findUmfragenByLink(List<UmfrageDB> umfrageDBs) {
+		if (umfrageDBs != null && !umfrageDBs.isEmpty()) {
+			List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
+			List<String> links = new ArrayList<String>();
+			for (UmfrageDB umfragedb : umfrageDBs) {
+				if (!links.contains(umfragedb.getLink())) {
+					distinctUmfrage.add(erstelleUmfrageOhneVorschlaege(umfragedb));
+					links.add(umfragedb.getLink());
+				}
 			}
-			return umfragen;
+			return distinctUmfrage;
 		}
 		return null;
-		
+	}
+	
+	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
+		if (umfragedb != null) {
+			Umfrage umfrage = new Umfrage();
+			umfrage.setBeschreibung(umfragedb.getBeschreibung());
+			umfrage.setErsteller(umfragedb.getErsteller());
+			umfrage.setFrist(umfragedb.getFrist());
+			umfrage.setGruppe(umfragedb.getGruppe());
+			umfrage.setLink(umfragedb.getLink());
+			umfrage.setLoeschdatum(umfragedb.getLoeschdatum());
+			umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
+			umfrage.setTitel(umfragedb.getTitel());
+			umfrage.setVorschlaege(new ArrayList<String>());
+			return umfrage;
+		}
+		return null;
 	}
 	
 }
