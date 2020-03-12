@@ -28,4 +28,6 @@ public class Terminfindung {
 	
 	private String gruppe;
 	
+	private LocalDateTime ergebnis;
+	
 }
