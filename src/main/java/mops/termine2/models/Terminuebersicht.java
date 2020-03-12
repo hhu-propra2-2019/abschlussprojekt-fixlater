@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Terminuebersicht {
 	
-	private List<Terminfindung> teilgenommen;
+	private List<Terminfindung> abgeschlossen;
 	
 	private List<Terminfindung> offen;
 	
