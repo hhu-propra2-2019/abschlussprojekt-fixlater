@@ -123,6 +123,21 @@ für eine seiner Gruppen simuliert und die Daten speichert.
 (Ingrid)
 -UI Views
 
+== Tag 8
+
+(Leon, Marcel, Jan)
+Services weitergeschrieben
+
+(Thomas, Anton)
+Thymeleaf für views geschrieben
+
+(Kathi, Julia)
+DB Initializer geschrieben
+
+(Ingrid)
+An Views weitergearbeitet
+
+
 ////
 Ziele für die Woche:
 - Review für das Datenbankmodell
@@ -139,7 +154,6 @@ Wochenziel:
 ////
 
 
-== Tag 8
 
 === Gruppe DB-Initializer (Kathi, Julia)
 Zu dem Database-Initializer wurden nun die vorgegebenen Accounts von Keycloak hinzugefügt
