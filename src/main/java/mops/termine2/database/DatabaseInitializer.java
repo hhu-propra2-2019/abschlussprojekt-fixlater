@@ -2,6 +2,7 @@ package mops.termine2.database;
 
 import com.github.javafaker.Faker;
 import mops.termine2.database.entities.BenutzerGruppeDB;
+import mops.termine2.database.entities.KommentarDB;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageAntwortDB;
@@ -20,6 +21,8 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 	
@@ -34,6 +37,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	private static final double ENTSCHEIDUNGSWERT2 = 0.33;
 	
 	private static final int ANZAHL_LINK = 20;
+	
+	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
 	private static final boolean EINGESCHALTET = true;
 	
@@ -128,6 +133,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			
 			fakeTerminfindungAntwortenGruppe(gruppeZaehler, terminfindungdb, faker, antwortGrenze);
 		});
+		fakeKommentare(faker, link, LocalDateTime.now(), frist);
 	}
 	
 	public void fakeTerminfindungAntwortenGruppe(int zaehler, TerminfindungDB terminfindungDB, Faker faker,
@@ -153,6 +159,68 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			this.terminfindungAntwortRepository.save(terminfindungAntwortDB);
 		});
 		
+	}
+	
+	public void fakeTerminfindungLink(Faker faker, String benutzer) {
+		
+		String beschreibung = faker.lorem().sentence();
+		String link = faker.funnyName().name();
+		String ort = faker.address().cityName();
+		String titel = faker.friends().quote();
+		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
+			.plusMonths(new Random().nextInt(4));
+		LocalDateTime loeschdatum = frist.plusDays(90);
+		int antwortGrenze = new Random().nextInt(3);
+		
+		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
+			final TerminfindungDB terminfindungdb = new TerminfindungDB();
+			terminfindungdb.setBeschreibung(beschreibung);
+			terminfindungdb.setErsteller(benutzer);
+			terminfindungdb.setFrist(frist);
+			terminfindungdb.setLink(link);
+			terminfindungdb.setLoeschdatum(loeschdatum);
+			terminfindungdb.setOrt(ort);
+			terminfindungdb.setModus(Modus.LINK);
+			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
+			terminfindungdb.setTitel(titel);
+			
+			this.terminfindungRepository.save(terminfindungdb);
+			
+			fakeTerminfindungAntwortenLink(terminfindungdb, faker, antwortGrenze);
+		});
+		fakeKommentare(faker, link, LocalDateTime.now(), frist);
+	}
+	
+	public void fakeTerminfindungAntwortenLink(TerminfindungDB terminfindungDB, Faker faker, int grenze) {
+		IntStream.range(grenze + 1, 10).forEach(value -> {
+			final TerminfindungAntwortDB terminfindungAntwortDB = new TerminfindungAntwortDB();
+			double benutzerWahl = Math.random();
+			if (benutzerWahl < ENTSCHEIDUNGSWERT1) {
+				terminfindungAntwortDB.setBenutzer("studentin" + value);
+			} else {
+				terminfindungAntwortDB.setBenutzer("orga" + value);
+			}
+			terminfindungAntwortDB.setTerminfindung(terminfindungDB);
+			
+			double option = Math.random();
+			if (option < ENTSCHEIDUNGSWERT1) {
+				terminfindungAntwortDB.setAntwort(Antwort.JA);
+			} else {
+				terminfindungAntwortDB.setAntwort(Antwort.NEIN);
+			}
+			
+			double pseudonymWahl = Math.random();
+			if (pseudonymWahl < ENTSCHEIDUNGSWERT1) {
+				terminfindungAntwortDB.setPseudonym(faker.harryPotter().character() + value);
+			} else {
+				if (benutzerWahl < ENTSCHEIDUNGSWERT1) {
+					terminfindungAntwortDB.setPseudonym("studentin" + value);
+				} else {
+					terminfindungAntwortDB.setPseudonym("orga" + value);
+				}
+			}
+			this.terminfindungAntwortRepository.save(terminfindungAntwortDB);
+		});
 	}
 	
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler) {
@@ -183,6 +251,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			
 			fakeUmfrageAntwortenGruppe(gruppeZaehler, umfrageDB, faker, antwortGrenze);
 		});
+		fakeKommentare(faker, link, LocalDateTime.now(), frist);
 	}
 	
 	public void fakeUmfrageAntwortenGruppe(int zaehler, UmfrageDB umfrageDB, Faker faker, int grenze) {
@@ -207,34 +276,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		
 	}
 	
-	public void fakeTerminfindungLink(Faker faker, String benutzer) {
-		
-		String beschreibung = faker.lorem().sentence();
-		String link = faker.funnyName().name();
-		String ort = faker.address().cityName();
-		String titel = faker.friends().quote();
-		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
-				.plusMonths(new Random().nextInt(4));
-		LocalDateTime loeschdatum = frist.plusDays(90);
-		
-		
-		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
-			final TerminfindungDB terminfindungdb = new TerminfindungDB();
-			terminfindungdb.setBeschreibung(beschreibung);
-			terminfindungdb.setErsteller(benutzer);
-			terminfindungdb.setFrist(frist);
-			terminfindungdb.setLink(link);
-			terminfindungdb.setLoeschdatum(loeschdatum);
-			terminfindungdb.setOrt(ort);
-			terminfindungdb.setModus(Modus.LINK);
-			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
-			terminfindungdb.setTitel(titel);
-			
-			this.terminfindungRepository.save(terminfindungdb);
-		});
-	}
-	
-	
 	public void fakeUmfrageLink(Faker faker, String benutzer) {
 		
 		String beschreibung = faker.lorem().sentence();
@@ -244,6 +285,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(30))
 				.plusMonths(new Random().nextInt(4));
 		LocalDateTime loeschdatum = frist.plusDays(90);
+		int antwortGrenze = new Random().nextInt(3);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final UmfrageDB umfrageDB = new UmfrageDB();
@@ -258,8 +300,55 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			umfrageDB.setMaxAntwortAnzahl(maxAntwortAnzahl);
 			
 			this.umfrageRepository.save(umfrageDB);
+			
+			fakeUmfrageAntwortenLink(umfrageDB, faker, antwortGrenze);
+		});
+		fakeKommentare(faker, link, LocalDateTime.now(), frist);
+	}
+	
+	public void fakeUmfrageAntwortenLink(UmfrageDB umfrageDB, Faker faker, int grenze) {
+		IntStream.range(grenze + 1, 10).forEach(value -> {
+			final UmfrageAntwortDB umfrageAntwortDB = new UmfrageAntwortDB();
+			double benutzerWahl = Math.random();
+			if (benutzerWahl < ENTSCHEIDUNGSWERT1) {
+				umfrageAntwortDB.setBenutzer("studentin" + value);
+			} else {
+				umfrageAntwortDB.setBenutzer("orga" + value);
+			}
+			umfrageAntwortDB.setUmfrage(umfrageDB);
+			
+			double option = Math.random();
+			if (option < ENTSCHEIDUNGSWERT1) {
+				umfrageAntwortDB.setAntwort(Antwort.JA);
+			} else {
+				umfrageAntwortDB.setAntwort(Antwort.NEIN);
+			}
+			
+			double pseudonymWahl = Math.random();
+			if (pseudonymWahl < ENTSCHEIDUNGSWERT1) {
+				umfrageAntwortDB.setPseudonym(faker.harryPotter().character() + value);
+			} else {
+				if (benutzerWahl < ENTSCHEIDUNGSWERT1) {
+					umfrageAntwortDB.setPseudonym("studentin" + value);
+				} else {
+					umfrageAntwortDB.setPseudonym("orga" + value);
+				}
+			}
+			this.umfrageAntwortRepository.save(umfrageAntwortDB);
 		});
 	}
 	
-	
+	public void fakeKommentare(Faker faker, String link, LocalDateTime erstellungsdatum, LocalDateTime frist) {
+		int kommentarAnzahl = new Random().nextInt(MAX_ANZAHL_KOMMENTARE + 1);
+		IntStream.range(0, kommentarAnzahl).forEach(value -> {
+			final KommentarDB kommentarDB = new KommentarDB();
+			int tage = new Random().nextInt((int) DAYS.between(erstellungsdatum, frist));
+			kommentarDB.setErstellungsdatum(erstellungsdatum.plusDays(tage));
+			kommentarDB.setPseudonym(faker.friends().character());
+			kommentarDB.setLink(link);
+			kommentarDB.setInhalt(faker.friends().quote());
+			
+			this.kommentarRepository.save(kommentarDB);
+		});
+	}
 }
