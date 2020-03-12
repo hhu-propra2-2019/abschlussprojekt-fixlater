@@ -26,4 +26,6 @@ public class Umfrage {
 	
 	private String gruppe;
 	
+	private String umfragenErgebnis; 
+	
 }

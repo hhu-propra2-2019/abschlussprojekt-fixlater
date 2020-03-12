@@ -32,16 +32,11 @@
 				
 				<div class="btn-toolbar" style="font-size: small">
 
-					<!--<select class="form-control" th:field="${}"  id="dropOperator">-->
 					<select class="btn btn-outline-secondary dropdown-toggle mx-2" id="dropOperator">
 						<option value="0">Alle Gruppen</option>
 						<option th:each="gruppe : ${termine.gruppen}" th:text="${gruppe}"
 								th:value="${gruppe}"></option>
 					</select>
-
-					<!--<button class="btn btn-outline-secondary dropdown-toggle mx-2">
-						Alle Gruppen
-					</button>-->
 
 					<a th:href="@{/termine2/termine-neu}">
 						<button class="btn btn-primary">Neuer Termin</button>
@@ -65,10 +60,6 @@
 									<div th:text="'am ' + ${#temporals.format(termin.ergebnis, 'dd.MM.yyyy, HH:mm')}">DD.MM.YYYY,
 										HH:MM
 									</div>
-								</div>
-								
-								<div>
-									<p th:text="${termin.ort}">Ort </p>
 								</div>
 							</div>
 							
