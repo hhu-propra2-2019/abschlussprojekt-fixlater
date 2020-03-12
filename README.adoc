@@ -31,7 +31,7 @@ Sowohl Termine und Umfragen, als auch die Antworten können im Nachhinein noch g
 Das Ergebnis einer Abstimmung liefert beispielsweise einen Termin, an welchem sich eine Gruppe treffen kann, wo die meisten Mitglieder Zeit haben.
 
 Das Web-element der Umfrage ist für bessere Übersicht, entsprechend den Entscheidungsmöglichkeiten, gefärbt.
-Die Farben sind so gewählt dass Menschen mit Sehschwäche besser damit klarkommen.
+Die Farben sind so gewählt dass Menschen mit Sehschwäche besser damit klarkommen. 
 
 == Hinweise:
 === Arc42 und Dokumentation
