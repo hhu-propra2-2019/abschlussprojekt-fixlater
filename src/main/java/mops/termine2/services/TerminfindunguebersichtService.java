@@ -21,8 +21,9 @@ public class TerminfindunguebersichtService {
 	
 	public List<Terminfindung> loadOffeneTerminfindungenFuerBenutzer(Account account) {
 		List<Terminfindung> termine = new ArrayList<>();
+		List<Terminfindung> offeneTermine = new ArrayList<>();
 		
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account.getName());
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		
 		for (Gruppe g : gruppen) {
 			termine.addAll(terminfindungService.loadByGruppeOhneTermine(g.getName()));
@@ -30,10 +31,29 @@ public class TerminfindunguebersichtService {
 		
 		for (Terminfindung termin : termine) {
 			if (termin.getFrist().compareTo(LocalDateTime.now()) < 0) {
-				termine.remove(termin);
+				offeneTermine.add(termin);
 			}
 		}
 		
-		return termine;
+		return offeneTermine;
+	}
+	
+	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerBenutzer(Account account) {
+		List<Terminfindung> termine = new ArrayList<>();
+		List<Terminfindung> abgeschlosseneTermine = new ArrayList<>();
+		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		
+		for (Gruppe g : gruppen) {
+			termine.addAll(terminfindungService.loadByGruppeOhneTermine(g.getName()));
+		}
+		
+		for (Terminfindung termin : termine) {
+			if (termin.getFrist().compareTo(LocalDateTime.now()) >= 0) {
+				abgeschlosseneTermine.add(termin);
+			}
+		}
+		
+		return abgeschlosseneTermine;
 	}
 }
