@@ -101,13 +101,10 @@ public class TerminfindungServiceTest {
 		int anzahl = 4;
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
-		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie);
-		when(repository.findByLink(linkListe.get(0))).thenReturn(terminfindungDBs);
+		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
+		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
-		
-		System.out.println(erwartet);
-		System.out.print(ergebnis);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -122,8 +119,6 @@ public class TerminfindungServiceTest {
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
 		
-		System.out.println(erwartet);
-		System.out.print(ergebnis);
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
