@@ -1,6 +1,7 @@
 = Management Summary
 
 == Problemstatement:
+
 Es gibt in der Universität keine Plattform zur Terminfindung
 und die Funktion von Umfragen in ILIAS ist nur für Organisatoren verfügbar.
 Außerdem dauert es lange sich im ILIAS durchzunavigieren. 
@@ -10,18 +11,28 @@ Es gibt keine klare Übersicht der Termine und Umfragen.
 Kopieren von Umfragen ist äußerst umständlich.
 
 == Ziele & Features:
+
 Mit einem Klick auf die Sidebar auf der MOPS Startseite erreicht man die Übersicht der Terminfindung, 
 wo entweder alle Terminabstimmungen (offene und fertige), welche für Mitglieder der jeweiligen Gruppen sichtbar sind, 
 oder die Terminabstimmungen, welchen der Nutzer per Link beigetreten ist, angezeigt werden.
 Dadurch ist es schnell und praktisch, Gruppentreffen zu organisieren.
+
 Zusätzlich dazu gibt es eine Seite für generelle Abstimmungen bzw. Umfragen, die auch erreichbar ist.
 Das Erstellen von Terminen und Umfragen ist schnell und intuitiv.
+
 Die Gruppen, welche in einem anderen System erstellt werden können, können für die Abstimmungen direkt verwendet werden.
+
 Alternativ ist auch ein Zugang über Link möglich, sodass Abstimmungen unabhängig von Gruppen sein können.
+
 Import und Export von Terminabstimmungen/Umfragen ermöglicht einfaches Kopieren der Daten.
+
 Sowohl Termine und Umfragen, als auch die Antworten können im Nachhinein noch geändert werden.
+
 Das Ergebnis einer Abstimmung liefert beispielsweise einen Termin, an welchem sich eine Gruppe treffen kann, wo die meisten Mitglieder Zeit haben.
+
+Das Web-element der Umfrage ist für bessere Übersicht, entsprechend den Entscheidungsmöglichkeiten, gefärbt.
+Die Farben sind so gewählt dass Menschen mit Sehschwäche besser damit klarkommen.
 
 == Hinweise:
 === Arc42 und Dokumentation
-Liegen beide im Ordner arc42 im Hauptverzeichnis.
+Beide liegen im Ordner "arc422 im Hauptverzeichnis.
