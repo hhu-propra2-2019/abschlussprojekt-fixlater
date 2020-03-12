@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
@@ -17,8 +18,8 @@ public class GruppeService {
 		this.benutzerGruppeRepository = benutzerGruppeRepository;
 	}
 	
-	public List<Gruppe> loadByBenutzer(String benutzer) {
-		List<BenutzerGruppeDB> gruppenDB = benutzerGruppeRepository.findByBenutzer(benutzer);
+	public List<Gruppe> loadByBenutzer(Account account) {
+		List<BenutzerGruppeDB> gruppenDB = benutzerGruppeRepository.findByBenutzer(account.getName());
 		List<Gruppe> gruppen = new ArrayList<>();
 		
 		
