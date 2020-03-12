@@ -20,13 +20,16 @@ import java.util.stream.IntStream;
 @Component
 public class DatabaseInitializer implements ServletContextInitializer {
 	
-	public static final int ANZAHL_GRUPPEN = 10;
+	private static final int ANZAHL_GRUPPEN = 10;
 	
-	public static final int ANZAHL_BENUTZER = 10;
+	private static final int ANZAHL_BENUTZER = 10;
 	
-	public static final int ANZAHL_OPTIONEN = 10;
+	private static final int ANZAHL_OPTIONEN = 10;
 	
-	public static final double ENTSCHEIDUNGSWERT = 0.5;
+	private static final double ENTSCHEIDUNGSWERT = 0.5;
+	
+	private static final boolean EINGESCHALTET = false;
+	
 	
 	@Autowired
 	private transient BenutzerGruppeRepository benutzerGruppeRepository;
@@ -48,29 +51,31 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		System.out.println("Befülle Datenbank!");
-		final Faker faker = new Faker(Locale.GERMAN);
-		int studentenZaehler = 1;
-		for (int value1 = 0; value1 < ANZAHL_GRUPPEN; value1++) {
-			// TODO Rollen: orga, orga1, orga2, orga3, actuator
-			String gruppeName = faker.book().title();
-			Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
-			
-			for (int value2 = 0; value2 < ANZAHL_BENUTZER; value2++) {
-				final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
-				benutzerGruppeDB.setBenutzer("studentin" + studentenZaehler);
-				studentenZaehler++;
-				benutzerGruppeDB.setGruppe(gruppeName);
-				benutzerGruppeDB.setGruppeId(gruppeId);
-				benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
+		if (EINGESCHALTET) {
+			System.out.println("Befülle Datenbank!");
+			final Faker faker = new Faker(Locale.GERMAN);
+			int studentenZaehler = 1;
+			for (int value1 = 0; value1 < ANZAHL_GRUPPEN; value1++) {
+				// TODO Rollen: orga, orga1, orga2, orga3, actuator
+				String gruppeName = faker.book().title();
+				Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
 				
-				if (Math.random() < ENTSCHEIDUNGSWERT) {
-					fakeTerminfindungGruppe(faker, benutzerGruppeDB);
-				} else {
-					fakeUmfrageGruppe(faker, benutzerGruppeDB);
+				for (int value2 = 0; value2 < ANZAHL_BENUTZER; value2++) {
+					final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
+					benutzerGruppeDB.setBenutzer("studentin" + studentenZaehler);
+					studentenZaehler++;
+					benutzerGruppeDB.setGruppe(gruppeName);
+					benutzerGruppeDB.setGruppeId(gruppeId);
+					benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
+					
+					if (Math.random() < ENTSCHEIDUNGSWERT) {
+						fakeTerminfindungGruppe(faker, benutzerGruppeDB);
+					} else {
+						fakeUmfrageGruppe(faker, benutzerGruppeDB);
+					}
+					
+					this.benutzerGruppeRepository.save(benutzerGruppeDB);
 				}
-				
-				this.benutzerGruppeRepository.save(benutzerGruppeDB);
 			}
 		}
 	}
