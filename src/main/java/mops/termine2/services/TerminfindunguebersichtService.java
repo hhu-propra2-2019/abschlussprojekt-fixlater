@@ -30,7 +30,7 @@ public class TerminfindunguebersichtService {
 		}
 		
 		for (Terminfindung termin : termine) {
-			if (termin.getFrist().compareTo(LocalDateTime.now()) < 0) {
+			if (termin.getFrist().compareTo(LocalDateTime.now()) > 0) {
 				offeneTermine.add(termin);
 			}
 		}
@@ -49,7 +49,7 @@ public class TerminfindunguebersichtService {
 		}
 		
 		for (Terminfindung termin : termine) {
-			if (termin.getFrist().compareTo(LocalDateTime.now()) >= 0) {
+			if (termin.getFrist().compareTo(LocalDateTime.now()) <= 0) {
 				abgeschlosseneTermine.add(termin);
 			}
 		}
