@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Umfrageuebersicht {
 	
-	private List<Umfrage> teilgenommen;
+	private List<Umfrage> abgeschlossen;
 	
 	private List<Umfrage> offen;
 	
