@@ -185,6 +185,31 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void load2TerminfindungenByGruppe() {
+		int dummie1 = 0;
+		int dummie2 = 1;
+		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
+		List<TerminfindungDB> terminfindungDBs1;
+		List<TerminfindungDB> terminfindungDBs2;
+		terminfindungDBs1 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie1);
+		terminfindungDBs2 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie2);
+		terminfindungDBs.addAll(terminfindungDBs1);
+		terminfindungDBs.addAll(terminfindungDBs2);
+		
+		when(repository.findByGruppe(gruppenListe.get(0))).thenReturn(terminfindungDBs);
+		
+		List<Terminfindung> erwartet = new ArrayList<>(
+				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
+						erstelleBeispielTerminfindungOhneTermine(dummie2)
+				)
+		);
+		
+		List<Terminfindung> ergebnis = service.loadByGruppeOhneTermine(gruppenListe.get(0));
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private Terminfindung erstelleBeispielTerminfindung(int dummie, int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();
 		termine.setBeschreibung(beschreibungsListe.get(dummie));
@@ -276,6 +301,7 @@ public class TerminfindungServiceTest {
 		} else {
 			terminfindungDB.setModus(Modus.LINK);
 		}
+		
 		
 		terminfindungDBs.add(terminfindungDB);
 		return terminfindungDBs;
