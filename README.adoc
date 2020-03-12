@@ -35,4 +35,4 @@ Die Farben sind so gewählt dass Menschen mit Sehschwäche besser damit klarkomm
 
 == Hinweise:
 === Arc42 und Dokumentation
-Beide liegen im Ordner "arc422 im Hauptverzeichnis.
+Beide liegen im Ordner "arc42" im Hauptverzeichnis.
