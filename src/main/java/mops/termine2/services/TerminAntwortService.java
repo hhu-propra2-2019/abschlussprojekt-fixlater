@@ -13,11 +13,7 @@ public class TerminAntwortService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
 	
-	private TerminfindungService terminfindungService;
-	
-	public TerminAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository,
-								TerminfindungService terminFService) {
-		this.terminfindungService = terminFService;
+	public TerminAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository) {
 		antwortRepo = terminfindungAntwortRepository;
 	}
 	
