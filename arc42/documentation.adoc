@@ -137,6 +137,12 @@ Einiges am Design und funktionalität verbessert
 === Gruppe UmfrageService (Leon, Marcel)
 Die von Thomas angemerkten Fehler, dass beim Laden die Daten mehrfach angezeigt werden, wurde behoben, indem die beiden Methoden loadByErsteller und loadByGruppe überarbeitet wurden. Hierbei erfolgt nun eine Filterung der Daten im Service. Anschließend wurden auch die Tests nochmal überarbeitet und ergänzt.
 
+=== Gruppe DB-Initializer (Kathi, Julia)
+Heute wurde der DB-Initializer um Methoden zur Befüllung aller restlichen Datenbanktabellen erweitert. Kleinere
+letzte Änderungen aufgrund einer Review wurden aus Zeitgründen auf den nächsten Tag verschoben. Zudem haben wir
+den LinkService angefangen, der ein gültiges Link-Ende generiert oder ein übergebenes Link-Ende des Benutzers
+auf Gültigkeit prüft. Die Tests sollen am nächsten Tag geschrieben werden.
+
 ////
 Ziele für die Woche:
 - Review für das Datenbankmodell
@@ -150,8 +156,3 @@ Wochenziel:
 - grundlegende Anwendungen vorhanden
 - Kombi funktioniert
 ////
-
-=== Gruppe DB-Initializer (Kathi, Julia)
-////
-TODO: Antworten für öffentliche Abstimmungen, Kommentare einfügen
-///
