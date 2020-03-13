@@ -9,11 +9,11 @@ import java.util.HashMap;
 
 @Getter
 @Setter
-public class Teilnahme {
+public class TerminfindungAntwort {
 	
 	private String link;
 	
-	private Long gruppeId;
+	private String gruppe;
 	
 	private String kuerzel;
 	
@@ -21,6 +21,7 @@ public class Teilnahme {
 	
 	private String pseudonym;
 	
+	// Brauchen wir vermutlich nicht
 	private Boolean teilgenommen;
 	
 }
