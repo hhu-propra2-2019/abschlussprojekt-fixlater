@@ -135,6 +135,12 @@ Einiges am Design und funktionalität verbessert
 
 == Tag 9
 
+
+=== TerminfindungService(Jan)
+Die von Thomas angemerkten Probleme wurden behoben, indem loadByErstellerOhneTermine und loadByGruppe ohne Termine erstellt bzw abgeändert wurden. Die Daten werden im Service gefiltert , nachdem eigentlich versucht wurde sich die Objekte direkt aus der Datenbank zu holen um so das eigene Filtern zu verhindern.
+Den Service und de Tests ueberarbeitet , sodass wesentlich weniger 
+Datenbankaufrufe notwendig sind, dies wurde durch  
+
 === DB (Thomas, Jan)
 
 === Gruppe UmfrageService (Leon, Marcel)
@@ -152,9 +158,13 @@ Wir haben an der Verbesserung der Oberfläche gearbeitet und die Übersicht der 
 
 == Tag 10
 
+
+=== TerminAntwortService(Jan,Marcel)
+
+
+Sichten weiterentwickelt: Termin
 === Gruppe UI (Anton, Ingrid)
-Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.
-Sichten weiterentwickelt: Terminabstimmung, Umfragenabstimmung sind visuell fertig und brauchen jetzt Thymeleaf.
+Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.abstimmung, Umfragenabstimmung sind visuell fertig und brauchen jetzt Thymeleaf.
 
 === Gruppe DB-Initializer/ LinkService (Kathi, Julia)
 Der DB-Initializer wurde nun angepasst und fertiggestellt. Außerdem wurden heute Tests für den
