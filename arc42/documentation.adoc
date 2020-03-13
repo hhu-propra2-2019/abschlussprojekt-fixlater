@@ -156,6 +156,12 @@ Wir haben an der Verbesserung der Oberfläche gearbeitet und die Übersicht der 
 Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.
 Sichten weiterentwickelt.
 
+=== Gruppe DB-Initializer/ LinkService (Kathi, Julia)
+Der DB-Initializer wurde nun angepasst und fertiggestellt. Außerdem wurden heute Tests für den
+LinkService geschrieben. Als letztes haben wir uns erste Gedanken darüber gemacht, wie man den
+LinkService sinnvoll integrieren kann, um bei Erstellung einer neuen Terminfindung/ Umfrage
+den Link zu prüfen. 
+
 
 ////
 Ziele für die Woche:
