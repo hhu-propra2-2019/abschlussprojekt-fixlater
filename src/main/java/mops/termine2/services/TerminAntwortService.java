@@ -3,11 +3,14 @@ package mops.termine2.services;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 public class TerminAntwortService {
 	
@@ -45,4 +48,32 @@ public class TerminAntwortService {
 			antwortRepo.save(db);
 		}
 	}
+	
+	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
+		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
+				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
+		return buildAntwortFromDB(terminfindungAntwortDBList);
+	}
+	
+	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
+		if (db != null && !db.isEmpty()) {
+			TerminfindungAntwort antwort = new TerminfindungAntwort();
+			antwort.setGruppe(db.get(0).getTerminfindung().getGruppe());
+			antwort.setKuerzel(db.get(0).getBenutzer());
+			antwort.setLink(db.get(0).getTerminfindung().getLink());
+			antwort.setTeilgenommen(true);
+			antwort.setPseudonym(db.get(0).getPseudonym());
+			
+			HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
+			for (TerminfindungAntwortDB anDB : db) {
+				antworten.put(anDB.getTerminfindung().getTermin(), anDB.getAntwort());
+			}
+			
+			antwort.setAntworten(antworten);
+			return antwort;
+		}
+		return null;
+	}
+	
+	
 }

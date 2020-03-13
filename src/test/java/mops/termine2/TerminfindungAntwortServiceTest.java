@@ -50,6 +50,20 @@ public class TerminfindungAntwortServiceTest {
 		Mockito.verify(repo, times(1)).deleteAllByTerminfindungLinkAAndBenutzer(any(), any());
 	}
 	
+	@Test
+	public void saveAntwortFuerTerminfindungMit9Moeglichkeiten() {
+		Terminfindung terminfindung = getBeispielTerinfindung();
+		TerminfindungAntwort toSave = new TerminfindungAntwort();
+		
+		toSave.setAntworten(getBeispielAntwortenAlleJa(9));
+		toSave.setKuerzel(BENUTZER1);
+		
+		antwortService.abstimmen(toSave, terminfindung);
+		
+		Mockito.verify(repo, times(9)).save(any());
+		Mockito.verify(repo, times(1)).deleteAllByTerminfindungLinkAAndBenutzer(any(), any());
+	}
+	
 	private HashMap<LocalDateTime, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
 		HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
 		for (int j = 0; j < anzahl; j++) {
