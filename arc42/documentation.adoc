@@ -154,7 +154,7 @@ Wir haben an der Verbesserung der Oberfläche gearbeitet und die Übersicht der 
 
 === Gruppe UI (Anton, Ingrid)
 Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.
-Sichten weiterentwickelt.
+Sichten weiterentwickelt: Terminabstimmung, Umfragenabstimmung sind visuell fertig und brauchen jetzt Thymeleaf.
 
 === Gruppe DB-Initializer/ LinkService (Kathi, Julia)
 Der DB-Initializer wurde nun angepasst und fertiggestellt. Außerdem wurden heute Tests für den
