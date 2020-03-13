@@ -153,9 +153,7 @@ public class TerminfindungServiceTest {
 		when(repository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
 		
 		Terminfindung ergebnis = service.loadByErstellerOhneTermine(erstellerListe.get(dummie)).get(0);
-		System.out.println(ergebnis);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
-		System.out.println(erwartet);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -177,9 +175,9 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(repository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(repository.findByGruppe(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
 		
-		Terminfindung ergebnis = service.loadByErstellerOhneTermine(erstellerListe.get(dummie)).get(0);
+		Terminfindung ergebnis = service.loadByGruppeOhneTermine(erstellerListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);

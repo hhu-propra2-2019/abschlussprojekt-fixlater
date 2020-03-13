@@ -46,13 +46,13 @@ public class TerminfindungService {
 	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
-		List<Terminfindung> terminfindungen = getDistinctTerminfindungsDBList(terminfindungDBs);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
 	
 	public List<Terminfindung> loadByGruppeOhneTermine(String gruppe) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppe(gruppe);
-		List<Terminfindung> terminfindungen = getDistinctTerminfindungsDBList(terminfindungDBs);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
 	
@@ -82,7 +82,7 @@ public class TerminfindungService {
 		return null;
 	}
 	
-	private List<Terminfindung> getDistinctTerminfindungsDBList(List<TerminfindungDB> terminfindungDBs) {
+	private List<Terminfindung> getDistinctTerminfindungList(List<TerminfindungDB> terminfindungDBs) {
 		List<TerminfindungDB> distinctTerminfindungDBs = new ArrayList<>();
 		List<String> links = new ArrayList<>();
 		for (TerminfindungDB terminfindungdb : terminfindungDBs) {
