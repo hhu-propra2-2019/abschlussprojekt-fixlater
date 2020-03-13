@@ -42,6 +42,10 @@ public class UmfrageService {
 		}
 	}
 	
+	public void deleteByLink(String link) {
+		umfrageRepository.deleteByLink(link);
+	}
+	
 	public Umfrage loadByLink(String link) {
 		List<UmfrageDB> umfragenDB = umfrageRepository.findByLink(link);
 		if (umfragenDB != null && !umfragenDB.isEmpty()) {
