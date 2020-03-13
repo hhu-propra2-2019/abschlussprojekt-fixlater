@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class TerminfindungAntwortServiceTest {
 	public static final String BENUTZER2 = "Kathi";
 	
 	public static final String BENUTZER3 = "Ingid";
+	
+	public static final List<String> benutzer = new ArrayList<>(
+			Arrays.asList("Julia,Kathi,Ingrid,Beate"));
 	
 	private transient TerminfindungAntwortRepository repo;
 	
@@ -73,19 +77,48 @@ public class TerminfindungAntwortServiceTest {
 	@Test
 	public void loadByBenutzerUndLinkEinBenutzer4Moeglichkeiten() {
 		int anzahl = 4;
-		List<TerminfindungAntwortDB> terminfindungAntwortDBs = getBeispielAntwortDBList(anzahl);
+		List<TerminfindungAntwortDB> terminfindungAntwortDBs = getBeispielAntwortDBList(anzahl, BENUTZER1);
 		when(repo.findByBenutzerAndTerminfindungLink(BENUTZER1, LINK)).thenReturn(terminfindungAntwortDBs);
 		TerminfindungAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
-		TerminfindungAntwort erwartet = getBeispielTerminAntwort(anzahl);
+		TerminfindungAntwort erwartet = getBeispielTerminAntwort(anzahl, BENUTZER1);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
-	private TerminfindungAntwort getBeispielTerminAntwort(int anzahl) {
+	@Test
+	public void loadByLink4Benutzer() {
+		int anzahlBenutzer = 4;
+		List<TerminfindungAntwortDB> terminfindungAntwortDBs = getBeispieleAntwortDBList(anzahlBenutzer);
+		when(repo.findAllByTerminfindungLink(LINK)).thenReturn(terminfindungAntwortDBs);
+		List<TerminfindungAntwort> ergebnis = antwortService.loadAllByLink(LINK);
+		List<TerminfindungAntwort> erwartet = getBeispieleTerminAntwort(anzahlBenutzer);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	private List<TerminfindungAntwort> getBeispieleTerminAntwort(int anzahlBenutzer) {
+		String name = "nameNr";
+		List<TerminfindungAntwort> antworten = new ArrayList<>();
+		for (int i = 0; i < anzahlBenutzer; i++) {
+			antworten.add(getBeispielTerminAntwort(4, name + i));
+		}
+		return antworten;
+	}
+	
+	private List<TerminfindungAntwortDB> getBeispieleAntwortDBList(int anzahlBenutzer) {
+		String name = "nameNr";
+		List<TerminfindungAntwortDB> antwortenDb = new ArrayList<>();
+		for (int i = 0; i < anzahlBenutzer; i++) {
+			antwortenDb.addAll(getBeispielAntwortDBList(4, name + i));
+		}
+		return antwortenDb;
+	}
+	
+	private TerminfindungAntwort getBeispielTerminAntwort(int anzahl, String benutzer) {
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setLink(LINK);
 		terminfindungAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
-		terminfindungAntwort.setKuerzel(BENUTZER1);
+		terminfindungAntwort.setKuerzel(benutzer);
 		terminfindungAntwort.setTeilgenommen(true);
 		return terminfindungAntwort;
 	}
@@ -105,7 +138,7 @@ public class TerminfindungAntwortServiceTest {
 		return terminfindung;
 	}
 	
-	private List<TerminfindungAntwortDB> getBeispielAntwortDBList(int anzahl) {
+	private List<TerminfindungAntwortDB> getBeispielAntwortDBList(int anzahl, String benutzer) {
 		List<TerminfindungAntwortDB> antwortDBs = new ArrayList<>();
 		HashMap<LocalDateTime, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
 		for (LocalDateTime termin : antworten.keySet()) {
@@ -114,7 +147,7 @@ public class TerminfindungAntwortServiceTest {
 			terminDB.setLink(LINK);
 			terminDB.setTermin(termin);
 			antwortDB.setTerminfindung(terminDB);
-			antwortDB.setBenutzer(BENUTZER1);
+			antwortDB.setBenutzer(benutzer);
 			antwortDB.setAntwort(antworten.get(termin));
 			antwortDBs.add(antwortDB);
 		}

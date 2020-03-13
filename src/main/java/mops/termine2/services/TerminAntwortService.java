@@ -56,6 +56,13 @@ public class TerminAntwortService {
 		return buildAntwortFromDB(terminfindungAntwortDBList);
 	}
 	
+	public List<TerminfindungAntwort> loadAllByLink(String link) {
+		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
+				antwortRepo.findAllByTerminfindungLink(link);
+		
+		return buildAntwortenFromDB(terminfindungAntwortDBList);
+	}
+	
 	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
 		if (db != null && !db.isEmpty()) {
 			return buildAntwortenFromDB(db).get(0);
@@ -83,6 +90,7 @@ public class TerminAntwortService {
 						}
 					}
 					antwort.setAntworten(antworten);
+					antwort.setTeilgenommen(true);
 					terminAntworten.add(antwort);
 					benuternamen.add(aktuellerBenutzer);
 				}
