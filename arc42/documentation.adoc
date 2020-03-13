@@ -91,7 +91,7 @@ wie 'Date' zu 'LocalDateTime' geändert.  Insgesamt wurde die Entwicklung des Da
 Review dieses Modells abgeschlossen. Außerdem wurden erste Ideen zu einem TerminfindungsService gesammelt,
 sowie erste Strukturen dafür entworfen.
 
-(Ingrid)
+=== UI (Ingrid)
 - pull request bearbeitet
 - Probleme mit merge-Konflikt
 - html Dateien überarbeitet
@@ -111,8 +111,8 @@ Datenbank mit ersten Fake-Daten füllt. Insgesamt wurde die Tabelle "BenutzerGru
 und Methoden geschrieben, die eine Erstellung einer Terminfindung bzw. einer Umfrage eines Benutzers
 für eine seiner Gruppen simuliert und die Daten speichert.
 
-(Ingrid)
--UI Views
+=== UI (Ingrid)
+An Views weitergearbeitet
 
 == Tag 8
 
@@ -128,11 +128,14 @@ Zudem gewann der Database-Initializer an Methoden: Nun wurde ermöglicht,
 Terminfindungen bzw. Umfragen für alle Nutzer (nicht auf eine Gruppe beschränkt) zu erstellen und die
 Antworten wurden für Gruppen - Terminfindungen bzw. - Umfragen gespeichert.
 
-(Ingrid)
+=== UI (Ingrid)
 An Views weitergearbeitet
 Einiges am Design und funktionalität verbessert
 
+
 == Tag 9
+
+=== DB (Thomas, Jan)
 
 === Gruppe UmfrageService (Leon, Marcel)
 Die von Thomas angemerkten Fehler, dass beim Laden die Daten mehrfach angezeigt werden, wurde behoben, indem die beiden Methoden loadByErsteller und loadByGruppe überarbeitet wurden. Hierbei erfolgt nun eine Filterung der Daten im Service. Anschließend wurden auch die Tests nochmal überarbeitet und ergänzt.
@@ -142,6 +145,17 @@ Heute wurde der DB-Initializer um Methoden zur Befüllung aller restlichen Daten
 letzte Änderungen aufgrund einer Review wurden aus Zeitgründen auf den nächsten Tag verschoben. Zudem haben wir
 den LinkService angefangen, der ein gültiges Link-Ende generiert oder ein übergebenes Link-Ende des Benutzers
 auf Gültigkeit prüft. Die Tests sollen am nächsten Tag geschrieben werden.
+
+=== Gruppe UI (Ingrid, Anton)
+Wir haben an der Verbesserung der Oberfläche gearbeitet und die Übersicht der Umfragen hat die erste Hälfte an Thymeleaf bekommen, so dass dummy Daten aus dem Controller korrekt ausgelesen und angezeigt werden.
+
+
+== Tag 10
+
+=== Gruppe UI (Anton, Ingrid)
+Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.
+Sichten weiterentwickelt.
+
 
 ////
 Ziele für die Woche:
