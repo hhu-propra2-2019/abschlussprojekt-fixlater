@@ -9,6 +9,7 @@ import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,23 +58,39 @@ public class TerminAntwortService {
 	
 	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
 		if (db != null && !db.isEmpty()) {
-			TerminfindungAntwort antwort = new TerminfindungAntwort();
-			antwort.setGruppe(db.get(0).getTerminfindung().getGruppe());
-			antwort.setKuerzel(db.get(0).getBenutzer());
-			antwort.setLink(db.get(0).getTerminfindung().getLink());
-			antwort.setTeilgenommen(true);
-			antwort.setPseudonym(db.get(0).getPseudonym());
-			
-			HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
-			for (TerminfindungAntwortDB anDB : db) {
-				antworten.put(anDB.getTerminfindung().getTermin(), anDB.getAntwort());
-			}
-			
-			antwort.setAntworten(antworten);
-			return antwort;
+			return buildAntwortenFromDB(db).get(0);
 		}
 		return null;
 	}
 	
+	private List<TerminfindungAntwort> buildAntwortenFromDB(List<TerminfindungAntwortDB> db) {
+		if (db != null && !db.isEmpty()) {
+			List<String> benuternamen = new ArrayList<>();
+			List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
+			
+			for (int i = 0; i < db.size(); i++) {
+				String aktuellerBenutzer = db.get(i).getBenutzer();
+				if (!benuternamen.contains(db.get(i).getBenutzer())) {
+					TerminfindungAntwort antwort = new TerminfindungAntwort();
+					antwort.setLink(db.get(i).getTerminfindung().getLink());
+					antwort.setPseudonym(db.get(i).getPseudonym());
+					antwort.setKuerzel(aktuellerBenutzer);
+					antwort.setGruppe(db.get(i).getTerminfindung().getGruppe());
+					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
+					for (int j = 0; j < db.size(); j++) {
+						if (db.get(j).getBenutzer().equals(aktuellerBenutzer)) {
+							antworten.put(db.get(j).getTerminfindung().getTermin(), db.get(j).getAntwort());
+						}
+					}
+					antwort.setAntworten(antworten);
+					terminAntworten.add(antwort);
+					benuternamen.add(aktuellerBenutzer);
+				}
+				
+			}
+			return terminAntworten;
+		}
+		return null;
+	}
 	
 }
