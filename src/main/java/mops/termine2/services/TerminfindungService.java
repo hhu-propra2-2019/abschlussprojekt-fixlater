@@ -43,7 +43,21 @@ public class TerminfindungService {
 		}
 	}
 	
-	public Terminfindung loadByLink(String link) {
+	
+	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
+	
+	public List<Terminfindung> loadByGruppeOhneTermine(String gruppe) {
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppe(gruppe);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
+	
+	
+	public Terminfindung loadByLinkMitTerminen(String link) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
 		if (termineDB != null && !termineDB.isEmpty()) {
 			Terminfindung terminfindung = new Terminfindung();
@@ -68,16 +82,36 @@ public class TerminfindungService {
 		return null;
 	}
 	
-	public List<Terminfindung> loadByErsteller(String ersteller) {
-		List<String> links = terminfindungRepo.findLinkByErsteller(ersteller);
-		if (links != null && !links.isEmpty()) {
-			List<Terminfindung> terminfindungen = new ArrayList<>();
-			
-			for (String link : links) {
-				terminfindungen.add(loadByLink(link));
+	private List<Terminfindung> getDistinctTerminfindungList(List<TerminfindungDB> terminfindungDBs) {
+		List<TerminfindungDB> distinctTerminfindungDBs = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		for (TerminfindungDB terminfindungdb : terminfindungDBs) {
+			if (!links.contains(terminfindungdb.getLink())) {
+				distinctTerminfindungDBs.add(terminfindungdb);
+				links.add(terminfindungdb.getLink());
 			}
-			return terminfindungen;
 		}
-		return null;
+		
+		List<Terminfindung> terminfindungen = new ArrayList<>();
+		for (TerminfindungDB db : distinctTerminfindungDBs) {
+			terminfindungen.add(erstelleTerminfindungOhneTermine(db));
+		}
+		return terminfindungen;
 	}
+	
+	private Terminfindung erstelleTerminfindungOhneTermine(TerminfindungDB db) {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setLink(db.getLink());
+		terminfindung.setTitel(db.getTitel());
+		terminfindung.setErsteller(db.getErsteller());
+		terminfindung.setLoeschdatum(db.getLoeschdatum());
+		terminfindung.setFrist(db.getFrist());
+		terminfindung.setGruppe(db.getGruppe());
+		terminfindung.setBeschreibung(db.getBeschreibung());
+		terminfindung.setOrt(db.getOrt());
+		
+		return terminfindung;
+	}
+	
+	
 }

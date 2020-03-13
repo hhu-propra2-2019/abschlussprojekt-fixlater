@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
                   navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Termine</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		        crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			    crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+			    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			    crossorigin="anonymous"></script>
 	</th:block>
 </head>
 
 <body>
 	<header>
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-            <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
 			<ul>
 				<li><a th:href="@{/termine2}">         Termine</a></li>
 				<li><a th:href="@{/termine2/umfragen}">Umfragen</a></li>
@@ -30,16 +44,49 @@
 			<div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
 				<h1 class="h1">Termine</h1>
 				
+				<!-- Gruppenauswahl zur Begrenzung der angezeigten Termine -->
 				<div class="btn-toolbar" style="font-size: small">
-
-					<select class="btn btn-outline-secondary dropdown-toggle mx-2" id="dropOperator">
-						<option value="0">Alle Gruppen</option>
-						<option th:each="gruppe : ${termine.gruppen}" th:text="${gruppe}"
-								th:value="${gruppe}"></option>
-					</select>
-
+					<div class="dropdown">
+						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
+						        data-toggle="dropdown" id="dropOperator" type="button">
+							Alle Gruppen
+						</button>
+						
+						<!-- Auswählbare Gruppen -->
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
+							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}">
+								Gruppe
+							</a>
+							
+							<div th:if="*{termine.gruppen.size() > 0}">
+								<div class="dropdown-divider"></div>
+							</div>
+							
+							<a class="dropdown-item" th:href="@{/termine2}">Alle Gruppen</a>
+						</div>
+					</div>
+					
+					<!-- variant 2 -->
+						<!--
+							<select class="btn btn-outline-secondary dropdown-toggle mx-2"
+							        id="dropOperator">
+							<option value="0">Alle Gruppen</option>
+							<option th:each="gruppe : ${termine.gruppen}" th:text="${gruppe}"
+							        th:value="${gruppe}"></option>
+							</select>
+						-->
+					
+					<!-- variant 1 -->
+						<!--
+							<button class="btn btn-outline-secondary dropdown-toggle mx-2">
+								Alle Gruppen
+							</button>
+						-->
+					
+					
 					<a th:href="@{/termine2/termine-neu}">
-						<button class="btn btn-primary">Neuer Termin</button>
+						<button class="btn btn-success">Neuer Termin</button>
 					</a>
 				</div>
 			</div>
@@ -55,21 +102,27 @@
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<div class="d-flex justify-content-between align-items-center">
-									<h3 class="h3" th:text="${termin.titel}">Titel des Termins</h3>
-									<div th:text="'am ' + ${#temporals.format(termin.ergebnis, 'dd.MM.yyyy, HH:mm')}">DD.MM.YYYY,
-										HH:MM
+								<div class="row d-flex justify-content-between align-items-center">
+									<h3 class="h3 col-auto" th:text="${termin.titel}">
+										Titel des Termins
+									</h3>
+									
+									<div class="col-5" style="text-align: right"
+									     th:text="'am ' + ${#temporals.format(termin.ergebnis,
+									              'dd.MM.yyyy, HH:mm')}">
+										am DD.MM.YYYY, HH:MM
 									</div>
+								</div>
+                
+								<div th:text="${termin.ort}">
+									Ort
 								</div>
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p th:text="${#strings.abbreviate(termin.beschreibung,300)}">
-									Authors often misinterpret the fibre as a tacky museum, when in
-									actuality it feels more like a moreish rate. We can assume that
-									any instance of a bestseller can be construed as a chuffy
-									bucket. </p>
+							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:text="${#strings.abbreviate(termin.beschreibung,300)}">
+								Beschreibung
 							</div>
 							
 							<!-- Weitere Aktionen -->
@@ -82,8 +135,6 @@
 								<!-- </a> -->
 							</div>
 						</div>
-						
-						<!--<div style="font-size: xx-large; text-align: center">…</div>-->
 					</div>
 				</div>
 				
@@ -96,24 +147,32 @@
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3" th:text="${termin.titel}">ATMs</h3>
+								<h3 class="h3" th:text="${termin.titel}">
+									Titel des Termins
+								</h3>
+								
+								<div th:text="${termin.ort}">
+									Ort
+								</div>
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p th:text="${#strings.abbreviate(termin.beschreibung,135)}"> An ATM is a crib from the
-									right perspective. </p>
+							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:text="${#strings.abbreviate(termin.beschreibung,135)}">
+								Beschreibung
 							</div>
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-2">
 								<div class="text-secondary" style="font-size: small; text-align: center"
-									 th:text="'offen bis ' + ${#temporals.format(termin.frist, 'dd.MM.yyyy, HH:mm')}">
-									DD.MM.YYYY, HH:MM
+								     th:text="'offen bis ' + ${#temporals.format(termin.frist,
+								              'dd.MM.yyyy, HH:mm')}">
+									offen bis DD.MM.YYYY, HH:MM
 								</div>
 								
 								<div class="mt-2" style="text-align: center">
-									<!-- falls der Nutzer schon an der Abstimmung teilgenommen hat -->
+									<!-- Falls der Nutzer schon an der Abstimmung teilgenommen hat,
+									     dann btn-outline-info, ansonsten btn-primary. -->
 									<button class="btn btn-outline-info" style="font-size: small">
 										Details
 									</button>
