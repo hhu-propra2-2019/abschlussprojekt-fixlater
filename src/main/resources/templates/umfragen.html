@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
       th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
-                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Umfragen</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		        crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			    crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+			    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			    crossorigin="anonymous"></script>
 	</th:block>
 </head>
 
@@ -30,16 +45,33 @@
 			<div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
 				<h1 class="h1">Umfragen</h1>
 				
+				<!-- Gruppenauswahl zur Begrenzung der angezeigten Termine -->
 				<div class="btn-toolbar" style="font-size: small">
-				
-					<select class="btn btn-outline-secondary dropdown-toggle mx-2" id="dropOperator">
-						<option value="0">Alle Gruppen</option>
-						<option th:each="gruppe : ${umfragen.gruppen}" th:text="${gruppe}"
-								th:value="${gruppe}"></option>
-					</select>
-
+					<div class="dropdown">
+						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
+						        data-toggle="dropdown" id="dropOperator" type="button">
+							Alle Gruppen
+						</button>
+						
+						<!-- Auswählbare Gruppen -->
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
+							   th:href="@{/termine2/umfragen(gruppe=${gruppe})}" th:text="${gruppe}">
+								Gruppe
+							</a>
+							
+							<div th:if="*{umfragen.gruppen.size() > 0}">
+								<div class="dropdown-divider"></div>
+							</div>
+							
+							<a class="dropdown-item" th:href="@{/termine2/umfragen}">
+								Alle Gruppen
+							</a>
+						</div>
+					</div>
+					
 					<a th:href="@{/termine2/umfragen-neu}">
-						<button class="btn btn-primary">Neue Umfrage</button>
+						<button class="btn btn-success">Neue Umfrage</button>
 					</a>
 				</div>
 			</div>
@@ -55,27 +87,37 @@
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<div class="d-flex justify-content-between align-items-center">
-									<h3 class="h3" th:text="${umfrage.titel} + ':'">Titel der Umfrage?</h3>
-									<div th:text="'Abgeschlossen am ' + ${#temporals.format(umfrage.frist, 'dd.MM.yyyy, HH:mm')}"></div>
+								<div class="row d-flex justify-content-between align-items-center">
+									<h3 class="h3 col-auto" th:text="${umfrage.titel}">
+										Titel der Umfrage
+									</h3>
+									
+									<div class="col-5" style="text-align: right"
+									     th:text="'geendet am ' + ${#temporals.format(umfrage.frist,
+									              'dd.MM.yyyy, HH:mm')}">
+										beendet am DD.MM.YYYY, HH:MM
+									</div>
 								</div>
-								<!-- Ergebnis -->
-								<div class="mt-2 text-success" style="font-size: large" >
-									<p th:text="${#strings.abbreviate(umfrage.umfragenErgebnis,300)}">
+								
+								<div class="text-success" style="font-size: large"
+								     th:text="${#strings.abbreviate(umfrage.umfragenErgebnis,300)}">
+									Ergebnis
 								</div>
 							</div>
-
-							<div class="mt-2 border-bottom">
-								<p th:text="'(' + ${#strings.abbreviate(umfrage.beschreibung,300) + ')'}">Beschreibung</p>
+							
+							<!-- Beschreibung -->
+							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:text="${#strings.abbreviate(umfrage.beschreibung,300)}">
+								Beschreibung
 							</div>
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-3" style="text-align: center">
 								<!-- leitet an die Ergebnisse der Umfrage weiter -->
 								<!-- <a th:href="@{………}"> -->
-									<button class="btn btn-outline-info" style="font-size: small">
-										Details
-									</button>
+								<button class="btn btn-outline-info" style="font-size: small">
+									Details
+								</button>
 								<!-- </a> -->
 							</div>
 						</div>
@@ -91,24 +133,30 @@
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3" th:text="${offeneUmfrage.titel}">Titel der Umfrage?</h3>
-								
+								<h3 class="h3" th:text="${offeneUmfrage.titel}">
+									Titel der Umfrage
+								</h3>
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2 text-success">
-									<p th:text="${#strings.abbreviate(offeneUmfrage.beschreibung,300)}">Beschreibung</p>
+							<div class="mt-2 pb-2 border-bottom"
+							     style="font-size: small"
+							     th:text="${#strings.abbreviate(offeneUmfrage.beschreibung,300)}">
+								Beschreibung
 							</div>
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-2">
 								<div class="text-secondary"
-								     style="font-size: small; text-align: center">
-								     <div th:text="'Teilnahme möglich bis ' + ${#temporals.format(offeneUmfrage.frist, 'dd.MM.yyyy, HH:mm')}"></div>
+								     style="font-size: small; text-align: center"
+								     th:text="'offen bis ' + ${#temporals.format(offeneUmfrage.frist,
+								              'dd.MM.yyyy, HH:mm')}">
+									offen bis DD.MM.YYYY, HH:MM
 								</div>
 								
 								<div class="mt-2" style="text-align: center">
-									<!-- falls der Nutzer schon an der Umfrage teilgenommen hat -->
+									<!-- Falls der Nutzer schon an der Abstimmung teilgenommen hat,
+									     dann btn-outline-info, ansonsten btn-primary. -->
 									<button class="btn btn-outline-info" style="font-size: small">
 										Details
 									</button>
