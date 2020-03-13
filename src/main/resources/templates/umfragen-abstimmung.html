@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
       th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
-                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Umfragenabstimmung</title>
@@ -14,175 +15,201 @@
 	<header>
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li><a th:href="@{/termine2}">         Termine </a></li>
+				<li><a th:href="@{/termine2/umfragen}">Umfragen</a></li>
+			</ul>
 		</nav>
 	</header>
 	
 	<main th:fragment="bodycontent">
-		<!-- Titel, Ort und Beschreibung der Umfrage -->
-		<div class="jumbotron" is="mops-div">
-			<div class="container" is="mops-container">
-				<h2 class="h2">Essen bei der Praktikums-Abschluss-Party</h2>
-				
-				<div class="row">
-					<div class="col-sm-3">
-						<h3 class="h3">Beschreibung:</h3>
+		<div class="container">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Umfragenabstimmung</h1>
+			</div>
+			
+			<div class="row">
+				<div class="col">
+					<!-- Umfrage -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
+							<div class="pb-2 border-bottom">
+								<div class="h3">Essen bei der Praktikums-Abschluss-Party</div>
+							</div>
+							
+							<!-- Beschreibung -->
+							<div class="mt-2" style="font-size: small">
+								Floppy macaroni are assumed to be dissatisfying. Few can name a
+								springtime flower that doesn't profit from rainstorms. In modern
+								times, clothes were lost without the long thin bands that were
+								their linen.
+							</div>
+						</div>
 					</div>
 					
-					<div class="col-sm-6">
-						<details>
-							<summary>(öffnen/schließen)</summary>
-							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-							eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-							voluptua. At vero eos et accusam et justo duo
-						</details>
+					<!-- Wahl -->
+					<div class="mb-3 border-bottom">
+						<div class="d-flex justify-content-between align-items-center">
+							<h2 class="h2">Vorschläge</h2>
+							
+							<button class="btn btn-outline-warning">Zurücksetzen</button>
+						</div>
+						
+						<form class="my-3">
+							<!-- falls es eine Stimmbegrenzung gibt -->
+							<div class="mb-2">
+								Wähle <span class="text-primary">[Anzahl]</span> aus:
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-sm" style="text-align: center">
+									<thead>
+										<tr>
+											<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
+											     chen: Blau und Gelb lassen sich besser unterschei-
+											     den als Grün und Gelb. -->
+											<th class="col-7 bg-secondary">Vorschlag</th>
+											<th class="col-2 bg-primary">  Ja</th>
+											<th class="col-2 bg-danger">   Nein</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										<tr>
+											<!-- abwechselnd bg-white / bg-light -->
+											<th class="col-7 bg-white">Grillen, grillen!</th>
+											<th class="col-2 table-primary">
+												<input type="radio" name="abstimmung1" value="y"/>
+											</th>
+											<th class="col-2 table-danger">
+												<input type="radio" name="abstimmung1" value="n"/>
+											</th>
+										</tr>
+										
+										<tr>
+											<th class="col-7 bg-light">Pizza-Bananen-Suppe</th>
+											<th class="col-2 table-primary">
+												<input type="radio" name="abstimmung2" value="y"/>
+											</th>
+											<th class="col-2 table-danger">
+												<input type="radio" name="abstimmung2" value="n"/>
+											</th>
+										</tr>
+										
+										<tr>
+											<th class="col-7 bg-white">Gurken-Hotdog</th>
+											<th class="col-2 table-primary">
+												<input type="radio" name="abstimmung3" value="y"/>
+											</th>
+											<th class="col-2 table-danger">
+												<input type="radio" name="abstimmung3" value="n"/>
+											</th>
+										</tr>
+										
+										<tr>
+											<th class="col-7 bg-white">Mayonesen-Milkshake</th>
+											<th class="col-2 table-primary">
+												<input type="radio" name="abstimmung4" value="y"/>
+											</th>
+											<th class="col-2 table-danger">
+												<input type="radio" name="abstimmung4" value="n"/>
+											</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div style="text-align: center">
+								<button class="btn btn-primary">Abschicken</button>
+							</div>
+						</form>
+					</div>
+					
+					<!-- Kommentare -->
+					<div>
+						<h2 class="h2">Kommentare</h2>
+						
+						<!-- Vorhandene Kommentare -->
+						<div class="mb-3">
+							<div class="my-3 p-3 bg-light rounded">
+								<!-- Sendedaten -->
+								<div class="pb-2 border-bottom">
+									<div class="h4">Benjamin</div>
+									<div>am [Datum, Zeit]</div>
+								</div>
+								
+								<!-- Inhalt -->
+								<div class="mt-2">
+									A leopard of the army is assumed to be an oversized toy. A
+									tragic Saturday comes with losing sleep over a napkin.
+									Literature would have us believe that molten margarine is
+									nothing but water.
+								</div>
+							</div>
+							
+							<div class="my-3 p-3 bg-light rounded">
+								<!-- Sendedaten -->
+								<div class="pb-2 border-bottom">
+									<div class="h4">Bibi Bloxberg</div>
+									<div>am [Datum, Zeit]</div>
+								</div>
+								
+								<!-- Inhalt -->
+								<div class="mt-2">
+									The lunchbox can be turned into a tinfoil hat with some magic.
+									Some antelopes are thought of as prefaces to evolution. In
+									modern times an impulse is enough to change the mind of one's
+									step-brother. A hottest desert is a dry segment of a coast.
+								</div>
+							</div>
+							
+							<div class="my-3 p-3 bg-light rounded">
+								<!-- Sendedaten -->
+								<div class="pb-2 border-bottom">
+									<div class="h4">RNA-abhängige DNA-Polymerase</div>
+									<div>am [Datum, Zeit]</div>
+								</div>
+								
+								<!-- Inhalt -->
+								<div class="mt-2">
+									The tip of a bow can become an instrument of astrology when used
+									right. We can assume that any instance of an antler can be made
+									into a lightbulb. A policeman is akin to a puny god. Experts
+									would have us believe that a respected cook can prepare a tasty
+									meal out of cicadas.
+								</div>
+							</div>
+						</div>
+						
+						<!-- Kommentarbox -->
+						<div class="container mb-3">
+							<h3 class="h3 mb-3">Verfassen</h3>
+							
+							<form method="post">
+								<!-- Inhalt -->
+								<div class="mb-3">
+									<textarea class="form-control" rows="5" id="comment"></textarea>
+								</div>
+								
+								<!-- Name -->
+								<div class="mb-3 form-group">
+									<label for="pseudonym">Name</label>
+									
+									<input class="form-control" id="pseudonym" type="text"
+									       placeholder="Benjamin"/>
+								</div>
+								
+								<div style="text-align: center">
+									<button class="btn btn-success">Veröffentlichen</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<!-- Optionen in der Umfrage -->
-		<form>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Option</th>
-						<th>Find ich gut</th>
-						<th>Nein auf keinen Fall</th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<tr>
-						<td>Grillen grillen</td>
-						<td><input type=radio name="abstimmung1" value="y"/></td>
-						<td><input type=radio name="abstimmung1" value="n"/></td>
-					</tr>
-					
-					<tr>
-						<td>PizzaBananenSuppe</td>
-						<td><input type=radio name="abstimmung2" value="y"/></td>
-						<td><input type=radio name="abstimmung2" value="n"/></td>
-					</tr>
-					
-					<tr>
-						<td>GurkenHotDog</td>
-						<td><input type=radio name="abstimmung3" value="y"/></td>
-						<td><input type=radio name="abstimmung3" value="n"/></td>
-					</tr>
-					
-					<tr>
-						<td>MayonesenMilchSchake</td>
-						<td><input type=radio name="abstimmung4" value="y"/></td>
-						<td><input type=radio name="abstimmung4" value="n"/></td>
-					</tr>
-				</tbody>
-			</table>
-			
-			<div class="align-content-center" is="mops-row">
-				<button type="submit" class="btn btn-outline-primary">Abstimmen (X Stimmen)</button>
-			</div>
-		</form>
-		
-		<!-- Kommentare -->
-		<details>
-			<summary class="text-left">Kommentare</summary>
-			
-			<div>
-				<div class="container">
-					
-					<!-- ein Kommentar -->
-					<div>
-						<div class="row">
-							<div class="col-sm-3"></div>
-							
-							<div class="col-sm-6">
-								<!-- Name -->
-								<div class="row">
-									<h3 class="h3">Benjamin</h3><br>
-								</div>
-								
-								<!-- Kommentartext -->
-								<div class="row">
-									Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-									diam nonumy eirmod tempor invidunt ut labore et dolore magna
-									aliquyam erat, sed diam voluptua. At vero eos et accusam et
-									justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-									takimata sanctus est Lorem ipsum dolor
-								</div>
-								
-								<!-- Datum -->
-								<div class="row">-dd.mm.yyyy hh:mm</div>
-								
-								<!-- Botton zum Löschen , da dies der User Benjamin ist -->
-								<form>
-									<button class="btn btn-outline-danger">Löschen</button>
-								</form>
-							</div>
-						</div>
-					</div>
-					
-					<div>
-						<div class="row">
-							<div class="col-sm-3"></div>
-							
-							<div class="col-sm-6">
-								<div class="row">
-									<h3 class="h3">Bibi Bloxberg</h3>
-								</div>
-								
-								<div class="row">
-									Haha erster
-								</div>
-								
-								<div class="row">-dd.mm.yyyy hh:mm</div>
-							</div>
-						</div>
-					</div>
-					
-					<div>
-						<div class="row">
-							<div class="col-sm-3"></div>
-							
-							<div class="col-sm-6">
-								<div class="row">
-									<h3 class="h3">DNAPolymerase</h3>
-								</div>
-								
-								<div class="row">
-									Ich kann gut abschreiben
-								</div>
-								
-								<div class="row">-dd.mm.yyyy hh:mm</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<!-- Kommentarbox -->
-			<form method="post">
-				<div class="row">
-					<div class="col-sm-3"></div>
-					
-					<div class="form-group col-sm-6">
-						<label for="comment">Comment:</label>
-						<textarea class="form-control" rows="5" id="comment"></textarea>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-sm-4"></div>
-					
-					<div class="col-sm-4">
-						<label for="pseudonym">Name:</label>
-						<input id="pseudonym" type="text" placeholder="Benjamin"/>
-						<button class="btn btn-outline-primary">Kommentieren</button>
-					</div>
-					
-					<div class="col-sm-4"></div>
-				</div>
-			</form>
-		</details>
 	</main>
 </body>
 </html>
