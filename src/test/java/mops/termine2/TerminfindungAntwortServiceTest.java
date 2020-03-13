@@ -47,6 +47,7 @@ public class TerminfindungAntwortServiceTest {
 		antwortService.abstimmen(toSave, terminfindung);
 		
 		Mockito.verify(repo, times(4)).save(any());
+		Mockito.verify(repo, times(1)).deleteAllByTerminfindungLinkAAndBenutzer(any(), any());
 	}
 	
 	private HashMap<LocalDateTime, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
