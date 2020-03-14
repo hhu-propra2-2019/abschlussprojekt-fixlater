@@ -56,6 +56,10 @@ public class TerminAntwortService {
 		return buildAntwortFromDB(terminfindungAntwortDBList);
 	}
 	
+	public void deleteAllByLink(String link) {
+		antwortRepo.deleteAllByTerminfindungLink(link);
+	}
+	
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findAllByTerminfindungLink(link);
