@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,13 +27,6 @@ public class TerminfindungAntwortServiceTest {
 	public static final String LINK = "IchBinKeinMannFuerEineNacht,IchBleibeHoechstensEinZweiStunden";
 	
 	public static final String BENUTZER1 = "Julia";
-	
-	public static final String BENUTZER2 = "Kathi";
-	
-	public static final String BENUTZER3 = "Ingid";
-	
-	public static final List<String> benutzer = new ArrayList<>(
-			Arrays.asList("Julia,Kathi,Ingrid,Beate"));
 	
 	private transient TerminfindungAntwortRepository repo;
 	
