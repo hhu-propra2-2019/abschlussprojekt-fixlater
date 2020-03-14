@@ -13,6 +13,6 @@ public interface TerminfindungAntwortRepository extends CrudRepository<Terminfin
 	
 	List<TerminfindungAntwortDB> findAllByTerminfindungLink(String link);
 	
-	void deleteAllByTerminfindungLinkAAndBenutzer(String link, String benutzer);
+	void deleteAllByTerminfindungLinkAndBenutzer(String link, String benutzer);
 }
 

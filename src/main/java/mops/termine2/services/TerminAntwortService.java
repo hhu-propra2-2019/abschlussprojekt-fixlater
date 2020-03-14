@@ -23,7 +23,7 @@ public class TerminAntwortService {
 	
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
-		antwortRepo.deleteAllByTerminfindungLinkAAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
+		antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
 		
 		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
