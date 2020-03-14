@@ -212,6 +212,32 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loadByBenutzer() {
+		int dummie1 = 0;
+		int dummie2 = 1;
+		String benutzer = "benutzer";
+		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
+		List<TerminfindungDB> terminfindungDBs1;
+		List<TerminfindungDB> terminfindungDBs2;
+		terminfindungDBs1 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie1);
+		terminfindungDBs2 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie2);
+		terminfindungDBs.addAll(terminfindungDBs1);
+		terminfindungDBs.addAll(terminfindungDBs2);
+		
+		when(antwortRepository.findTerminindungDbByBenutzer(benutzer)).thenReturn(terminfindungDBs);
+		
+		List<Terminfindung> erwartet = new ArrayList<>(
+				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
+						erstelleBeispielTerminfindungOhneTermine(dummie2)
+				)
+		);
+		
+		List<Terminfindung> ergebnis = service.loadAllBenutzerHatAbgestimmtOhneTermine(benutzer);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private Terminfindung erstelleBeispielTerminfindung(int dummie, int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();
 		termine.setBeschreibung(beschreibungsListe.get(dummie));
