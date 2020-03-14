@@ -53,9 +53,10 @@ public class TerminfindungService {
 		terminfindungRepo.deleteByLink(link);
 	}
 	
-	//TODO
 	public void loescheAbgelaufene() {
-		System.out.println("mist");
+		LocalDateTime timeNow = LocalDateTime.now();
+		antwortRepo.loescheAelterAls(timeNow);
+		terminfindungRepo.loescheAelterAls(timeNow);
 	}
 	
 	

@@ -6,10 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface TerminfindungAntwortRepository extends CrudRepository<TerminfindungAntwortDB, Long> {
 	
 	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.link like :link")
 	void deleteByLink(@Param("link") String link);
 	
+	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.loeschdatum < :timeNow")
+	void loescheAelterAls(@Param("timeNow") LocalDateTime timeNow);
 }
