@@ -40,9 +40,9 @@
 	
 	<main th:fragment="bodycontent">
 		
-		<div class="container">
+		<div class="container my-3">
 			<!-- Header mit Titel und Aktionen -->
-			<div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
+			<div class="row d-flex justify-content-between align-items-center mb-3 border-bottom">
 				<h1 class="h1">Umfragen</h1>
 				
 				<!-- Gruppenauswahl zur Begrenzung der angezeigten Termine -->
@@ -82,9 +82,10 @@
 				<div class="col-md-8 order-md-1">
 					<h2 class="h2">Ergebnisse</h2>
 					
-					<!-- Die neusten Abstimmungen sollten oben eingefügt werden. -->
-					<div th:each="umfrage : ${umfragen.getTeilgenommen()}">
-						<div class="my-3 p-3 bg-light rounded">
+					<div class="mt-3">
+						<!-- Abstimmungen aufsteigend nach dem Enddatum sortiert -->
+						<div class="mt-3 p-3 bg-light rounded"
+						     th:each="umfrage : ${umfragen.getTeilgenommen()}">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<div class="row d-flex justify-content-between align-items-center">
@@ -92,16 +93,22 @@
 										Titel der Umfrage
 									</h3>
 									
-									<div class="col-5" style="text-align: right"
-									     th:text="'geendet am ' + ${#temporals.format(umfrage.frist,
+									<div class="col-6" style="text-align: right"
+									     th:text="'vom ' + ${#temporals.format(umfrage.frist,
 									              'dd.MM.yyyy, HH:mm')}">
-										beendet am DD.MM.YYYY, HH:MM
+										vom DD.MM.YYYY, HH:MM
 									</div>
 								</div>
 								
 								<div class="text-success" style="font-size: large"
 								     th:text="${#strings.abbreviate(umfrage.umfragenErgebnis,300)}">
 									Ergebnis
+								</div>
+								
+								<!-- Gruppe, falls verfügbar -->
+								<div class="mt-1 text-secondary"
+								     th:if="*{umfrage.gruppe != null && umfrage.gruppe != ''}">
+									für Gruppe <i><span th:text="${umfrage.gruppe}">Gruppe</span></i>
 								</div>
 							</div>
 							
@@ -130,12 +137,19 @@
 					
 					<!-- Umfragen sollten aufsteigend nach ihrer Frist sortiert sein. -->
 					<div th:each="offeneUmfrage : ${umfragen.getOffen()}">
-						<div class="my-3 p-3 bg-light rounded">
+						<div class="mt-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<h3 class="h3" th:text="${offeneUmfrage.titel}">
 									Titel der Umfrage
 								</h3>
+								
+								<!-- Gruppe, falls verfügbar -->
+								<div class="mt-1 text-secondary"
+								     th:if="*{offeneUmfrage.gruppe != null &&
+								              offeneUmfrage.gruppe != ''}">
+									für Gruppe <i><span th:text="${offeneUmfrage.gruppe}">Gruppe</span></i>
+								</div>
 							</div>
 							
 							<!-- Beschreibung -->

@@ -52,9 +52,9 @@ public class Termine2Controller {
 		authenticatedAccess.increment();
 		//Dummy Daten damit man am thymeleaf arbeiten kann:
 		List<String> gruppen = new ArrayList<String>();
-		gruppen.add("gruppe1");
-		gruppen.add("gruppe2");
-		gruppen.add("gruppe3");
+		gruppen.add("FIXLATER");
+		gruppen.add("WEB24");
+		gruppen.add("GIT-R-DONE");
 		
 		List<Terminfindung> terminfindungenTeilgenommen = new ArrayList<Terminfindung>();
 		Terminfindung termin1 = new Terminfindung();
@@ -62,6 +62,7 @@ public class Termine2Controller {
 		termin1.setBeschreibung("Dies ist eine Beschreibung für Termin 1");
 		termin1.setTitel("Terminfindung 1");
 		termin1.setOrt("Raum 25.12.03.35");
+		termin1.setGruppe("FIXLATER");
 		termin1.setErgebnis(LocalDateTime.now());
 		
 		Terminfindung termin3 = new Terminfindung();
@@ -69,6 +70,7 @@ public class Termine2Controller {
 		termin3.setBeschreibung("Dies ist eine Beschreibung für Termin 3");
 		termin3.setTitel("Terminfindung 1");
 		termin3.setOrt("Raum 25.12.03.35");
+		termin3.setGruppe("WEB24");
 		termin3.setErgebnis(LocalDateTime.now());
 		
 		terminfindungenTeilgenommen.add(termin1);
@@ -80,6 +82,7 @@ public class Termine2Controller {
 		termin2.setBeschreibung("Dies ist eine Beschreibung für Termin 2");
 		termin2.setTitel("Terminfindung 2");
 		termin2.setOrt("Raum 25.12.03.35");
+		termin2.setGruppe("GIT-R-DONE");
 		termin2.setFrist(LocalDateTime.now());
 		
 		Terminfindung termin4 = new Terminfindung();
@@ -87,6 +90,7 @@ public class Termine2Controller {
 		termin4.setBeschreibung("Dies ist eine Beschreibung für Termin 4");
 		termin4.setTitel("Terminfindung 2");
 		termin4.setOrt("Raum 25.12.03.35");
+		termin4.setGruppe("FIXLATER");
 		termin4.setFrist(LocalDateTime.now());
 		
 		terminfindungenOffen.add(termin2);
@@ -146,6 +150,7 @@ public class Termine2Controller {
 		umfrage1.setBeschreibung("Was sollen wir essen?");
 		umfrage1.setFrist(LocalDateTime.now().plusHours(3));
 		umfrage1.setUmfragenErgebnis("Spaghetti");
+		umfrage1.setGruppe("FIXLATER");
 		
 		umfragenTeilgenommen.add(umfrage1);
 		
@@ -155,6 +160,7 @@ public class Termine2Controller {
 		umfrage2.setBeschreibung("Was sollen wir später essen?");
 		umfrage2.setFrist(LocalDateTime.now().plusHours(6));
 		umfrage2.setUmfragenErgebnis("Kuchen");
+		umfrage2.setGruppe("WEB24");
 		
 		umfragenTeilgenommen.add(umfrage2);
 		
@@ -166,6 +172,7 @@ public class Termine2Controller {
 		umfrage3.setBeschreibung("Was sollen wir morgen früh essen?");
 		umfrage3.setFrist(LocalDateTime.now().plusHours(23));
 		umfrage3.setUmfragenErgebnis("Eggs and bacon");
+		umfrage3.setGruppe("GIT-R-DONE");
 		
 		umfragenOffen.add(umfrage3);
 		
@@ -175,6 +182,7 @@ public class Termine2Controller {
 		umfrage4.setBeschreibung("Was sollen wir morgen Mittag essen?");
 		umfrage4.setFrist(LocalDateTime.now().plusHours(23));
 		umfrage4.setUmfragenErgebnis("Barbeque");
+		umfrage4.setGruppe("FIXLATER");
 		
 		umfragenOffen.add(umfrage4);
 		
