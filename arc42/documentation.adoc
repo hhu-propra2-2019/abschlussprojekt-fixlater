@@ -160,11 +160,19 @@ Wir haben an der Verbesserung der Oberfläche gearbeitet und die Übersicht der 
 
 
 === TerminAntwortService(Jan,Marcel)
+Es wurde am TerminAntwortService gearbeitet, dieser ist dazu zuständig die Antworten
+eines Benutzers bezüglich einer bestimmten Terminumfrage zu Speichern und zu laden
+Ebenso soll sie alle Antworten laden können um das Auswerten eines Ergebnisses zu 
+ermöglichen.
+Dabei eröffnet sich die Frage ob die Klasse für das berechnen des ergebnis zuständig 
+sein sollte oder wirklich nur für das speichern und laden zum antworten.
+Wegen des SingleResponsibility Prinzips wird das Berechnen des Ergebnisses in einer 
+anderen Methode erfolgen. 
 
 
-Sichten weiterentwickelt: Termin
 === Gruppe UI (Anton, Ingrid)
 Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenbank einzubinden.abstimmung, Umfragenabstimmung sind visuell fertig und brauchen jetzt Thymeleaf.
+Sichten weiterentwickelt: Termin
 
 === Gruppe DB-Initializer/ LinkService (Kathi, Julia)
 Der DB-Initializer wurde nun angepasst und fertiggestellt. Außerdem wurden heute Tests für den
