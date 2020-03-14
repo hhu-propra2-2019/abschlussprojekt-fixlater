@@ -72,6 +72,11 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
+	public List<Terminfindung> loadAllBenutzerHatAbgestimmt(String benutzer) {
+		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminindungDbByBenutzer(benutzer);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
 	
 	public Terminfindung loadByLinkMitTerminen(String link) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
