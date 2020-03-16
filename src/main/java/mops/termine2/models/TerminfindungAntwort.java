@@ -1,7 +1,9 @@
 package mops.termine2.models;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import mops.termine2.enums.Antwort;
 
 import java.time.LocalDateTime;
@@ -9,11 +11,13 @@ import java.util.HashMap;
 
 @Getter
 @Setter
-public class Teilnahme {
+@EqualsAndHashCode
+@ToString
+public class TerminfindungAntwort {
 	
 	private String link;
 	
-	private Long gruppeId;
+	private String gruppe;
 	
 	private String kuerzel;
 	
@@ -21,6 +25,7 @@ public class Teilnahme {
 	
 	private String pseudonym;
 	
+	// Brauchen wir vermutlich nicht
 	private Boolean teilgenommen;
 	
 }
