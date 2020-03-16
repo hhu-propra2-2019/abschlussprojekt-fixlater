@@ -13,7 +13,16 @@ import java.util.List;
 @Repository
 public interface TerminfindungAntwortRepository extends CrudRepository<TerminfindungAntwortDB, Long> {
 	
-	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.link like :link")
+	
+	List<TerminfindungAntwortDB> findByBenutzerAndTerminfindungLink(String benutzer, String link);
+	
+	List<TerminfindungAntwortDB> findAllByTerminfindungLink(String link);
+	
+	@Query("delete from TerminfindungAntwortDB db "
+			+ "where db.terminfindung.link like :link and db.benutzer like :benutzer")
+	void deleteAllByTerminfindungLinkAndBenutzer(@Param("link") String link, @Param("benutzer") String benutzer);
+	
+	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.link like  :link")
 	void deleteByLink(@Param("link") String link);
 	
 	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.loeschdatum < :timeNow")
@@ -22,3 +31,4 @@ public interface TerminfindungAntwortRepository extends CrudRepository<Terminfin
 	@Query("select db.terminfindung from TerminfindungAntwortDB db where db.benutzer like :benutzer")
 	List<TerminfindungDB> findTerminfindungDbByBenutzer(@Param("benutzer") String benutzer);
 }
+
