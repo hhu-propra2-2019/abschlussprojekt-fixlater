@@ -25,10 +25,7 @@ public class KommentarService {
 	}
 	
 	public void delete(String link) {
-		List<KommentarDB> kommentarDBs = kommentarRepo.findByLink(link);
-		for (KommentarDB kommentarDB : kommentarDBs) {
-			kommentarRepo.delete(kommentarDB);
-		}
+		kommentarRepo.deleteByLink(link);
 	}
 	
 	public List<Kommentar> loadByLink(String link) {
@@ -40,7 +37,7 @@ public class KommentarService {
 		return kommentare;
 	}
 	
-	public Kommentar erstelleKommentar(KommentarDB kommentarDB) {
+	private Kommentar erstelleKommentar(KommentarDB kommentarDB) {
 		Kommentar kommentar = new Kommentar();
 		kommentar.setLink(kommentarDB.getLink());
 		kommentar.setInhalt(kommentarDB.getInhalt());

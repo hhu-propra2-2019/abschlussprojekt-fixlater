@@ -14,4 +14,7 @@ public interface KommentarRepository extends CrudRepository<KommentarDB, Long> {
 	@Query("select k from KommentarDB k where k.link like :link order by k.erstellungsdatum")
 	List<KommentarDB> findByLink(@Param("link") String link);
 	
+	@Query("delete from KommentarDB k where k.link like :link")
+	void deleteByLink(@Param("link") String link);
+	
 }
