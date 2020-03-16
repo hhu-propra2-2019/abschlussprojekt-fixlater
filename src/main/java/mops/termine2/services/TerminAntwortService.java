@@ -57,7 +57,7 @@ public class TerminAntwortService {
 	}
 	
 	public void deleteAllByLink(String link) {
-		antwortRepo.deleteAllByTerminfindungLink(link);
+		antwortRepo.deleteByLink(link);
 	}
 	
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
@@ -88,10 +88,10 @@ public class TerminAntwortService {
 					antwort.setKuerzel(aktuellerBenutzer);
 					antwort.setGruppe(db.get(i).getTerminfindung().getGruppe());
 					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
-					for (int j = 0; j < db.size(); j++) {
-						if (db.get(j).getBenutzer().equals(aktuellerBenutzer)) {
-							antworten.put(db.get(j).getTerminfindung().getTermin(),
-									db.get(j).getAntwort());
+					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
+						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
+							antworten.put(terminfindungAntwortDB.getTerminfindung().getTermin(),
+									terminfindungAntwortDB.getAntwort());
 						}
 					}
 					antwort.setAntworten(antworten);
