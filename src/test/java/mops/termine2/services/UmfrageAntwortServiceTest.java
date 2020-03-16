@@ -45,6 +45,20 @@ public class UmfrageAntwortServiceTest {
 		Mockito.verify(repo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
 	}
 	
+	@Test
+	public void saveAntwortFuerUmfrageMit17Moeglichkeiten() {
+		int anzahl = 17;
+		Umfrage umfrage = getBeispielUmfrage();
+		UmfrageAntwort umfrageAntwort = new UmfrageAntwort();
+		umfrageAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
+		umfrageAntwort.setBenutzer(BENUTZER1);
+		
+		antwortService.abstimmen(umfrageAntwort, umfrage);
+		
+		Mockito.verify(repo, times(anzahl)).save(any());
+		Mockito.verify(repo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
+	}
+	
 	private Umfrage getBeispielUmfrage() {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(LINK);
