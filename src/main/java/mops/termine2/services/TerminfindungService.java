@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
@@ -15,8 +16,12 @@ public class TerminfindungService {
 	
 	private transient TerminfindungRepository terminfindungRepo;
 	
-	public TerminfindungService(TerminfindungRepository terminfindungRepo) {
+	private transient TerminfindungAntwortRepository antwortRepo;
+	
+	public TerminfindungService(TerminfindungRepository terminfindungRepo,
+								TerminfindungAntwortRepository antwortRepo) {
 		this.terminfindungRepo = terminfindungRepo;
+		this.antwortRepo = antwortRepo;
 	}
 	
 	public void save(Terminfindung terminfindung) {
@@ -43,6 +48,17 @@ public class TerminfindungService {
 		}
 	}
 	
+	public void loescheByLink(String link) {
+		antwortRepo.deleteByLink(link);
+		terminfindungRepo.deleteByLink(link);
+	}
+	
+	public void loescheAbgelaufene() {
+		LocalDateTime timeNow = LocalDateTime.now();
+		antwortRepo.loescheAelterAls(timeNow);
+		terminfindungRepo.loescheAelterAls(timeNow);
+	}
+	
 	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
@@ -56,6 +72,11 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
+	public List<Terminfindung> loadAllBenutzerHatAbgestimmtOhneTermine(String benutzer) {
+		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminfindungDbByBenutzer(benutzer);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
 	
 	public Terminfindung loadByLinkMitTerminen(String link) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
