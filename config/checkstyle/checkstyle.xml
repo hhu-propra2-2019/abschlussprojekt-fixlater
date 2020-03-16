@@ -11,6 +11,10 @@
 	<module name="SuppressionSingleFilter">
 	  <property name="files" value=".+\.(?:html|sql|css|properties|js|map|yarn-integrity)$"/>
 	</module>
+    <module name="SuppressionSingleFilter">
+      <property name="files" value=".+\.(?:png|gif|jpg|jpeg)$"/>
+      <property name="checks" value=".*"/>
+    </module>
 
 	<module name="TreeWalker">
 		

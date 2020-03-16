@@ -1,5 +1,6 @@
 package mops.termine2;
 
+import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
@@ -56,12 +57,15 @@ public class TerminfindungServiceTest {
 	
 	private transient TerminfindungService service;
 	
-	private transient TerminfindungRepository repository;
+	private transient TerminfindungRepository terminRepository;
+	
+	private transient TerminfindungAntwortRepository antwortRepository;
 	
 	@BeforeEach
 	public void setUp() {
-		repository = mock(TerminfindungRepository.class);
-		service = new TerminfindungService(repository);
+		terminRepository = mock(TerminfindungRepository.class);
+		antwortRepository = mock(TerminfindungAntwortRepository.class);
+		service = new TerminfindungService(terminRepository, antwortRepository);
 	}
 	
 	@Test
@@ -69,7 +73,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(repository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
 	}
 	
 	@Test
@@ -77,7 +81,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(3, terminAnzahl);
 		service.save(termine);
-		Mockito.verify(repository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
 	}
 	
 	@Test
@@ -85,7 +89,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 10;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(repository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
 	}
 	
 	@Test
@@ -93,7 +97,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 1000;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(repository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
 	}
 	
 	@Test
@@ -102,7 +106,7 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
 		
@@ -115,7 +119,7 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
 		
@@ -128,7 +132,7 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
-		when(repository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		assertThat(ergebnis).isEqualTo(null);
 	}
@@ -138,7 +142,7 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungenByErstellerKeineTreffer() {
 		int dummie = 0;
 		List<TerminfindungDB> dbs = new ArrayList<>();
-		when(repository.findByErsteller(erstellerListe.get(dummie))).thenReturn(dbs);
+		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(dbs);
 		List<Terminfindung> ergebnisse = service.loadByErstellerOhneTermine(erstellerListe.get(dummie));
 		
 		assertThat(ergebnisse.isEmpty()).isTrue();
@@ -150,7 +154,7 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(repository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
 		
 		Terminfindung ergebnis = service.loadByErstellerOhneTermine(erstellerListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
@@ -162,7 +166,7 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungenByGruppeKeineTreffer() {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
-		when(repository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
 		List<Terminfindung> ergebnisse = service.loadByErstellerOhneTermine(erstellerListe.get(dummie));
 		
 		assertThat(ergebnisse.isEmpty()).isTrue();
@@ -175,7 +179,7 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(repository.findByGruppe(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppe(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
 		
 		Terminfindung ergebnis = service.loadByGruppeOhneTermine(erstellerListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
@@ -195,7 +199,7 @@ public class TerminfindungServiceTest {
 		terminfindungDBs.addAll(terminfindungDBs1);
 		terminfindungDBs.addAll(terminfindungDBs2);
 		
-		when(repository.findByGruppe(gruppenListe.get(0))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppe(gruppenListe.get(0))).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
 				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
@@ -204,6 +208,32 @@ public class TerminfindungServiceTest {
 		);
 		
 		List<Terminfindung> ergebnis = service.loadByGruppeOhneTermine(gruppenListe.get(0));
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	@Test
+	public void loadByBenutzer() {
+		int dummie1 = 0;
+		int dummie2 = 1;
+		String benutzer = "benutzer";
+		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
+		List<TerminfindungDB> terminfindungDBs1;
+		List<TerminfindungDB> terminfindungDBs2;
+		terminfindungDBs1 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie1);
+		terminfindungDBs2 = erstelleTerminfindungDBListeFuerEineTerminfindungOhneTermine(dummie2);
+		terminfindungDBs.addAll(terminfindungDBs1);
+		terminfindungDBs.addAll(terminfindungDBs2);
+		
+		when(antwortRepository.findTerminfindungDbByBenutzer(benutzer)).thenReturn(terminfindungDBs);
+		
+		List<Terminfindung> erwartet = new ArrayList<>(
+				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
+						erstelleBeispielTerminfindungOhneTermine(dummie2)
+				)
+		);
+		
+		List<Terminfindung> ergebnis = service.loadAllBenutzerHatAbgestimmtOhneTermine(benutzer);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}

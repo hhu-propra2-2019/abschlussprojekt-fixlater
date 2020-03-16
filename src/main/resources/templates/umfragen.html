@@ -30,8 +30,18 @@
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
 			<ul>
-				<li><a th:href="@{/termine2}">         Termine</a></li>
-				<li><a th:href="@{/termine2/umfragen}">Umfragen</a></li>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg" th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg" th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
 			</ul>
 			<div align="center">
 			</div>
@@ -83,7 +93,7 @@
 					<h2 class="h2">Ergebnisse</h2>
 					
 					<!-- Die neusten Abstimmungen sollten oben eingefügt werden. -->
-					<div th:each="umfrage : ${umfragen.getTeilgenommen()}">
+					<div th:each="umfrage : ${umfragen.getAbgeschlossen()}">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
@@ -99,7 +109,7 @@
 									</div>
 								</div>
 								
-								<div class="text-success" style="font-size: large"
+								<div class="text-success" style="font-size: x-large"
 								     th:text="${#strings.abbreviate(umfrage.umfragenErgebnis,300)}">
 									Ergebnis
 								</div>
