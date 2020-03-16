@@ -90,7 +90,8 @@ public class TerminAntwortService {
 					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
 					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
 						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
-							antworten.put(terminfindungAntwortDB.getTerminfindung().getTermin(),
+							antworten.put(terminfindungAntwortDB
+											.getTerminfindung().getTermin(),
 									terminfindungAntwortDB.getAntwort());
 						}
 					}
