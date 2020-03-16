@@ -1,19 +1,25 @@
 package mops.termine2.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import mops.termine2.database.UmfrageAntwortRepository;
+import mops.termine2.database.entities.UmfrageAntwortDB;
+import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Antwort;
 import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 public class UmfrageAntwortServiceTest {
 	
@@ -59,6 +65,17 @@ public class UmfrageAntwortServiceTest {
 		Mockito.verify(repo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
 	}
 	
+	@Test
+	public void loadByBenutzerAndLinkEinBenutzer3Moeglichkeiten() {
+		int anzahl = 3;
+		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispielAntwortDBList(anzahl, BENUTZER1);
+		when(repo.findByBenutzerAndUmfrageLink(BENUTZER1, LINK)).thenReturn(umfrageAntwortDBs);
+		UmfrageAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
+		UmfrageAntwort erwartet = getBeispielUmfrageAntwort(anzahl, BENUTZER1);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private Umfrage getBeispielUmfrage() {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(LINK);
@@ -71,6 +88,32 @@ public class UmfrageAntwortServiceTest {
 			antworten.put("Vorschlag " + i, Antwort.JA);
 		}
 		return antworten;
+	}
+	
+	private UmfrageAntwort getBeispielUmfrageAntwort(int anzahl, String benutzer) {
+		UmfrageAntwort umfrageAntwort = new UmfrageAntwort();
+		umfrageAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
+		umfrageAntwort.setBenutzer(benutzer);
+		umfrageAntwort.setLink(LINK);
+		umfrageAntwort.setTeilgenommen(true);
+		return umfrageAntwort;
+	}
+	
+	private List<UmfrageAntwortDB> getBeispielAntwortDBList(int anzahl, String benutzer) {
+		List<UmfrageAntwortDB> umfrageAntwortDBs = new ArrayList<>();
+		HashMap<String, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
+		for (String vorschlag : antworten.keySet()) {
+			UmfrageAntwortDB umfrageAntwortDB = new UmfrageAntwortDB();
+			UmfrageDB umfrageDB = new UmfrageDB();
+			umfrageDB.setLink(LINK);
+			umfrageDB.setAuswahlmoeglichkeit(vorschlag);
+			umfrageAntwortDB.setAntwort(antworten.get(vorschlag));
+			umfrageAntwortDB.setBenutzer(benutzer);
+			umfrageAntwortDB.setUmfrage(umfrageDB);
+			
+			umfrageAntwortDBs.add(umfrageAntwortDB);
+		}
+		return umfrageAntwortDBs;
 	}
 	
 }
