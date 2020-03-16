@@ -79,14 +79,14 @@ public class TerminAntwortService {
 			List<String> benuternamen = new ArrayList<>();
 			List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
 			
-			for (int i = 0; i < db.size(); i++) {
-				String aktuellerBenutzer = db.get(i).getBenutzer();
-				if (!benuternamen.contains(db.get(i).getBenutzer())) {
+			for (TerminfindungAntwortDB antwortDB : db) {
+				String aktuellerBenutzer = antwortDB.getBenutzer();
+				if (!benuternamen.contains(antwortDB.getBenutzer())) {
 					TerminfindungAntwort antwort = new TerminfindungAntwort();
-					antwort.setLink(db.get(i).getTerminfindung().getLink());
-					antwort.setPseudonym(db.get(i).getPseudonym());
+					antwort.setLink(antwortDB.getTerminfindung().getLink());
+					antwort.setPseudonym(antwortDB.getPseudonym());
 					antwort.setKuerzel(aktuellerBenutzer);
-					antwort.setGruppe(db.get(i).getTerminfindung().getGruppe());
+					antwort.setGruppe(antwortDB.getTerminfindung().getGruppe());
 					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
 					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
 						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
