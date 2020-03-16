@@ -93,7 +93,7 @@
 					<h2 class="h2">Ergebnisse</h2>
 					
 					<!-- Die neusten Abstimmungen sollten oben eingefügt werden. -->
-					<div th:each="umfrage : ${umfragen.getTeilgenommen()}">
+					<div th:each="umfrage : ${umfragen.getAbgeschlossen()}">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">

@@ -1,30 +1,32 @@
 package mops.termine2;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.security.RolesAllowed;
-
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.authentication.Account;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Terminuebersicht;
+import mops.termine2.models.Umfrage;
+import mops.termine2.models.Umfrageuebersicht;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.TerminfindunguebersichtService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.authentication.Account;
-import mops.termine2.models.Terminfindung;
-import mops.termine2.models.Terminuebersicht;
-import mops.termine2.models.Umfrage;
-import mops.termine2.models.Umfrageuebersicht;
+import javax.annotation.security.RolesAllowed;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @SessionScope
@@ -39,6 +41,12 @@ public class Termine2Controller {
 	
 	private final transient Counter authenticatedAccess;
 	
+	@Autowired
+	private TerminfindunguebersichtService terminfindunguebersichtService;
+	
+	@Autowired
+	private GruppeService gruppeService;
+	
 	public Termine2Controller(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
@@ -47,59 +55,28 @@ public class Termine2Controller {
 	@RolesAllowed({ROLE_ORGA, ROLE_STUDENTIN})
 	public String index(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
+			Account account = createAccountFromPrincipal(p);
+			m.addAttribute(ACCOUNT, account);
+			
+			authenticatedAccess.increment();
+			
+			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+			List<String> gruppenNamen = new ArrayList<>();
+			for (Gruppe g : gruppen) {
+				gruppenNamen.add(g.getName());
+			}
+			
+			List<Terminfindung> terminfindungenOffen =
+				terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			List<Terminfindung> terminfindungenAbgeschlossen =
+				terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+			
+			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
+				terminfindungenOffen, gruppenNamen);
+			
+			m.addAttribute("termine", termine);
 		}
-		authenticatedAccess.increment();
-		//Dummy Daten damit man am thymeleaf arbeiten kann:
-		List<String> gruppen = new ArrayList<String>();
-		gruppen.add("gruppe1");
-		gruppen.add("gruppe2");
-		gruppen.add("gruppe3");
-		
-		List<Terminfindung> terminfindungenTeilgenommen = new ArrayList<Terminfindung>();
-		Terminfindung termin1 = new Terminfindung();
-		termin1.setErsteller("studentin");
-		termin1.setBeschreibung("Dies ist eine Beschreibung für Termin 1");
-		termin1.setTitel("Terminfindung 1");
-		termin1.setOrt("Raum 25.12.03.35");
-		termin1.setErgebnis(LocalDateTime.now());
-		
-		Terminfindung termin3 = new Terminfindung();
-		termin3.setErsteller("studentin");
-		termin3.setBeschreibung("Dies ist eine Beschreibung für Termin 3");
-		termin3.setTitel("Terminfindung 1");
-		termin3.setOrt("Raum 25.12.03.35");
-		termin3.setErgebnis(LocalDateTime.now());
-		
-		terminfindungenTeilgenommen.add(termin1);
-		terminfindungenTeilgenommen.add(termin3);
-		
-		List<Terminfindung> terminfindungenOffen = new ArrayList<Terminfindung>();
-		Terminfindung termin2 = new Terminfindung();
-		termin2.setErsteller("studentin");
-		termin2.setBeschreibung("Dies ist eine Beschreibung für Termin 2");
-		termin2.setTitel("Terminfindung 2");
-		termin2.setOrt("Raum 25.12.03.35");
-		termin2.setFrist(LocalDateTime.now());
-		
-		Terminfindung termin4 = new Terminfindung();
-		termin4.setErsteller("studentin");
-		termin4.setBeschreibung("Dies ist eine Beschreibung für Termin 4");
-		termin4.setTitel("Terminfindung 2");
-		termin4.setOrt("Raum 25.12.03.35");
-		termin4.setFrist(LocalDateTime.now());
-		
-		terminfindungenOffen.add(termin2);
-		terminfindungenOffen.add(termin4);
-		
-		Terminuebersicht termine = new Terminuebersicht(terminfindungenTeilgenommen, terminfindungenOffen,
-			gruppen);
-		
-		m.addAttribute("termine", termine);
-		
 		return "termine";
-		
-		
 	}
 	
 	@GetMapping("/termine-abstimmung")

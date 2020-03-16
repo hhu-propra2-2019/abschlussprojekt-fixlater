@@ -108,7 +108,7 @@
 					<h2 class="h2">Anstehend</h2>
 					
 					<!-- Termine sollten in aufsteigender Reihenfolge sortiert sein. -->
-					<div th:each="termin : ${termine.getTeilgenommen()}">
+					<div th:each="termin : ${termine.getAbgeschlossen()}">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
