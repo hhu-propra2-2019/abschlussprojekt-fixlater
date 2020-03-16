@@ -46,8 +46,21 @@
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
 			<ul>
-				<li><a th:href="@{/termine2}">         Termine </a></li>
-				<li><a th:href="@{/termine2/umfragen}">Umfragen</a></li>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
 			</ul>
 			<div align="center">
 			</div>
@@ -131,7 +144,13 @@
 								Erreichbarkeit
 							</label>
 							
-							<select class="custom-select" id="erreichbarkeit">
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() == 0}" disabled>
+								<option value="0" selected>Link</option>
+							</select>
+							
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() != 0}">
 								<option value="0" selected>Link</option>
 								
 								<optgroup label="Gruppen">
@@ -150,6 +169,11 @@
 								<p>
 									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
 									ausgewählten Gruppe sichtbar.
+									
+									<span class="text-warning" th:if="${gruppen.size() == 0}">
+										Diese Option ist aber nicht verfügbar, da es im Moment keine
+										Gruppenzugehörigkeit gibt.
+									</span>
 								</p>
 							</div>
 						</div>
@@ -215,24 +239,15 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="row justify-content-center">
+						<button class="btn btn-success" type="submit">
+							Erstellen
+						</button>
+					</div>
 				</div>
-				
-				
-				
 			</form>
 		</div>
-		
-		
-		<div class="form-group">
-			
-			
-			<button class="button" type="submit">Zeit hinzufügen</button>
-		</div>
-		
-		<div>
-			<button class="button" type="submit">Termin erstellen</button>
-		</div>
-	
 	</main>
 </body>
 </html>
