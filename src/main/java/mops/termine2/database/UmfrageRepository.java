@@ -1,5 +1,6 @@
 package mops.termine2.database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,8 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	void deleteByLink(String link);
 	
 	void deleteByGruppe(String gruppe);
-  
+	
+	@Query("DELETE FROM UmfrageDB WHERE loeschdatum < :timeNow")
+	void deleteOutdated(@Param("timeNow") LocalDateTime timeNow);
+	
 }
