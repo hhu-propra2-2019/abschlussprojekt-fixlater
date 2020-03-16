@@ -7,6 +7,6 @@ import org.springframework.web.context.annotation.SessionScope;
 @Controller
 @SessionScope
 @RequestMapping("/termine2/termine_abstimmung")
-public class abstimmungTerminController {
-	
+public class AbstimmungTerminController {
+
 }
