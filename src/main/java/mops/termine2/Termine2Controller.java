@@ -73,7 +73,9 @@ public class Termine2Controller {
 			
 			m.addAttribute("termine", termine);
 		}
+    
 		return "termine";
+		
 	}
 	
 	@GetMapping("/termine-abstimmung")
@@ -105,6 +107,56 @@ public class Termine2Controller {
 			m.addAttribute(ACCOUNT, createAccountFromPrincipal(p));
 		}
 		authenticatedAccess.increment();
+		
+		//Dummy Daten damit man am thymeleaf arbeiten kann:
+		List<String> gruppen = new ArrayList<String>();
+		gruppen.add("FIXLATER");
+		gruppen.add("WEB24");
+		gruppen.add("GIT-R-DONE");
+		
+		List<Umfrage> umfragenTeilgenommen = new ArrayList<Umfrage>();
+		
+		Umfrage umfrage1 = new Umfrage();
+		umfrage1.setErsteller("studentin");
+		umfrage1.setTitel("Brunch");
+		umfrage1.setBeschreibung("Was sollen wir essen?");
+		umfrage1.setFrist(LocalDateTime.now().plusHours(3));
+		umfrage1.setUmfragenErgebnis("Spaghetti");
+		
+		umfragenTeilgenommen.add(umfrage1);
+		
+		Umfrage umfrage2 = new Umfrage();
+		umfrage2.setErsteller("studentin");
+		umfrage2.setTitel("Dinner");
+		umfrage2.setBeschreibung("Was sollen wir später essen?");
+		umfrage2.setFrist(LocalDateTime.now().plusHours(6));
+		umfrage2.setUmfragenErgebnis("Kuchen");
+		
+		umfragenTeilgenommen.add(umfrage2);
+		
+		List<Umfrage> umfragenOffen = new ArrayList<Umfrage>();
+		
+		Umfrage umfrage3 = new Umfrage();
+		umfrage3.setErsteller("studentin");
+		umfrage3.setTitel("Breakfast");
+		umfrage3.setBeschreibung("Was sollen wir morgen früh essen?");
+		umfrage3.setFrist(LocalDateTime.now().plusHours(23));
+		umfrage3.setUmfragenErgebnis("Eggs and bacon");
+		
+		umfragenOffen.add(umfrage3);
+		
+		Umfrage umfrage4 = new Umfrage();
+		umfrage4.setErsteller("studentin");
+		umfrage4.setTitel("Lunch");
+		umfrage4.setBeschreibung("Was sollen wir morgen Mittag essen?");
+		umfrage4.setFrist(LocalDateTime.now().plusHours(23));
+		umfrage4.setUmfragenErgebnis("Barbeque");
+		
+		umfragenOffen.add(umfrage4);
+		
+		Umfrageuebersicht umfragen = new Umfrageuebersicht(umfragenTeilgenommen, umfragenOffen, gruppen);
+		
+		m.addAttribute("umfragen", umfragen);
 		
 		return "umfragen";
 	}
