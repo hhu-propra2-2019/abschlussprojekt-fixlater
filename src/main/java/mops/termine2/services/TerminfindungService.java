@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
@@ -15,8 +16,12 @@ public class TerminfindungService {
 	
 	private transient TerminfindungRepository terminfindungRepo;
 	
-	public TerminfindungService(TerminfindungRepository terminfindungRepo) {
+	private transient TerminfindungAntwortRepository antwortRepo;
+	
+	public TerminfindungService(TerminfindungRepository terminfindungRepo,
+								TerminfindungAntwortRepository antwortRepo) {
 		this.terminfindungRepo = terminfindungRepo;
+		this.antwortRepo = antwortRepo;
 	}
 	
 	public void save(Terminfindung terminfindung) {
@@ -43,7 +48,37 @@ public class TerminfindungService {
 		}
 	}
 	
-	public Terminfindung loadByLink(String link) {
+	public void loescheByLink(String link) {
+		antwortRepo.deleteByLink(link);
+		terminfindungRepo.deleteByLink(link);
+	}
+	
+	public void loescheAbgelaufene() {
+		LocalDateTime timeNow = LocalDateTime.now();
+		antwortRepo.loescheAelterAls(timeNow);
+		terminfindungRepo.loescheAelterAls(timeNow);
+	}
+	
+	
+	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
+	
+	public List<Terminfindung> loadByGruppeOhneTermine(String gruppe) {
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppe(gruppe);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
+	
+	public List<Terminfindung> loadAllBenutzerHatAbgestimmtOhneTermine(String benutzer) {
+		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminfindungDbByBenutzer(benutzer);
+		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		return terminfindungen;
+	}
+	
+	public Terminfindung loadByLinkMitTerminen(String link) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
 		if (termineDB != null && !termineDB.isEmpty()) {
 			Terminfindung terminfindung = new Terminfindung();
@@ -68,16 +103,36 @@ public class TerminfindungService {
 		return null;
 	}
 	
-	public List<Terminfindung> loadByErsteller(String ersteller) {
-		List<String> links = terminfindungRepo.findLinkByErsteller(ersteller);
-		if (links != null && !links.isEmpty()) {
-			List<Terminfindung> terminfindungen = new ArrayList<>();
-			
-			for (String link : links) {
-				terminfindungen.add(loadByLink(link));
+	private List<Terminfindung> getDistinctTerminfindungList(List<TerminfindungDB> terminfindungDBs) {
+		List<TerminfindungDB> distinctTerminfindungDBs = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		for (TerminfindungDB terminfindungdb : terminfindungDBs) {
+			if (!links.contains(terminfindungdb.getLink())) {
+				distinctTerminfindungDBs.add(terminfindungdb);
+				links.add(terminfindungdb.getLink());
 			}
-			return terminfindungen;
 		}
-		return null;
+		
+		List<Terminfindung> terminfindungen = new ArrayList<>();
+		for (TerminfindungDB db : distinctTerminfindungDBs) {
+			terminfindungen.add(erstelleTerminfindungOhneTermine(db));
+		}
+		return terminfindungen;
 	}
+	
+	private Terminfindung erstelleTerminfindungOhneTermine(TerminfindungDB db) {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setLink(db.getLink());
+		terminfindung.setTitel(db.getTitel());
+		terminfindung.setErsteller(db.getErsteller());
+		terminfindung.setLoeschdatum(db.getLoeschdatum());
+		terminfindung.setFrist(db.getFrist());
+		terminfindung.setGruppe(db.getGruppe());
+		terminfindung.setBeschreibung(db.getBeschreibung());
+		terminfindung.setOrt(db.getOrt());
+		
+		return terminfindung;
+	}
+	
+	
 }
