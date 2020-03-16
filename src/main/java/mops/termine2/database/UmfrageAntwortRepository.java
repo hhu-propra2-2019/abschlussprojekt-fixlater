@@ -1,5 +1,6 @@
 package mops.termine2.database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,8 @@ public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortD
 	
 	@Query("delete from UmfrageAntwortDB db where db.umfrage.link like :link")
 	void deleteAllByUmfrageLink(@Param("link") String link);
+	
+	@Query("delete from UmfrageAntwortDB db where db.umfrage.loeschdatum < :timeNow")
+	void deleteOutdated(@Param("timeNow") LocalDateTime timeNow);
 	
 }
