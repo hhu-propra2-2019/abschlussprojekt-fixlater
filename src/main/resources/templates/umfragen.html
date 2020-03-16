@@ -93,6 +93,12 @@
 				<div class="col-md-8 order-md-1">
 					<h2 class="h2">Ergebnisse</h2>
 					
+					<div class="text-secondary"
+					     style="font-size: small"
+					     th:if="*{umfragen.getAbgeschlossen().size() == 0}">
+						<i>Es liegen keine Ergebnisse vor.</i>
+					</div>
+					
 					<div class="mt-3">
 						<!-- Abstimmungen aufsteigend nach dem Enddatum sortiert -->
 						<div class="mt-3 p-3 bg-light rounded"
@@ -146,9 +152,16 @@
 				<div class="col-md-4 order-md-2">
 					<h2 class="h2">Offen</h2>
 					
-					<!-- Umfragen sollten aufsteigend nach ihrer Frist sortiert sein. -->
-					<div th:each="offeneUmfrage : ${umfragen.getOffen()}">
-						<div class="mt-3 p-3 bg-light rounded">
+					<div class="text-secondary"
+					     style="font-size: small"
+					     th:if="*{umfragen.getOffen().size() == 0}">
+						<i>Es sind keine Abstimmungen offen.</i>
+					</div>
+					
+					<div class="mt-3">
+						<!-- Umfragen sollten aufsteigend nach ihrer Frist sortiert sein. -->
+						<div class="mt-3 p-3 bg-light rounded"
+						     th:each="offeneUmfrage : ${umfragen.getOffen()}">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<h3 class="h3" th:text="${offeneUmfrage.titel}">
