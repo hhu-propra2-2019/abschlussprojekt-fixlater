@@ -1,15 +1,16 @@
 package mops.termine2;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.security.RolesAllowed;
-
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.authentication.Account;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Terminuebersicht;
+import mops.termine2.models.Umfrage;
+import mops.termine2.models.Umfrageuebersicht;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.TerminfindunguebersichtService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.authentication.Account;
-import mops.termine2.models.Terminfindung;
-import mops.termine2.models.Terminuebersicht;
-import mops.termine2.models.Umfrage;
-import mops.termine2.models.Umfrageuebersicht;
+import javax.annotation.security.RolesAllowed;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @SessionScope

@@ -2,6 +2,7 @@ package mops.termine2;
 
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
+import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.database.entities.TerminfindungDB;
@@ -33,10 +34,13 @@ public class TerminfindunguebersichtServiceTest {
 	
 	private transient BenutzerGruppeRepository benutzerGruppeRepository;
 	
+	private transient TerminfindungAntwortRepository antwortRepo;
+	
 	@BeforeEach
 	public void setUp() {
+		antwortRepo = mock(TerminfindungAntwortRepository.class);
 		terminfindungRepository = mock(TerminfindungRepository.class);
-		terminfindungService = new TerminfindungService(terminfindungRepository);
+		terminfindungService = new TerminfindungService(terminfindungRepository, antwortRepo);
 		
 		benutzerGruppeRepository = mock(BenutzerGruppeRepository.class);
 		gruppeService = new GruppeService(benutzerGruppeRepository);
