@@ -73,7 +73,7 @@ public class TerminfindungService {
 	}
 	
 	public List<Terminfindung> loadAllBenutzerHatAbgestimmtOhneTermine(String benutzer) {
-		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminindungDbByBenutzer(benutzer);
+		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminfindungDbByBenutzer(benutzer);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}

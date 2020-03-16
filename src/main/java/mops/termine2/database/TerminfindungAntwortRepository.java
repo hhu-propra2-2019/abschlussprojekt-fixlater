@@ -20,5 +20,5 @@ public interface TerminfindungAntwortRepository extends CrudRepository<Terminfin
 	void loescheAelterAls(@Param("timeNow") LocalDateTime timeNow);
 	
 	@Query("select db.terminfindung from TerminfindungAntwortDB db where db.benutzer like :benutzer")
-	List<TerminfindungDB> findTerminindungDbByBenutzer(@Param("benutzer") String benutzer);
+	List<TerminfindungDB> findTerminfindungDbByBenutzer(@Param("benutzer") String benutzer);
 }

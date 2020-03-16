@@ -225,7 +225,7 @@ public class TerminfindungServiceTest {
 		terminfindungDBs.addAll(terminfindungDBs1);
 		terminfindungDBs.addAll(terminfindungDBs2);
 		
-		when(antwortRepository.findTerminindungDbByBenutzer(benutzer)).thenReturn(terminfindungDBs);
+		when(antwortRepository.findTerminfindungDbByBenutzer(benutzer)).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
 				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
