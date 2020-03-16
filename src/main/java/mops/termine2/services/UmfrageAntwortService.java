@@ -1,10 +1,14 @@
 package mops.termine2.services;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
 import mops.termine2.database.entities.UmfrageDB;
+import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
@@ -48,4 +52,31 @@ public class UmfrageAntwortService {
 			antwortRepo.save(umfrageAntwortDB);
 		}
 	}
+	
+	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
+		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
+		return buildAntwortFromDB(umfrageAntwortDBs);
+	}
+	
+	private UmfrageAntwort buildAntwortFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
+		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
+			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
+			UmfrageAntwort antwort = new UmfrageAntwort();
+			antwort.setBenutzer(ersteAntwortDB.getBenutzer());
+			antwort.setGruppe(ersteAntwortDB.getUmfrage().getGruppe());
+			antwort.setLink(ersteAntwortDB.getUmfrage().getLink());
+			antwort.setPseudonym(ersteAntwortDB.getPseudonym());
+			antwort.setTeilgenommen(true);
+			
+			HashMap<String, Antwort> antworten = new HashMap<>();
+			for (UmfrageAntwortDB antwortDB : umfrageAntwortDBs) {
+				antworten.put(antwortDB.getUmfrage().getAuswahlmoeglichkeit(), antwortDB.getAntwort());
+			}
+			antwort.setAntworten(antworten);
+			
+			return antwort;
+		}
+		return null;
+	}
+	
 }
