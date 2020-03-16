@@ -76,6 +76,18 @@ public class UmfrageAntwortServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loadAllByLink3Moeglichkeiten3Benutzer() {
+		int anzahl = 3;
+		int anzahlBenutzer = 3;
+		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispieleAntwortDBList(anzahl, anzahlBenutzer);
+		when(repo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
+		List<UmfrageAntwort> ergebnis = antwortService.loadAllByLink(LINK);
+		List<UmfrageAntwort> erwartet = getBeispieleUmfrageAntwort(anzahl, anzahlBenutzer);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private Umfrage getBeispielUmfrage() {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(LINK);
@@ -99,6 +111,15 @@ public class UmfrageAntwortServiceTest {
 		return umfrageAntwort;
 	}
 	
+	private List<UmfrageAntwort> getBeispieleUmfrageAntwort(int anzahl, int anzahlBenutzer) {
+		List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
+		String benutzername = "Benutzer";
+		for (int i = 0; i < anzahlBenutzer; i++) {
+			umfrageAntworten.add(getBeispielUmfrageAntwort(anzahl, benutzername + i));
+		}
+		return umfrageAntworten;
+	}
+	
 	private List<UmfrageAntwortDB> getBeispielAntwortDBList(int anzahl, String benutzer) {
 		List<UmfrageAntwortDB> umfrageAntwortDBs = new ArrayList<>();
 		HashMap<String, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
@@ -112,6 +133,15 @@ public class UmfrageAntwortServiceTest {
 			umfrageAntwortDB.setUmfrage(umfrageDB);
 			
 			umfrageAntwortDBs.add(umfrageAntwortDB);
+		}
+		return umfrageAntwortDBs;
+	}
+	
+	private List<UmfrageAntwortDB> getBeispieleAntwortDBList(int anzahl, int anzahlBenutzer) {
+		List<UmfrageAntwortDB> umfrageAntwortDBs = new ArrayList<>();
+		String benutzername = "Benutzer";
+		for (int i = 0; i < anzahlBenutzer; i++) {
+			umfrageAntwortDBs.addAll(getBeispielAntwortDBList(anzahl, benutzername + i));
 		}
 		return umfrageAntwortDBs;
 	}
