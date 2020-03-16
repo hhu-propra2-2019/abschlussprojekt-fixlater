@@ -43,7 +43,7 @@ public class LinkServiceTest {
 	public void setUp() {
 		terminfindungRepo = mock(TerminfindungRepository.class);
 		umfrageRepo = mock(UmfrageRepository.class);
-		this.linkService = new LinkService(terminfindungRepo, umfrageRepo);
+		linkService = new LinkService(terminfindungRepo, umfrageRepo);
 	}
 	
 	@Test
