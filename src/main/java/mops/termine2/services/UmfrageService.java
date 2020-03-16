@@ -1,10 +1,12 @@
 package mops.termine2.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
@@ -15,8 +17,11 @@ public class UmfrageService {
 	
 	private transient UmfrageRepository umfrageRepository;
 	
-	public UmfrageService(UmfrageRepository repo) {
-		umfrageRepository = repo;
+	private transient UmfrageAntwortRepository umfrageAntwortRepository;
+	
+	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepository) {
+		umfrageRepository = umfrageRepo;
+		umfrageAntwortRepository = antwortRepository;
 	}
 	
 	public void save(Umfrage umfrage) {
@@ -50,6 +55,12 @@ public class UmfrageService {
 		umfrageRepository.deleteByGruppe(gruppe);
 	}
 	
+	public void deleteOutdated() {
+		LocalDateTime now = LocalDateTime.now();
+		umfrageRepository.deleteOutdated(now);
+		umfrageAntwortRepository.deleteOutdated(now);
+	}
+	
 	public Umfrage loadByLink(String link) {
 		List<UmfrageDB> umfragenDB = umfrageRepository.findByLink(link);
 		if (umfragenDB != null && !umfragenDB.isEmpty()) {
@@ -77,15 +88,15 @@ public class UmfrageService {
 	
 	public List<Umfrage> loadByErsteller(String ersteller) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
-		return findUmfragenByLink(umfrageDBs);
+		return getDistinctUmfragen(umfrageDBs);
 	}
 	
 	public List<Umfrage> loadByGruppe(String gruppe) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
-		return findUmfragenByLink(umfrageDBs);
+		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> findUmfragenByLink(List<UmfrageDB> umfrageDBs) {
+	public List<Umfrage> getDistinctUmfragen(List<UmfrageDB> umfrageDBs) {
 		if (umfrageDBs != null && !umfrageDBs.isEmpty()) {
 			List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
 			List<String> links = new ArrayList<String>();
