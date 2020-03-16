@@ -121,6 +121,19 @@ public class Termine2Controller {
 		}
 		authenticatedAccess.increment();
 		
+		// Dummy-Daten
+		List<String> gruppen = new ArrayList<String>();
+		gruppen.add("FIXLATER");
+		gruppen.add("WEB24");
+		gruppen.add("GIT-R-DONE");
+		
+		List<LocalDateTime> vorschlaege = new ArrayList<LocalDateTime>();
+		vorschlaege.add(LocalDateTime.now());
+		vorschlaege.add(LocalDateTime.now().plusDays(2).plusHours(3));
+		
+		m.addAttribute("gruppen", gruppen);
+		m.addAttribute("zeiten", vorschlaege);
+		
 		return "termine-neu";
 	}
 	
