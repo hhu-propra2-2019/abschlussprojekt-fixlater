@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +59,11 @@ public class UmfrageAntwortService {
 		return buildAntwortFromDB(umfrageAntwortDBs);
 	}
 	
+	public List<UmfrageAntwort> loadAllByLink(String link) {
+		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findAllByUmfrageLink(link);
+		return buildAntwortenFromDB(umfrageAntwortDBs);
+	}
+	
 	private UmfrageAntwort buildAntwortFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
 		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
 			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
@@ -75,6 +81,39 @@ public class UmfrageAntwortService {
 			antwort.setAntworten(antworten);
 			
 			return antwort;
+		}
+		return null;
+	}
+	
+	private List<UmfrageAntwort> buildAntwortenFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
+		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
+			List<String> benutzernamen = new ArrayList<>();
+			List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
+			
+			for (UmfrageAntwortDB aktuelleAntwortDB : umfrageAntwortDBs) {
+				String aktuellerBenutzer = aktuelleAntwortDB.getBenutzer();
+				if (!benutzernamen.contains(aktuellerBenutzer)) {
+					UmfrageAntwort antwort = new UmfrageAntwort();
+					antwort.setBenutzer(aktuellerBenutzer);
+					antwort.setGruppe(aktuelleAntwortDB.getUmfrage().getGruppe());
+					antwort.setLink(aktuelleAntwortDB.getUmfrage().getLink());
+					antwort.setPseudonym(aktuelleAntwortDB.getPseudonym());
+					antwort.setTeilgenommen(true);
+					
+					HashMap<String, Antwort> antworten = new HashMap<>();
+					for (UmfrageAntwortDB db : umfrageAntwortDBs) {
+						if (db.getBenutzer().equals(aktuellerBenutzer)) {
+							antworten.put(db.getUmfrage().getAuswahlmoeglichkeit(),
+								db.getAntwort());
+						}
+					}
+					antwort.setAntworten(antworten);
+					
+					umfrageAntworten.add(antwort);
+					benutzernamen.add(aktuellerBenutzer);
+				}
+			}
+			return umfrageAntworten;
 		}
 		return null;
 	}
