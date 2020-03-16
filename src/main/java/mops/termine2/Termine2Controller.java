@@ -7,6 +7,8 @@ import mops.termine2.authentication.Account;
 import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.Terminuebersicht;
+import mops.termine2.models.Umfrage;
+import mops.termine2.models.Umfrageuebersicht;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.TerminfindunguebersichtService;
 import org.keycloak.KeycloakPrincipal;
@@ -20,6 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -73,7 +76,7 @@ public class Termine2Controller {
 			
 			m.addAttribute("termine", termine);
 		}
-    
+		
 		return "termine";
 		
 	}
