@@ -88,6 +88,18 @@ public class UmfrageAntwortServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loadAllByLink7Moeglichkeiten11Benutzer() {
+		int anzahl = 7;
+		int anzahlBenutzer = 11;
+		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispieleAntwortDBList(anzahl, anzahlBenutzer);
+		when(repo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
+		List<UmfrageAntwort> ergebnis = antwortService.loadAllByLink(LINK);
+		List<UmfrageAntwort> erwartet = getBeispieleUmfrageAntwort(anzahl, anzahlBenutzer);
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
 	private Umfrage getBeispielUmfrage() {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(LINK);
