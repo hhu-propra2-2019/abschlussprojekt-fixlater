@@ -22,4 +22,6 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	void deleteByLink(String link);
 	
+	void deleteByGruppe(String gruppe);
+	
 }
