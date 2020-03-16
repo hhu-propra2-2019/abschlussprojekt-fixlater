@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
       th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
-                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Umfragen</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		        crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			    crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+			    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			    crossorigin="anonymous"></script>
 	</th:block>
 </head>
 
@@ -14,6 +29,10 @@
 	<header>
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li><a th:href="@{/termine2}">         Termine</a></li>
+				<li><a th:href="@{/termine2/umfragen}">Umfragen</a></li>
+			</ul>
 			<div align="center">
 			</div>
 		</nav>
@@ -22,133 +41,132 @@
 	<main th:fragment="bodycontent">
 		
 		<div class="container">
+			<!-- Header mit Titel und Aktionen -->
 			<div class="row d-flex justify-content-between align-items-center my-3 border-bottom">
 				<h1 class="h1">Umfragen</h1>
 				
+				<!-- Gruppenauswahl zur Begrenzung der angezeigten Termine -->
 				<div class="btn-toolbar" style="font-size: small">
-					<button class="btn btn-outline-secondary dropdown-toggle mx-2">
-						Alle Gruppen
-					</button>
+					<div class="dropdown">
+						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
+						        data-toggle="dropdown" id="dropOperator" type="button">
+							Alle Gruppen
+						</button>
+						
+						<!-- Auswählbare Gruppen -->
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
+							   th:href="@{/termine2/umfragen(gruppe=${gruppe})}" th:text="${gruppe}">
+								Gruppe
+							</a>
+							
+							<div th:if="*{umfragen.gruppen.size() > 0}">
+								<div class="dropdown-divider"></div>
+							</div>
+							
+							<a class="dropdown-item" th:href="@{/termine2/umfragen}">
+								Alle Gruppen
+							</a>
+						</div>
+					</div>
+					
 					<a th:href="@{/termine2/umfragen-neu}">
-						<button class="btn btn-primary">Neue Umfrage</button>
+						<button class="btn btn-success">Neue Umfrage</button>
 					</a>
 				</div>
 			</div>
 			
+			<!-- Listen -->
 			<div class="row">
+				<!-- Linke Liste: Umfrageergebnisse -->
 				<div class="col-md-8 order-md-1">
 					<h2 class="h2">Ergebnisse</h2>
 					
 					<!-- Die neusten Abstimmungen sollten oben eingefügt werden. -->
-					<!-- <div th:each="ergebnis : ${ergebnisse}"> -->
+					<div th:each="umfrage : ${umfragen.getTeilgenommen()}">
 						<div class="my-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<div class="d-flex justify-content-between align-items-center">
-									<h3 class="h3">Titel der Umfrage</h3>
+								<div class="row d-flex justify-content-between align-items-center">
+									<h3 class="h3 col-auto" th:text="${umfrage.titel}">
+										Titel der Umfrage
+									</h3>
+									
+									<div class="col-5" style="text-align: right"
+									     th:text="'geendet am ' + ${#temporals.format(umfrage.frist,
+									              'dd.MM.yyyy, HH:mm')}">
+										beendet am DD.MM.YYYY, HH:MM
+									</div>
 								</div>
-								<div>Ort</div>
-								<div class="mt-2 text-success">Ergebnis</div>
+								
+								<div class="text-success" style="font-size: large"
+								     th:text="${#strings.abbreviate(umfrage.umfragenErgebnis,300)}">
+									Ergebnis
+								</div>
 							</div>
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p> Authors often misinterpret the fibre as a tacky museum, when in
-									actuality it feels more like a moreish rate. We can assume that
-									any instance of a bestseller can be construed as a chuffy
-									bucket. </p>
-								<p> Their prose was, in this moment, a peeling cast. We can assume
-									that any instance of a tuna can be construed as a ruttish
-									custard. </p>
+							
+							<!-- Beschreibung -->
+							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:text="${#strings.abbreviate(umfrage.beschreibung,300)}">
+								Beschreibung
 							</div>
+							
+							<!-- Weitere Aktionen -->
 							<div class="mt-3" style="text-align: center">
 								<!-- leitet an die Ergebnisse der Umfrage weiter -->
 								<!-- <a th:href="@{………}"> -->
-									<button class="btn btn-outline-info" style="font-size: small">
-										Details
-									</button>
+								<button class="btn btn-outline-info" style="font-size: small">
+									Details
+								</button>
 								<!-- </a> -->
 							</div>
 						</div>
-						
-						<div class="my-3 p-3 bg-light rounded">
-							<div class="pb-2 border-bottom">
-								<div class="d-flex justify-content-between align-items-center">
-									<h3 class="h3">Titel der Umfrage</h3>
-								</div>
-								<div>Ort</div>
-								<div class="mt-2 text-success">Ergebnis</div>
-							</div>
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p> Framed in a different way, mice are feodal risks. They were lost
-									without the olden brace that composed their organization. The
-									marrieds could be said to resemble agaze bulldozers. </p>
-								<p> Some streets are thought of simply as icons. Those zones are
-									nothing more than grenades. </p>
-							</div>
-							<div class="mt-3" style="text-align: center">
-								<!-- leitet an die Ergebnisse der Umfrage weiter -->
-								<!-- <a th:href="@{………}"> -->
-									<button class="btn btn-outline-info" style="font-size: small">
-										Details
-									</button>
-								<!-- </a> -->
-							</div>
-						</div>
-						
-						<div style="font-size: xx-large; text-align: center">…</div>
-					<!-- </div> -->
+					</div>
 				</div>
 				
+				<!-- Rechte Liste: Offene Umfragen -->
 				<div class="col-md-4 order-md-2">
 					<h2 class="h2">Offen</h2>
 					
 					<!-- Umfragen sollten aufsteigend nach ihrer Frist sortiert sein. -->
-					<!-- <div th:each="offeneUmfrage : ${offeneUmfragen}"> -->
+					<div th:each="offeneUmfrage : ${umfragen.getOffen()}">
 						<div class="my-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3">ATMs</h3>
-								<span>from the right perspective</span>
+								<h3 class="h3" th:text="${offeneUmfrage.titel}">
+									Titel der Umfrage
+								</h3>
 							</div>
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p> An ATM is a crib from the right perspective. </p>
+							
+							<!-- Beschreibung -->
+							<div class="mt-2 pb-2 border-bottom"
+							     style="font-size: small"
+							     th:text="${#strings.abbreviate(offeneUmfrage.beschreibung,300)}">
+								Beschreibung
 							</div>
-							<div class="mt-2 text-secondary"
-							     style="font-size: small; text-align: center">
-								offen bis DD.MM.YYYY, HH:MM
-							</div>
-							<div class="mt-2" style="text-align: center">
-								<!-- falls der Nutzer schon an der Umfrage teilgenommen hat -->
-								<span class="btn btn-outline-info" style="font-size: small">
-									Details
-								</span>
+							
+							<!-- Weitere Aktionen -->
+							<div class="mt-2">
+								<div class="text-secondary"
+								     style="font-size: small; text-align: center"
+								     th:text="'offen bis ' + ${#temporals.format(offeneUmfrage.frist,
+								              'dd.MM.yyyy, HH:mm')}">
+									offen bis DD.MM.YYYY, HH:MM
+								</div>
+								
+								<div class="mt-2" style="text-align: center">
+									<!-- Falls der Nutzer schon an der Abstimmung teilgenommen hat,
+									     dann btn-outline-info, ansonsten btn-primary. -->
+									<button class="btn btn-outline-info" style="font-size: small">
+										Details
+									</button>
+								</div>
 							</div>
 						</div>
-						
-						<div class="my-3 p-3 bg-light rounded">
-							<div class="pb-2 border-bottom">
-								<h3 class="h3">Prayerless Mayonnaise</h3>
-								<span>at church</span>
-							</div>
-							<div class="mt-2 border-bottom" style="font-size: small">
-								<p> Some posit the prayerless mayonnaise to be more than risky. </p>
-							</div>
-							<div class="mt-2 text-secondary"
-							     style="font-size: small; text-align: center">
-								offen bis DD.MM.YYYY, HH:MM
-							</div>
-							<div class="mt-2" style="text-align: center">
-								<!-- falls der Nutzer noch an der Umfrage teilnehmen kann -->
-								<span class="btn btn-primary" style="font-size: small">
-									Abstimmen
-								</span>
-							</div>
-						</div>
-						
-						<div style="font-size: xx-large; text-align: center">…</div>
-					<!-- </div> -->
+					</div>
 				</div>
-			
 			</div>
 		</div>
-		
 	</main>
 </body>
 </html>

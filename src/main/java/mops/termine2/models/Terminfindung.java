@@ -1,5 +1,6 @@
 package mops.termine2.models;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Terminfindung {
 	
 	private String link;
@@ -27,5 +29,7 @@ public class Terminfindung {
 	private LocalDateTime loeschdatum;
 	
 	private String gruppe;
+	
+	private LocalDateTime ergebnis;
 	
 }
