@@ -21,4 +21,7 @@ public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortD
 	@Query("delete from UmfrageAntwortDB db where db.umfrage.link like :link and db.benutzer like :benutzer")
 	void deleteAllByUmfrageLinkAndBenutzer(@Param("link") String link, @Param("benutzer") String benutzer);
 	
+	@Query("delete from UmfrageAntwortDB db where db.umfrage.link like :link")
+	void deleteAllByUmfrageLink(@Param("link") String link);
+	
 }

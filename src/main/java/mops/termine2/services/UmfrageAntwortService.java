@@ -64,6 +64,10 @@ public class UmfrageAntwortService {
 		return buildAntwortenFromDB(umfrageAntwortDBs);
 	}
 	
+	public void deleteAllByLink(String link) {
+		antwortRepo.deleteAllByUmfrageLink(link);
+	}
+	
 	private UmfrageAntwort buildAntwortFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
 		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
 			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
