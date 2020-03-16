@@ -32,11 +32,7 @@ public class LinkService {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByLink(link);
 		List<UmfrageDB> umfrageDBs = umfrageRepo.findByLink(link);
 		
-		if (terminfindungDBs.isEmpty() && umfrageDBs.isEmpty()) {
-			return true;
-		}
-		return false;
+		return terminfindungDBs.isEmpty() && umfrageDBs.isEmpty();
 	}
-	
 	
 }
