@@ -41,7 +41,8 @@ public class TerminfindunguebersichtServiceTest {
 		benutzerGruppeRepository = mock(BenutzerGruppeRepository.class);
 		gruppeService = new GruppeService(benutzerGruppeRepository);
 		
-		terminfindunguebersichtService = new TerminfindunguebersichtService(terminfindungService, gruppeService);
+		terminfindunguebersichtService = new TerminfindunguebersichtService(
+			terminfindungService, gruppeService);
 	}
 	
 	@Test
@@ -68,11 +69,14 @@ public class TerminfindunguebersichtServiceTest {
 			terminfindungenDB.add(terminDB);
 		}
 		
-		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(new ArrayList<>(Arrays.asList(gruppe)));
+		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
+			new ArrayList<>(Arrays.asList(gruppe)));
 		when(terminfindungRepository.findByGruppe(gruppe.getGruppe())).thenReturn(terminfindungenDB);
 		
-		List<Terminfindung> ergebnis = terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
-		List<Terminfindung> erwartet = new ArrayList<>(Arrays.asList(terminfindungen.get(0), terminfindungen.get(2)));
+		List<Terminfindung> ergebnis =
+			terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+		List<Terminfindung> erwartet =
+			new ArrayList<>(Arrays.asList(terminfindungen.get(0), terminfindungen.get(2)));
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -101,11 +105,14 @@ public class TerminfindunguebersichtServiceTest {
 			terminfindungenDB.add(terminDB);
 		}
 		
-		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(new ArrayList<>(Arrays.asList(gruppe)));
+		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
+			new ArrayList<>(Arrays.asList(gruppe)));
 		when(terminfindungRepository.findByGruppe(gruppe.getGruppe())).thenReturn(terminfindungenDB);
 		
-		List<Terminfindung> ergebnis = terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
-		List<Terminfindung> erwartet = new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(3)));
+		List<Terminfindung> ergebnis =
+			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+		List<Terminfindung> erwartet =
+			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(3)));
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
