@@ -189,6 +189,10 @@ Den Service und de Tests ueberarbeitet , sodass wesentlich weniger Datenbankaufr
 
 === DB (Thomas, Jan)
 
+Es ist aufgefallen, dass beim Laden der Terminfindungen die Daten mehrfach vorhanden sind und zu viele Datenbankaufrufe gemacht werden. Das liegt an der vorhandenen Redunzanz in der Datenbank.
+Diese Probleme wurden von Leon und Marcel behoben.
+Währenddessen wurde ein Service für die Termin Übersicht geschrieben, welcher die vorhandenen Termine für einen Benutzer lädt und diese dem Controller der Übersicht aufgeteilt in bereits abgeschlossene und noch offene Terminabstimmungen bereitstellt. Zusätzlich wurde ein Service geschrieben, der alle Gruppen für einen Benutzer bereitstellt.
+
 === Gruppe UmfrageService (Leon, Marcel)
 
 Die von Thomas angemerkten Fehler, dass beim Laden die Daten mehrfach angezeigt werden, wurde behoben, indem die beiden Methoden loadByErsteller und loadByGruppe überarbeitet wurden.
@@ -220,10 +224,12 @@ Thymeleaf für Übersicht der Umfragen fertiggestellt und angefangen die Datenba
 Sichten weiterentwickelt: Termin
 
 === Gruppe DB-Initializer/ LinkService (Kathi, Julia)
-
 Der DB-Initializer wurde nun angepasst und fertiggestellt.
 Außerdem wurden heute Tests für den LinkService geschrieben.
 Als letztes haben wir uns erste Gedanken darüber gemacht, wie man den LinkService sinnvoll integrieren kann, um bei Erstellung einer neuen Terminfindung/ Umfrage den Link zu prüfen.
+
+=== Gruppe Urlaub (Thomas)
+
 
 ////
 Ziele für die Woche:
@@ -262,3 +268,34 @@ Eine Lösung wäre es die Reihenfolge zu beachten, in der die TerminOptionen und
 Es sollte dann aber überprüft werden ob sich die Umfrage seit dem Letzten aufrufen geändert hat.(Evtl mit einer Map) (Es eröffnet sich eine weitere Schwierigkeit.
 Bisher wird berprüft ob ein Student an einer Umfrage teilgenommen hat , indem überprüft wird ob Antworten von ihm in der Tabelle stehen.
 Wenn die Abstimmungsoptionen aber verändert wurden , ergibt es durchaus Sinn, ihn nochmal in der Übersicht anzuzeigen , dass er abstimmen sollte, ohne seine alten Antworten zu löschen (Wenn z.B eine Option hinzugekommt oder gelöscht wurde))
+
+=== Terminfindung Übersicht, Auslagerung (Thomas)
+
+Der Service für die Termin Übersicht wurde vorerst fertiggestellt. Die bereits abgeschlossenen Termine werden bisher noch nicht korrekt sortiert, was später verbessert wird.
+Außerdem wurden der vorhandene Controller in jeweils einen Controller für jede html-Seite aufgeteilt um das parallele Arbeiten und die Übersicht zu vereinfachen. Zusätzlich wurde das Erstellen der Account Objekte in einen eigenen Service ausgelagert, da dieser in jeden Controller benötigt wird.
+
+=== (Anton)
+Eigene Icons für Sidebar hergestellt und in HTML eingebunden.
+Checkstyle angepasst damit Bilder ignoriert werden.
+Am Kommentarservice mitgearbeitet.
+TempusDominus recherchiert.
+
+=== Gruppe KommentarService (Kathi, Julia, Anton)
+Wir haben die Klasse Kommentar zu den model-Klassen hinzugefügt und einen KommentarService geschrieben.
+
+=== Gruppe LinkService/ KommentarService (Julia, Kathi)
+Der LinkService wurde korrigiert und in den Master gemerged. Wir haben Tests zum Kommentarservice hinzugefügt
+und im KommentarService wurde die delete Methode geändert.
+
+== Tag 12
+
+=== UI (Ingrid, Anton, Thomas)
+Views für Formulare fertiggestellt (neuer Termin/ neue Bestellung)
+Thymeleaf für Umfragenübersicht gemacht und notwendigen controller und service geschrieben.
+Controller für neue Termine geschrieben
+
+=== DB-Initializer/ KommentarService (Julia, Kathi)
+Nach Wünschen der anderen Teammitglieder haben wir den DB-Initializer so erweitert, dass für
+studentin1, studentin2 und studentin3 immer eine Terminumfrage und eine Umfrage erstellt wrid.
+Für die Methode loadByLink im Kommentarservice haben wir Tests hinzugefügt. Aufgrund eines fehlschlagenden
+Tests haben wir Fehler im Kommentarservice entdeckt und korrigiert.
