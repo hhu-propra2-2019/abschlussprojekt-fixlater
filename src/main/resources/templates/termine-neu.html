@@ -186,7 +186,7 @@
 							
 							<textarea class="form-control" id="beschreibung" type="text"
 							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
-							          rows="4" th:value="*{beschreibung}"></textarea>
+							          rows="4" th:field="*{beschreibung}"></textarea>
 						</div>
 					</div>
 					
@@ -248,7 +248,28 @@
 
 						</div>
 					</div>
-					
+
+					<!-- DAS HIER NOCH ÜBERARBEITEN -->
+					<!-- ES SOLL DIE FRIST EINGESTELLT WERDEN -->
+					<div class="input-group date"
+						 data-target-input="nearest"
+						 th:id="frist">
+						<input class="form-control datetimepicker-input"
+							   data-target="#datetimepicker2"
+							   th:attr="data-target='frist'"
+							   th:field="*{frist}"
+							   type="text"/>
+
+						<div class="input-group-append"
+							 data-toggle="datetimepicker"
+							 th:attr="data-target='#frist'">
+							<div class="input-group-text">
+								<i class="fa fa-calendar"></i>
+							</div>
+						</div>
+					</div>
+					<!-- -------------------------- -->
+
 					<div class="row justify-content-center">
 						<button class="btn btn-success" type="submit" name="create">
 							Erstellen
