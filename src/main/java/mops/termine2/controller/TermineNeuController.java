@@ -9,6 +9,7 @@ import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,9 @@ public class TermineNeuController {
 	
 	@Autowired
 	private GruppeService gruppeService;
+	
+	@Autowired
+	private TerminfindungService terminfindungService;
 	
 	public TermineNeuController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -93,20 +97,21 @@ public class TermineNeuController {
 	
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung) {
+	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
 			// Account
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
-
-			// Terminfindung erstellen
-			System.out.println("Create Date Poll");
 			
-			m.addAttribute("terminfindung", terminfindung);
+			// Terminfindung erstellen
+			Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
+			terminfindung.setGruppe(gruppe.getName());
+			
+			terminfindungService.save(terminfindung);
 		}
 		
-		return "termine-neu";
+		return "termine2";
 	}
 }
