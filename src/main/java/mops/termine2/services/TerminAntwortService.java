@@ -1,24 +1,31 @@
 package mops.termine2.services;
 
 import mops.termine2.database.TerminfindungAntwortRepository;
+import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class TerminAntwortService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
 	
-	public TerminAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository) {
+	private TerminfindungRepository terminRepo;
+	
+	public TerminAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository,
+								TerminfindungRepository terminfindungRepository) {
 		antwortRepo = terminfindungAntwortRepository;
+		terminRepo = terminfindungRepository;
 	}
 	
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
@@ -50,21 +57,25 @@ public class TerminAntwortService {
 		}
 	}
 	
+	public void deleteAllByLink(String link) {
+		antwortRepo.deleteByLink(link);
+	}
+	
 	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
 		return buildAntwortFromDB(terminfindungAntwortDBList);
 	}
 	
-	public void deleteAllByLink(String link) {
-		antwortRepo.deleteByLink(link);
-	}
-	
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findAllByTerminfindungLink(link);
 		
-		return buildAntwortenFromDB(terminfindungAntwortDBList);
+		List<TerminfindungAntwort> antworten = buildAntwortenFromDB(terminfindungAntwortDBList);
+		for (TerminfindungAntwort antwort : antworten) {
+			aktuelleOptionenEinfuegen(antwort, link);
+		}
+		return antworten;
 	}
 	
 	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
@@ -105,6 +116,17 @@ public class TerminAntwortService {
 			return terminAntworten;
 		}
 		return null;
+	}
+	
+	private void aktuelleOptionenEinfuegen(TerminfindungAntwort antwort, String link) {
+		List<TerminfindungDB> terminfindungDBS = terminRepo.findByLink(link);
+		HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
+		HashMap<LocalDateTime, Antwort> alteAntworten = antwort.getAntworten();
+		for (TerminfindungDB db : terminfindungDBS) {
+			LocalDateTime termin = db.getTermin();
+			antworten.put(termin, alteAntworten.get(termin));
+		}
+		antwort.setAntworten(antworten);
 	}
 	
 }

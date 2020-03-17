@@ -1,6 +1,7 @@
 package mops.termine2;
 
 import mops.termine2.database.TerminfindungAntwortRepository;
+import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Antwort;
@@ -28,14 +29,17 @@ public class TerminfindungAntwortServiceTest {
 	
 	public static final String BENUTZER1 = "Julia";
 	
-	private transient TerminfindungAntwortRepository repo;
+	private transient TerminfindungAntwortRepository antwortRepo;
 	
 	private transient TerminAntwortService antwortService;
 	
+	private transient TerminfindungRepository terminRepo;
+	
 	@BeforeEach
 	private void setUp() {
-		repo = mock(TerminfindungAntwortRepository.class);
-		antwortService = new TerminAntwortService(repo);
+		antwortRepo = mock(TerminfindungAntwortRepository.class);
+		terminRepo = mock(TerminfindungRepository.class);
+		antwortService = new TerminAntwortService(antwortRepo, terminRepo);
 	}
 	
 	@Test
@@ -48,8 +52,8 @@ public class TerminfindungAntwortServiceTest {
 		
 		antwortService.abstimmen(toSave, terminfindung);
 		
-		Mockito.verify(repo, times(4)).save(any());
-		Mockito.verify(repo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
+		Mockito.verify(antwortRepo, times(4)).save(any());
+		Mockito.verify(antwortRepo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
 	}
 	
 	@Test
@@ -62,15 +66,20 @@ public class TerminfindungAntwortServiceTest {
 		
 		antwortService.abstimmen(toSave, terminfindung);
 		
-		Mockito.verify(repo, times(9)).save(any());
-		Mockito.verify(repo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
+		Mockito.verify(antwortRepo, times(9)).save(any());
+		Mockito.verify(antwortRepo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
 	}
 	
 	@Test
 	public void loadByBenutzerUndLinkEinBenutzer4Moeglichkeiten() {
 		int anzahl = 4;
 		List<TerminfindungAntwortDB> terminfindungAntwortDBs = getBeispielAntwortDBList(anzahl, BENUTZER1);
-		when(repo.findByBenutzerAndTerminfindungLink(BENUTZER1, LINK)).thenReturn(terminfindungAntwortDBs);
+		List<TerminfindungDB> terminfindungDBs = getBeispielTerminDBList(anzahl);
+		
+		when(antwortRepo.findByBenutzerAndTerminfindungLink(BENUTZER1, LINK))
+				.thenReturn(terminfindungAntwortDBs);
+		when(terminRepo.findByLink(LINK))
+				.thenReturn(terminfindungDBs);
 		TerminfindungAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
 		TerminfindungAntwort erwartet = getBeispielTerminAntwort(anzahl, BENUTZER1);
 		
@@ -81,7 +90,10 @@ public class TerminfindungAntwortServiceTest {
 	public void loadByLink4Benutzer() {
 		int anzahlBenutzer = 4;
 		List<TerminfindungAntwortDB> terminfindungAntwortDBs = getBeispieleAntwortDBList(anzahlBenutzer);
-		when(repo.findAllByTerminfindungLink(LINK)).thenReturn(terminfindungAntwortDBs);
+		List<TerminfindungDB> terminfindungDBs = getBeispielTerminDBList(4);
+		when(antwortRepo.findAllByTerminfindungLink(LINK)).thenReturn(terminfindungAntwortDBs);
+		when(terminRepo.findByLink(LINK))
+				.thenReturn(terminfindungDBs);
 		List<TerminfindungAntwort> ergebnis = antwortService.loadAllByLink(LINK);
 		List<TerminfindungAntwort> erwartet = getBeispieleTerminAntwort(anzahlBenutzer);
 		
@@ -145,5 +157,16 @@ public class TerminfindungAntwortServiceTest {
 		}
 		
 		return antwortDBs;
+	}
+	
+	private List<TerminfindungDB> getBeispielTerminDBList(int anzahl) {
+		List<TerminfindungDB> terminfindungAntwortDBS = new ArrayList<>();
+		for (int i = 0; i < anzahl; i++) {
+			TerminfindungDB terminfindungDB = new TerminfindungDB();
+			terminfindungDB.setTermin(
+					LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(i));
+			terminfindungAntwortDBS.add(terminfindungDB);
+		}
+		return terminfindungAntwortDBS;
 	}
 }
