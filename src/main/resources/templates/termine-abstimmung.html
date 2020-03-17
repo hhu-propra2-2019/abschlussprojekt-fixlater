@@ -47,12 +47,13 @@
 					<div class="mb-3 p-3 bg-light rounded">
 						<!-- Zusammenfassung -->
 						<div class="pb-2 border-bottom">
-							<div class="h3">Wir basteln uns eine Terminplanung</div>
-							<div>25.13.U1.24</div>
+							<div class="h3" th:text="${terminfindung.getTitel()}">Wir basteln uns eine Terminplanung
+							</div>
+							<div th:text="${terminfindung.getOrt()}">25.13.U1.24</div>
 						</div>
 
 						<!-- Beschreibung -->
-						<div class="mt-2" style="font-size: small">
+						<div class="mt-2" style="font-size: small" th:text="${terminfindung.getBeschreibung()}">
 							Floppy macaroni are assumed to be dissatisfying. Few can name a
 							springtime flower that doesn't profit from rainstorms. In modern
 							times, clothes were lost without the long thin bands that were
@@ -69,7 +70,7 @@
 						<button class="btn btn-outline-warning">Zurücksetzen</button>
 					</div>
 
-					<form class="my-3">
+					<form class="my-3" th:object="${antwort}" method="post">
 						<div class="table-responsive">
 							<table class="table table-sm" style="text-align: center">
 								<thead>
@@ -84,18 +85,29 @@
 								</tr>
 								</thead>
 
-								<tbody>
+								<tbody th:remove="all-but-first" th:each="termin,terminStat: *{termine}" }>
 								<tr>
 									<!-- abwechselnd bg-white / bg-light -->
-									<th class="col-5 bg-white">25.02.2084, 12:15</th>
+									<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
 									<th class="col-2 table-primary">
-										<input type="radio" name="abstimmung1" value="y"/>
+										<input type="radio"
+										       name="abstimmung1"
+										       th:name="${termin}"
+										       th:field="${antwort.antworten[__${terminStat.index}__]}"
+										       value="y"/>
+
 									</th>
 									<th class="col-2 table-warning">
-										<input type="radio" name="abstimmung1" value="m"/>
+										<input type="radio"
+										       name="abstimmung1"
+										       th:name="${termin}"
+										       value="v"/>
 									</th>
 									<th class="col-2 table-danger">
-										<input type="radio" name="abstimmung1" value="n"/>
+										<input type="radio"
+										       name="abstimmung1"
+										       th:name="${termin}"
+										       value="n"/>
 									</th>
 								</tr>
 
@@ -129,7 +141,8 @@
 						</div>
 
 						<div style="text-align: center">
-							<input type="text" name="pseudonym" placeholder="Benjamin">
+							<input type="text" name="pseudonym" placeholder="Benjamin"
+							       th:placeholder="*{getPseudonym()}">
 							<button class="btn btn-primary">Abschicken</button>
 						</div>
 					</form>

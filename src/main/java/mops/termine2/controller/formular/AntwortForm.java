@@ -1,5 +1,6 @@
 package mops.termine2.controller.formular;
 
+import lombok.Data;
 import mops.termine2.enums.Antwort;
 import mops.termine2.models.TerminfindungAntwort;
 
@@ -8,11 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Data
 public class AntwortForm {
 	
-	private List<LocalDateTime> termine = new ArrayList<>();
+	public List<LocalDateTime> termine = new ArrayList<>();
 	
-	private List<Antwort> antworten = new ArrayList<>();
+	public List<Antwort> antworten = new ArrayList<>();
 	
 	private String pseudonym;
 	
