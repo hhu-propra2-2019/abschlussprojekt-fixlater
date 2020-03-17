@@ -9,6 +9,7 @@ import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,9 @@ public class TermineNeuController {
 	@Autowired
 	private TerminfindungService terminfindungService;
 	
+	@Autowired
+	private LinkService linkService;
+	
 	public TermineNeuController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
@@ -62,6 +66,7 @@ public class TermineNeuController {
 			Terminfindung terminfindung = new Terminfindung();
 			terminfindung.setVorschlaege(new ArrayList<>());
 			terminfindung.getVorschlaege().add(LocalDateTime.now());
+			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 			
 			m.addAttribute("terminfindung", terminfindung);
 		}
@@ -87,6 +92,7 @@ public class TermineNeuController {
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
 			termine.add(LocalDateTime.now());
 			
+			// Selektierte Gruppe
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			
 			m.addAttribute("terminfindung", terminfindung);
@@ -106,12 +112,19 @@ public class TermineNeuController {
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
 			// Terminfindung erstellen
-			Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
-			terminfindung.setGruppe(gruppe.getName());
+			terminfindung.setErsteller(account.getName());
+			terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
+			if (gruppeSelektiert.getId() != -1) {
+				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
+				terminfindung.setGruppe(gruppe.getName());
+			}
+			
+			String link = linkService.generiereEindeutigenLink();
+			terminfindung.setLink(link);
 			
 			terminfindungService.save(terminfindung);
 		}
 		
-		return "termine2";
+		return "redirect:/termine2";
 	}
 }
