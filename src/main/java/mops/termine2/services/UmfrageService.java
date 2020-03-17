@@ -48,6 +48,7 @@ public class UmfrageService {
 	}
 	
 	public void deleteByLink(String link) {
+		umfrageAntwortRepository.deleteAllByUmfrageLink(link);
 		umfrageRepository.deleteByLink(link);
 	}
 	
@@ -86,46 +87,46 @@ public class UmfrageService {
 		return null;
 	}
 	
-	public List<Umfrage> loadByErsteller(String ersteller) {
+	public List<Umfrage> loadByErstellerOhneTermine(String ersteller) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppe(String gruppe) {
+	public List<Umfrage> loadByGruppeOhneTermine(String gruppe) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
+	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneVorschlaege(String benutzer) {
+		List<UmfrageDB> umfrageDBs = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
+		List<Umfrage> umfragen = getDistinctUmfragen(umfrageDBs);
+		return umfragen;
+	}
+	
 	public List<Umfrage> getDistinctUmfragen(List<UmfrageDB> umfrageDBs) {
-		if (umfrageDBs != null && !umfrageDBs.isEmpty()) {
-			List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
-			List<String> links = new ArrayList<String>();
-			for (UmfrageDB umfragedb : umfrageDBs) {
-				if (!links.contains(umfragedb.getLink())) {
-					distinctUmfrage.add(erstelleUmfrageOhneVorschlaege(umfragedb));
-					links.add(umfragedb.getLink());
-				}
+		List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
+		List<String> links = new ArrayList<String>();
+		for (UmfrageDB umfragedb : umfrageDBs) {
+			if (!links.contains(umfragedb.getLink())) {
+				distinctUmfrage.add(erstelleUmfrageOhneVorschlaege(umfragedb));
+				links.add(umfragedb.getLink());
 			}
-			return distinctUmfrage;
 		}
-		return null;
+		return distinctUmfrage;
 	}
 	
 	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
-		if (umfragedb != null) {
-			Umfrage umfrage = new Umfrage();
-			umfrage.setBeschreibung(umfragedb.getBeschreibung());
-			umfrage.setErsteller(umfragedb.getErsteller());
-			umfrage.setFrist(umfragedb.getFrist());
-			umfrage.setGruppe(umfragedb.getGruppe());
-			umfrage.setLink(umfragedb.getLink());
-			umfrage.setLoeschdatum(umfragedb.getLoeschdatum());
-			umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
-			umfrage.setTitel(umfragedb.getTitel());
-			umfrage.setVorschlaege(new ArrayList<String>());
-			return umfrage;
-		}
-		return null;
+		Umfrage umfrage = new Umfrage();
+		umfrage.setBeschreibung(umfragedb.getBeschreibung());
+		umfrage.setErsteller(umfragedb.getErsteller());
+		umfrage.setFrist(umfragedb.getFrist());
+		umfrage.setGruppe(umfragedb.getGruppe());
+		umfrage.setLink(umfragedb.getLink());
+		umfrage.setLoeschdatum(umfragedb.getLoeschdatum());
+		umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
+		umfrage.setTitel(umfragedb.getTitel());
+		umfrage.setVorschlaege(new ArrayList<String>());
+		return umfrage;
 	}
 	
 }
