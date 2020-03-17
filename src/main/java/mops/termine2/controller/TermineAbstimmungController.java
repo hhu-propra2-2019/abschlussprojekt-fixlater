@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
-import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class TermineAbstimmungController {
 	@Autowired
 	private GruppeService gruppeService;
 	
-	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<LinkWrapper, Terminfindung>();
+	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
 	public TermineAbstimmungController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -56,7 +56,7 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/termine-abstimmung/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathParam("link") String link) {
+	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		Account account;
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -97,7 +97,7 @@ public class TermineAbstimmungController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal p,
 								 Model m,
-								 @PathParam("link") String link,
+								 @PathVariable("link") String link,
 								 @ModelAttribute AntwortForm antwortForm) {
 		Account account;
 		if (p != null) {
@@ -119,12 +119,12 @@ public class TermineAbstimmungController {
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			return "termine-abstimmung/" + link;
+			return "/termine-abstimmung/" + link;
 		}
 		
 		LinkWrapper linkWrapper = new LinkWrapper(link);
 		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
-			return "termine-abstimmung/" + link;
+			return "/termine-abstimmung/" + link;
 		}
 		
 		TerminfindungAntwort terminfindungAntwort = mergeToAnswer(terminfindung, account.getName(),
