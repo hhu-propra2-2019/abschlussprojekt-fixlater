@@ -1,19 +1,22 @@
 package mops.termine2.services;
 
-import mops.termine2.authentication.Account;
-import mops.termine2.models.Gruppe;
-import mops.termine2.models.Terminfindung;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import mops.termine2.authentication.Account;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+
 @Service
 public class TerminfindunguebersichtService {
-	
+	@Autowired
 	private TerminfindungService terminfindungService;
 	
+	@Autowired
 	private GruppeService gruppeService;
 	
 	public TerminfindunguebersichtService(TerminfindungService terminfindungService, GruppeService gruppeService) {
