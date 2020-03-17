@@ -198,7 +198,7 @@ Wochenziel:
 == Tag 11
 
 === Abstimmungsfunktion(Jan)
-Ziel wer es den Controller für die View termine-abstimmen anzulegen und dabei die abstimmungsfunktion zu implementieren. Jedoch musste noch auf einige pull requests gewartet werden. Weshalb ablaufpläne erstellt wurden
+Ziel wer es den Controller für die View termine-abstimmen anzulegen und dabei die Abstimmungsfunktion zu implementieren. Jedoch musste noch auf einige PullRequests gewartet werden. Weshalb Ablaufpläne erstellt wurden.
 
 =====  Get(termine-abstimmung)
 
