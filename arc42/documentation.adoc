@@ -194,3 +194,35 @@ Wochenziel:
 - grundlegende Anwendungen vorhanden
 - Kombi funktioniert
 ////
+
+== Tag 11
+
+=== Abstimmungsfunktion(Jan)
+Ziel wer es den Controller für die View termine-abstimmen anzulegen und dabei die abstimmungsfunktion zu implementieren. Jedoch musste noch auf einige pull requests gewartet werden. Weshalb ablaufpläne erstellt wurden
+
+=====  Get(termine-abstimmung)
+
+
+image::flussDiaGetAbstimmung.jpg[]
+
+Eine Schwierigkeit , bei der über die Änderung einiger Methoden aus dem 
+TermineAntwortService nachgedacht werden könnte , ist wie die Antwort geladen 
+wird . Was wenn sich seit dem letzten antworten eines Nutzers die Umfrage 
+geändert hat(dabei will ich außer acht lassen , dass höchstens Termine 
+hinzugefügt werden können sollen um den Code möglichst allgemein Zu halten)
+Es wäre eine Möglichkeit die Geladene Antwort Klasse mit allen 
+Antwortmöglichkeiten Aufzufüllen und dann die Antworten für die jeweiligen 
+Möglichkeiten zu laden.
+
+
+===== Post(termine-abstimmung)
+
+image::flussDiaPostAbstimmung.jpg[]
+
+Eine Schwierigkeit wird es sein , festzuhalten zu welchem Termin 
+eine Antwort gehört. Eine Lösung wäre es die Reihenfolge zu beachten, in der 
+die TerminOptionen und Antworten stehen. Es sollte dann aber überprüft werden 
+ob sich die Umfrage seit dem Letzten aufrufen geändert hat.(Evtl mit einer Map)
+(Es eröffnet sich eine Weitere schwierigkeit, bisher wird berprüft ob ein 
+Student an einer Umfrage teilgenommen hat , indem überprüft wird ob antworten 
+von ihm in der Tabelle stehen. Wenn die AbstimmungsOptionen aber verändert wurden , ergibt es durchaus Sinn, ihn nochmal in der Übersicht anzuzeigen , dass er abstimmen sollte, ohne seine Alten antworten zu löschen (Wenn z.B eine Option hinzugekommen oder eine Gelöscht wurde))
