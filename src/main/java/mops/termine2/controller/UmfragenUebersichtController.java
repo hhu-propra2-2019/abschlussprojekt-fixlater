@@ -1,12 +1,12 @@
 package mops.termine2.controller;
 
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.Konstanten;
-import mops.termine2.models.Umfrage;
-import mops.termine2.models.Umfrageuebersicht;
-import mops.termine2.services.AuthenticationService;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.annotation.security.RolesAllowed;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Umfrage;
+import mops.termine2.models.Umfrageuebersicht;
+import mops.termine2.services.AuthenticationService;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.UmfragenuebersichtService;
 
 @Controller
 @SessionScope
@@ -30,6 +35,12 @@ public class UmfragenUebersichtController {
 	@Autowired
 	private AuthenticationService authenticationService;
 	
+	@Autowired
+	private UmfragenuebersichtService umfragenuebersichtService;
+	
+	@Autowired
+	private GruppeService gruppeService;
+	
 	public UmfragenUebersichtController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
@@ -38,11 +49,24 @@ public class UmfragenUebersichtController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String umfragen(Principal p, Model m) {
 		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			Account account = authenticationService.createAccountFromPrincipal(p);
+			m.addAttribute(Konstanten.ACCOUNT, account);
+			authenticatedAccess.increment();
+			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+			List<String> gruppenNamen = new ArrayList<>();
+			for (Gruppe g : gruppen) {
+				gruppenNamen.add(g.getName());
+			}
+			List<Umfrage> umfragenOffen = umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
+			List<Umfrage> umfragenAbgeschlossen =
+					umfragenuebersichtService.loadAbgeschlosseneUmfragenFuerBenutzer(account);
+			Umfrageuebersicht umfragen =
+					new Umfrageuebersicht(umfragenAbgeschlossen, umfragenOffen, gruppenNamen);
+			m.addAttribute("umfragen", umfragen);
 		}
-		authenticatedAccess.increment();
-		
-		//Dummy Daten damit man am thymeleaf arbeiten kann:
+		//_______________________________
+		//_______________________________
+		/* Dummy Daten damit man am thymeleaf arbeiten kann:
 		List<String> gruppen = new ArrayList<String>();
 		gruppen.add("FIXLATER");
 		gruppen.add("WEB24");
@@ -95,6 +119,8 @@ public class UmfragenUebersichtController {
 		Umfrageuebersicht umfragen = new Umfrageuebersicht(umfragenTeilgenommen, umfragenOffen, gruppen);
 		
 		m.addAttribute("umfragen", umfragen);
+		
+		dummy code ends here*/
 		
 		return "umfragen";
 	}
