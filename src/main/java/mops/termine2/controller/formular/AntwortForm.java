@@ -16,7 +16,7 @@ public class AntwortForm {
 	
 	public List<Antwort> antworten = new ArrayList<>();
 	
-	private String pseudonym;
+	public String pseudonym;
 	
 	public AntwortForm(TerminfindungAntwort terminAntwort) {
 		pseudonym = terminAntwort.getPseudonym();

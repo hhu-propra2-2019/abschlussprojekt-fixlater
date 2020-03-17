@@ -15,13 +15,16 @@ import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -51,9 +54,9 @@ public class TermineAbstimmungController {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
 	
-	@GetMapping("/termine-abstimmung")
+	@GetMapping("/termine-abstimmung/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, String link) {
+	public String termineAbstimmung(Principal p, Model m, @PathParam("link") String link) {
 		Account account;
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -89,9 +92,13 @@ public class TermineAbstimmungController {
 		return "termine-abstimmung";
 	}
 	
-	@PostMapping("/termine-abstimmung/save")
+	@Transactional
+	@PostMapping("/termine-abstimmung/save/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveAbstimmung(Principal p, Model m, String link) {
+	public String saveAbstimmung(Principal p,
+								 Model m,
+								 @PathParam("link") String link,
+								 @ModelAttribute AntwortForm antwortForm) {
 		Account account;
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -100,9 +107,43 @@ public class TermineAbstimmungController {
 			return null;
 		}
 		
+		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		if (terminfindung == null) {
+			return "404";
+		}
+		
+		if (terminfindung.getGruppe() != null
+				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+			return "403";
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (terminfindung.getFrist().isBefore(now)) {
+			return "termine-abstimmung/" + link;
+		}
+		
+		LinkWrapper linkWrapper = new LinkWrapper(link);
+		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
+			return "termine-abstimmung/" + link;
+		}
+		
+		TerminfindungAntwort terminfindungAntwort = mergeToAnswer(terminfindung, account.getName(),
+				antwortForm);
+		
+		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
 		authenticatedAccess.increment();
 		
-		return "termine-abstimmung";
+		return "";
+	}
+	
+	private TerminfindungAntwort mergeToAnswer(Terminfindung terminfindung, String benutzer, AntwortForm antwort) {
+		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
+		terminfindungAntwort.setKuerzel(benutzer);
+		terminfindungAntwort.setLink(terminfindung.getLink());
+		terminfindungAntwort.setPseudonym(antwort.getPseudonym());
+		terminfindungAntwort.setTeilgenommen(true);
+		terminfindungAntwort.setGruppe(terminfindung.getGruppe());
+		return terminfindungAntwort;
 	}
 	
 }
