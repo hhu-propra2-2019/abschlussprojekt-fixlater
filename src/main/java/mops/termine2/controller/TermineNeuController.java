@@ -14,6 +14,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.util.ArrayList;
 
 @Controller
 @SessionScope
@@ -37,6 +38,14 @@ public class TermineNeuController {
 		}
 		authenticatedAccess.increment();
 		
+		ArrayList<String> gruppen = new ArrayList<String>();
+		//gruppen.add("FIXLATER");
+		//gruppen.add("WEB24");
+		//gruppen.add("GIT-R-DONE");
+		
+		m.addAttribute("gruppen", gruppen);
+		
 		return "termine-neu";
 	}
 }
+

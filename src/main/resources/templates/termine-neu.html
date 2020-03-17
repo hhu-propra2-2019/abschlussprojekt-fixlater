@@ -1,12 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
-                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Terminfindung', title='Neuer Termin',
+                  headcontent=~{:: headcontent}, navigation=~{:: navigation},
+                  bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Neuer Termin</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		        crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		        crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		        crossorigin="anonymous"></script>
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
+		
+		<!-- Tempus Dominus -->
+		<link rel="stylesheet"
+		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"/>
+		<script type="text/javascript"
+		        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript"
+		        src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+		<script type="text/javascript"
+		        src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
 	</th:block>
 </head>
 
@@ -14,85 +45,209 @@
 	<header>
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
 			<div align="center">
 			</div>
 		</nav>
 	</header>
 	
 	<main th:fragment="bodycontent">
-		<!-- Restlichen Inhalt hier einfügen! -->
-		
-		<header>
-			<h1>Neuer Termin:</h1>
-		</header>
-		
-		<div>
-			<form method="POST">
-				<div class="form-group ">
-					<label class="col-sm-4 control-label">Titel:</label>
-					
-					<div class="col-sm-6">
-						<input id="titel" type="text" required name="titel" class="form-control"
-						       value=""/>
-					</div>
-				</div>
-				
-				<div class="form-group ">
-					<label class="col-sm-4 control-label">Ort:</label>
-					
-					<div class="col-sm-6">
-						<input id="ort" type="text" required name="ort" class="form-control"
-						       value=""/>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Terminbeschreibung:</label>
-					
-					<div class="col-sm-6">
-						<textarea id="beschreibung" name="beschreibung" class="form-control"
-						          rows="4">
-						</textarea>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Sichbarkeit des Termins:</label>
-					
-					<div class="col-sm-8">
-						<div class="radio">
-							<label>
-								<input type="radio" name="editable" id="editableByAll"
-								       checked value="1">
-									Gruppenmitglieder
-								</input>
+		<div class="container mb-3">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Neuer Termin</h1>
+			</div>
+			
+			<form class="row" method="post">
+				<div class="col">
+					<!-- Übersicht -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 form-group">
+							<label for="titel">
+								Titel
 							</label>
 							
-							<label>
-								<input type="radio" name="editable" value="2">Link</input>
+							<input class="form-control" id="titel" name="titel" type="text"
+							       required placeholder="Worum geht es?" value=""/>
+						</div>
+						
+						<!-- Ort -->
+						<div class="mb-3 form-group">
+							<label for="ort">
+								Ort
 							</label>
+							
+							<input class="form-control" id="ort" name="ort" type="text"
+							       required placeholder="Wo soll man sich treffen?" value=""/>
+						</div>
+						
+						<!-- Erreichbarkeit -->
+						<div class="mb-3 form-group">
+							<!-- variant 1
+							     The original version had two radio buttons to allow the user to se-
+							     lect whether the Terminabstimmung should be accessible by everyone
+							     in a specific Gruppe or by everyone who knew its ID.
+							     
+							     The problem with this, however, was that there was no possibility
+							     to select the Gruppe: Adding a radio button for each Gruppe seemed
+							     ridiculous, and having the radio buttons perform a redirect to the
+							     same page just as to hide or unhide a select box for the Gruppen
+							     would be annoying in the long term.
+							     
+							     A third option would be JavaScript, so, if anyone knows how to show
+							     and hide components based on what radio buttons are selected, be my
+							     guest. The current version works decently enough, though, so no
+							     worries.
+							     
+							     NOTES: There seem to be some weird paddings in a stylesheet some-
+							     where which mess with the Bootstrap custom radio buttons. That's
+							     what those 'pl-0's and 'pl-4's are all about.
+								
+								<label>Erreichbarkeit</label>
+								
+								<div class="pl-0 custom-control custom-radio">
+									<input class="custom-control-input" id="editableByGroup"
+									       name="editable" type="radio" checked required value="1"/>
+									
+									<label class="pl-4 custom-control-label" for="editableByGroup">
+										Gruppe
+									</label>
+								</div>
+								
+								<div class="pl-0 custom-control custom-radio mb-3">
+									<input class="custom-control-input" id="editableByLink"
+									       name="editable" type="radio" required value="2"/>
+									
+									<label class="pl-4 custom-control-label" for="editableByLink">
+										Link
+									</label>
+								</div>
+							-->
+							
+							<label for="erreichbarkeit">
+								Erreichbarkeit
+							</label>
+							
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() == 0}" disabled>
+								<option value="0" selected>Link</option>
+							</select>
+							
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() != 0}">
+								<option value="0" selected>Link</option>
+								
+								<optgroup label="Gruppen">
+									<option th:each="gruppe, index : ${gruppen}"
+									        th:value="${index.count}"
+									        th:text="${gruppe}">Gruppe</option>
+								</optgroup>
+							</select>
+							
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+									kennen. Der Link wird dabei automatisch vom System generiert.
+								</p>
+								
+								<p>
+									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+									ausgewählten Gruppe sichtbar.
+									
+									<span class="text-warning" th:if="${gruppen.size() == 0}">
+										Diese Option ist aber nicht verfügbar, da es im Moment keine
+										Gruppenzugehörigkeit gibt.
+									</span>
+								</p>
+							</div>
+						</div>
+						
+						<!-- Beschreibung -->
+						<div class="mb-3 form-group">
+							<label class="text-secondary" for="beschreibung">
+								Beschreibung (optional)
+							</label>
+							
+							<textarea class="form-control" id="beschreibung" type="text"
+							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
+							          rows="4"></textarea>
 						</div>
 					</div>
 					
-					<ul th:remove="all-but-first">
-						<li th:each="zeit : ${zeiten}">
-							<label>
-								<input name="Zeit" type="checkbox">
-									<span th:text="${zeit}">Placeholder 1</span>
-								</input>
-							</label>
-						</li>
-					</ul>
+					<!-- Zeiten -->
+					<div>
+						<h2 class="h2">
+							Zeiten
+						</h2>
+						
+						<div class="container mb-3">
+							<!-- Now, I have the honour of using dynamic Thymeleaf IDs and referen-
+							     cing them in the JavaScript function below. Oh, Momma… -->
+							<div class="mb-2" th:each="zeit, iter : ${zeiten}">
+								<!-- Datum und Uhrzeit -->
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<div class="input-group date"
+											     th:id="zeit+${iter.count}"
+											     data-target-input="nearest">
+												<input type="text"
+												       class="form-control datetimepicker-input"
+												       th:attr="data-target='#zeit'+${iter.count}"
+												       data-target="#datetimepicker2"/>
+												
+												<div class="input-group-append"
+												     th:attr="data-target='#zeit'+${iter.count}"
+												     data-toggle="datetimepicker">
+													<div class="input-group-text">
+														<i class="fa fa-calendar"></i>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<script th:inline="javascript">
+										/*[+
+										
+										$(function () {
+											var pickerID = 'zeit' + [[${iter.count}]];
+											var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
+											
+											$(pickerID).datetimepicker();
+										});
+										
+										+]*/
+									</script>
+								</div>
+							</div>
+						</div>
+					</div>
 					
-					<button class="button" type="submit">Zeit hinzufügen</button>
-				</div>
-				
-				<div>
-					<button class="button" type="submit">Termin erstellen</button>
+					<div class="row justify-content-center">
+						<button class="btn btn-success" type="submit">
+							Erstellen
+						</button>
+					</div>
 				</div>
 			</form>
 		</div>
-	
 	</main>
 </body>
 </html>
