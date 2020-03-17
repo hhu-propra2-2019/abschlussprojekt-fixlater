@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
+import mops.termine2.controller.formular.AntwortForm;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
@@ -80,13 +81,11 @@ public class TermineAbstimmungController {
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("antworten");
-		
+		m.addAttribute("antwort", new AntwortForm(antwort));
 		
 		authenticatedAccess.increment();
 		
 		return "termine-abstimmung";
 	}
-	
 	
 }
