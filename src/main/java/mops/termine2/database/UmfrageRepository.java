@@ -1,5 +1,6 @@
 package mops.termine2.database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -14,14 +15,17 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	List<UmfrageDB> findByLink(String link);
 	
-	@Query("SELECT db FROM UmfrageDB db WHERE db.ersteller LIKE :ersteller ORDER BY db.frist")
+	@Query("select db from UmfrageDB db where db.ersteller like :ersteller order by db.frist")
 	List<UmfrageDB> findByErsteller(@Param("ersteller") String ersteller);
 	
-	@Query("SELECT db FROM UmfrageDB db WHERE db.gruppe LIKE :gruppe ORDER BY db.frist")
+	@Query("select db from UmfrageDB db where db.gruppe like :gruppe order by db.frist")
 	List<UmfrageDB> findByGruppe(@Param("gruppe") String gruppe);
 	
 	void deleteByLink(String link);
 	
 	void deleteByGruppe(String gruppe);
-  
+	
+	@Query("delete from UmfrageDB where loeschdatum < :timeNow")
+	void deleteOutdated(@Param("timeNow") LocalDateTime timeNow);
+	
 }
