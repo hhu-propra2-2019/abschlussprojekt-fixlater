@@ -293,3 +293,9 @@ und im KommentarService wurde die delete Methode geändert.
 Views für Formulare fertiggestellt (neuer Termin/ neue Bestellung)
 Thymeleaf für Umfragenübersicht gemacht und notwendigen controller und service geschrieben.
 Controller für neue Termine geschrieben
+
+=== DB-Initializer/ KommentarService (Julia, Kathi)
+Nach Wünschen der anderen Teammitglieder haben wir den DB-Initializer so erweitert, dass für
+studentin1, studentin2 und studentin3 immer eine Terminumfrage und eine Umfrage erstellt wrid.
+Für die Methode loadByLink im Kommentarservice haben wir Tests hinzugefügt. Aufgrund eines fehlschlagenden
+Tests haben wir Fehler im Kommentarservice entdeckt und korrigiert.
