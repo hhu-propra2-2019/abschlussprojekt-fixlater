@@ -64,7 +64,7 @@ public class TerminAntwortService {
 	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
-		return buildAntwortFromDB(terminfindungAntwortDBList);
+		return aktuelleOptionenEinfuegen(buildAntwortFromDB(terminfindungAntwortDBList), link);
 	}
 	
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
@@ -118,7 +118,7 @@ public class TerminAntwortService {
 		return null;
 	}
 	
-	private void aktuelleOptionenEinfuegen(TerminfindungAntwort antwort, String link) {
+	private TerminfindungAntwort aktuelleOptionenEinfuegen(TerminfindungAntwort antwort, String link) {
 		List<TerminfindungDB> terminfindungDBS = terminRepo.findByLink(link);
 		HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
 		HashMap<LocalDateTime, Antwort> alteAntworten = antwort.getAntworten();
@@ -127,6 +127,7 @@ public class TerminAntwortService {
 			antworten.put(termin, alteAntworten.get(termin));
 		}
 		antwort.setAntworten(antworten);
+		return antwort;
 	}
 	
 }
