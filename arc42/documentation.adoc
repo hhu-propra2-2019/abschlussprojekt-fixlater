@@ -189,6 +189,10 @@ Den Service und de Tests ueberarbeitet , sodass wesentlich weniger Datenbankaufr
 
 === DB (Thomas, Jan)
 
+Es ist aufgefallen, dass beim Laden der Terminfindungen die Daten mehrfach vorhanden sind und zu viele Datenbankaufrufe gemacht werden. Das liegt an der vorhandenen Redunzanz in der Datenbank.
+Diese Probleme wurden von Leon und Marcel behoben.
+Währenddessen wurde ein Service für die Termin Übersicht geschrieben, welcher die vorhandenen Termine für einen Benutzer lädt und diese dem Controller der Übersicht aufgeteilt in bereits abgeschlossene und noch offene Terminabstimmungen bereitstellt. Zusätzlich wurde ein Service geschrieben, der alle Gruppen für einen Benutzer bereitstellt.
+
 === Gruppe UmfrageService (Leon, Marcel)
 
 Die von Thomas angemerkten Fehler, dass beim Laden die Daten mehrfach angezeigt werden, wurde behoben, indem die beiden Methoden loadByErsteller und loadByGruppe überarbeitet wurden.
@@ -224,6 +228,8 @@ Sichten weiterentwickelt: Termin
 Der DB-Initializer wurde nun angepasst und fertiggestellt.
 Außerdem wurden heute Tests für den LinkService geschrieben.
 Als letztes haben wir uns erste Gedanken darüber gemacht, wie man den LinkService sinnvoll integrieren kann, um bei Erstellung einer neuen Terminfindung/ Umfrage den Link zu prüfen.
+
+=== Gruppe Urlaub (Thomas)
 
 ////
 Ziele für die Woche:
@@ -262,3 +268,8 @@ Eine Lösung wäre es die Reihenfolge zu beachten, in der die TerminOptionen und
 Es sollte dann aber überprüft werden ob sich die Umfrage seit dem Letzten aufrufen geändert hat.(Evtl mit einer Map) (Es eröffnet sich eine weitere Schwierigkeit.
 Bisher wird berprüft ob ein Student an einer Umfrage teilgenommen hat , indem überprüft wird ob Antworten von ihm in der Tabelle stehen.
 Wenn die Abstimmungsoptionen aber verändert wurden , ergibt es durchaus Sinn, ihn nochmal in der Übersicht anzuzeigen , dass er abstimmen sollte, ohne seine alten Antworten zu löschen (Wenn z.B eine Option hinzugekommt oder gelöscht wurde))
+
+=== Terminfindung Übersicht, Auslagerung (Thomas)
+
+Der Service für die Termin Übersicht wurde vorerst fertiggestellt. Die bereits abgeschlossenen Termine werden bisher noch nicht korrekt sortiert, was später verbessert wird.
+Außerdem wurden der vorhandene Controller in jeweils einen Controller für jede html-Seite aufgeteilt um das parallele Arbeiten und die Übersicht zu vereinfachen. Zusätzlich wurde das Erstellen der Account Objekte in einen eigenen Service ausgelagert, da dieser in jeden Controller benötigt wird.
