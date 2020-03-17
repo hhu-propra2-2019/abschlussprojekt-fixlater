@@ -62,8 +62,6 @@
 					</a>
 				</li>
 			</ul>
-			<div align="center">
-			</div>
 		</nav>
 	</header>
 	
@@ -99,47 +97,6 @@
 						
 						<!-- Erreichbarkeit -->
 						<div class="mb-3 form-group">
-							<!-- variant 1
-							     The original version had two radio buttons to allow the user to se-
-							     lect whether the Terminabstimmung should be accessible by everyone
-							     in a specific Gruppe or by everyone who knew its ID.
-							     
-							     The problem with this, however, was that there was no possibility
-							     to select the Gruppe: Adding a radio button for each Gruppe seemed
-							     ridiculous, and having the radio buttons perform a redirect to the
-							     same page just as to hide or unhide a select box for the Gruppen
-							     would be annoying in the long term.
-							     
-							     A third option would be JavaScript, so, if anyone knows how to show
-							     and hide components based on what radio buttons are selected, be my
-							     guest. The current version works decently enough, though, so no
-							     worries.
-							     
-							     NOTES: There seem to be some weird paddings in a stylesheet some-
-							     where which mess with the Bootstrap custom radio buttons. That's
-							     what those 'pl-0's and 'pl-4's are all about.
-								
-								<label>Erreichbarkeit</label>
-								
-								<div class="pl-0 custom-control custom-radio">
-									<input class="custom-control-input" id="editableByGroup"
-									       name="editable" type="radio" checked required value="1"/>
-									
-									<label class="pl-4 custom-control-label" for="editableByGroup">
-										Gruppe
-									</label>
-								</div>
-								
-								<div class="pl-0 custom-control custom-radio mb-3">
-									<input class="custom-control-input" id="editableByLink"
-									       name="editable" type="radio" required value="2"/>
-									
-									<label class="pl-4 custom-control-label" for="editableByLink">
-										Link
-									</label>
-								</div>
-							-->
-							
 							<label for="erreichbarkeit">
 								Erreichbarkeit
 							</label>
@@ -154,8 +111,8 @@
 								<option value="0" selected>Link</option>
 								
 								<optgroup label="Gruppen">
-									<option th:each="gruppe, index : ${gruppen}"
-									        th:value="${index.count}"
+									<option th:each="gruppe, iter : ${gruppen}"
+									        th:value="${iter.count}"
 									        th:text="${gruppe}">Gruppe</option>
 								</optgroup>
 							</select>
