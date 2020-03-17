@@ -1,4 +1,13 @@
-package mops.termine2;
+package mops.termine2.services;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
@@ -6,15 +15,6 @@ import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Antwort;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
-import mops.termine2.services.TerminAntwortService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -122,7 +122,6 @@ public class TerminfindungAntwortServiceTest {
 		}
 		return antworten;
 	}
-	
 	
 	private Terminfindung getBeispielTerminfindung() {
 		Terminfindung terminfindung = new Terminfindung();

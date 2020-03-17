@@ -1,4 +1,4 @@
-package mops.termine2;
+package mops.termine2.services;
 
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
@@ -7,9 +7,6 @@ import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.models.Terminfindung;
-import mops.termine2.services.GruppeService;
-import mops.termine2.services.TerminfindungService;
-import mops.termine2.services.TerminfindunguebersichtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
