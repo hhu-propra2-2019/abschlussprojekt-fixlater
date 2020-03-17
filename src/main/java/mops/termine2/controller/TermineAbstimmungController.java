@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -82,6 +83,22 @@ public class TermineAbstimmungController {
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("antwort", new AntwortForm(antwort));
+		
+		authenticatedAccess.increment();
+		
+		return "termine-abstimmung";
+	}
+	
+	@PostMapping("/termine-abstimmung/save")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String saveAbstimmung(Principal p, Model m, String link) {
+		Account account;
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			return null;
+		}
 		
 		authenticatedAccess.increment();
 		

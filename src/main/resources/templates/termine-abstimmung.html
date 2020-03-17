@@ -70,7 +70,8 @@
 						<button class="btn btn-outline-warning">Zurücksetzen</button>
 					</div>
 
-					<form class="my-3" th:object="${antwort}" method="post">
+					<form class="my-3" th:action="@{/termine-abstimmung/save(link=${terminfindung.getLink()})}"
+					      th:object="${antwort}" method="post">
 						<div class="table-responsive">
 							<table class="table table-sm" style="text-align: center">
 								<thead>
@@ -101,12 +102,14 @@
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
+										       th:field="${antwort.antworten[__${terminStat.index}__]}"
 										       value="v"/>
 									</th>
 									<th class="col-2 table-danger">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
+										       th:field="${antwort.antworten[__${terminStat.index}__]}"
 										       value="n"/>
 									</th>
 								</tr>
@@ -142,7 +145,9 @@
 
 						<div style="text-align: center">
 							<input type="text" name="pseudonym" placeholder="Benjamin"
-							       th:placeholder="*{getPseudonym()}">
+							       th:placeholder="*{getPseudonym()}"
+							       th:field="${antwort.pseudonym}"
+							>
 							<button class="btn btn-primary">Abschicken</button>
 						</div>
 					</form>

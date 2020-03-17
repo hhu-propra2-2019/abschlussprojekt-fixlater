@@ -31,6 +31,7 @@ public class AntwortForm {
 		}
 	}
 	
+	//Wenn man lustig ist effizienteren Algorithmus verwenden
 	private void sort() {
 		for (int i = 0; i < termine.size(); i++) {
 			for (int j = i; j < termine.size(); j++) {
