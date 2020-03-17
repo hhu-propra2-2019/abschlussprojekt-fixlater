@@ -180,6 +180,14 @@ LinkService geschrieben. Als letztes haben wir uns erste Gedanken darüber gemac
 LinkService sinnvoll integrieren kann, um bei Erstellung einer neuen Terminfindung/ Umfrage
 den Link zu prüfen. 
 
+== Tag 11
+
+=== Gruppe KommentarService (Kathi, Julia, Anton)
+Wir haben die Klasse Kommentar zu den model-Klassen hinzugefügt und einen KommentarService geschrieben.
+
+=== Gruppe LinkService/ KommentarService (Julia, Kathi)
+Der LinkService wurde korrigiert und in den Master gemerged. Wir haben Tests zum Kommentarservice hinzugefügt
+und im KommentarService wurde die delete Methode geändert.
 
 ////
 Ziele für die Woche:
