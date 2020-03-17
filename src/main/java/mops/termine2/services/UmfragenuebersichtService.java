@@ -24,11 +24,11 @@ public class UmfragenuebersichtService {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		for (Gruppe g : gruppen) {
-			umfragen.addAll(umfrageService.loadByGruppe(g.getName()));
+			umfragen.addAll(umfrageService.loadByGruppeOhneTermine(g.getName()));
 		}
 		return umfragen;
 	}
-
+	
 	public List<Umfrage> loadOffeneUmfragenFuerBenutzer(Account account) {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
@@ -39,7 +39,7 @@ public class UmfragenuebersichtService {
 		}
 		return offeneUmfragen;
 	}
-
+	
 	public List<Umfrage> loadAbgeschlosseneUmfragenFuerBenutzer(Account account) {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		List<Umfrage> abgeschlosseneUmfragen = new ArrayList<>();
@@ -50,5 +50,5 @@ public class UmfragenuebersichtService {
 		}
 		return abgeschlosseneUmfragen;
 	}
-
+	
 }
