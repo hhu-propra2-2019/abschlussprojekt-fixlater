@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import mops.termine2.database.entities.UmfrageAntwortDB;
+import mops.termine2.database.entities.UmfrageDB;
 
 @Repository
 public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortDB, Long> {
@@ -27,5 +28,8 @@ public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortD
 	
 	@Query("delete from UmfrageAntwortDB db where db.umfrage.loeschdatum < :timeNow")
 	void deleteOutdated(@Param("timeNow") LocalDateTime timeNow);
+	
+	@Query("select db.umfrage from UmfrageAntwortDB db where db.benutzer like :benutzer")
+	List<UmfrageDB> findUmfrageDbByBenutzer(@Param("benutzer") String benutzer);
 	
 }
