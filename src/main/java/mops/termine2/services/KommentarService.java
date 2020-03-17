@@ -41,7 +41,8 @@ public class KommentarService {
 		Kommentar kommentar = new Kommentar();
 		kommentar.setLink(kommentarDB.getLink());
 		kommentar.setInhalt(kommentarDB.getInhalt());
-		kommentar.setPseudonym(kommentar.getPseudonym());
+		kommentar.setPseudonym(kommentarDB.getPseudonym());
+		kommentar.setErstellungsdatum(kommentarDB.getErstellungsdatum());
 		return kommentar;
 	}
 }
