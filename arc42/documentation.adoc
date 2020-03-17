@@ -273,3 +273,17 @@ Wenn die Abstimmungsoptionen aber verändert wurden , ergibt es durchaus Sinn, i
 
 Der Service für die Termin Übersicht wurde vorerst fertiggestellt. Die bereits abgeschlossenen Termine werden bisher noch nicht korrekt sortiert, was später verbessert wird.
 Außerdem wurden der vorhandene Controller in jeweils einen Controller für jede html-Seite aufgeteilt um das parallele Arbeiten und die Übersicht zu vereinfachen. Zusätzlich wurde das Erstellen der Account Objekte in einen eigenen Service ausgelagert, da dieser in jeden Controller benötigt wird.
+
+=== (Anton)
+Eigene Icons für Sidebar hergestellt und in HTML eingebunden.
+Checkstyle angepasst damit Bilder ignoriert werden.
+Am Kommentarservice mitgearbeitet.
+TempusDominus recherchiert.
+
+
+== Tag 12
+
+=== UI (Ingrid, Anton, Thomas)
+Views für Formulare fertiggestellt (neuer Termin/ neue Bestellung)
+Thymeleaf für Umfragenübersicht gemacht und notwendigen controller und service geschrieben.
+Controller für neue Termine geschrieben
