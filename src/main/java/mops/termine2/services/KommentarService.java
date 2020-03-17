@@ -24,10 +24,6 @@ public class KommentarService {
 		kommentarRepo.save(kommentarDB);
 	}
 	
-	public void delete(String link) {
-		kommentarRepo.deleteByLink(link);
-	}
-	
 	public List<Kommentar> loadByLink(String link) {
 		List<KommentarDB> kommentarDBs = kommentarRepo.findByLink(link);
 		List<Kommentar> kommentare = new ArrayList<>();
