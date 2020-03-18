@@ -156,13 +156,17 @@ public class TermineAbstimmungController {
 	private TerminfindungAntwort mergeToAnswer(Terminfindung terminfindung,
 											   String benutzer,
 											   AntwortForm antwortForm) {
+		System.out.println(antwortForm);
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setKuerzel(benutzer);
 		terminfindungAntwort.setLink(terminfindung.getLink());
-		terminfindungAntwort.setPseudonym(antwortForm.getPseudonym());
 		terminfindungAntwort.setTeilgenommen(true);
 		terminfindungAntwort.setGruppe(terminfindung.getGruppe());
-		
+		if (antwortForm.getPseudonym().equals("")) {
+			terminfindungAntwort.setPseudonym(benutzer);
+		} else {
+			terminfindungAntwort.setPseudonym(antwortForm.getPseudonym());
+		}
 		List<LocalDateTime> termine = sortTermine(terminfindung);
 		List<Antwort> antworten = antwortForm.getAntworten();
 		if (termine.size() != antworten.size()) {

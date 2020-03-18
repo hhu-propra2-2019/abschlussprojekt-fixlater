@@ -22,8 +22,12 @@ public class AntwortForm {
 	
 	public String pseudonym;
 	
+	public String benutzer;
+	
+	
 	public void init(TerminfindungAntwort terminAntwort) {
 		pseudonym = terminAntwort.getPseudonym();
+		benutzer = terminAntwort.getKuerzel();
 		save(terminAntwort.getAntworten());
 		sort();
 	}
