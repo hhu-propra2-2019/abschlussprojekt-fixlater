@@ -49,7 +49,8 @@ public class TermineUebersichtController {
 	@GetMapping("")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal p, Model m,
-						@RequestParam(name = "gruppe", defaultValue = "Alle Gruppen") String gruppe) {
+						@RequestParam(name = "gruppe",
+							defaultValue = "Alle Gruppen") String gruppe) {
 		if (p != null) {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
