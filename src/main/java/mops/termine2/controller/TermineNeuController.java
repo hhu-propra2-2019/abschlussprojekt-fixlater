@@ -116,6 +116,13 @@ public class TermineNeuController {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
+			for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
+				if (ldt == null) {
+					System.out.println("Fehler");
+					// TODO: Fehlermeldung ausgeben und auf Terminfindung erstellen weiterleiten
+				}
+			}
+			
 			// Terminfindung erstellen
 			terminfindung.setErsteller(account.getName());
 			terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
