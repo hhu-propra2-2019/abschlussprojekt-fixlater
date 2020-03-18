@@ -1,18 +1,18 @@
-package mops.termine2;
+package mops.termine2.services;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
-import mops.termine2.services.LinkService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -38,7 +38,6 @@ public class LinkServiceTest {
 	
 	private transient String link = "link";
 	
-	
 	@BeforeEach
 	public void setUp() {
 		terminfindungRepo = mock(TerminfindungRepository.class);
@@ -59,19 +58,19 @@ public class LinkServiceTest {
 	@Test
 	public void pruefeEindeutigkeitLinkGehoertZuTerminfindung() {
 		when(terminfindungRepo.findByLink(link))
-				.thenReturn(erstelleTerminfindungDBListeFuerGruppe(link));
+			.thenReturn(erstelleTerminfindungDBListeFuerGruppe(link));
 		when(umfrageRepo.findByLink(link)).thenReturn(new ArrayList<>());
 		
 		Boolean eindeutig = linkService.pruefeEindeutigkeitLink(link);
 		
 		assertThat(eindeutig).isEqualTo(false);
-	
+		
 	}
 	
 	@Test
 	public void pruefeEindeutigkeitLinkGehoertZuUmfrage() {
 		when(umfrageRepo.findByLink(link))
-				.thenReturn(erstelleUmfrageDBListeFuerGruppe(link));
+			.thenReturn(erstelleUmfrageDBListeFuerGruppe(link));
 		when(terminfindungRepo.findByLink(link)).thenReturn(new ArrayList<>());
 		
 		Boolean eindeutig = linkService.pruefeEindeutigkeitLink(link);
@@ -80,28 +79,26 @@ public class LinkServiceTest {
 		
 	}
 	
-	
 	@Test
 	public void generiertEindeutigenLink() {
 		String uuidLinkTerminfindung = "ef2b999e-da9e-40af-a3c7-bc6ae00a9d70";
 		String uuidLinkUmfrage = "195e3001-4bce-41fe-9cf9-138602d9ba2d";
 		when(terminfindungRepo.findByLink(uuidLinkTerminfindung))
-				.thenReturn(erstelleTerminfindungDBListeFuerGruppe(uuidLinkTerminfindung));
+			.thenReturn(erstelleTerminfindungDBListeFuerGruppe(uuidLinkTerminfindung));
 		when(umfrageRepo.findByLink(uuidLinkUmfrage))
-				.thenReturn(erstelleUmfrageDBListeFuerGruppe(uuidLinkUmfrage));
+			.thenReturn(erstelleUmfrageDBListeFuerGruppe(uuidLinkUmfrage));
 		
 		String generierterLink = linkService.generiereEindeutigenLink();
 		
 		assertThat(generierterLink).isNotEqualTo(uuidLinkTerminfindung);
 		assertThat(generierterLink).isNotEqualTo(uuidLinkUmfrage);
 		
-		
 	}
 	
 	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerGruppe(String link) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = Arrays.asList(LocalDateTime.now(),
-				LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
+			LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
 		
 		for (LocalDateTime termin : terminVorschlaege) {
 			TerminfindungDB terminfindungDB = new TerminfindungDB();
