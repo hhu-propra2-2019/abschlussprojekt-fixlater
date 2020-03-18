@@ -31,8 +31,6 @@ public class TerminAntwortService {
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
 		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
-		System.out.println(antwort.getKuerzel());
-		System.out.println(terminVorschlag.getLink());
 		List<TerminfindungAntwortDB> antwortenToDelete =
 				antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
 						terminVorschlag.getLink());
@@ -90,6 +88,16 @@ public class TerminAntwortService {
 			aktuelleOptionenEinfuegen(antwort, link);
 		}
 		return antworten;
+	}
+	
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<TerminfindungAntwortDB> antworten =
+				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
+						link);
+		if (antworten.isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 	
 	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
