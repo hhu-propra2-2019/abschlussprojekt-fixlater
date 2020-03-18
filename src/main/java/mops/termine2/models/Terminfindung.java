@@ -7,6 +7,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -20,10 +22,12 @@ public class Terminfindung {
 	
 	private String beschreibung;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private List<LocalDateTime> vorschlaege;
 	
 	private String ersteller;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime frist;
 	
 	private LocalDateTime loeschdatum;
