@@ -5,7 +5,6 @@ import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Antwort;
-import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 import org.springframework.stereotype.Service;
@@ -34,30 +33,23 @@ public class TerminAntwortService {
 		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
 		System.out.println(antwort.getKuerzel());
 		System.out.println(terminVorschlag.getLink());
-		List<TerminfindungAntwortDB> antwortenToDelete = antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(), terminVorschlag.getLink());
+		List<TerminfindungAntwortDB> antwortenToDelete =
+				antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
+						terminVorschlag.getLink());
+		
 		antwortRepo.deleteAll(antwortenToDelete);
 		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
-			TerminfindungDB terminfindungDB = new TerminfindungDB();
-			terminfindungDB.setTitel(terminVorschlag.getTitel());
-			terminfindungDB.setErsteller(terminVorschlag.getErsteller());
-			terminfindungDB.setBeschreibung(terminVorschlag.getBeschreibung());
-			terminfindungDB.setOrt(terminVorschlag.getOrt());
-			terminfindungDB.setLink(terminVorschlag.getLink());
-			terminfindungDB.setFrist(terminVorschlag.getFrist());
-			terminfindungDB.setLoeschdatum(terminVorschlag.getLoeschdatum());
-			if (terminVorschlag.getGruppe() == null) {
-				terminfindungDB.setModus(Modus.LINK);
-			} else {
-				terminfindungDB.setModus(Modus.GRUPPE);
-			}
-			terminfindungDB.setTermin(termin);
+			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminVorschlag.getLink(),
+					termin);
 			
 			db.setAntwort(antwort.getAntworten().get(termin));
 			db.setBenutzer(antwort.getKuerzel());
 			db.setPseudonym(antwort.getPseudonym());
 			db.setTerminfindung(terminfindungDB);
-			antwortRepo.save(db);
+			if (terminfindungDB != null) {
+				antwortRepo.save(db);
+			}
 		}
 	}
 	

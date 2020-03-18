@@ -146,7 +146,6 @@ public class TermineAbstimmungController {
 		
 		System.out.println("jetzt wird abgestimmt");
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
-		System.out.println("mist");
 		authenticatedAccess.increment();
 		
 		

@@ -25,4 +25,6 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	
 	@Query("delete from TerminfindungDB db where db.loeschdatum < :timeNow")
 	void loescheAelterAls(@Param("timeNow") LocalDateTime timeNow);
+	
+	TerminfindungDB findByLinkAndTermin(String link, LocalDateTime termin);
 }

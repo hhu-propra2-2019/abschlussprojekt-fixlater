@@ -18,7 +18,6 @@ public interface TerminfindungAntwortRepository extends CrudRepository<Terminfin
 	
 	List<TerminfindungAntwortDB> findAllByTerminfindungLink(String link);
 	
-	
 	void deleteAllByTerminfindungLinkAndBenutzer(@Param("link") String link, @Param("benutzer") String benutzer);
 	
 	@Query("delete from TerminfindungAntwortDB db where db.terminfindung.link like  :link")

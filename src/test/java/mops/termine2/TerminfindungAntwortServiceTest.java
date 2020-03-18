@@ -53,7 +53,7 @@ public class TerminfindungAntwortServiceTest {
 		antwortService.abstimmen(toSave, terminfindung);
 		
 		Mockito.verify(antwortRepo, times(4)).save(any());
-		Mockito.verify(antwortRepo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
+		
 	}
 	
 	@Test
@@ -67,7 +67,6 @@ public class TerminfindungAntwortServiceTest {
 		antwortService.abstimmen(toSave, terminfindung);
 		
 		Mockito.verify(antwortRepo, times(9)).save(any());
-		Mockito.verify(antwortRepo, times(1)).deleteAllByTerminfindungLinkAndBenutzer(any(), any());
 	}
 	
 	@Test
