@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,5 +71,15 @@ public class TermineUebersichtController {
 			m.addAttribute("termine", termine);
 		}
 		return "termine";
+	}
+	
+	@PostMapping(path = "", params = "details")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String details(Principal p, Model m, final HttpServletRequest req) {
+		String link = "";
+		if (p != null) {
+			link = req.getParameter("details");
+		}
+		return "redirect:/termine2/" + link;
 	}
 }
