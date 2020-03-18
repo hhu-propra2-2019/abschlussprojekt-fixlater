@@ -37,8 +37,7 @@ public class GruppeService {
 		Optional gruppeDB = benutzerGruppeRepository.findById(id);
 		
 		if (gruppeDB.isPresent()) {
-			BenutzerGruppeDB gruppeDB1 = null;
-			gruppeDB1 = (BenutzerGruppeDB) gruppeDB.get();
+			BenutzerGruppeDB gruppeDB1 = (BenutzerGruppeDB) gruppeDB.get();
 			Gruppe gruppe = new Gruppe();
 			gruppe.setName(gruppeDB1.getGruppe());
 			gruppe.setId(gruppeDB1.getId());
