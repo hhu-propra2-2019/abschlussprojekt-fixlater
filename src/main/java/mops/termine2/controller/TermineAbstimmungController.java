@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
@@ -55,9 +56,9 @@ public class TermineAbstimmungController {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
 	
-	@GetMapping("/termine-abstimmung")
+	@GetMapping("/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, String link) {
+	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		System.out.println("get: " + link);
 		Account account;
 		if (p != null) {
@@ -102,11 +103,11 @@ public class TermineAbstimmungController {
 	
 	
 	@Transactional
-	@PostMapping("/termine-abstimmung/save")
+	@PostMapping(path = "/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal p,
 								 Model m,
-								 String link,
+								 @PathVariable("link") String link,
 								 @ModelAttribute AntwortForm antwortForm) {
 		Account account;
 		if (p != null) {
@@ -149,7 +150,7 @@ public class TermineAbstimmungController {
 		authenticatedAccess.increment();
 		
 		
-		return "redirect:?link=" + link;
+		return "redirect:/termine2/" + link;
 	}
 	
 	private TerminfindungAntwort mergeToAnswer(Terminfindung terminfindung,
@@ -165,9 +166,6 @@ public class TermineAbstimmungController {
 		List<LocalDateTime> termine = sortTermine(terminfindung);
 		List<Antwort> antworten = antwortForm.getAntworten();
 		if (termine.size() != antworten.size()) {
-			System.out.println("SCHEIßE");
-			System.out.println(termine);
-			System.out.println(antworten);
 			return null;
 		}
 		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
