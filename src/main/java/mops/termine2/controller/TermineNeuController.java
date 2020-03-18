@@ -62,9 +62,9 @@ public class TermineNeuController {
 			/* Gruppen */
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			m.addAttribute("gruppen", gruppen);
-			Gruppe dummy = new Gruppe();
-			dummy.setId(-1L);
-			m.addAttribute("gruppeSelektiert", dummy);
+			Gruppe noGroup = new Gruppe();
+			noGroup.setId(-1L);
+			m.addAttribute("gruppeSelektiert", noGroup);
 			
 			Terminfindung terminfindung = new Terminfindung();
 			terminfindung.setVorschlaege(new ArrayList<>());
@@ -79,7 +79,8 @@ public class TermineNeuController {
 	
 	@PostMapping(path = "/termine-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String neuenTermineHinzufügen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
+	public String neuerTermin(Principal p, Model m, Terminfindung terminfindung,
+							  Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -106,7 +107,8 @@ public class TermineNeuController {
 	
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
+	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung,
+										 Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -117,7 +119,7 @@ public class TermineNeuController {
 			// Terminfindung erstellen
 			terminfindung.setErsteller(account.getName());
 			terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
-			if (gruppeSelektiert.getId() != -1) {
+			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
 				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
 				terminfindung.setGruppe(gruppe.getName());
 			}
@@ -133,7 +135,8 @@ public class TermineNeuController {
 	
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert, final HttpServletRequest request) {
+	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
+								 final HttpServletRequest request) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
