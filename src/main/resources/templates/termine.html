@@ -60,21 +60,22 @@
 				<div class="btn-toolbar" style="font-size: small">
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
-						        data-toggle="dropdown" id="dropOperator" type="button">
+						        data-toggle="dropdown" id="dropOperator" type="button" th:text="${selektierteGruppe}">
 							Alle Gruppen
 						</button>
 						
 						<!-- Auswählbare Gruppen -->
-						<div class="dropdown-menu">
+						<div class="dropdown-menu" >
 							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}">
+							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}"
+							   th:value="${gruppe}">
 								Gruppe
 							</a>
 							
 							<div th:if="*{termine.gruppen.size() > 0}">
 								<div class="dropdown-divider"></div>
 							</div>
-							
+
 							<a class="dropdown-item" th:href="@{/termine2}">
 								Alle Gruppen
 							</a>
