@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mops.termine2.enums.Antwort;
+import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
+import mops.termine2.util.LocalDateTimeManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,34 +27,47 @@ public class AntwortForm {
 	public String benutzer;
 	
 	
-	public void init(TerminfindungAntwort terminAntwort) {
-		pseudonym = terminAntwort.getPseudonym();
-		benutzer = terminAntwort.getKuerzel();
-		save(terminAntwort.getAntworten());
-		sort();
-	}
-	
-	
-	private void save(HashMap<LocalDateTime, Antwort> antwortMap) {
-		for (LocalDateTime termin : antwortMap.keySet()) {
-			termine.add(termin);
-			antworten.add(antwortMap.get(termin));
+	public void init(TerminfindungAntwort terminAbstimmung) {
+		HashMap<LocalDateTime, Antwort> antwortenMap = terminAbstimmung.getAntworten();
+		pseudonym = terminAbstimmung.getPseudonym();
+		benutzer = terminAbstimmung.getKuerzel();
+		
+		termine = new ArrayList<>();
+		termine.addAll(antwortenMap.keySet());
+		LocalDateTimeManager.sortTermine(termine);
+		for (LocalDateTime termin : termine) {
+			antworten.add(antwortenMap.get(termin));
 		}
 	}
 	
-	//Wenn man lustig ist effizienteren Algorithmus verwenden
-	private void sort() {
+	
+	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, String nutzer, AntwortForm antwortFrm) {
+		System.out.println(antwortFrm);
+		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
+		terminfindungAntwort.setKuerzel(nutzer);
+		terminfindungAntwort.setLink(terminf.getLink());
+		terminfindungAntwort.setTeilgenommen(true);
+		terminfindungAntwort.setGruppe(terminf.getGruppe());
+		if (antwortFrm.getPseudonym().equals("")) {
+			terminfindungAntwort.setPseudonym(nutzer);
+		} else {
+			terminfindungAntwort.setPseudonym(antwortFrm.getPseudonym());
+		}
+		
+		List<LocalDateTime> termine = terminf.getVorschlaege();
+		LocalDateTimeManager.sortTermine(termine);
+		List<Antwort> antworten = antwortFrm.getAntworten();
+		if (termine.size() != antworten.size()) {
+			return null;
+		}
+		
+		
+		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
 		for (int i = 0; i < termine.size(); i++) {
-			for (int j = i; j < termine.size(); j++) {
-				if (termine.get(i).isAfter(termine.get(j))) {
-					LocalDateTime tmpTermin = termine.get(j);
-					Antwort tmpAntwort = antworten.get(j);
-					termine.set(j, termine.get(i));
-					termine.set(i, tmpTermin);
-					antworten.set(j, antworten.get(i));
-					antworten.set(i, tmpAntwort);
-				}
-			}
+			antwortenMap.put(termine.get(i), antworten.get(i));
 		}
+		
+		terminfindungAntwort.setAntworten(antwortenMap);
+		return terminfindungAntwort;
 	}
 }

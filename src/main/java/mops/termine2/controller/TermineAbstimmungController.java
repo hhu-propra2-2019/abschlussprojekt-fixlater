@@ -6,7 +6,6 @@ import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortForm;
-import mops.termine2.enums.Antwort;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
@@ -58,33 +57,79 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
-		System.out.println("get: " + link);
+	public String termineDetails(Principal p, Model m, @PathVariable("link") String link) {
 		Account account;
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
-			return null;
+			System.out.println("403");
+			return "error/403";
 		}
 		
 		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		if (terminfindung == null) {
 			System.out.println("404");
-			return "404";
+			return "error/404";
 		}
 		
 		if (terminfindung.getGruppe() != null
 				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
 			System.out.println("403");
-			return "403";
+			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
 			System.out.println("ErgebnisMussAngezeigtWeren");
-			return "termine-abstimmung";
+			return "redirect:/termine2/" + link + "termine-ergebnis";
+		}
+		
+		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
+		// muss dies hier noch abgefragt werden und evtl auf die
+		//Abstimmungsseite umgeleitet werden;
+		
+		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
+		if (bereitsTeilgenommen) {
+			System.out.println("ergebnis");
+			return "redirect:/termine2/" + link + "/ergebnis";
+		} else {
+			System.out.println("abstimmung");
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
+	}
+	
+	@GetMapping("/{link}/abstimmung")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+		
+		Account account;
+		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			System.out.println("404");
+			return "error/403";
+		}
+		
+		if (terminfindung == null) {
+			System.out.println("404");
+			return "error/404";
+		}
+		
+		if (terminfindung.getGruppe() != null
+				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+			System.out.println("403");
+			return "error/403";
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (terminfindung.getFrist().isBefore(now)) {
+			System.out.println("ErgebnisMussAngezeigtWeren");
+			return "redirect:/termine2/" + link + "termine-ergebnis";
 		}
 		
 		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
@@ -99,6 +144,48 @@ public class TermineAbstimmungController {
 		authenticatedAccess.increment();
 		
 		return "termine-abstimmung";
+	}
+	
+	@GetMapping("/{link}/ergebnis")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+		
+		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Account account;
+		
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			System.out.println("404");
+			return "error/403";
+		}
+		
+		if (terminfindung == null) {
+			System.out.println("404");
+			return "error/404";
+		}
+		
+		if (terminfindung.getGruppe() != null
+				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+			System.out.println("403");
+			return "error/403";
+		}
+		
+		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
+		// muss dies hier noch abgefragt werden und evtl auf die
+		//Abstimmungsseite umgeleitet werden;
+		
+		LinkWrapper setLink = new LinkWrapper(link);
+		letzteTerminfindung.put(setLink, terminfindung);
+		
+		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
+		m.addAttribute("terminfindung", terminfindung);
+		m.addAttribute("ergebnis", terminfindung);
+		
+		authenticatedAccess.increment();
+		
+		return "termine-ergebnis";
 	}
 	
 	
@@ -121,19 +208,19 @@ public class TermineAbstimmungController {
 		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		if (terminfindung == null) {
 			System.out.println("404");
-			return "404";
+			return "error/404";
 		}
 		
 		if (terminfindung.getGruppe() != null
 				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
 			System.out.println("403");
-			return "403";
+			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("AbstimmungsfristAbgelaufen");
-			return "/termine-abstimmung?link=" + link;
+			System.out.println("ErgebnisMussAngezeigtWeren");
+			return "redirect:/termine2/" + link + "termine-abstimmung";
 		}
 		
 		LinkWrapper linkWrapper = new LinkWrapper(link);
@@ -142,7 +229,7 @@ public class TermineAbstimmungController {
 			return "/termine-abstimmung?link=" + link;
 		}
 		
-		TerminfindungAntwort terminfindungAntwort = mergeToAnswer(terminfindung, account.getName(),
+		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
 				antwortForm);
 		
 		System.out.println("jetzt wird abgestimmt");
@@ -151,48 +238,5 @@ public class TermineAbstimmungController {
 		
 		
 		return "redirect:/termine2/" + link;
-	}
-	
-	private TerminfindungAntwort mergeToAnswer(Terminfindung terminfindung,
-											   String benutzer,
-											   AntwortForm antwortForm) {
-		System.out.println(antwortForm);
-		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
-		terminfindungAntwort.setKuerzel(benutzer);
-		terminfindungAntwort.setLink(terminfindung.getLink());
-		terminfindungAntwort.setTeilgenommen(true);
-		terminfindungAntwort.setGruppe(terminfindung.getGruppe());
-		if (antwortForm.getPseudonym().equals("")) {
-			terminfindungAntwort.setPseudonym(benutzer);
-		} else {
-			terminfindungAntwort.setPseudonym(antwortForm.getPseudonym());
-		}
-		List<LocalDateTime> termine = sortTermine(terminfindung);
-		List<Antwort> antworten = antwortForm.getAntworten();
-		if (termine.size() != antworten.size()) {
-			return null;
-		}
-		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
-		for (int i = 0; i < termine.size(); i++) {
-			antwortenMap.put(termine.get(i), antworten.get(i));
-		}
-		
-		terminfindungAntwort.setAntworten(antwortenMap);
-		return terminfindungAntwort;
-	}
-	
-	private List<LocalDateTime> sortTermine(Terminfindung terminfindung) {
-		List<LocalDateTime> termine = terminfindung.getVorschlaege();
-		
-		for (int i = 0; i < termine.size(); i++) {
-			for (int j = i; j < termine.size(); j++) {
-				if (termine.get(i).isAfter(termine.get(j))) {
-					LocalDateTime tmpTermin = termine.get(j);
-					termine.set(j, termine.get(i));
-					termine.set(i, tmpTermin);
-				}
-			}
-		}
-		return termine;
 	}
 }
