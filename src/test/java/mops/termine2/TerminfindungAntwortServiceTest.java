@@ -49,7 +49,7 @@ public class TerminfindungAntwortServiceTest {
 		
 		toSave.setAntworten(getBeispielAntwortenAlleJa(4));
 		toSave.setKuerzel(BENUTZER1);
-		
+		when(terminRepo.findByLinkAndTermin(any(), any())).thenReturn(getBeispielTerminDBList(1).get(0));
 		antwortService.abstimmen(toSave, terminfindung);
 		
 		Mockito.verify(antwortRepo, times(4)).save(any());
@@ -63,9 +63,10 @@ public class TerminfindungAntwortServiceTest {
 		
 		toSave.setAntworten(getBeispielAntwortenAlleJa(9));
 		toSave.setKuerzel(BENUTZER1);
-		
+		when(terminRepo.findByLinkAndTermin(any(), any())).thenReturn(getBeispielTerminDBList(1).get(0));
 		antwortService.abstimmen(toSave, terminfindung);
 		
+		System.out.println(toSave);
 		Mockito.verify(antwortRepo, times(9)).save(any());
 	}
 	

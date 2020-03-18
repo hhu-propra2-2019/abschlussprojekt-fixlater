@@ -42,7 +42,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = true;
+	private static final boolean EINGESCHALTET = false;
 	
 	
 	@Autowired
@@ -72,7 +72,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				String gruppeName = faker.book().title();
 				Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
 				List<Integer> studenten = IntStream.rangeClosed(1, ANZAHL_STUDENTEN)
-					.boxed().collect(Collectors.toList());
+						.boxed().collect(Collectors.toList());
 				
 				for (int value2 = 0; value2 < ANZAHL_BENUTZER_GRUPPE; value2++) {
 					final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
@@ -115,7 +115,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-			.minusDays(new Random().nextInt(90));
+				.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(4);
 		
@@ -171,7 +171,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-			.minusDays(new Random().nextInt(90));
+				.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(3);
 		
@@ -233,7 +233,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-			.minusDays(new Random().nextInt(90));
+				.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(4);
 		
@@ -286,7 +286,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-			.minusDays(new Random().nextInt(90));
+				.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(3);
 		
