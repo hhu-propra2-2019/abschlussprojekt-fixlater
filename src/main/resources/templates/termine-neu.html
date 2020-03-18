@@ -188,7 +188,7 @@
 									</div>
 								</div>
 
-								<div class="col-sm-3">
+								<div class="col-sm-3" th:if="*{vorschlaege.size() > 1}">
 									<button class="btn btn-danger" name="delete" th:value="${iter.index}" type="submit">
 										Löschen
 									</button>

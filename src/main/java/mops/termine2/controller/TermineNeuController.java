@@ -146,11 +146,8 @@ public class TermineNeuController {
 			// Selektierte Gruppe
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			
-			String test = request.getParameter("delete");
-			
-			Integer index = Integer.parseInt(request.getParameter("delete"));
-			
-			terminfindung.getVorschlaege().remove(index);
+			// Terminvorschlag löschen
+			terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
 			
 			m.addAttribute("terminfindung", terminfindung);
 		}
