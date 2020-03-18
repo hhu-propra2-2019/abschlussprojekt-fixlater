@@ -14,6 +14,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.util.ArrayList;
 
 @Controller
 @SessionScope
@@ -37,6 +38,23 @@ public class UmfragenNeuController {
 		}
 		authenticatedAccess.increment();
 		
+		ArrayList<String> gruppen = new ArrayList<String>();
+		//gruppen.add("FIXLATER");
+		//gruppen.add("WEB24");
+		//gruppen.add("GIT-R-DONE");
+		
+		ArrayList<String> vorschlaege = new ArrayList<String>();
+		vorschlaege.add("Grillen!");
+		vorschlaege.add("Hotdogs");
+		vorschlaege.add("Kabelsalat aus der Entwickelbar");
+		vorschlaege.add("Bananen-Milkshake");
+		vorschlaege.add("Spezi");
+		vorschlaege.add("Heißer Kakao mit Rum");
+		
+		m.addAttribute("gruppen", gruppen);
+		m.addAttribute("vorschlaege", vorschlaege);
+		
 		return "umfragen-neu";
 	}
 }
+

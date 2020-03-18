@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GruppeService {
@@ -30,6 +35,20 @@ public class GruppeService {
 		}
 		
 		return gruppen;
+	}
+	
+	public Gruppe loadById(Long id) {
+		Optional gruppeDB = benutzerGruppeRepository.findById(id);
+		
+		if (gruppeDB.isPresent()) {
+			BenutzerGruppeDB gruppeDB1 = (BenutzerGruppeDB) gruppeDB.get();
+			Gruppe gruppe = new Gruppe();
+			gruppe.setName(gruppeDB1.getGruppe());
+			gruppe.setId(gruppeDB1.getId());
+			return gruppe;
+		}
+		
+		return null;
 	}
 	
 	public boolean accountInGruppe(Account account, String gruppe) {

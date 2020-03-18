@@ -42,7 +42,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = false;
+	private static final boolean EINGESCHALTET = true;
 	
 	
 	@Autowired
@@ -72,7 +72,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				String gruppeName = faker.book().title();
 				Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
 				List<Integer> studenten = IntStream.rangeClosed(1, ANZAHL_STUDENTEN)
-						.boxed().collect(Collectors.toList());
+					.boxed().collect(Collectors.toList());
 				
 				for (int value2 = 0; value2 < ANZAHL_BENUTZER_GRUPPE; value2++) {
 					final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
@@ -84,14 +84,32 @@ public class DatabaseInitializer implements ServletContextInitializer {
 					benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
 					
 					if (Math.random() < ENTSCHEIDUNGSWERT1) {
-						fakeTerminfindungGruppe(faker, benutzerGruppeDB, value1);
+						fakeTerminfindungGruppe(faker, benutzerGruppeDB, value1, Math.random());
 					} else {
-						fakeUmfrageGruppe(faker, benutzerGruppeDB, value1);
+						fakeUmfrageGruppe(faker, benutzerGruppeDB, value1, Math.random());
 					}
 					
 					this.benutzerGruppeRepository.save(benutzerGruppeDB);
 				}
 			}
+			
+			IntStream.range(1, 3).forEach(gruppeNummer -> {
+				long gruppeId = ThreadLocalRandom.current().nextLong(10000);
+				
+				IntStream.range(1, ANZAHL_BENUTZER_GRUPPE - 1).forEach(studentNummer -> {
+					final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
+					benutzerGruppeDB.setBenutzer("studentin" + studentNummer);
+					benutzerGruppeDB.setGruppe("FIXLATER" + gruppeNummer);
+					benutzerGruppeDB.setGruppeId(gruppeId);
+					benutzerGruppeDB.setId(ThreadLocalRandom.current().nextLong(10000));
+					fakeTerminfindungGruppe(faker, benutzerGruppeDB, studentNummer, 0);
+					fakeUmfrageGruppe(faker, benutzerGruppeDB, studentNummer, 0);
+					fakeTerminfindungGruppe(faker, benutzerGruppeDB, studentNummer, 1);
+					fakeUmfrageGruppe(faker, benutzerGruppeDB, studentNummer, 1);
+					
+					this.benutzerGruppeRepository.save(benutzerGruppeDB);
+				});
+			});
 			
 			int benutzerZaehler = 1;
 			for (int value2 = 0; value2 < ANZAHL_LINK; value2++) {
@@ -108,14 +126,21 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		}
 	}
 	
-	public void fakeTerminfindungGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler) {
+	private LocalDateTime setzeDatumZukunftOderVergangenheit(double entscheidungswert) {
+		if (entscheidungswert < ENTSCHEIDUNGSWERT1) {
+			return LocalDateTime.now().minusDays(new Random().nextInt(30));
+		}
+		return LocalDateTime.now().plusDays(new Random().nextInt(60));
+	}
+	
+	public void fakeTerminfindungGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
+										double entscheidungswert) {
 		
 		String beschreibung = faker.lorem().sentence();
 		String link = faker.name().firstName() + benutzerGruppeDB.getId();
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
-		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-				.minusDays(new Random().nextInt(90));
+		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(4);
 		
@@ -171,7 +196,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-				.minusDays(new Random().nextInt(90));
+			.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(3);
 		
@@ -226,14 +251,14 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		});
 	}
 	
-	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler) {
+	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
+								  double entscheidungswert) {
 		
 		String beschreibung = faker.lorem().sentence();
 		String link = faker.name().firstName() + benutzerGruppeDB.getId();
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
-		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-				.minusDays(new Random().nextInt(90));
+		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(4);
 		
@@ -286,7 +311,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
-				.minusDays(new Random().nextInt(90));
+			.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(3);
 		

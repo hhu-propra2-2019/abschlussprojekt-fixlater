@@ -1,14 +1,4 @@
-package mops.termine2;
-
-import mops.termine2.database.TerminfindungAntwortRepository;
-import mops.termine2.database.TerminfindungRepository;
-import mops.termine2.database.entities.TerminfindungDB;
-import mops.termine2.enums.Modus;
-import mops.termine2.models.Terminfindung;
-import mops.termine2.services.TerminfindungService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+package mops.termine2.services;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +6,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import mops.termine2.database.TerminfindungAntwortRepository;
+import mops.termine2.database.TerminfindungRepository;
+import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.enums.Modus;
+import mops.termine2.models.Terminfindung;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,35 +25,33 @@ import static org.mockito.Mockito.when;
 
 public class TerminfindungServiceTest {
 	
-	
 	private transient List<String> linkListe = new ArrayList<>(
-			Arrays.asList("alleMeineEntchen", "haenzchenKlein", "bruderJakob", "derMondIstAufgegangen"));
+		Arrays.asList("alleMeineEntchen", "haenzchenKlein", "bruderJakob", "derMondIstAufgegangen"));
 	
 	private transient List<String> erstellerListe = new ArrayList<>(
-			Arrays.asList("Leon", "Loen", "Thomas", "Anthon"));
+		Arrays.asList("Leon", "Loen", "Thomas", "Anthon"));
 	
 	private transient List<String> gruppenListe = new ArrayList<>(
-			Arrays.asList("G1", "G2", "G3", null));
+		Arrays.asList("G1", "G2", "G3", null));
 	
 	private transient List<String> titelListe = new ArrayList<>(
-			Arrays.asList("Titel1", "Titel2", "Titel3", "Titel4"));
+		Arrays.asList("Titel1", "Titel2", "Titel3", "Titel4"));
 	
 	private transient List<String> beschreibungsListe = new ArrayList<>(
-			Arrays.asList("B1", "B2", "B3", "B4"));
+		Arrays.asList("B1", "B2", "B3", "B4"));
 	
 	private transient List<String> ortListe = new ArrayList<>(
-			Arrays.asList("O1", "O2", "O3", "O4"));
+		Arrays.asList("O1", "O2", "O3", "O4"));
 	
 	private transient LocalDateTime loeschdatum = LocalDateTime.of(1, 3, 1, 1, 1, 1, 1);
 	
 	private transient LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
 	
 	private transient List<LocalDateTime> loeschdatumListe = new ArrayList<>(
-			Arrays.asList(loeschdatum, loeschdatum, loeschdatum, loeschdatum));
+		Arrays.asList(loeschdatum, loeschdatum, loeschdatum, loeschdatum));
 	
 	private transient List<LocalDateTime> fristListe = new ArrayList<>(
-			Arrays.asList(frist, frist, frist, frist));
-	
+		Arrays.asList(frist, frist, frist, frist));
 	
 	private transient TerminfindungService service;
 	
@@ -126,7 +124,6 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
-	
 	@Test
 	public void loadTerminfindungByLinkKeineTreffer() {
 		int dummie = 0;
@@ -136,7 +133,6 @@ public class TerminfindungServiceTest {
 		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
 		assertThat(ergebnis).isEqualTo(null);
 	}
-	
 	
 	@Test
 	public void loadTerminfindungenByErstellerKeineTreffer() {
@@ -172,7 +168,6 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnisse.isEmpty()).isTrue();
 	}
 	
-	
 	@Test
 	public void loadTerminfindungenByGruppeEineTerminfindungVierVorschlaege() {
 		int anzahl = 4;
@@ -202,10 +197,8 @@ public class TerminfindungServiceTest {
 		when(terminRepository.findByGruppe(gruppenListe.get(0))).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
-				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
-						erstelleBeispielTerminfindungOhneTermine(dummie2)
-				)
-		);
+			Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
+				erstelleBeispielTerminfindungOhneTermine(dummie2)));
 		
 		List<Terminfindung> ergebnis = service.loadByGruppeOhneTermine(gruppenListe.get(0));
 		
@@ -228,10 +221,8 @@ public class TerminfindungServiceTest {
 		when(antwortRepository.findTerminfindungDbByBenutzer(benutzer)).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
-				Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
-						erstelleBeispielTerminfindungOhneTermine(dummie2)
-				)
-		);
+			Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
+				erstelleBeispielTerminfindungOhneTermine(dummie2)));
 		
 		List<Terminfindung> ergebnis = service.loadAllBenutzerHatAbgestimmtOhneTermine(benutzer);
 		
@@ -272,12 +263,11 @@ public class TerminfindungServiceTest {
 		return termine;
 	}
 	
-	
 	private List<LocalDateTime> erstelleVorschlaege(int anzahlTermine) {
 		List<LocalDateTime> terminVorschleage = new ArrayList<>();
 		for (int i = 0; i < anzahlTermine; i++) {
 			LocalDateTime termin = LocalDateTime.of(LocalDate.of(1, 1, 1),
-					LocalTime.of(1, 1, 1, 1)).plusDays(i);
+				LocalTime.of(1, 1, 1, 1)).plusDays(i);
 			
 			terminVorschleage.add(termin);
 		}
@@ -285,7 +275,7 @@ public class TerminfindungServiceTest {
 	}
 	
 	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerEineTerminfindung(
-			int dummie, int anzahlTermine) {
+		int dummie, int anzahlTermine) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		
@@ -329,7 +319,6 @@ public class TerminfindungServiceTest {
 		} else {
 			terminfindungDB.setModus(Modus.LINK);
 		}
-		
 		
 		terminfindungDBs.add(terminfindungDB);
 		return terminfindungDBs;

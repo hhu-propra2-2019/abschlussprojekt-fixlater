@@ -1,16 +1,16 @@
-package mops.termine2;
+package mops.termine2.services;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
-import mops.termine2.services.GruppeService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
