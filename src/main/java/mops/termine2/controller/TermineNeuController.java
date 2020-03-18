@@ -62,7 +62,9 @@ public class TermineNeuController {
 			/* Gruppen */
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			m.addAttribute("gruppen", gruppen);
-			m.addAttribute("gruppeSelektiert", gruppen.get(0));
+			Gruppe dummy = new Gruppe();
+			dummy.setId(-1L);
+			m.addAttribute("gruppeSelektiert", dummy);
 			
 			Terminfindung terminfindung = new Terminfindung();
 			terminfindung.setVorschlaege(new ArrayList<>());
