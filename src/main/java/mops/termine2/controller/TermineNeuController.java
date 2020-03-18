@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -127,4 +128,34 @@ public class TermineNeuController {
 		
 		return "redirect:/termine2";
 	}
+	
+	@PostMapping(path = "/termine-neu", params = "delete")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert, final HttpServletRequest request) {
+		if (p != null) {
+			authenticatedAccess.increment();
+			
+			// Account
+			Account account = authenticationService.createAccountFromPrincipal(p);
+			m.addAttribute(Konstanten.ACCOUNT, account);
+			
+			// Gruppen
+			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+			m.addAttribute("gruppen", gruppen);
+			
+			// Selektierte Gruppe
+			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+			
+			String test = request.getParameter("delete");
+			
+			Integer index = Integer.parseInt(request.getParameter("delete"));
+			
+			terminfindung.getVorschlaege().remove(index);
+			
+			m.addAttribute("terminfindung", terminfindung);
+		}
+		
+		return "termine-neu";
+	}
+	
 }
