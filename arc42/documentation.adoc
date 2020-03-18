@@ -287,6 +287,9 @@ Wir haben die Klasse Kommentar zu den model-Klassen hinzugefügt und einen Komme
 Der LinkService wurde korrigiert und in den Master gemerged. Wir haben Tests zum Kommentarservice hinzugefügt
 und im KommentarService wurde die delete Methode geändert.
 
+=== UmfrageAntwortService (Marcel)
+Der UmfrageAntwortService wurde erstellt und analog zum TerminAntwortService wurden die benötigten Methoden geschrieben. Passend dazu wurden auch Tests hinzugefügt, um die jeweiligen Methoden zu testen. Eventuell bleiben noch Änderungen offen. Dies ergibt sich aus weiteren Erfahrungen mit anderen Teilen des Projektes. 
+
 == Tag 12
 
 === UI (Ingrid, Anton, Thomas)
@@ -299,3 +302,9 @@ Nach Wünschen der anderen Teammitglieder haben wir den DB-Initializer so erweit
 studentin1, studentin2 und studentin3 immer eine Terminumfrage und eine Umfrage erstellt wrid.
 Für die Methode loadByLink im Kommentarservice haben wir Tests hinzugefügt. Aufgrund eines fehlschlagenden
 Tests haben wir Fehler im Kommentarservice entdeckt und korrigiert.
+
+=== UmfrageService (Leon, Marcel)
+Ein Fehler im Test wurde behoben und anschließend war die Bearbeitung dieser Klasse fertiggestellt.
+
+=== GruppeController (Leon, Marcel)
+Es wurden erste Überlegungen mit der Schnittstelle zum Projekt Gruppenbildung gemacht. Dazu wurden die Api und die angegebenen get-Anfragen sowie deren Rückgabe analysiert. Hier waren einige Fragen offen, welche durch die Tutoren beantwortet werden konnten. Eine Frage war beispielsweise, woher wir die groupIds bekommen, die für getGroup benötigt werden. Diese hat sich dadurch geklärt, dass die Anfrage updateGroups bereits alle nötigen Informationen (alle Gruppen mit Inhalt, die bis zur angegebenen Statusnummer geändert wurden) liefert. Dies hat in sofern geholfen, da uns vorher nicht klar war, welche Bedeutung die Statusnummer hat.
