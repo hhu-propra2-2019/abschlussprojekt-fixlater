@@ -308,3 +308,12 @@ Ein Fehler im Test wurde behoben und anschließend war die Bearbeitung dieser Kl
 
 === GruppeController (Leon, Marcel)
 Es wurden erste Überlegungen mit der Schnittstelle zum Projekt Gruppenbildung gemacht. Dazu wurden die Api und die angegebenen get-Anfragen sowie deren Rückgabe analysiert. Hier waren einige Fragen offen, welche durch die Tutoren beantwortet werden konnten. Eine Frage war beispielsweise, woher wir die groupIds bekommen, die für getGroup benötigt werden. Diese hat sich dadurch geklärt, dass die Anfrage updateGroups bereits alle nötigen Informationen (alle Gruppen mit Inhalt, die bis zur angegebenen Statusnummer geändert wurden) liefert. Dies hat in sofern geholfen, da uns vorher nicht klar war, welche Bedeutung die Statusnummer hat.
+
+== Tag 13
+
+=== (Ingrid, Anton, Thomas)
+neue-Termine Formular verbessert,
+Übersicht angepasst,
+re-direct zu Details,
+Controller für neue Termine fertiggestellt,
+Button für Gruppenauswahl auf Übersichtsseite zeigt richtige Gruppe an
