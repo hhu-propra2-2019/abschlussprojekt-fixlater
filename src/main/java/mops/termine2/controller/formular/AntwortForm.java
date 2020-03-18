@@ -1,6 +1,8 @@
 package mops.termine2.controller.formular;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import mops.termine2.enums.Antwort;
 import mops.termine2.models.TerminfindungAntwort;
 
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AntwortForm {
 	
 	public List<LocalDateTime> termine = new ArrayList<>();
@@ -18,11 +22,12 @@ public class AntwortForm {
 	
 	public String pseudonym;
 	
-	public AntwortForm(TerminfindungAntwort terminAntwort) {
+	public void init(TerminfindungAntwort terminAntwort) {
 		pseudonym = terminAntwort.getPseudonym();
 		save(terminAntwort.getAntworten());
 		sort();
 	}
+	
 	
 	private void save(HashMap<LocalDateTime, Antwort> antwortMap) {
 		for (LocalDateTime termin : antwortMap.keySet()) {

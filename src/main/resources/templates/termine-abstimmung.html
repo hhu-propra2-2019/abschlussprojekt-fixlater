@@ -70,7 +70,7 @@
 						<button class="btn btn-outline-warning">Zurücksetzen</button>
 					</div>
 
-					<form class="my-3" th:action="@{/termine-abstimmung/save(link=${terminfindung.getLink()})}"
+					<form class="my-3" th:action="@{/termine2/termine-abstimmung/save(link=${terminfindung.getLink()})}"
 					      th:object="${antwort}" method="post">
 						<div class="table-responsive">
 							<table class="table table-sm" style="text-align: center">
@@ -95,7 +95,7 @@
 										       name="abstimmung1"
 										       th:name="${termin}"
 										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="y"/>
+										       value="JA"/>
 
 									</th>
 									<th class="col-2 table-warning">
@@ -103,40 +103,40 @@
 										       name="abstimmung1"
 										       th:name="${termin}"
 										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="v"/>
+										       value="VIELLEICHT"/>
 									</th>
 									<th class="col-2 table-danger">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
 										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="n"/>
+										       value="NEIN"/>
 									</th>
 								</tr>
 
 								<tr>
 									<th class="col-5 bg-light">01.01.0001, 03:12</th>
 									<th class="col-2 table-primary">
-										<input type="radio" name="abstimmung2" value="y"/>
+										<input type="radio" name="abstimmung2" value="0"/>
 									</th>
 									<th class="col-2 table-warning">
-										<input type="radio" name="abstimmung2" value="m"/>
+										<input type="radio" name="abstimmung2" value="1"/>
 									</th>
 									<th class="col-2 table-danger">
-										<input type="radio" name="abstimmung2" value="n"/>
+										<input type="radio" name="abstimmung2" value="2"/>
 									</th>
 								</tr>
 
 								<tr>
 									<th class="col-5 bg-white">26.11.1997, 14:14</th>
 									<th class="col-2 table-primary">
-										<input type="radio" name="abstimmung3" value="y"/>
+										<input type="radio" name="abstimmung3" value="0"/>
 									</th>
 									<th class="col-2 table-warning">
-										<input type="radio" name="abstimmung3" value="m"/>
+										<input type="radio" name="abstimmung3" value="1"/>
 									</th>
 									<th class="col-2 table-danger">
-										<input type="radio" name="abstimmung3" value="n"/>
+										<input type="radio" name="abstimmung3" value="2"/>
 									</th>
 								</tr>
 								</tbody>

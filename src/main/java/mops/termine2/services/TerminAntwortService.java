@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+
 public class TerminAntwortService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
@@ -30,8 +31,11 @@ public class TerminAntwortService {
 	
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
-		antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
-		
+		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
+		System.out.println(antwort.getKuerzel());
+		System.out.println(terminVorschlag.getLink());
+		List<TerminfindungAntwortDB> antwortenToDelete = antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(), terminVorschlag.getLink());
+		antwortRepo.deleteAll(antwortenToDelete);
 		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
 			TerminfindungDB terminfindungDB = new TerminfindungDB();
@@ -64,7 +68,22 @@ public class TerminAntwortService {
 	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
-		return aktuelleOptionenEinfuegen(buildAntwortFromDB(terminfindungAntwortDBList), link);
+		
+		TerminfindungAntwort antwort = buildAntwortFromDB(terminfindungAntwortDBList);
+		if (antwort == null) {
+			antwort = erstelleLeereAntwort(benutzer, link);
+		}
+		
+		return aktuelleOptionenEinfuegen(antwort, link);
+	}
+	
+	private TerminfindungAntwort erstelleLeereAntwort(String benutzer, String link) {
+		TerminfindungAntwort antwort = new TerminfindungAntwort();
+		antwort.setPseudonym(benutzer);
+		antwort.setKuerzel(benutzer);
+		antwort.setLink(link);
+		antwort.setAntworten(new HashMap<>());
+		return antwort;
 	}
 	
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
@@ -72,6 +91,9 @@ public class TerminAntwortService {
 				antwortRepo.findAllByTerminfindungLink(link);
 		
 		List<TerminfindungAntwort> antworten = buildAntwortenFromDB(terminfindungAntwortDBList);
+		if (antworten == null) {
+			antworten = new ArrayList<>();
+		}
 		for (TerminfindungAntwort antwort : antworten) {
 			aktuelleOptionenEinfuegen(antwort, link);
 		}
@@ -124,7 +146,11 @@ public class TerminAntwortService {
 		HashMap<LocalDateTime, Antwort> alteAntworten = antwort.getAntworten();
 		for (TerminfindungDB db : terminfindungDBS) {
 			LocalDateTime termin = db.getTermin();
-			antworten.put(termin, alteAntworten.get(termin));
+			if (alteAntworten.get(termin) != null) {
+				antworten.put(termin, alteAntworten.get(termin));
+			} else {
+				antworten.put(termin, Antwort.VIELLEICHT);
+			}
 		}
 		antwort.setAntworten(antworten);
 		return antwort;
