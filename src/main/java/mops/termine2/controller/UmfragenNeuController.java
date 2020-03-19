@@ -88,9 +88,8 @@ public class UmfragenNeuController {
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			m.addAttribute("gruppen", gruppen);
 			
-//			List<String> vorschlaege = umfrage.getVorschlaege();
-//			vorschlaege.add("");
-			umfrage.getVorschlaege().add("");
+			List<String> vorschlaege = umfrage.getVorschlaege();
+			vorschlaege.add("");
 			
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("umfrage", umfrage);
