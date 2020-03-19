@@ -351,32 +351,30 @@ hinzugefügt , die Anlässlich der Implementierung des Abstimmens für Umfragen 
 finden könnten.
 
 ==== Details
-Wenn termine2/link aufgerufen wird wird entschieden ob die Abstimmungs oder Ergebnisseite Angezeigt wird : 
+Wenn termine2/link aufgerufen wird wird entschieden ob die Abstimmung oder Ergebnisseite Angezeigt wird : 
 
 image::ourimages/tag14/get-details.jpg[]
 Kommentar : Es könnte Logik eingefügt werden um sicher zu stellen , dass das Ergebnis erst nach der Frist angezeigt wird.
 (Abhängig von der Abstimmung (Interessant für die Umfrage)) 
 
 ==== Abstimmungs Übersicht
-Wenn termine2/link/abstimmung aufgerufen wird gelangt man auf die abstimmungs Seite der Umgrage "link"
+Wenn termine2/link/abstimmung aufgerufen wird gelangt man auf die Abstimmungs-Seite der Umfrage "link"
 Auf der Seite werden die Informationen zur Terminfindung angezeigt und 
 es besteht die Möglichkeit über die Termine abzustimmen und über einen Post abzustimmen , danach wird man auf die Ergebnis Seite Umgeleitet. 
 
 image::ourimages/tag14/get-termine-abstimmung.jpg[]
-Kommentar : Hier könnte noch Logik eingefügt  um den Nutzer zu informieren wie viele Stimmen er hat.
-
+Kommentar : Hier könnte noch Logik eingefügt um den Nutzer zu informieren wie viele Stimmen er hat.
 
 ==== Post Abstimmen
 
 image::ourimages/tag14/post-termine-abstimmung.jpg[]
 Kommentar : Hier könnte noch Logik eingefügt werden, um 
-sicherzustellen, dass ein nNtzer nur eine feste Anzahl 
+sicherzustellen, dass ein Nutzer nur eine feste Anzahl 
 an Stimmen hat die er abgibt und wenn die Regel nicht 
 erfüllt, des weiteren könnte Logik von Nöten sein ,
 die zum Beispiel prüft ob der Nutzer bereits abgestimmt 
 hat ,um Änderungen der Abstimmung zu vermeiden
 (Abhängig vom Abstimmungsmodus(Eher für Umfrage interessant)) 
-
 
 ==== get-Ergebnis
 Das (Zwischen)Ergebnis wird Angezeigt wenn der Link termine2/link/ergebnis aufgerufen wird und wenn man zumindest schon einmal einmal Abgestimmt hat.
@@ -385,5 +383,11 @@ Es ist ein Button dort , der auf die Abstimmung verweißt um seine Wahl zu ände
 
 image::ourimages/tag14/get-termine-ergebnis.jpg[]
 Kommentar:
-Der Button müsste bei Umfragen evtl entfernt werden 
+Der Button müsste bei Umfragen evtl. entfernt werden 
 (abhängig von der Umfrage)
+Es könnte Logik eingefügt werden um sicher zu stellen , 
+dass das Ergebnis erst nach der Frist angezerigt wird 
+oder erst wenn jemand abgestimmt hat
+(Abhängik von der Abstimmung (Interessant für die 
+Umfrage))
+
