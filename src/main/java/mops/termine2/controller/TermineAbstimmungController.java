@@ -226,13 +226,13 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
 			System.out.println("ErgebnisMussAngezeigtWeren");
-			return "redirect:/termine2/" + link + "termine-abstimmung";
+			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
 		LinkWrapper linkWrapper = new LinkWrapper(link);
 		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
 			System.out.println("Abstimmung wurde geupdated");
-			return "/termine-abstimmung?link=" + link;
+			return "redirect:/termine2/" + link;
 		}
 		
 		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
