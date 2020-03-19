@@ -150,25 +150,28 @@
 						<h2 class="h2">
 							Vorschläge
 						</h2>
-
+						
 						<div class="container mb-3">
-							<div class="col-sm-10" th:each="vorschlag, iter : *{vorschlaege}">
-								<input class="form-control" th:id="vorschlag+${iter.count}"
-								       type="text" placeholder="neuer Vorschlag"
-									   th:value="${vorschlag}"
-									   th:field="*{vorschlaege[__${iter.index}__]}"/>
-
-								<!-- button zum löschen eines Vorschlags -->
-								<div class="col-sm3" th:if="*{vorschlaege.size() > 1}">
-									<button class="btn btn-danger" name="delete" th:value="${iter.index}" type="submit">
-									Vorschlag löschen</button>
+							<div class="input-group mb-2"
+							     th:each="vorschlag, iter : *{vorschlaege}">
+								<input class="form-control" type="text" placeholder="Vorschlag"
+								       th:id="vorschlag + ${iter.count}"
+								       th:field="*{vorschlaege[__${iter.index}__]}"
+								       th:value="${vorschlag}"/>
+								
+								<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+									<button class="btn btn-outline-danger" name="delete"
+									        th:value="${iter.index}" type="submit">
+										Löschen
+									</button>
 								</div>
-
 							</div>
+							
 							<!-- Button für neue Vorschläge-->
 							<div class="row justify-content-center mt-1">
 								<button class="btn btn-outline-success" type="submit" name="add">
-								neuen Vorschlag hinzufügen</button>
+									Hinzufügen
+								</button>
 							</div>
 						</div>
 					</div>
