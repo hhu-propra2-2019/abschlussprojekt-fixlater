@@ -87,12 +87,12 @@ public class UmfrageService {
 		return null;
 	}
 	
-	public List<Umfrage> loadByErstellerOhneTermine(String ersteller) {
+	public List<Umfrage> loadByErstellerOhneUmfragen(String ersteller) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppeOhneTermine(String gruppe) {
+	public List<Umfrage> loadByGruppeOhneUmfragen(String gruppe) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
 		return getDistinctUmfragen(umfrageDBs);
 	}

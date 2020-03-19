@@ -33,13 +33,15 @@
 			<ul>
 				<li>
 					<a th:href="@{/termine2}">
-						<img src="../static/img/resized/calendar_small.jpg" th:src="@{/img/resized/calendar_small.jpg}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
 						Termine
 					</a>
 				</li>
 				<li>
 					<a th:href="@{/termine2/umfragen}">
-						<img src="../static/img/resized/survey_small.jpg" th:src="@{/img/resized/survey_small.jpg}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
 						Umfragen
 					</a>
 				</li>
@@ -60,24 +62,25 @@
 				<div class="btn-toolbar" style="font-size: small">
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
-						        data-toggle="dropdown" id="dropOperator" type="button" th:text="${selektierteGruppe}">
+						        data-toggle="dropdown" id="dropOperator" type="button"
+						        th:text="${selektierteGruppe}">
 							Alle Gruppen
 						</button>
 						
 						<!-- Auswählbare Gruppen -->
 						<div class="dropdown-menu" >
-							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}"
-							   th:value="${gruppe}">
-								Gruppe
+							<a class="dropdown-item" th:href="@{/termine2}">
+								Alle Gruppen
 							</a>
 							
 							<div th:if="*{termine.gruppen.size() > 0}">
 								<div class="dropdown-divider"></div>
 							</div>
-
-							<a class="dropdown-item" th:href="@{/termine2}">
-								Alle Gruppen
+							
+							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
+							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}"
+							   th:value="${gruppe}">
+								Gruppe
 							</a>
 						</div>
 					</div>
@@ -190,7 +193,7 @@
 							
 							<!-- Beschreibung -->
 							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
-							     th:if="${termin.beschreibung != null && termin.beschreibung != ''}"
+							     th:if="*{termin.beschreibung != null && termin.beschreibung != ''}"
 							     th:text="${#strings.abbreviate(termin.beschreibung,135)}">
 								Beschreibung
 							</div>
@@ -221,7 +224,7 @@
 										<span class="text-info" th:text="${termin.link}">
 											Link
 										</span>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>
