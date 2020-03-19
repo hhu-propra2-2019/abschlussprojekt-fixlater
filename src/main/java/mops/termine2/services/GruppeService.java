@@ -48,13 +48,8 @@ public class GruppeService {
 	}
 	
 	public boolean accountInGruppe(Account account, String gruppe) {
-		List<Gruppe> nutzerGruppen = loadByBenutzer(account);
-		for (Gruppe nutzerGruppe : nutzerGruppen) {
-			if (nutzerGruppe.getName().equals(gruppe)) {
-				return true;
-			}
-		}
-		return false;
+		String benutzer = account.getName();
+		return !benutzerGruppeRepository.findByBenutzerAndGruppe(benutzer, gruppe).isEmpty();
 	}
 	
 }
