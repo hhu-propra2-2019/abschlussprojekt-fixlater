@@ -247,7 +247,7 @@ Wochenziel:
 
 == Tag 11
 
-=== Abstimmungsfunktion(Jan)
+=== Abstimmungsfunktion(Termine)(Jan)
 
 Ziel wer es den Controller für die View termine-abstimmen anzulegen und dabei die Abstimmungsfunktion zu implementieren.
 Jedoch musste noch auf einige PullRequests gewartet werden.
@@ -255,13 +255,13 @@ Weshalb Ablaufpläne erstellt wurden.
 
 =====  Get(termine-abstimmung)
 
-image::flussDiaGetAbstimmung.jpg[]
+image::ourimages/tag11/flussDiaGetAbstimmung.jpg[]
 
 Eine Schwierigkeit , bei der über die Änderung einiger Methoden aus dem TermineAntwortService nachgedacht werden könnte , ist wie die Antwort geladen wird . Was wenn sich seit dem letzten Antworten eines Nutzers die Umfrage geändert hat(dabei will ich außer acht lassen , dass höchstens Termine hinzugefügt werden können , um den Code möglichst allgemein Zu halten) Es wäre eine Möglichkeit die geladene Antwort Klasse mit allen Antwortmöglichkeiten aufzufüllen und dann die Antworten für die jeweiligen Möglichkeiten zu laden.
 
 ===== Post(termine-abstimmung)
 
-image::flussDiaPostAbstimmung.jpg[]
+image::ourimages/tag11/flussDiaPostAbstimmung.jpg[]
 
 Eine Schwierigkeit wird es sein festzuhalten, zu welchem Termin eine Antwort gehört.
 Eine Lösung wäre es die Reihenfolge zu beachten, in der die TerminOptionen und Antworten stehen.
@@ -292,6 +292,13 @@ Der UmfrageAntwortService wurde erstellt und analog zum TerminAntwortService wur
 
 == Tag 12
 
+=== Implementierung der Antwort-Funktion(Termine)(Jan)
+
+Umsetzung der Plane des Vortages bezüglich der Logik der das Abstimmen unterliegt, einiges in den Services geändert um Code
+wiederverwertbar und die Methoden einfach zu hakten.
+Das Thymeleaf in der Abstimmungsseite wurde geschrieben.
+Es muss nun noch Debuggt werden. 
+
 === UI (Ingrid, Anton, Thomas)
 Views für Formulare fertiggestellt (neuer Termin/ neue Bestellung)
 Thymeleaf für Umfragenübersicht gemacht und notwendigen controller und service geschrieben.
@@ -317,3 +324,66 @@ neue-Termine Formular verbessert,
 re-direct zu Details,
 Controller für neue Termine fertiggestellt,
 Button für Gruppenauswahl auf Übersichtsseite zeigt richtige Gruppe an
+
+=== Implementierung der Antwort-Funktion und des Ergebnis(Jan)
+
+Beim Debugging mussten einige NullPointer gelöst werden , weshalb einig Services 
+angepasst und ein wenig refactored wurden.
+Das Loeschen von einträgen über die Query "deleteAllByTerminfindungLinkAndBenutzer" 
+funktionierte nicht , Lösung: 
+Die zu Löschende Objekte Laden und erst dann mit delete(Objekte) Löschen.
+
+Zudem gab es einige Fehler , die wohl auftraten , da die Datenbank noch ein veraltetes 
+schema hatte,docker-compose down, docker-Compose up löste das Problem.
+Anschließend weiter geplant wie das Ergebnis angezeigt werden sollte.
+
+Alls alle Probleme gelößt wurden ging es ans Refactoring.
+Dabei wurde auch Nachgedacht wie das Ergebnis angezeigt werden könnte: 
+Und die Grundlagen für die Implementierung geschaffen
+
+== Tag 14 
+
+=== Implementierung der Antwort-Funktion und des Ergebnis oder auch TerminAbstimmungsDetails(Jan)
+Bei dem Refactoring und dem Anzeigen des Ergebnisses ist einiges an Logik 
+hinzugekommen , welches wieder in Form von Flussdiagrammen versucht wurde Festzuhalten.
+Da das Abstimmen bei den Umfragen ähnlich Ablaufen wird , wurden einige Kommentare
+hinzugefügt , die Anlässlich der Implementierung des Abstimmens für Umfragen Beachtung 
+finden könnten.
+
+==== Details
+Wenn termine2/link aufgerufen wird wird entschieden ob die Abstimmungs oder Ergebnisseite Angezeigt wird : 
+
+image::ourimages/tag14/get-details.jpg[]
+Kommentar : Es könnte Logik eingefügt werden um sicher zu stellen , dass das Ergebnis erst nach der Frist angezeigt wird.
+(Abhängig von der Abstimmung (Interessant für die Umfrage)) 
+
+==== Abstimmungs Übersicht
+Wenn termine2/link/abstimmung aufgerufen wird gelangt man auf die abstimmungs Seite der Umgrage "link"
+Auf der Seite werden die Informationen zur Terminfindung angezeigt und 
+es besteht die Möglichkeit über die Termine abzustimmen und über einen Post abzustimmen , danach wird man auf die Ergebnis Seite Umgeleitet. 
+
+image::ourimages/tag14/get-termine-abstimmung.jpg[]
+Kommentar : Hier könnte noch Logik eingefügt  um den Nutzer zu informieren wie viele Stimmen er hat.
+
+
+==== Post Abstimmen
+
+image::ourimages/tag14/post-termine-abstimmung.jpg[]
+Kommentar : Hier könnte noch Logik eingefügt werden, um 
+sicherzustellen, dass ein nNtzer nur eine feste Anzahl 
+an Stimmen hat die er abgibt und wenn die Regel nicht 
+erfüllt, des weiteren könnte Logik von Nöten sein ,
+die zum Beispiel prüft ob der Nutzer bereits abgestimmt 
+hat ,um Änderungen der Abstimmung zu vermeiden
+(Abhängig vom Abstimmungsmodus(Eher für Umfrage interessant)) 
+
+
+==== get-Ergebnis
+Das (Zwischen)Ergebnis wird Angezeigt wenn der Link termine2/link/ergebnis aufgerufen wird und wenn man zumindest schon einmal einmal Abgestimmt hat.
+(Ansonsten redirect zur Abstimmung )
+Es ist ein Button dort , der auf die Abstimmung verweißt um seine Wahl zu ändern.
+
+image::ourimages/tag14/get-termine-ergebnis.jpg[]
+Kommentar:
+Der Button müsste bei Umfragen evtl entfernt werden 
+(abhängig von der Umfrage)
