@@ -133,7 +133,9 @@
 						<div class="container mb-3">
 							<div class="mb-2" th:each="vorschlag, iter : *{vorschlaege}">
 								<input class="form-control" th:id="vorschlag+${iter.count}"
-								       type="text" placeholder="neuer Vorschlag" th:value="${vorschlag}"/>
+								       type="text" placeholder="neuer Vorschlag"
+									   th:value="${vorschlag}"
+									   th:field="*{vorschlaege[__${iter.index}__]}"/>
 
 								<!-- button zum löschen eines Vorschlags -->
 								<div class="col-sm3" th:if="*{vorschlaege.size() > 1}">
