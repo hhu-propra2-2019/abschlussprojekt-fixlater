@@ -29,14 +29,14 @@ public class ErgebnisForm {
 	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung) {
 		termine = terminfindung.getVorschlaege();
 		LocalDateTimeManager.sortTermine(termine);
-		for (int i = 0; i < termine.size(); i++) {
+		for (LocalDateTime localDateTime : termine) {
 			int ja = 0;
 			int nein = 0;
 			int vielleicht = 0;
 			
 			for (TerminfindungAntwort antwort : antworten) {
 				HashMap<LocalDateTime, Antwort> antwortMap = antwort.getAntworten();
-				Antwort a = antwortMap.get(termine.get(i));
+				Antwort a = antwortMap.get(localDateTime);
 				if (a == Antwort.JA) {
 					ja++;
 				} else if (a == Antwort.NEIN) {
