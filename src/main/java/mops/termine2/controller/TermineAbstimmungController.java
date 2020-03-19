@@ -6,6 +6,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortForm;
+import mops.termine2.controller.formular.ErgebnisForm;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
@@ -82,7 +83,7 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
 			System.out.println("ErgebnisMussAngezeigtWeren");
-			return "redirect:/termine2/" + link + "termine-ergebnis";
+			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
 		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
@@ -129,7 +130,7 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
 			System.out.println("ErgebnisMussAngezeigtWeren");
-			return "redirect:/termine2/" + link + "termine-ergebnis";
+			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
 		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
@@ -152,6 +153,7 @@ public class TermineAbstimmungController {
 		
 		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		Account account;
+		List<TerminfindungAntwort> antworten;
 		
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -176,12 +178,16 @@ public class TermineAbstimmungController {
 		// muss dies hier noch abgefragt werden und evtl auf die
 		//Abstimmungsseite umgeleitet werden;
 		
-		LinkWrapper setLink = new LinkWrapper(link);
-		letzteTerminfindung.put(setLink, terminfindung);
+		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
+		if (!bereitsTeilgenommen) {
+			System.out.println("abstimmung");
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
 		
-		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
+		antworten = terminAntwortService.loadAllByLink(link);
+		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("ergebnis", terminfindung);
+		m.addAttribute("ergebnis", ergebnis);
 		
 		authenticatedAccess.increment();
 		
