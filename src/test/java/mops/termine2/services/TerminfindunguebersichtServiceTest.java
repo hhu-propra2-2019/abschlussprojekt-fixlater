@@ -84,7 +84,8 @@ public class TerminfindunguebersichtServiceTest {
 	
 	@Test
 	public void testLoadAbgeschlosseneTerminfindungenFuerBenutzer() {
-		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2));
+		List<Integer> fristTage = new ArrayList<>(Arrays.asList(5, -5, 1, -2));
+		List<Integer> ergebnisTage = new ArrayList<>(Arrays.asList(1, -2, -1, 2));
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
@@ -94,15 +95,17 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
 		
-		for (Integer day : days) {
+		for (int i = 0; i < fristTage.size(); i++) {
 			Terminfindung termin = new Terminfindung();
-			termin.setLink(day.toString());
-			termin.setFrist(ldt.plusDays(day));
+			termin.setLink(fristTage.get(i).toString());
+			termin.setFrist(ldt.plusDays(fristTage.get(i)));
+			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
-			terminDB.setLink(day.toString());
-			terminDB.setFrist(ldt.plusDays(day));
+			terminDB.setLink(fristTage.get(i).toString());
+			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
+			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -113,7 +116,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 		List<Terminfindung> erwartet =
-			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(3)));
+			new ArrayList<>(Arrays.asList(terminfindungen.get(3), terminfindungen.get(1)));
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
