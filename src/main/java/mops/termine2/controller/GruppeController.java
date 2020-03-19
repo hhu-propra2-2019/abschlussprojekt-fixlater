@@ -1,5 +1,6 @@
 package mops.termine2.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,10 @@ public class GruppeController {
 	
 	@Scheduled(fixedRate = 30000)
 	public void updateGruppe() {
-		System.out.println("Starte Update");
 		ResponseEntity<GruppenDTO> result;
 		try {
 			result = rt.getForEntity(url, GruppenDTO.class, statusnummer);
 		} catch (HttpClientErrorException e) {
-			System.out.println("Fehler");
 			return;
 		}
 		
@@ -53,19 +52,46 @@ public class GruppeController {
 			return;
 		}
 		
-		for (GruppeDTO gruppe : gruppeListe) {
-			if (!gruppe.getTitle().equals("null")) {
-				for (BenutzerDTO benutzerDTO : gruppe.getMembers()) {
-					BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
-					benutzerGruppeDB.setBenutzer(benutzerDTO.getUser_id());
-					benutzerGruppeDB.setGruppe(gruppe.getTitle());
-					benutzerGruppeDB.setGruppeId(Integer.toUnsignedLong(gruppe.getId()));
-					repository.save(benutzerGruppeDB);
+		for (GruppeDTO gruppeDTO : gruppeListe) {
+			String gruppe = gruppeDTO.getTitle();
+			Long gruppeId = Integer.toUnsignedLong(gruppeDTO.getId());
+			if (!gruppe.equals("null")) {
+				List<BenutzerDTO> members = gruppeDTO.getMembers();
+				List<String> aktuelleBenutzer = repository.findBenutzerByGruppeId(gruppeId);
+				List<String> neueBenutzer = new ArrayList<>();
+				
+				for (BenutzerDTO member : members) {
+					String benutzername = member.getUser_id();
+					if (!aktuelleBenutzer.contains(benutzername)) {
+						neueBenutzer.add(benutzername);
+					} else {
+						aktuelleBenutzer.remove(benutzername);
+					}
 				}
+				
+				benutzerHinzufuegen(neueBenutzer, gruppe, gruppeId);
+				
+				benutzerLoeschen(aktuelleBenutzer, gruppeId);
+				
 			} else {
-				repository.deleteAllByGruppeId(Integer.toUnsignedLong(gruppe.getId()));
+				repository.deleteAllByGruppeId(gruppeId);
 			}
 		}
 	}
 	
+	private void benutzerHinzufuegen(List<String> neueBenutzer, String gruppe, Long gruppeId) {
+		for (String benutzer : neueBenutzer) {
+			BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
+			benutzerGruppeDB.setBenutzer(benutzer);
+			benutzerGruppeDB.setGruppe(gruppe);
+			benutzerGruppeDB.setGruppeId(gruppeId);
+			repository.save(benutzerGruppeDB);
+		}
+	}
+	
+	private void benutzerLoeschen(List<String> benutzerliste, Long gruppeId) {
+		for (String benutzer : benutzerliste) {
+			repository.deleteByBenutzerAndGruppeId(benutzer, gruppeId);
+		}
+	}
 }

@@ -2,7 +2,9 @@ package mops.termine2.database;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,5 +16,13 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
 	
 	@Transactional
-	void deleteAllByGruppeId(Long id);
+	void deleteAllByGruppeId(Long gruppeId);
+	
+	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
+	
+	@Query("select db.benutzer from BenutzerGruppeDB db where db.gruppeId like :gruppeId")
+	List<String> findBenutzerByGruppeId(@Param("gruppeId") Long gruppeId);
+	
+	@Transactional
+	void deleteByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 }
