@@ -37,6 +37,7 @@ public class TerminfindungService {
 			terminfindungDB.setBeschreibung(terminfindung.getBeschreibung());
 			terminfindungDB.setGruppe(terminfindung.getGruppe());
 			terminfindungDB.setTermin(termin);
+			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
 			
 			if (terminfindung.getGruppe() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
@@ -92,6 +93,7 @@ public class TerminfindungService {
 			terminfindung.setGruppe(ersterTermin.getGruppe());
 			terminfindung.setLink(ersterTermin.getLink());
 			terminfindung.setErsteller(ersterTermin.getErsteller());
+			terminfindung.setErgebnis(ersterTermin.getErgebnis());
 			
 			List<LocalDateTime> terminMoeglichkeiten = new ArrayList<>();
 			for (TerminfindungDB termin : termineDB) {
@@ -130,6 +132,7 @@ public class TerminfindungService {
 		terminfindung.setGruppe(db.getGruppe());
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
+		terminfindung.setErgebnis(db.getErgebnis());
 		
 		return terminfindung;
 	}
