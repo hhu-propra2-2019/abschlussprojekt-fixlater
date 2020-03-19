@@ -58,7 +58,7 @@
 				<h1 class="h1">Neue Umfrage</h1>
 			</div>
 			
-			<form class="row" method="post">
+			<form class="row" method="post" th:action="@{/termine2/umfragen-neu}" th:object="${umfrage}">
 				<div class="col">
 					<!-- Übersicht -->
 					<div class="mb-3 border-bottom">
@@ -68,7 +68,7 @@
 							</label>
 							
 							<input class="form-control" id="titel" name="titel" type="text"
-							       required placeholder="Worum geht es?" value=""/>
+							       required placeholder="Worum geht es?" th:value="*{titel}"/>
 						</div>
 						
 						<!-- Erreichbarkeit -->
@@ -79,17 +79,17 @@
 							
 							<select class="custom-select" id="erreichbarkeit"
 							        th:if="${gruppen.size() == 0}" disabled>
-								<option value="0" selected>Link</option>
+								<option selected th:value="-1">Link</option>
 							</select>
 							
-							<select class="custom-select" id="erreichbarkeit"
-							        th:if="${gruppen.size() != 0}">
-								<option value="0" selected>Link</option>
+							<select class="custom-select"
+							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+								<option selected value="-1">Link</option>
 								
 								<optgroup label="Gruppen">
 									<option th:each="gruppe, iter : ${gruppen}"
-									        th:value="${iter.count}"
-									        th:text="${gruppe}">Gruppe</option>
+									        th:value="${gruppen[__${iter.index}__].id}"
+									        th:text="${gruppe.name}">Gruppe</option>
 								</optgroup>
 							</select>
 							
@@ -131,15 +131,27 @@
 						
 						
 						<div class="container mb-3">
-							<div class="mb-2" th:each="vorschlag, iter : ${vorschlaege}">
+							<div class="mb-2" th:each="vorschlag, iter : *{vorschlaege}">
 								<input class="form-control" th:id="vorschlag+${iter.count}"
-								       type="text" placeholder="Vorschlag" th:value="${vorschlag}"/>
+								       type="text" placeholder="neuer Vorschlag" th:value="${vorschlag}"/>
+
+								<!-- button zum löschen eines Vorschlags -->
+								<div class="col-sm3" th:if="*{vorschlaege.size() > 1}">
+									<button class="btn btn-danger" name="delete" th:value="${iter.index}" type="submit">
+									Vorschlag löschen</button>
+								</div>
+
+							</div>
+							<!-- Button für neue Vorschläge-->
+							<div class="row justify-content-center mt-1">
+								<button class="btn btn-outline-success" type="submit" name="add">
+								neuen Vorschlag hinzufügen</button>
 							</div>
 						</div>
 					</div>
 					
 					<div class="row justify-content-center">
-						<button class="btn btn-success" type="submit">
+						<button class="btn btn-success" type="submit" name="create">
 							Erstellen
 						</button>
 					</div>
