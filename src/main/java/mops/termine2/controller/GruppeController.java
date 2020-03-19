@@ -2,6 +2,7 @@ package mops.termine2.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +20,7 @@ import mops.termine2.models.GruppenDTO;
 @EnableScheduling
 public class GruppeController {
 	
+	@Autowired
 	private BenutzerGruppeRepository repository;
 	
 	private int statusnummer = 0;
@@ -43,7 +45,6 @@ public class GruppeController {
 		}
 		
 		gruppen = result.getBody();
-		System.out.println(gruppen);
 		
 		try {
 			gruppeListe = gruppen.getGroupList();
@@ -54,16 +55,15 @@ public class GruppeController {
 		
 		for (GruppeDTO gruppe : gruppeListe) {
 			if (!gruppe.getTitle().equals("null")) {
-				System.out.println(gruppe.getTitle());
 				for (BenutzerDTO benutzerDTO : gruppe.getMembers()) {
 					BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
 					benutzerGruppeDB.setBenutzer(benutzerDTO.getUser_id());
 					benutzerGruppeDB.setGruppe(gruppe.getTitle());
 					benutzerGruppeDB.setGruppeId(Integer.toUnsignedLong(gruppe.getId()));
-					// repository.save(benutzerGruppeDB);
+					repository.save(benutzerGruppeDB);
 				}
 			} else {
-				System.out.println(gruppe.getTitle());
+				repository.deleteAllByGruppeId(Integer.toUnsignedLong(gruppe.getId()));
 			}
 		}
 	}
