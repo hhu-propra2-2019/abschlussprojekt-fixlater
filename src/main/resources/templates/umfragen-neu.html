@@ -141,7 +141,7 @@
 							
 							<textarea class="form-control" id="beschreibung" type="text"
 							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
-							          rows="4"></textarea>
+							          rows="3" th:field="*{beschreibung}"></textarea>
 						</div>
 					</div>
 					
@@ -150,8 +150,7 @@
 						<h2 class="h2">
 							Vorschläge
 						</h2>
-						
-						
+
 						<div class="container mb-3">
 							<div class="mb-2" th:each="vorschlag, iter : *{vorschlaege}">
 								<input class="form-control" th:id="vorschlag+${iter.count}"
