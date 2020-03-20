@@ -185,7 +185,8 @@ public class TermineAbstimmungController {
 		}
 		
 		antworten = terminAntwortService.loadAllByLink(link);
-		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
+		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
+			account.getName(), link);
 		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
