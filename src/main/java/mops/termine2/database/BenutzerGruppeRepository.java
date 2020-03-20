@@ -1,6 +1,7 @@
 package mops.termine2.database;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,5 +28,8 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	
 	@Transactional
 	void deleteByBenutzerAndGruppeId(String benutzer, Long gruppeId);
+	
+	@Query("select distinct db.gruppe from BenutzerGruppeDB db where db.gruppeId like :gruppeId")
+	Optional<String> findGruppeByGruppeId(@Param("gruppeId") Long gruppeId);
 	
 }

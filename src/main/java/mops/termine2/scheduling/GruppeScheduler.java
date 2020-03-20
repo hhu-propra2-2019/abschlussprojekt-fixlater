@@ -2,6 +2,7 @@ package mops.termine2.scheduling;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,10 @@ public class GruppeScheduler {
 			String gruppe = gruppeDTO.getTitle();
 			Long gruppeId = Integer.toUnsignedLong(gruppeDTO.getId());
 			if (!gruppe.equals("null")) {
+				Optional<String> aktuellerGruppentitel = repository.findGruppeByGruppeId(gruppeId);
+				if (aktuellerGruppentitel.isPresent() && !aktuellerGruppentitel.get().equals(gruppe)) {
+					repository.deleteAllByGruppeId(gruppeId);
+				}
 				List<BenutzerDTO> members = gruppeDTO.getMembers();
 				List<String> aktuelleBenutzer = repository.findBenutzerByGruppeId(gruppeId);
 				List<String> neueBenutzer = new ArrayList<>();
