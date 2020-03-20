@@ -39,4 +39,14 @@ public class LocalDateTimeManagerTest {
 		assertThat(input).isEqualTo(expected);
 	}
 	
+	@Test
+	public void toStringTest() {
+		LocalDateTime test = LocalDateTime.of(2020, 3, 20, 14, 14);
+		String expected = "Fr. 20.3.2020 14:14";
+		
+		String result = LocalDateTimeManager.toString(test);
+		
+		assertThat(result).isEqualTo(expected);
+	}
+	
 }
