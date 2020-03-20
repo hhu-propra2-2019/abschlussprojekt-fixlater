@@ -58,6 +58,7 @@ public class UmfragenuebersichtService {
 		
 		return abgeschlosseneUmfragen;
 	}
+	
 	/**
 	 * Geht die Umfragen durch und filtert nach offenen die zu einem Nutzer gehören
 	 * @param account
