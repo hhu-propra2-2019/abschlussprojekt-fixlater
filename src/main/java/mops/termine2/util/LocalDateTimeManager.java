@@ -42,7 +42,7 @@ public class LocalDateTimeManager {
 			weekday = "Sa.";
 		}
 		
-		int monthZiffer0 = dayOfMonth % 10;
+		int monthZiffer0 = month % 10;
 		int monthZiffer1 = month / 10 % 10;
 		int dayZiffer0 = dayOfMonth % 10;
 		int dayZiffer1 = dayOfMonth / 10 % 10;
@@ -50,7 +50,8 @@ public class LocalDateTimeManager {
 		int minuteZiffer1 = time.getMinute() / 10 % 10;
 		int stundeZiffer0 = time.getHour() % 10;
 		int stundeZiffer1 = time.getHour() / 10 % 10;
-		String datum = weekday + " " + dayZiffer1 + "" + dayZiffer0 + "." + month + "." + year;
+		String datum = weekday + " "
+			+ dayZiffer1 + "" + dayZiffer0 + "." + monthZiffer1 + "" + monthZiffer0 + "." + year;
 		String uhrzeit = stundeZiffer1 + "" + stundeZiffer0 + ":" + minuteZiffer1 + "" + minuteZiffer0;
 		return datum + " " + uhrzeit;
 	}
