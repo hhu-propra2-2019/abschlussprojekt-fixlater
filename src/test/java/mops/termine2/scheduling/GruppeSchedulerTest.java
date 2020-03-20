@@ -2,6 +2,7 @@ package mops.termine2.scheduling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,12 @@ public class GruppeSchedulerTest {
 		+ "}, { \"email\":\"string3\", \"familyname\": \"string3\", \"givenname\": \"string3\", \"user_id\":"
 		+ " \"string3\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
 		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"string\", \"type\": \"SIMPLE\","
+		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
+	
+	private static String groupNew3 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
+		+ "[ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": "
+		+ "\"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
+		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"stringNeu\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
 	private static String groupDelete = "{ \"groupList\": [ { \"description\": \"null\", \"id\": 0, \"members\": "
@@ -141,6 +148,28 @@ public class GruppeSchedulerTest {
 		scheduler.updateGruppe();
 		
 		verify(bgrepo, times(1)).deleteByBenutzerAndGruppeId("string2", 0L);
+		verify(bgrepo, times(1)).save(erwartetNeu);
+	}
+	
+	@Test
+	public void aendereGruppenname() {
+		when(bgrepo.findBenutzerByGruppeId(0L))
+			.thenReturn(new ArrayList<String>());
+		when(bgrepo.findGruppeByGruppeId(0L))
+			.thenReturn(Optional.of("string"));
+		BenutzerGruppeDB erwartetNeu = new BenutzerGruppeDB();
+		erwartetNeu.setBenutzer("string1");
+		erwartetNeu.setGruppe("stringNeu");
+		erwartetNeu.setGruppeId(0L);
+		
+		server.expect(ExpectedCount.once(),
+			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withSuccess(groupNew3, MediaType.APPLICATION_JSON));
+		
+		scheduler.updateGruppe();
+		
+		verify(bgrepo, times(1)).deleteAllByGruppeId(0L);
 		verify(bgrepo, times(1)).save(erwartetNeu);
 	}
 	
