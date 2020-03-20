@@ -15,6 +15,8 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
 	
+	List<BenutzerGruppeDB> findByBenutzerAndGruppe(String benutzer, String gruppe);
+	
 	@Transactional
 	void deleteAllByGruppeId(Long gruppeId);
 	
@@ -25,4 +27,5 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	
 	@Transactional
 	void deleteByBenutzerAndGruppeId(String benutzer, Long gruppeId);
+	
 }
