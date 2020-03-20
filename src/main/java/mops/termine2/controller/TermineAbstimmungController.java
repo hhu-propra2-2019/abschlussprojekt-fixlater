@@ -178,8 +178,9 @@ public class TermineAbstimmungController {
 		// muss dies hier noch abgefragt werden und evtl auf die
 		//Abstimmungsseite umgeleitet werden;
 		
+		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (!bereitsTeilgenommen) {
+		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
 			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
