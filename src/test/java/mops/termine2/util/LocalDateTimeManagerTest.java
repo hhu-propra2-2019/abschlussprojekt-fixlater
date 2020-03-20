@@ -52,7 +52,7 @@ public class LocalDateTimeManagerTest {
 	@Test
 	public void toStringTest202012201414() {
 		LocalDateTime test = LocalDateTime.of(2020, 12, 20, 14, 14);
-		String expected = "Fr. 20.12.2020 14:14";
+		String expected = "Sa. 20.12.2020 14:14";
 		
 		String result = LocalDateTimeManager.toString(test);
 		
