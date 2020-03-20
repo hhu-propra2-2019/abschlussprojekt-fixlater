@@ -19,7 +19,7 @@ import mops.termine2.models.GruppenDTO;
 
 @Component
 @EnableScheduling
-public class GruppeController {
+public class GruppeScheduler {
 	
 	@Autowired
 	private BenutzerGruppeRepository repository;
