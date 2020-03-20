@@ -146,7 +146,7 @@
 					</div>
 					
 					<!-- Vorschläge -->
-					<div>
+					<div class="mb-3 pb-3 border-bottom">
 						<h2 class="h2">
 							Vorschläge
 						</h2>
@@ -175,6 +175,20 @@
 									Hinzufügen
 								</button>
 							</div>
+						</div>
+						
+						<div class="mb-3 form-group">
+							<label for="maxAntwortAnzahl">
+								Höchstanzahl an Stimmen je Nutzer
+							</label>
+							
+							<input class="form-control"
+							       id="maxAntwortAnzahl" name="maxAntwortAnzahl"
+							       type="number" required
+							       min="1" th:attr="max=*{vorschlaege.size()}"
+							       placeholder="Wie viele Stimmen darf ein Nutzer höchstens vergeben?"
+							       th:value="*{maxAntwortAnzahl == null || maxAntwortAnzahl < 1 ?
+							                 1 : maxAntwortAnzahl}"/>
 						</div>
 					</div>
 					
