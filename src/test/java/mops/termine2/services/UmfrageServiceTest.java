@@ -101,7 +101,7 @@ public class UmfrageServiceTest {
 		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		erwartet.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis = service.loadByErstellerOhneTermine(ERSTELLER[0]).get(0);
+		Umfrage ergebnis = service.loadByErstellerOhneUmfragen(ERSTELLER[0]).get(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -120,8 +120,8 @@ public class UmfrageServiceTest {
 		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 0, 1, 1, 1);
 		erwartet2.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis1 = service.loadByErstellerOhneTermine(ERSTELLER[0]).get(0);
-		Umfrage ergebnis2 = service.loadByErstellerOhneTermine(ERSTELLER[0]).get(1);
+		Umfrage ergebnis1 = service.loadByErstellerOhneUmfragen(ERSTELLER[0]).get(0);
+		Umfrage ergebnis2 = service.loadByErstellerOhneUmfragen(ERSTELLER[0]).get(1);
 		
 		assertThat(erwartet1).isEqualTo(ergebnis1);
 		assertThat(erwartet2).isEqualTo(ergebnis2);
@@ -135,7 +135,7 @@ public class UmfrageServiceTest {
 		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		erwartet.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis = service.loadByGruppeOhneTermine(GRUPPE[0]).get(0);
+		Umfrage ergebnis = service.loadByGruppeOhneUmfragen(GRUPPE[0]).get(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
@@ -154,8 +154,8 @@ public class UmfrageServiceTest {
 		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 1, 0, 1, 1);
 		erwartet2.setVorschlaege(new ArrayList<String>());
 		
-		Umfrage ergebnis1 = service.loadByGruppeOhneTermine(GRUPPE[0]).get(0);
-		Umfrage ergebnis2 = service.loadByGruppeOhneTermine(GRUPPE[0]).get(1);
+		Umfrage ergebnis1 = service.loadByGruppeOhneUmfragen(GRUPPE[0]).get(0);
+		Umfrage ergebnis2 = service.loadByGruppeOhneUmfragen(GRUPPE[0]).get(1);
 		
 		assertThat(erwartet1).isEqualTo(ergebnis1);
 		assertThat(erwartet2).isEqualTo(ergebnis2);

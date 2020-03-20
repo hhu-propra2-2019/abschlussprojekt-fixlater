@@ -26,6 +26,11 @@ public class TerminfindunguebersichtService {
 		this.gruppeService = gruppeService;
 	}
 	
+	/**
+	 * Geht die Termine durch und filtert nach offenen die zu einer Gruppe gehören
+	 * @param gruppe
+	 * @return eine Liste von offenen Terminabstimmungen nach Gruppe
+	 */
 	public List<Terminfindung> loadOffeneTerminfindungenFuerGruppe(String gruppe) {
 		List<Terminfindung> termine = new ArrayList<>();
 		List<Terminfindung> offeneTermine = new ArrayList<>();
@@ -37,10 +42,14 @@ public class TerminfindunguebersichtService {
 				offeneTermine.add(termin);
 			}
 		}
-		
 		return offeneTermine;
 	}
 	
+	/**
+	 * Geht die Termine durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
+	 * @param gruppe
+	 * @return eine Liste von abgeschlossenen Terminabstimmungen nach Gruppe
+	 */
 	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerGruppe(String gruppe) {
 		List<Terminfindung> termine = new ArrayList<>();
 		List<Terminfindung> abgeschlosseneTermine = new ArrayList<>();
@@ -60,6 +69,11 @@ public class TerminfindunguebersichtService {
 		return abgeschlosseneTermine;
 	}
 	
+	/**
+	 * Geht die Termine durch und filtert nach offenen die zu einem Nutzer gehören
+	 * @param account
+	 * @return eine Liste von offenen Terminabstimmungen nach Nutzer
+	 */
 	public List<Terminfindung> loadOffeneTerminfindungenFuerBenutzer(Account account) {
 		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
 		
@@ -73,6 +87,11 @@ public class TerminfindunguebersichtService {
 		return offeneTermine;
 	}
 	
+	/**
+	 * Geht die Termine durch und filtert nach abgeschlossenen die zu einem Nutzer gehören
+	 * @param account
+	 * @return eine Liste von abgeschlossenen Terminabstimmungen nach Nutzer
+	 */
 	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerBenutzer(Account account) {
 		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
 		
@@ -145,6 +164,11 @@ public class TerminfindunguebersichtService {
 		return terminesortiert;
 	}
 	
+	/**
+	 * Lädt alle Termine zu einem Bestimmten Nutzer
+	 * @param account
+	 * @return Liste von Terminen eines Nutzers
+	 */
 	private List<Terminfindung> getTermineVonBenutzer(Account account) {
 		List<Terminfindung> termine = new ArrayList<>();
 		termine.addAll(terminfindungService.loadByErstellerOhneTermine(account.getName()));
