@@ -392,3 +392,14 @@ Umfrage))
 
 === Terminübersicht (Thomas)
 In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer angezeigt inklusive der Termine, die nur über einen Link erreichbar sind, an denen der Benutzer aber bereits teilgenommen hat. Die abgeschlossenen Termine (Termine, bei denen die Frist bereits abgelaufen ist) werden nach dem Ergebnis der Abstimmung sortiert. Dabei werden die aös nächstes anstehenden Termine oben angezeigt und die, die bereits in der Vergangenheit liegen ganz unten.
+
+=== Neue Umfrage (Anton)
+GetMapping und PostMappings geschrieben damit man im Formular neue Umfragen Vorschläge hinzufügen kann
+und die entsprechende HTML Seite um nötige Thymeleaf Attribute erweitert.
+
+
+== Tag 15
+
+=== UI Neue Umfragen (Anton, Ingrid)
+Formular für neue Termine wurde komplett überholt und die UX (Funktion/Optik) wurde deutlich verbessert.
+Formular für neue Umfragen ist jetzt vollständig mit allen input Komponenten und die VIEW ist verfollständigt und überarbeitet worden. Jetzt werden falsche Eingaben korrekt abgefangen und die Bedienung ist einfacher.
