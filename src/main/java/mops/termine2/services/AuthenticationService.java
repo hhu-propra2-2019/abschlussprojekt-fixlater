@@ -12,6 +12,11 @@ import java.util.Set;
 @Service
 public class AuthenticationService {
 	
+	/**
+	 * Generiert einen Account mit einem KeyCloak Token 
+	 * @param principal Ein java-security Interface welches einen Nutzer representiert
+	 * @return Account
+	 */
 	public Account createAccountFromPrincipal(Principal principal) {
 		if (principal instanceof KeycloakAuthenticationToken) {
 			KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) principal;

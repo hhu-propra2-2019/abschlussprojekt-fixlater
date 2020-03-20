@@ -28,6 +28,11 @@ public class TerminAntwortService {
 		terminRepo = terminfindungRepository;
 	}
 	
+	/**
+	 * Speichert Antworten zu einer Terminabstimmung
+	 * @param antwort
+	 * @param terminVorschlag
+	 */
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
 		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
@@ -55,6 +60,14 @@ public class TerminAntwortService {
 		antwortRepo.deleteByLink(link);
 	}
 	
+
+	/**
+	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 * @param benutzer
+	 * @param link
+	 * @return gibt eine Antwort zu einer Terminfindung
+	 */
+
 	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
@@ -74,8 +87,20 @@ public class TerminAntwortService {
 		antwort.setLink(link);
 		antwort.setAntworten(new HashMap<>());
 		return antwort;
+
+	/**
+	 * Löscht alle Antworten nach Link
+	 * @param link
+	 */
+	public void deleteAllByLink(String link) {
+		antwortRepo.deleteByLink(link);
 	}
 	
+	/**
+	 * Lädt alle Antworten die zu einem Link gehören
+	 * @param link
+	 * @return eine Liste von Antworten
+	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 				antwortRepo.findAllByTerminfindungLink(link);
