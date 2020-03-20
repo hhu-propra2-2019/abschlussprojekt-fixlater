@@ -82,26 +82,25 @@
 								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
 									 chen: Blau und Gelb lassen sich besser unterschei-
 									 den als Grün und Gelb. -->
-								<th class="col bg-secondary" style="width: 10%;">
+								<th class="col bg-secondary" style="width: 1%;">
 									Meine
 								</th>
-								<th class="col bg-secondary" style="width: 40%;">Termin</th>
-								<th class="col bg-secondary" style="width: 40%;"> Überblick</th>
-								<th class="col bg-secondary" style="width: 10%;"></th>
+								<th class="col bg-secondary" style="width: 45%;">Termin</th>
+								<th class="col bg-secondary" style="width: 49%;"> Überblick</th>
+								<th class="col bg-secondary" style="width: 5%;"></th>
 							</tr>
 							</thead>
 
 							<tbody th:each="termin,terminStat: ${ergebnis.termineString}">
 							<tr>
 								<!-- abwechselnd bg-white / bg-light -->
-								<th class="col bg-light" style="width: 10%;">
-									<div class="progress" style="width: 15px;height: 15px">
-										<div class="progress-bar bg-primary" role="progressbar" style="width: 100%;"
-										     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-									</div>
+								<th class="col " style="width: 1%;"
+								    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'bg-primary'
+								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning': 'bg-danger' )">
+
 								</th>
-								<th class="col bg-light" th:text="${termin}" style="width: 40%;">25.02.2084, 12:15</th>
-								<th class="col bg-light" style="width: 40%;">
+								<th class="col bg-light" th:text="${termin}" style="width: 45%;">25.02.2084, 12:15</th>
+								<th class="col bg-light" style="width: 49%;">
 									<div class="progress">
 										<div class="progress-bar bg-primary" role="progressbar"
 										     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${terminStat.index}__]} +'%;'"
@@ -126,7 +125,7 @@
 										></div>
 									</div>
 								</th>
-								<th class="col bg-light" style="width: 10%;"></th>
+								<th class="col bg-light" style="width: 5%;"></th>
 							</tr>
 							</tbody>
 						</table>

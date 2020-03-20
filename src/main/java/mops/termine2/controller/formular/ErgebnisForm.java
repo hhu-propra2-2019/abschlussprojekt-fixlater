@@ -38,6 +38,10 @@ public class ErgebnisForm {
 	
 	List<Double> anteilStimmenNein = new ArrayList<>();
 	
+	List<Boolean> isNutzerAntwortJa = new ArrayList<>();
+	
+	List<Boolean> isNutzerAntwortVielleicht = new ArrayList<>();
+	
 	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung,
 						TerminfindungAntwort nutzerAbstimmung) {
 		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
@@ -75,7 +79,12 @@ public class ErgebnisForm {
 			anteilStimmenJa.add(jaAnteil);
 			anteilStimmenVielleicht.add(vielleichtAnteil);
 			anteilStimmenNein.add(neinAnteil);
+			
+			isNutzerAntwortJa.add(nutzerAntwortenMap.get(localDateTime).equals(Antwort.JA));
+			isNutzerAntwortVielleicht.add(nutzerAntwortenMap.get(localDateTime).equals(Antwort.VIELLEICHT));
 		}
 	}
+	
+	
 }
 
