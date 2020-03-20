@@ -22,18 +22,23 @@ import mops.termine2.models.GruppenDTO;
 @EnableScheduling
 public class GruppeScheduler {
 	
-	@Autowired
 	private BenutzerGruppeRepository repository;
 	
 	private int statusnummer = 0;
 	
 	private final String url = "http://localhost:8082/gruppen2/api/updateGroups/{status}";
 	
-	private RestTemplate template = new RestTemplate();
+	private RestTemplate template;
 	
 	private GruppenDTO gruppen;
 	
 	private List<GruppeDTO> gruppeListe;
+	
+	@Autowired
+	public GruppeScheduler(BenutzerGruppeRepository repo, RestTemplate rt) {
+		repository = repo;
+		template = rt;
+	}
 	
 	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
