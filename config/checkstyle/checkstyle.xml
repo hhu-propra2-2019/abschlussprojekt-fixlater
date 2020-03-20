@@ -12,7 +12,7 @@
 	  <property name="files" value=".+\.(?:html|sql|css|properties|js|map|yarn-integrity)$"/>
 	</module>
     <module name="SuppressionSingleFilter">
-      <property name="files" value=".+\.(?:png|gif|jpg|jpeg)$"/>
+      <property name="files" value=".+\.(?:png|gif|jpg|jpeg|woff|woff2)$"/>
       <property name="checks" value=".*"/>
     </module>
 
