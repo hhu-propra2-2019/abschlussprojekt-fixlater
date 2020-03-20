@@ -152,18 +152,20 @@
 						</h2>
 						
 						<div class="container mb-3">
-							<div class="input-group mb-2"
+							<div class="form-group mb-2"
 							     th:each="vorschlag, iter : *{vorschlaege}">
-								<input class="form-control" type="text" placeholder="Vorschlag"
-								       th:id="vorschlag + ${iter.count}"
-								       th:field="*{vorschlaege[__${iter.index}__]}"
-								       th:value="${vorschlag}"/>
-								
-								<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
-									<button class="btn btn-outline-danger" name="delete"
-									        th:value="${iter.index}" type="submit">
-										Löschen
-									</button>
+								<div class="input-group">
+									<input class="form-control" type="text" placeholder="Vorschlag"
+									       th:id="vorschlag + ${iter.count}"
+									       th:field="*{vorschlaege[__${iter.index}__]}"
+									       th:value="${vorschlag}"/>
+									
+									<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+										<button class="btn btn-outline-danger" name="delete"
+										        th:value="${iter.index}" type="submit">
+											Löschen
+										</button>
+									</div>
 								</div>
 							</div>
 							
@@ -186,32 +188,32 @@
 							<div class="input-group date"
 							     id="frist"
 							     data-target-input="nearest">
-								<input type="text"
-								       class="form-control datetimepicker-input"
-								       data-target="#frist"
-								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
-								       th:field="*{frist}"/>
-								
-								<div class="input-group-append"
+								<div class="input-group-prepend"
 								     data-target="#frist"
 								     data-toggle="datetimepicker">
 									<div class="input-group-text">
 										<i class="fa fa-calendar"></i>
 									</div>
 								</div>
-							</div>
-						</div>
-						
-						<script type="text/javascript">
-							$(function () {
-								var pickerID = '#frist';
 								
-								$(pickerID).datetimepicker({
-									format: 'DD.MM.YYYY, HH:mm',
-									locale: 'de'
+								<input type="text"
+								       class="form-control datetimepicker-input"
+								       data-target="#frist"
+								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+								       th:field="*{frist}"/>
+							</div>
+							
+							<script type="text/javascript">
+								$(function () {
+									var pickerID = '#frist';
+									
+									$(pickerID).datetimepicker({
+										format: 'DD.MM.YYYY, HH:mm',
+										locale: 'de'
+									});
 								});
-							});
-						</script>
+							</script>
+						</div>
 					</div>
 					
 					<div class="row justify-content-center">
