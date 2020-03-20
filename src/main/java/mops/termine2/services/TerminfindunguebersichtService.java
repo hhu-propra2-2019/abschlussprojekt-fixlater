@@ -24,9 +24,13 @@ public class TerminfindunguebersichtService {
 	@Autowired
 	private GruppeService gruppeService;
 	
-	public TerminfindunguebersichtService(TerminfindungService terminfindungService, GruppeService gruppeService) {
+	public TerminfindunguebersichtService(TerminfindungService terminfindungService,
+										  GruppeService gruppeService,
+										  TerminAntwortService
+											  terminAntwortService) {
 		this.terminfindungService = terminfindungService;
 		this.gruppeService = gruppeService;
+		this.terminAntwortService = terminAntwortService;
 	}
 	
 	/**
