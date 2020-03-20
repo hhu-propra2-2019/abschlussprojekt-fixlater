@@ -18,6 +18,10 @@ public class LinkService {
 	
 	private transient UmfrageRepository umfrageRepo;
 	
+	/**
+	 * Generiert einen eindeutigen Link
+	 * @return eindeutiger Link
+	 */
 	public String generiereEindeutigenLink() {
 		String link = UUID.randomUUID().toString();
 		
@@ -28,6 +32,11 @@ public class LinkService {
 		return link;
 	}
 	
+	/**
+	 * Prüft ob ein Link eindeutig ist
+	 * @param link vom Link Generator übergeben
+	 * @return boolean zur Bestätigung der Eindeutigkeit
+	 */
 	public Boolean pruefeEindeutigkeitLink(String link) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByLink(link);
 		List<UmfrageDB> umfrageDBs = umfrageRepo.findByLink(link);

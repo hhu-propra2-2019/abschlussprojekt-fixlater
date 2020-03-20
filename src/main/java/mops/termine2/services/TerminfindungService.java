@@ -24,6 +24,10 @@ public class TerminfindungService {
 		this.antwortRepo = antwortRepo;
 	}
 	
+	/**
+	 * Speichert eine neue Terminfindung in der DB
+	 * @param terminfindung
+	 */
 	public void save(Terminfindung terminfindung) {
 		
 		for (LocalDateTime termin : terminfindung.getVorschlaege()) {
@@ -48,11 +52,18 @@ public class TerminfindungService {
 		}
 	}
 	
+	/**
+	 * Löscht eine Terminfindung und zugehörige Antworten nach Link
+	 * @param link
+	 */
 	public void loescheByLink(String link) {
 		antwortRepo.deleteByLink(link);
 		terminfindungRepo.deleteByLink(link);
 	}
 	
+	/**
+	 * Löscht eine abgelaufene Terminfindung und zugehörige Antworten
+	 */
 	public void loescheAbgelaufene() {
 		LocalDateTime timeNow = LocalDateTime.now();
 		antwortRepo.loescheAelterAls(timeNow);
