@@ -26,30 +26,39 @@ public class LocalDateTimeManager {
 		int year = time.getYear();
 		
 		String weekday;
-		if (dayOfWeek == 0) {
+		switch (dayOfWeek) {
+		case 0:
 			weekday = "So.";
-		} else if (dayOfWeek == 1) {
+			break;
+		case 1:
 			weekday = "Mo.";
-		} else if (dayOfWeek == 2) {
+			break;
+		case 2:
 			weekday = "Di.";
-		} else if (dayOfWeek == 3) {
+			break;
+		case 3:
 			weekday = "Mi.";
-		} else if (dayOfWeek == 4) {
+			break;
+		case 4:
 			weekday = "Do.";
-		} else if (dayOfWeek == 5) {
+			break;
+		case 5:
 			weekday = "Fr.";
-		} else {
+			break;
+		default:
 			weekday = "Sa.";
+			
+			
 		}
 		
-		int monthZiffer0 = month % 10;
-		int monthZiffer1 = month / 10 % 10;
-		int dayZiffer0 = dayOfMonth % 10;
-		int dayZiffer1 = dayOfMonth / 10 % 10;
-		int minuteZiffer0 = time.getMinute() % 10;
-		int minuteZiffer1 = time.getMinute() / 10 % 10;
-		int stundeZiffer0 = time.getHour() % 10;
-		int stundeZiffer1 = time.getHour() / 10 % 10;
+		int monthZiffer0 = IntegerToolkit.getFirstZiffer(month);
+		int monthZiffer1 = IntegerToolkit.getSecoundZiffer(month);
+		int dayZiffer0 = IntegerToolkit.getFirstZiffer(dayOfMonth);
+		int dayZiffer1 = IntegerToolkit.getSecoundZiffer(dayOfMonth);
+		int minuteZiffer0 = IntegerToolkit.getFirstZiffer(time.getMinute());
+		int minuteZiffer1 = IntegerToolkit.getSecoundZiffer(time.getMinute());
+		int stundeZiffer0 = IntegerToolkit.getFirstZiffer(time.getHour());
+		int stundeZiffer1 = IntegerToolkit.getSecoundZiffer(time.getHour());
 		String datum = weekday + " "
 			+ dayZiffer1 + "" + dayZiffer0 + "." + monthZiffer1 + "" + monthZiffer0 + "." + year;
 		String uhrzeit = stundeZiffer1 + "" + stundeZiffer0 + ":" + minuteZiffer1 + "" + minuteZiffer0;
@@ -62,6 +71,14 @@ public class LocalDateTimeManager {
 			result.add(toString(time));
 		}
 		return result;
+	}
+	
+	private static int getFirstZiffer(int zahl) {
+		return zahl % 10;
+	}
+	
+	private static int getSecoundZiffer(int zahl) {
+		return zahl / 10 % 10;
 	}
 	
 	
