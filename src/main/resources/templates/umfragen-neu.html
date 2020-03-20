@@ -146,7 +146,7 @@
 					</div>
 					
 					<!-- Vorschläge -->
-					<div>
+					<div class="mb-3 pb-3 border-bottom">
 						<h2 class="h2">
 							Vorschläge
 						</h2>
@@ -176,13 +176,20 @@
 								</button>
 							</div>
 						</div>
-					</div>
-					
-					<!-- Anzahl der Auswahloptionen -->
-					<div class="row justify-content-center">
-    					<input class="form-control col-sm-4" id="titel" name="maxAntwortAnzahl" type="text"
-        					required placeholder="Wieviele Antworten dürfen ausgewählt werden?" 
-        					th:value="*{maxAntwortAnzahl}"/>
+						
+						<div class="mb-3 form-group">
+							<label for="maxAntwortAnzahl">
+								Höchstanzahl an Stimmen je Nutzer
+							</label>
+							
+							<input class="form-control"
+							       id="maxAntwortAnzahl" name="maxAntwortAnzahl"
+							       type="number" required
+							       min="1" th:attr="max=*{vorschlaege.size()}"
+							       placeholder="Wie viele Stimmen darf ein Nutzer höchstens vergeben?"
+							       th:value="*{maxAntwortAnzahl == null || maxAntwortAnzahl < 1 ?
+							                 1 : maxAntwortAnzahl}"/>
+						</div>
 					</div>
 					
 					<!-- Frist -->
