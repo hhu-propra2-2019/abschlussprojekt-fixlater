@@ -126,13 +126,6 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		}
 	}
 	
-	private LocalDateTime setzeDatumZukunftOderVergangenheit(double entscheidungswert) {
-		if (entscheidungswert < ENTSCHEIDUNGSWERT1) {
-			return LocalDateTime.now().minusDays(new Random().nextInt(30));
-		}
-		return LocalDateTime.now().plusDays(new Random().nextInt(60));
-	}
-	
 	public void fakeTerminfindungGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
 										double entscheidungswert) {
 		
@@ -142,6 +135,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String titel = faker.friends().quote();
 		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
 		LocalDateTime loeschdatum = frist.plusDays(90);
+		LocalDateTime ergebnis = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(4);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
@@ -156,6 +150,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setModus(Modus.GRUPPE);
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
+			terminfindungdb.setErgebnis(ergebnis);
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -197,6 +192,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(new Random().nextInt(90))
 			.minusDays(new Random().nextInt(90));
+		LocalDateTime ergebnis = LocalDateTime.now().plusDays(new Random().nextInt(90))
+			.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = new Random().nextInt(3);
 		
@@ -211,6 +208,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setModus(Modus.LINK);
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
+			terminfindungdb.setErgebnis(ergebnis);
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -378,5 +376,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			
 			this.kommentarRepository.save(kommentarDB);
 		});
+	}
+	
+	private LocalDateTime setzeDatumZukunftOderVergangenheit(double entscheidungswert) {
+		if (entscheidungswert < ENTSCHEIDUNGSWERT1) {
+			return LocalDateTime.now().minusDays(new Random().nextInt(30));
+		}
+		return LocalDateTime.now().plusDays(new Random().nextInt(60));
 	}
 }
