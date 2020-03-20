@@ -71,10 +71,10 @@ public class TermineUebersichtController {
 				terminfindungenAbgeschlossen = terminfindunguebersichtService
 					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 			} else {
-				terminfindungenOffen =
-					terminfindunguebersichtService.loadOffeneTerminfindungenFuerGruppe(gruppe);
+				terminfindungenOffen = terminfindunguebersichtService
+					.loadOffeneTerminfindungenFuerGruppe(account, gruppe);
 				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(gruppe);
+					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe);
 			}
 			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 				terminfindungenOffen, gruppenNamen);

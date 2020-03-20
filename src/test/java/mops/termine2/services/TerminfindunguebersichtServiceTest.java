@@ -5,6 +5,7 @@ import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
+import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,17 +34,19 @@ public class TerminfindunguebersichtServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
+	private transient TerminAntwortService terminAntwortService;
+	
 	@BeforeEach
 	public void setUp() {
-		antwortRepo = mock(TerminfindungAntwortRepository.class);
 		terminfindungRepository = mock(TerminfindungRepository.class);
-		terminfindungService = new TerminfindungService(terminfindungRepository, antwortRepo);
-		
+		antwortRepo = mock(TerminfindungAntwortRepository.class);
 		benutzerGruppeRepository = mock(BenutzerGruppeRepository.class);
-		gruppeService = new GruppeService(benutzerGruppeRepository);
 		
+		terminfindungService = new TerminfindungService(terminfindungRepository, antwortRepo);
+		terminAntwortService = new TerminAntwortService(antwortRepo, terminfindungRepository);
+		gruppeService = new GruppeService(benutzerGruppeRepository);
 		terminfindunguebersichtService = new TerminfindunguebersichtService(
-			terminfindungService, gruppeService);
+			terminfindungService, gruppeService, terminAntwortService);
 	}
 	
 	@Test
@@ -70,6 +73,10 @@ public class TerminfindunguebersichtServiceTest {
 			terminfindungenDB.add(terminDB);
 		}
 		
+		when(antwortRepo.findByBenutzerAndTerminfindungLink(account.getName(), "5")).thenReturn(
+			new ArrayList<TerminfindungAntwortDB>());
+		when(antwortRepo.findByBenutzerAndTerminfindungLink(account.getName(), "1")).thenReturn(
+			new ArrayList<TerminfindungAntwortDB>());
 		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
 			new ArrayList<>(Arrays.asList(gruppe)));
 		when(terminfindungRepository.findByGruppe(gruppe.getGruppe())).thenReturn(terminfindungenDB);
@@ -77,7 +84,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
 		List<Terminfindung> erwartet =
-			new ArrayList<>(Arrays.asList(terminfindungen.get(0), terminfindungen.get(2)));
+			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(0)));
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}

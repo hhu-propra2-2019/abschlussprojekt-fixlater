@@ -209,12 +209,18 @@
 								
 								<div class="mt-2" style="text-align: center">
 									<form th:action="@{/termine2}" method="post">
-										<!-- Falls der Nutzer schon an der Abstimmung teilgenommen
-										     hat, dann btn-outline-info, ansonsten btn-primary. -->
 										<button class="btn btn-outline-info"
 										        style="font-size: small" type="submit"
-										        name="details" th:value="${termin.link}">
+										        name="details"
+												th:value="${termin.link}"
+												th:if="${termin.teilgenommen}">
 											Details
+										</button>
+										<button class="btn btn-primary" style="font-size: small"
+												type="submit" name="details"
+												th:value="*{termin.link}"
+												th:if="!${termin.teilgenommen}">
+											Abstimmen
 										</button>
 									</form>
 									
