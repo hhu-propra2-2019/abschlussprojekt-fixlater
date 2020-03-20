@@ -30,6 +30,7 @@ public class TerminAntwortService {
 	
 	/**
 	 * Speichert Antworten zu einer Terminabstimmung
+	 *
 	 * @param antwort
 	 * @param terminVorschlag
 	 */
@@ -37,14 +38,14 @@ public class TerminAntwortService {
 		
 		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
 		List<TerminfindungAntwortDB> antwortenToDelete =
-				antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
-						terminVorschlag.getLink());
+			antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
+				terminVorschlag.getLink());
 		
 		antwortRepo.deleteAll(antwortenToDelete);
 		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
 			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminVorschlag.getLink(),
-					termin);
+				termin);
 			
 			db.setAntwort(antwort.getAntworten().get(termin));
 			db.setBenutzer(antwort.getKuerzel());
@@ -56,21 +57,18 @@ public class TerminAntwortService {
 		}
 	}
 	
-	public void deleteAllByLink(String link) {
-		antwortRepo.deleteByLink(link);
-	}
 	
-
 	/**
 	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 *
 	 * @param benutzer
 	 * @param link
 	 * @return gibt eine Antwort zu einer Terminfindung
 	 */
-
+	
 	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
-				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
+			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
 		
 		TerminfindungAntwort antwort = buildAntwortFromDB(terminfindungAntwortDBList);
 		if (antwort == null) {
@@ -87,9 +85,11 @@ public class TerminAntwortService {
 		antwort.setLink(link);
 		antwort.setAntworten(new HashMap<>());
 		return antwort;
-
+	}
+	
 	/**
 	 * Löscht alle Antworten nach Link
+	 *
 	 * @param link
 	 */
 	public void deleteAllByLink(String link) {
@@ -98,12 +98,13 @@ public class TerminAntwortService {
 	
 	/**
 	 * Lädt alle Antworten die zu einem Link gehören
+	 *
 	 * @param link
 	 * @return eine Liste von Antworten
 	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
-				antwortRepo.findAllByTerminfindungLink(link);
+			antwortRepo.findAllByTerminfindungLink(link);
 		
 		List<TerminfindungAntwort> antworten = buildAntwortenFromDB(terminfindungAntwortDBList);
 		if (antworten == null) {
@@ -117,8 +118,8 @@ public class TerminAntwortService {
 	
 	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
 		List<TerminfindungAntwortDB> antworten =
-				antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
-						link);
+			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
+				link);
 		if (antworten.isEmpty()) {
 			return false;
 		}
@@ -149,8 +150,8 @@ public class TerminAntwortService {
 					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
 						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
 							antworten.put(terminfindungAntwortDB
-											.getTerminfindung().getTermin(),
-									terminfindungAntwortDB.getAntwort());
+									.getTerminfindung().getTermin(),
+								terminfindungAntwortDB.getAntwort());
 						}
 					}
 					antwort.setAntworten(antworten);
