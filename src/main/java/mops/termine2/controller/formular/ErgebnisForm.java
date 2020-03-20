@@ -42,12 +42,22 @@ public class ErgebnisForm {
 	
 	List<Boolean> isNutzerAntwortVielleicht = new ArrayList<>();
 	
+	boolean fristNichtAbgelaufen = false;
+	
 	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung,
 						TerminfindungAntwort nutzerAbstimmung) {
 		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
 		termine = terminfindung.getVorschlaege();
 		LocalDateTimeManager.sortTermine(termine);
 		anzahlAntworten = antworten.size();
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (terminfindung.getFrist().isBefore(now)) {
+			fristNichtAbgelaufen = false;
+		} else {
+			fristNichtAbgelaufen = true;
+		}
+		
 		for (LocalDateTime localDateTime : termine) {
 			int ja = 0;
 			int nein = 0;
