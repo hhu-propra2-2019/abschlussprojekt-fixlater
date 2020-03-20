@@ -319,8 +319,7 @@ Es wurden erste Überlegungen mit der Schnittstelle zum Projekt Gruppenbildung g
 == Tag 13
 
 === (Ingrid, Anton, Thomas)
-neue-Termine Formular verbessert,
-Übersicht angepasst,
+Beim erstellen neuer Terminfindungen können jetzt einzelne Terminvorschläge hinzugefügt und entfernt werden. Die Funktionalität nach Gruppen zu filtern wurde in der Terminübersicht hinzugefügt. Hierzu werden alle Gruppen eines Benutzers in einme Dropdown Menü angezeigt.
 re-direct zu Details,
 Controller für neue Termine fertiggestellt,
 Button für Gruppenauswahl auf Übersichtsseite zeigt richtige Gruppe an
@@ -391,3 +390,5 @@ oder erst wenn jemand abgestimmt hat
 (Abhängik von der Abstimmung (Interessant für die 
 Umfrage))
 
+=== Terminübersicht (Thomas)
+In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer angezeigt inklusive der Termine, die nur über einen Link erreichbar sind, an denen der Benutzer aber bereits teilgenommen hat. Die abgeschlossenen Termine (Termine, bei denen die Frist bereits abgelaufen ist) werden nach dem Ergebnis der Abstimmung sortiert. Dabei werden die aös nächstes anstehenden Termine oben angezeigt und die, die bereits in der Vergangenheit liegen ganz unten.
