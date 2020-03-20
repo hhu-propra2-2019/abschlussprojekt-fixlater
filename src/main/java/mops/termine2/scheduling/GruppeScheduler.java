@@ -1,4 +1,4 @@
-package scheduling;
+package mops.termine2.scheduling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import mops.termine2.database.BenutzerGruppeRepository;
@@ -28,7 +29,7 @@ public class GruppeScheduler {
 	
 	private final String url = "http://localhost:8082/gruppen2/api/updateGroups/{status}";
 	
-	private RestTemplate rt = new RestTemplate();
+	private RestTemplate template = new RestTemplate();
 	
 	private GruppenDTO gruppen;
 	
@@ -36,10 +37,11 @@ public class GruppeScheduler {
 	
 	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
+		System.out.println("Starte Update");
 		ResponseEntity<GruppenDTO> result;
 		try {
-			result = rt.getForEntity(url, GruppenDTO.class, statusnummer);
-		} catch (HttpClientErrorException e) {
+			result = template.getForEntity(url, GruppenDTO.class, statusnummer);
+		} catch (HttpClientErrorException | ResourceAccessException e) {
 			return;
 		}
 		
