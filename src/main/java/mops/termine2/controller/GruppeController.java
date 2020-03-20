@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +17,7 @@ import mops.termine2.models.BenutzerDTO;
 import mops.termine2.models.GruppeDTO;
 import mops.termine2.models.GruppenDTO;
 
-@Controller
+@Component
 @EnableScheduling
 public class GruppeController {
 	
@@ -34,7 +34,7 @@ public class GruppeController {
 	
 	private List<GruppeDTO> gruppeListe;
 	
-	@Scheduled(fixedRate = 30000)
+	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
 		ResponseEntity<GruppenDTO> result;
 		try {
@@ -94,4 +94,5 @@ public class GruppeController {
 			repository.deleteByBenutzerAndGruppeId(benutzer, gruppeId);
 		}
 	}
+	
 }
