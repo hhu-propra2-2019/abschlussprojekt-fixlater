@@ -94,9 +94,12 @@
 							<tbody th:each="termin,terminStat: ${ergebnis.termineString}">
 							<tr>
 								<!-- abwechselnd bg-white / bg-light -->
-								<th class="col " style="width: 2%;"
+								<th class="col text-white" style="width: 2%;"
 								    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'bg-primary'
-								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning': 'bg-danger' )">
+								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning': 'bg-danger' )"
+
+								    th:text="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'J'
+								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'V': 'N' )">
 
 								</th>
 								<th class="col bg-light" th:text="${termin}" style="width: 38%;">25.02.2084, 12:15</th>
