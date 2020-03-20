@@ -69,64 +69,43 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h2 class="h2">Zeiten</h2>
 
-						<button class="btn btn-outline-warning">Zurücksetzen</button>
+						<a th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
+							<button class="btn btn-success">Abstimmung ändern</button>
+						</a>
 					</div>
 
-					<form class="my-3" th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
-					      th:object="${antwort}" method="post">
-						<div class="table-responsive">
-							<table class="table table-sm" style="text-align: center">
-								<thead>
-								<tr>
-									<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
-										 chen: Blau und Gelb lassen sich besser unterschei-
-										 den als Grün und Gelb. -->
-									<th class="col-5 bg-secondary">Termin</th>
-									<th class="col-2 bg-primary"> Ja</th>
-									<th class="col-2 bg-warning"> Vielleicht</th>
-									<th class="col-2 bg-danger"> Nein</th>
-								</tr>
-								</thead>
 
-								<tbody th:remove="all-but-first" th:each="termin,terminStat: *{termine}" }>
-								<tr>
-									<!-- abwechselnd bg-white / bg-light -->
-									<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
-									<th class="col-2 table-primary">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="JA"/>
+					<div class="table-responsive">
+						<table class="table table-sm" style="text-align: center">
+							<thead>
+							<tr>
+								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
+									 chen: Blau und Gelb lassen sich besser unterschei-
+									 den als Grün und Gelb. -->
+								<th class="col-5 bg-secondary">Termin</th>
+								<th class="col-2 bg-primary"> Ja</th>
+								<th class="col-2 bg-warning"> Vielleicht</th>
+								<th class="col-2 bg-danger"> Nein</th>
+							</tr>
+							</thead>
 
-									</th>
-									<th class="col-2 table-warning">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="VIELLEICHT"/>
-									</th>
-									<th class="col-2 table-danger">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="NEIN"/>
-									</th>
-								</tr>
-								</tbody>
-							</table>
-						</div>
-
-						<div style="text-align: center">
-							<input type="text" name="pseudonym" placeholder="Benjamin"
-							       th:placeholder="*{getBenutzer()}"
-							       th:field="${antwort.pseudonym}"
-							>
-							<button class="btn btn-primary" type="submit" name="sichern">Abschicken</button>
-						</div>
-					</form>
+							<tbody th:each="termin,terminStat: ${ergebnis.termine}">
+							<tr>
+								<!-- abwechselnd bg-white / bg-light -->
+								<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
+								<th class="col-2 table-primary"
+								    th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}">7
+								</th>
+								<th class="col-2 table-warning"
+								    th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}">8
+								</th>
+								<th class="col-2 table-danger"
+								    th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}">9
+								</th>
+							</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 
 				<!-- Kommentare -->
