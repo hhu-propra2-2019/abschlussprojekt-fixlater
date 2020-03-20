@@ -15,6 +15,12 @@ public class KommentarService {
 	
 	private transient KommentarRepository kommentarRepo;
 	
+	/**
+	 * Speichert einen Kommentar mit zugehörigen
+	 * Link, Inhalt, Pseudonym und ErstellungsDatum
+	 * in einer KommentarDB
+	 * @param kommentar bekommt einen Kommentar übergeben
+	 */
 	public void save(Kommentar kommentar) {
 		KommentarDB kommentarDB = new KommentarDB();
 		kommentarDB.setLink(kommentar.getLink());

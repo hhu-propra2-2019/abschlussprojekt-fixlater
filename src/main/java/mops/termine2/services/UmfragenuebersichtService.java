@@ -19,6 +19,11 @@ public class UmfragenuebersichtService {
 	@Autowired
 	private GruppeService gruppeService;
 	
+	/**
+	 * Geht die Umfragen durch und filtert nach offenen die zu einer Gruppe gehören
+	 * @param gruppe
+	 * @return eine Liste von offenen Umfragen nach Gruppe
+	 */
 	public List<Umfrage> loadOffeneUmfragenFuerGruppe(String gruppe) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
@@ -34,6 +39,11 @@ public class UmfragenuebersichtService {
 		return offeneUmfragen;
 	}
 	
+	/**
+	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
+	 * @param gruppe
+	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
+	 */
 	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(String gruppe) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Umfrage> abgeschlosseneUmfragen = new ArrayList<>();
@@ -49,17 +59,30 @@ public class UmfragenuebersichtService {
 		return abgeschlosseneUmfragen;
 	}
 	
+	/**
+	 * Geht die Umfragen durch und filtert nach offenen die zu einem Nutzer gehören
+	 * @param account
+	 * @return eine Liste von offenen Umfragen nach Nutzer
+	 */
 	public List<Umfrage> loadOffeneUmfragenFuerBenutzer(Account account) {
+		
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
+		
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) > 0) {
 				offeneUmfragen.add(umfrage);
 			}
 		}
+		
 		return offeneUmfragen;
 	}
 	
+	/**
+	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einem Nutzer gehören
+	 * @param account
+	 * @return eine Liste von abgeschlossenen Umfragen nach Nutzer
+	 */
 	public List<Umfrage> loadAbgeschlosseneUmfragenFuerBenutzer(Account account) {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		List<Umfrage> abgeschlosseneUmfragen = new ArrayList<>();

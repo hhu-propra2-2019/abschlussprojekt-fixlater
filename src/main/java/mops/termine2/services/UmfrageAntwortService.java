@@ -23,6 +23,11 @@ public class UmfrageAntwortService {
 		antwortRepo = umfrageAntwortRepository;
 	}
 	
+	/**
+	 * Speichert Antworten zu einer Umfragenabstimmung
+	 * @param antwort
+	 * @param umfrage
+	 */
 	public void abstimmen(UmfrageAntwort antwort, Umfrage umfrage) {
 		
 		antwortRepo.deleteAllByUmfrageLinkAndBenutzer(umfrage.getLink(), antwort.getBenutzer());
@@ -54,16 +59,31 @@ public class UmfrageAntwortService {
 		}
 	}
 	
+	/**
+	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 * @param benutzer
+	 * @param link
+	 * @returngibt eine Antwort zu einer Umfrage
+	 */
 	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
 		return buildAntwortFromDB(umfrageAntwortDBs);
 	}
 	
+	/**
+	 * Lädt alle Antworten die zu einem Link gehören
+	 * @param link
+	 * @return eine Liste von Antworten
+	 */
 	public List<UmfrageAntwort> loadAllByLink(String link) {
 		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findAllByUmfrageLink(link);
 		return buildAntwortenFromDB(umfrageAntwortDBs);
 	}
 	
+	/**
+	 * Löscht alle Antworten nach Link
+	 * @param link
+	 */
 	public void deleteAllByLink(String link) {
 		antwortRepo.deleteAllByUmfrageLink(link);
 	}
