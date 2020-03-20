@@ -1,12 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{mopslayout :: html(name='Terminfindung', headcontent=~{:: headcontent},
-                  navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Terminfindung', title='Neue Umfrage',
+                  headcontent=~{:: headcontent}, navigation=~{:: navigation},
+                  bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>Neue Umfrage</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		        crossorigin="anonymous"></script>
+		
+		<!-- PopperJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"
+		        integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
+		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		        crossorigin="anonymous"></script>
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
+		
+		<!-- MomentJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+		        integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
+		        crossorigin="anonymous"></script>
+		
+		<!-- Tempus Dominus -->
+		<link rel="stylesheet"
+		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
+		      crossorigin="anonymous" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
+		        crossorigin="anonymous"></script>
 	</th:block>
 </head>
 
@@ -14,76 +53,191 @@
 	<header>
 		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
 			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-			<div align="center">
-			</div>
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
 		</nav>
 	</header>
 	
 	<main th:fragment="bodycontent">
-		<!-- Restlichen Inhalt hier einfügen! -->
-		
-		<header>
-			<h1>Neue Umfrage:</h1>
-		</header>
-		
-		<div>
-			<form method="POST">
-				<div class="form-group ">
-					<label class="col-sm-4 control-label">Titel:</label>
-					
-					<div class="col-sm-6">
-						<input id="titel" type="text" required name="titel" class="form-control"
-						       value=""/>
-					</div>
-				</div>
-				
-				<div class="form-group ">
-					<label class="col-sm-4 control-label">Beschreibung:</label>
-					
-					<div class="col-sm-6">
-						<textarea id="beschreibung" name="beschreibung" class="form-control"
-						          rows="4">
-						</textarea>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-4 control-label">Sichbarkeit der Umfrage:</label>
-					
-					<div class="col-sm-8">
-						<div class="radio">
-							<label>
-								<input type="radio" name="editable" id="editableByAll" checked
-								       value="1">
-									Gruppenmitglieder
-								</input>
+		<div class="container mb-3">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Neue Umfrage</h1>
+			</div>
+			
+			<form class="row" method="post" th:action="@{/termine2/umfragen-neu}" th:object="${umfrage}">
+				<div class="col">
+					<!-- Übersicht -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 form-group">
+							<label for="titel">
+								Titel
 							</label>
 							
-							<label>
-								<input type="radio" name="editable" value="2">Link</input>
+							<input class="form-control" id="titel" name="titel" type="text"
+							       required placeholder="Worum geht es?" th:value="*{titel}"/>
+						</div>
+						
+						<!-- Erreichbarkeit -->
+						<div class="mb-3 form-group">
+							<label for="erreichbarkeit">
+								Erreichbarkeit
 							</label>
+							
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() == 0}" disabled>
+								<option selected th:value="-1">Link</option>
+							</select>
+							
+							<select class="custom-select"
+							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+								<option selected value="-1">Link</option>
+								
+								<optgroup label="Gruppen">
+									<option th:each="gruppe, iter : ${gruppen}"
+									        th:value="${gruppen[__${iter.index}__].id}"
+									        th:text="${gruppe.name}">Gruppe</option>
+								</optgroup>
+							</select>
+							
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+									kennen. Der Link wird dabei automatisch vom System generiert.
+								</p>
+								
+								<p>
+									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+									ausgewählten Gruppe sichtbar.
+									
+									<span class="text-warning" th:if="${gruppen.size() == 0}">
+										Diese Option ist aber nicht verfügbar, da es im Moment keine
+										Gruppenzugehörigkeit gibt.
+									</span>
+								</p>
+							</div>
+						</div>
+						
+						<!-- Beschreibung -->
+						<div class="mb-3 form-group">
+							<label class="text-secondary" for="beschreibung">
+								Beschreibung (optional)
+							</label>
+							
+							<textarea class="form-control" id="beschreibung" type="text"
+							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
+							          rows="3" th:field="*{beschreibung}"></textarea>
 						</div>
 					</div>
-				</div>
-				
-				<div class="form-group ">
-					<label class="col-sm-4 control-label">Option 1:</label>
 					
-					<div class="col-sm-6">
-						<textarea id="beschreibung" name="beschreibung" class="form-control"
-						          rows="2">
-						</textarea>
+					<!-- Vorschläge -->
+					<div class="mb-3 pb-3 border-bottom">
+						<h2 class="h2">
+							Vorschläge
+						</h2>
 						
-						<button class="button" type="submit">Option hinzufügen</button>
+						<div class="container mb-3">
+							<div class="form-group mb-2"
+							     th:each="vorschlag, iter : *{vorschlaege}">
+								<div class="input-group">
+									<input class="form-control" type="text" placeholder="Vorschlag"
+									       th:id="vorschlag + ${iter.count}"
+									       th:field="*{vorschlaege[__${iter.index}__]}"
+									       th:value="${vorschlag}"/>
+									
+									<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+										<button class="btn btn-outline-danger" name="delete"
+										        th:value="${iter.index}" type="submit">
+											Löschen
+										</button>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Button für neue Vorschläge-->
+							<div class="row justify-content-center mt-1">
+								<button class="btn btn-outline-success" type="submit" name="add">
+									Hinzufügen
+								</button>
+							</div>
+						</div>
+						
+						<div class="mb-3 form-group">
+							<label for="maxAntwortAnzahl">
+								Höchstanzahl an Stimmen je Nutzer
+							</label>
+							
+							<input class="form-control"
+							       id="maxAntwortAnzahl" name="maxAntwortAnzahl"
+							       type="number" required
+							       min="1" th:attr="max=*{vorschlaege.size()}"
+							       placeholder="Wie viele Stimmen darf ein Nutzer höchstens vergeben?"
+							       th:value="*{maxAntwortAnzahl == null || maxAntwortAnzahl < 1 ?
+							                 1 : maxAntwortAnzahl}"/>
+						</div>
 					</div>
-				</div>
-				
-				<div>
-					<button class="button" type="submit">Umfrage erstellen</button>
+					
+					<!-- Frist -->
+					<div class="mb-3">
+						<h2 class="h2">
+							Frist
+						</h2>
+						
+						<div class="form-group mb-2">
+							<div class="input-group date"
+							     id="frist"
+							     data-target-input="nearest">
+								<div class="input-group-prepend"
+								     data-target="#frist"
+								     data-toggle="datetimepicker">
+									<div class="input-group-text">
+										<i class="fa fa-calendar"></i>
+									</div>
+								</div>
+								
+								<input type="text"
+								       class="form-control datetimepicker-input"
+								       data-target="#frist"
+								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+								       th:field="*{frist}"/>
+							</div>
+							
+							<script type="text/javascript">
+								$(function () {
+									var pickerID = '#frist';
+									
+									$(pickerID).datetimepicker({
+										format: 'DD.MM.YYYY, HH:mm',
+										locale: 'de'
+									});
+								});
+							</script>
+						</div>
+					</div>
+					
+					<div class="row justify-content-center">
+						<button class="btn btn-success" type="submit" name="create">
+							Erstellen
+						</button>
+					</div>
 				</div>
 			</form>
 		</div>
-		
 	</main>
 </body>
 </html>

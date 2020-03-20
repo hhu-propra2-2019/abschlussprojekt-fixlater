@@ -3,6 +3,8 @@ package mops.termine2.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public class Umfrage {
 	
 	private String ersteller;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime frist;
 	
 	private LocalDateTime loeschdatum;

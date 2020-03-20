@@ -33,13 +33,15 @@
 			<ul>
 				<li>
 					<a th:href="@{/termine2}">
-						<img src="../static/img/resized/calendar_small.jpg" th:src="@{/img/resized/calendar_small.jpg}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
 						Termine
 					</a>
 				</li>
 				<li>
 					<a th:href="@{/termine2/umfragen}">
-						<img src="../static/img/resized/survey_small.jpg" th:src="@{/img/resized/survey_small.jpg}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
 						Umfragen
 					</a>
 				</li>
@@ -60,23 +62,25 @@
 				<div class="btn-toolbar" style="font-size: small">
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
-						        data-toggle="dropdown" id="dropOperator" type="button">
+						        data-toggle="dropdown" id="dropOperator" type="button"
+						        th:text="${selektierteGruppe}">
 							Alle Gruppen
 						</button>
 						
 						<!-- Auswählbare Gruppen -->
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}">
-								Gruppe
+						<div class="dropdown-menu" >
+							<a class="dropdown-item" th:href="@{/termine2}">
+								Alle Gruppen
 							</a>
 							
 							<div th:if="*{termine.gruppen.size() > 0}">
 								<div class="dropdown-divider"></div>
 							</div>
 							
-							<a class="dropdown-item" th:href="@{/termine2}">
-								Alle Gruppen
+							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
+							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}"
+							   th:value="${gruppe}">
+								Gruppe
 							</a>
 						</div>
 					</div>
@@ -130,19 +134,27 @@
 							
 							<!-- Beschreibung -->
 							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:if="${termin.beschreibung != null && termin.beschreibung != ''}"
 							     th:text="${#strings.abbreviate(termin.beschreibung,300)}">
 								Beschreibung
 							</div>
-							<div th:text=" 'Link: ' + ${termin.link}"></div>
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-3" style="text-align: center">
-								<!-- leitet an die Ergebnisse der Abstimmung weiter -->
-								<!-- <a th:href="@{………}"> -->
-								<button class="btn btn-outline-info" style="font-size: small">
-									Details
-								</button>
-								<!-- </a> -->
+								<form th:action="@{/termine2}" method="post">
+									<button class="btn btn-outline-info" style="font-size: small"
+									        type="submit" name="details" th:value="*{termin.link}">
+										Details
+									</button>
+								</form>
+								
+								<div class="mt-2 text-secondary" style="font-size: small">
+									Link:
+									
+									<span class="text-info" th:text="${termin.link}">
+										Link
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -180,12 +192,11 @@
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2 pb-2 border-bottom"
-							     style="font-size: small"
+							<div class="mt-2 pb-2 border-bottom" style="font-size: small"
+							     th:if="*{termin.beschreibung != null && termin.beschreibung != ''}"
 							     th:text="${#strings.abbreviate(termin.beschreibung,135)}">
 								Beschreibung
 							</div>
-							<div th:text=" 'Link: ' + ${termin.link}"></div>
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-2">
@@ -197,11 +208,29 @@
 								</div>
 								
 								<div class="mt-2" style="text-align: center">
-									<!-- Falls der Nutzer schon an der Abstimmung teilgenommen hat,
-									     dann btn-outline-info, ansonsten btn-primary. -->
-									<button class="btn btn-outline-info" style="font-size: small">
-										Details
-									</button>
+									<form th:action="@{/termine2}" method="post">
+										<button class="btn btn-outline-info"
+										        style="font-size: small" type="submit"
+										        name="details"
+												th:value="${termin.link}"
+												th:if="${termin.teilgenommen}">
+											Details
+										</button>
+										<button class="btn btn-primary" style="font-size: small"
+												type="submit" name="details"
+												th:value="*{termin.link}"
+												th:if="!${termin.teilgenommen}">
+											Abstimmen
+										</button>
+									</form>
+									
+									<div class="mt-2 text-secondary" style="font-size: small">
+										Link:
+										
+										<span class="text-info" th:text="${termin.link}">
+											Link
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>

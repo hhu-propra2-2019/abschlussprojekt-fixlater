@@ -19,13 +19,16 @@
 			<ul>
 				<li>
 					<a th:href="@{/termine2}">
-						<img src="../static/img/resized/calendar_small.jpg" th:src="@{/img/resized/calendar_small.jpg}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
 						Termine
 					</a>
 				</li>
+				
 				<li>
 					<a th:href="@{/termine2/umfragen}">
-						<img src="../static/img/resized/survey_small.jpg" th:src="@{/img/resized/survey_small.jpg}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
 						Umfragen
 					</a>
 				</li>
@@ -132,8 +135,21 @@
 								</table>
 							</div>
 							
-							<div style="text-align: center">
-								<button class="btn btn-primary">Abschicken</button>
+							<!-- Absendezeile -->
+							<div class="container">
+								<div class="form-group row justify-content-center">
+									<!-- Name -->
+									<div class="col-xs-4 mx-1">
+										<input class="form-control" id="pseudonym" type="text"
+										       placeholder="Benjamin"/>
+									</div>
+									
+									<div class="col-xs mx-1">
+										<button class="btn btn-primary">
+											Abschicken
+										</button>
+									</div>
+								</div>
 							</div>
 						</form>
 					</div>
@@ -198,22 +214,28 @@
 						<div class="container mb-3">
 							<h3 class="h3 mb-3">Verfassen</h3>
 							
+							<!-- Kommentardaten -->
 							<form method="post">
 								<!-- Inhalt -->
 								<div class="mb-3">
 									<textarea class="form-control" rows="5" id="comment"></textarea>
 								</div>
 								
-								<!-- Name -->
-								<div class="mb-3 form-group">
-									<label for="pseudonym">Name</label>
-									
-									<input class="form-control" id="pseudonym" type="text"
-									       placeholder="Benjamin"/>
-								</div>
-								
-								<div style="text-align: center">
-									<button class="btn btn-success">Veröffentlichen</button>
+								<!-- Absendezeile -->
+								<div class="container">
+									<div class="form-group row justify-content-center">
+										<!-- Name -->
+										<div class="col-xs-4 mx-1">
+											<input class="form-control" id="pseudonym" type="text"
+											       placeholder="Benjamin"/>
+										</div>
+										
+										<div class="col-xs mx-1">
+											<button class="btn btn-success">
+												Veröffentlichen
+											</button>
+										</div>
+									</div>
 								</div>
 							</form>
 						</div>

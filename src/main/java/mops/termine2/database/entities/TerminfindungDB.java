@@ -37,4 +37,6 @@ public class TerminfindungDB {
 	
 	private String gruppe;
 	
+	private LocalDateTime ergebnis;
+	
 }

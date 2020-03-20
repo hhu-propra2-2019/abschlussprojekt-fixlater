@@ -24,6 +24,10 @@ public class UmfrageService {
 		umfrageAntwortRepository = antwortRepository;
 	}
 	
+	/**
+	 * Speichert eine neue Umfrage in der DB
+	 * @param umfrage
+	 */
 	public void save(Umfrage umfrage) {
 		for (String vorschlag : umfrage.getVorschlaege()) {
 			UmfrageDB umfrageDB = new UmfrageDB();
@@ -47,11 +51,19 @@ public class UmfrageService {
 		}
 	}
 	
+	/**
+	 * Löscht eine Umfrage und zugehörige Antworten nach Link
+	 * @param link
+	 */
 	public void deleteByLink(String link) {
 		umfrageAntwortRepository.deleteAllByUmfrageLink(link);
 		umfrageRepository.deleteByLink(link);
 	}
 	
+	/**
+	 * Löscht eine abgelaufene Umfrage und zugehörige Antworten
+	 * @param gruppe
+	 */
 	public void deleteByGruppe(String gruppe) {
 		umfrageRepository.deleteByGruppe(gruppe);
 	}
@@ -87,12 +99,12 @@ public class UmfrageService {
 		return null;
 	}
 	
-	public List<Umfrage> loadByErstellerOhneTermine(String ersteller) {
+	public List<Umfrage> loadByErstellerOhneUmfragen(String ersteller) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppeOhneTermine(String gruppe) {
+	public List<Umfrage> loadByGruppeOhneUmfragen(String gruppe) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
 		return getDistinctUmfragen(umfrageDBs);
 	}
