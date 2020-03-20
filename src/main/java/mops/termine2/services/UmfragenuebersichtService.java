@@ -65,13 +65,16 @@ public class UmfragenuebersichtService {
 	 * @return eine Liste von offenen Umfragen nach Nutzer
 	 */
 	public List<Umfrage> loadOffeneUmfragenFuerBenutzer(Account account) {
+		
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
+		
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) > 0) {
 				offeneUmfragen.add(umfrage);
 			}
 		}
+		
 		return offeneUmfragen;
 	}
 	
