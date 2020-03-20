@@ -18,7 +18,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ErgebnisForm {
 	
+	int anzahlAntworten;
+	
 	List<LocalDateTime> termine = new ArrayList<>();
+	
+	List<Antwort> nutzerAntworten = new ArrayList<>();
+	
+	List<String> termineString = new ArrayList<>();
 	
 	List<Integer> anzahlStimmenJa = new ArrayList<>();
 	
@@ -26,13 +32,25 @@ public class ErgebnisForm {
 	
 	List<Integer> anzahlStimmenNein = new ArrayList<>();
 	
-	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung) {
+	List<Double> anteilStimmenJa = new ArrayList<>();
+	
+	List<Double> anteilStimmenVielleicht = new ArrayList<>();
+	
+	List<Double> anteilStimmenNein = new ArrayList<>();
+	
+	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung,
+						TerminfindungAntwort nutzerAbstimmung) {
+		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
 		termine = terminfindung.getVorschlaege();
 		LocalDateTimeManager.sortTermine(termine);
+		anzahlAntworten = antworten.size();
 		for (LocalDateTime localDateTime : termine) {
 			int ja = 0;
 			int nein = 0;
 			int vielleicht = 0;
+			
+			
+			nutzerAntworten.add(nutzerAntwortenMap.get(localDateTime));
 			
 			for (TerminfindungAntwort antwort : antworten) {
 				HashMap<LocalDateTime, Antwort> antwortMap = antwort.getAntworten();
@@ -46,10 +64,17 @@ public class ErgebnisForm {
 				}
 				
 			}
-			
+			termineString.add(LocalDateTimeManager.toString(localDateTime));
 			anzahlStimmenJa.add(ja);
 			anzahlStimmenNein.add(nein);
 			anzahlStimmenVielleicht.add(vielleicht);
+			
+			double jaAnteil = 100 * (ja * 1.) / anzahlAntworten;
+			double vielleichtAnteil = 100 * (vielleicht * 1.) / anzahlAntworten;
+			double neinAnteil = 100 * (nein * 1.) / anzahlAntworten;
+			anteilStimmenJa.add(jaAnteil);
+			anteilStimmenVielleicht.add(vielleichtAnteil);
+			anteilStimmenNein.add(neinAnteil);
 		}
 	}
 }
