@@ -82,25 +82,25 @@
 								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
 									 chen: Blau und Gelb lassen sich besser unterschei-
 									 den als Grün und Gelb. -->
-								<th class="col bg-secondary" style="width: 1%;">
-									Meine
+								<th class="col bg-secondary" style="width: 2%;">
+									m.An
 								</th>
-								<th class="col bg-secondary" style="width: 45%;">Termin</th>
-								<th class="col bg-secondary" style="width: 49%;"> Überblick</th>
-								<th class="col bg-secondary" style="width: 5%;"></th>
+								<th class="col bg-secondary" style="width: 38%;">Termin</th>
+								<th class="col bg-secondary" style="width: 48%;"> Überblick</th>
+								<th class="col bg-secondary" style="width: 10%;"></th>
 							</tr>
 							</thead>
 
 							<tbody th:each="termin,terminStat: ${ergebnis.termineString}">
 							<tr>
 								<!-- abwechselnd bg-white / bg-light -->
-								<th class="col " style="width: 1%;"
+								<th class="col " style="width: 2%;"
 								    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'bg-primary'
 								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning': 'bg-danger' )">
 
 								</th>
-								<th class="col bg-light" th:text="${termin}" style="width: 45%;">25.02.2084, 12:15</th>
-								<th class="col bg-light" style="width: 49%;">
+								<th class="col bg-light" th:text="${termin}" style="width: 38%;">25.02.2084, 12:15</th>
+								<th class="col bg-light" style="width: 48%;">
 									<div class="progress">
 										<div class="progress-bar bg-primary" role="progressbar"
 										     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${terminStat.index}__]} +'%;'"
@@ -125,7 +125,7 @@
 										></div>
 									</div>
 								</th>
-								<th class="col bg-light" style="width: 5%;"></th>
+								<th class="col bg-light" style="width: 10%;"></th>
 							</tr>
 							</tbody>
 						</table>
