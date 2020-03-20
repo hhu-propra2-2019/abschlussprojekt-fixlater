@@ -82,26 +82,51 @@
 								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
 									 chen: Blau und Gelb lassen sich besser unterschei-
 									 den als Grün und Gelb. -->
-								<th class="col-5 bg-secondary">Termin</th>
-								<th class="col-2 bg-primary"> Ja</th>
-								<th class="col-2 bg-warning"> Vielleicht</th>
-								<th class="col-2 bg-danger"> Nein</th>
+								<th class="col bg-secondary" style="width: 10%;">
+									Meine
+								</th>
+								<th class="col bg-secondary" style="width: 40%;">Termin</th>
+								<th class="col bg-secondary" style="width: 40%;"> Überblick</th>
+								<th class="col bg-secondary" style="width: 10%;"></th>
 							</tr>
 							</thead>
 
-							<tbody th:each="termin,terminStat: ${ergebnis.termine}">
+							<tbody th:each="termin,terminStat: ${ergebnis.termineString}">
 							<tr>
 								<!-- abwechselnd bg-white / bg-light -->
-								<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
-								<th class="col-2 table-primary"
-								    th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}">7
+								<th class="col bg-light" style="width: 10%;">
+									<div class="progress" style="width: 15px;height: 15px">
+										<div class="progress-bar bg-primary" role="progressbar" style="width: 100%;"
+										     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
 								</th>
-								<th class="col-2 table-warning"
-								    th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}">8
+								<th class="col bg-light" th:text="${termin}" style="width: 40%;">25.02.2084, 12:15</th>
+								<th class="col bg-light" style="width: 40%;">
+									<div class="progress">
+										<div class="progress-bar bg-primary" role="progressbar"
+										     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${terminStat.index}__]} +'%;'"
+										     style="width: 34%;"
+										     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
+										     aria-valuenow="34"
+										     th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
+										></div>
+										<div class="progress-bar bg-warning" role="progressbar"
+										     th:style="'width:'+ ${ergebnis.getAnteilStimmenVielleicht()[__${terminStat.index}__]} +'%;'"
+										     style="width: 34%;"
+										     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
+										     aria-valuenow="34"
+										     th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
+										></div>
+										<div class="progress-bar bg-danger" role="progressbar"
+										     th:style="'width:'+ ${ergebnis.getAnteilStimmenNein()[__${terminStat.index}__]} +'%;'"
+										     style="width: 34%;"
+										     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+										     aria-valuenow="34"
+										     th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+										></div>
+									</div>
 								</th>
-								<th class="col-2 table-danger"
-								    th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}">9
-								</th>
+								<th class="col bg-light" style="width: 10%;"></th>
 							</tr>
 							</tbody>
 						</table>
