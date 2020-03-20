@@ -1,7 +1,6 @@
 package mops.termine2.util;
 
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class LocalDateTimeManager {
 	public static String toString(LocalDateTime time) {
 		int dayOfWeek = time.getDayOfWeek().getValue();
 		int dayOfMonth = time.getDayOfMonth();
-		Month month = time.getMonth();
+		int month = time.getMonth().getValue();
 		int year = time.getYear();
 		
 		String weekday;
@@ -43,8 +42,16 @@ public class LocalDateTimeManager {
 			weekday = "Sa.";
 		}
 		
-		String datum = weekday + " " + dayOfMonth + "." + month.getValue() + "." + year;
-		String uhrzeit = time.getHour() + ":" + time.getMinute();
+		int monthZiffer0 = dayOfMonth % 10;
+		int monthZiffer1 = month / 10 % 10;
+		int dayZiffer0 = dayOfMonth % 10;
+		int dayZiffer1 = dayOfMonth / 10 % 10;
+		int minuteZiffer0 = time.getMinute() % 10;
+		int minuteZiffer1 = time.getMinute() / 10 % 10;
+		int stundeZiffer0 = time.getHour() % 10;
+		int stundeZiffer1 = time.getHour() / 10 % 10;
+		String datum = weekday + " " + dayZiffer1 + "" + dayZiffer0 + "." + month + "." + year;
+		String uhrzeit = stundeZiffer1 + "" + stundeZiffer0 + ":" + minuteZiffer1 + "" + minuteZiffer0;
 		return datum + " " + uhrzeit;
 	}
 	
@@ -55,6 +62,7 @@ public class LocalDateTimeManager {
 		}
 		return result;
 	}
+	
 	
 }
 
