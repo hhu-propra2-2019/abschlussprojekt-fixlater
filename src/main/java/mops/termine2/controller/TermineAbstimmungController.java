@@ -82,7 +82,7 @@ public class TermineAbstimmungController {
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -129,7 +129,7 @@ public class TermineAbstimmungController {
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -228,7 +228,7 @@ public class TermineAbstimmungController {
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -241,10 +241,8 @@ public class TermineAbstimmungController {
 		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
 			antwortForm);
 		
-		System.out.println("jetzt wird abgestimmt");
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
 		authenticatedAccess.increment();
-		
 		
 		return "redirect:/termine2/" + link;
 	}
