@@ -6,7 +6,7 @@ public class IntegerToolkit {
 		return zahl % 10;
 	}
 	
-	public static int getSecoundZiffer(int zahl) {
+	public static int getSecondZiffer(int zahl) {
 		return zahl / 10 % 10;
 	}
 }

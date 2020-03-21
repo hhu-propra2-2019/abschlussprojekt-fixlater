@@ -51,14 +51,15 @@ public class LocalDateTimeManager {
 			
 		}
 		
+		//um führende NKullen anzuzeigen
 		int monthZiffer0 = IntegerToolkit.getFirstZiffer(month);
-		int monthZiffer1 = IntegerToolkit.getSecoundZiffer(month);
+		int monthZiffer1 = IntegerToolkit.getSecondZiffer(month);
 		int dayZiffer0 = IntegerToolkit.getFirstZiffer(dayOfMonth);
-		int dayZiffer1 = IntegerToolkit.getSecoundZiffer(dayOfMonth);
+		int dayZiffer1 = IntegerToolkit.getSecondZiffer(dayOfMonth);
 		int minuteZiffer0 = IntegerToolkit.getFirstZiffer(time.getMinute());
-		int minuteZiffer1 = IntegerToolkit.getSecoundZiffer(time.getMinute());
+		int minuteZiffer1 = IntegerToolkit.getSecondZiffer(time.getMinute());
 		int stundeZiffer0 = IntegerToolkit.getFirstZiffer(time.getHour());
-		int stundeZiffer1 = IntegerToolkit.getSecoundZiffer(time.getHour());
+		int stundeZiffer1 = IntegerToolkit.getSecondZiffer(time.getHour());
 		String datum = weekday + " "
 			+ dayZiffer1 + "" + dayZiffer0 + "." + monthZiffer1 + "" + monthZiffer0 + "." + year;
 		String uhrzeit = stundeZiffer1 + "" + stundeZiffer0 + ":" + minuteZiffer1 + "" + minuteZiffer0;
@@ -71,14 +72,6 @@ public class LocalDateTimeManager {
 			result.add(toString(time));
 		}
 		return result;
-	}
-	
-	private static int getFirstZiffer(int zahl) {
-		return zahl % 10;
-	}
-	
-	private static int getSecoundZiffer(int zahl) {
-		return zahl / 10 % 10;
 	}
 	
 	
