@@ -202,33 +202,16 @@ public class TermineNeuController {
 				try (CSVReader csvReader = new CSVReader(
 					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 					
-					// Daten einlesen
-					List<String[]> datumUndUhrzeit = csvReader.readAll();
+					List<String[]> termineEingelesen = csvReader.readAll();
+					DateTimeFormatter formatter = setzeFormatFuerTermine();
+					pruefeFuerJedenTerminGueltigesFormat(termineEingelesen, formatter);
 					
-					// setze benötigtes Format für die Daten
-					DateTimeFormatter formatter;
-					DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
-					formatter = b.appendPattern("dd.MM.")
-						.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
-							SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
-						.toFormatter();
-					
-					// alle Strings in LocalDateTime umwandeln und überprüfen,
-					// ob sie im richtigen Format sind
-					for (String[] terminEingelesen : datumUndUhrzeit) {
-						LocalDateTime.parse(terminEingelesen[0]
-							+ " " + terminEingelesen[1], formatter);
-					}
-					
-					// entferne ggf. überflüssige Datumsbox und trage Termine ein
+					// entferne ggf. überflüssige Datumsbox
 					if (termine.get(0) == null) {
 						terminfindung.getVorschlaege().remove(0);
 					}
-					for (String[] terminEingelesen : datumUndUhrzeit) {
-						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
-							+ " " + terminEingelesen[1], formatter);
-						termine.add(termin);
-					}
+					
+					fuegeTermineInModelEin(termineEingelesen, formatter, termine);
 					m.addAttribute("message", "Upload erfolgreich!");
 					m.addAttribute("erfolg", true);
 					
@@ -240,14 +223,35 @@ public class TermineNeuController {
 					m.addAttribute("error", true);
 				}
 				
-				// Selektierte Gruppe
 				m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-				
 				m.addAttribute("terminfindung", terminfindung);
 			}
 		}
-		
 		return "termine-neu";
 	}
 	
+	private DateTimeFormatter setzeFormatFuerTermine() {
+		DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
+		return b.appendPattern("dd.MM.")
+			.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
+				SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
+			.toFormatter();
+	}
+	
+	private void pruefeFuerJedenTerminGueltigesFormat(
+		List<String[]> termineEingelesen, DateTimeFormatter formatter) {
+		for (String[] terminEingelesen : termineEingelesen) {
+			LocalDateTime.parse(terminEingelesen[0]
+				+ " " + terminEingelesen[1], formatter);
+		}
+	}
+	
+	private void fuegeTermineInModelEin(
+		List<String[]> termineEingelesen, DateTimeFormatter formatter, List<LocalDateTime> termine) {
+		for (String[] terminEingelesen : termineEingelesen) {
+			LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+				+ " " + terminEingelesen[1], formatter);
+			termine.add(termin);
+		}
+	}
 }
