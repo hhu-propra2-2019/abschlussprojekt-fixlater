@@ -1,8 +1,7 @@
 package mops.termine2.controller;
 
 
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.CSVReader;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -11,7 +10,6 @@ import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
-import mops.termine2.services.ImportTermineService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +24,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,12 +177,12 @@ public class TermineNeuController {
 		return "termine-neu";
 	}
 	
-	@PostMapping(path = "/termine-neu", params = "upload")
+	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String uploadTermineCSV(@RequestParam("file") MultipartFile datei, Principal p,
+	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal p,
 								   Model m, Terminfindung terminfindung,
 								   Gruppe gruppeSelektiert) {
-		System.out.println("Hallo");
+		System.out.println("in Controller");
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -196,32 +198,40 @@ public class TermineNeuController {
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
 			termine.add(LocalDateTime.now());
 			
-			if (datei.isEmpty()) {
-				m.addAttribute("message", "Please select a CSV file to upload.");
+			if (file.isEmpty()) {
+				System.out.println("empty");
+				m.addAttribute("message", "Bitte eine CSV-Datei zum Upload auswählen!");
 				m.addAttribute("status", false);
 			} else {
-				try (Reader reader = new BufferedReader(
-						new InputStreamReader(datei.getInputStream()))) {
+				try (CSVReader csvReader = new CSVReader(
+					new InputStreamReader(file.getInputStream()))) {
 					
-					// create csv bean reader
-					CsvToBean<ImportTermineService> csvToBean = new CsvToBeanBuilder(reader)
-							.withType(ImportTermineService.class)
-							.withIgnoreLeadingWhiteSpace(true)
-							.build();
+					// Daten einlesen
+					List<String[]> datumUndUhrzeit = csvReader.readAll();
+					datumUndUhrzeit
+						.forEach(eingelesen ->
+							System.out.println("eingelesen: " + eingelesen[0] + ", "
+								+ eingelesen[1]));
 					
-					// convert `CsvToBean` object to list of users
-					List<ImportTermineService> datumUndUhrzeit = csvToBean.parse();
-					datumUndUhrzeit.stream().forEach(terminEingelesen -> {
-						LocalDateTime termin = LocalDateTime.of(terminEingelesen.getDatum(),
-								terminEingelesen.getZeit());
+					// Strings in LocalDateTime umwandeln und ins Model hinzufügen
+					for (String[] terminEingelesen : datumUndUhrzeit) {
+						String str = terminEingelesen[0] + " " + terminEingelesen[1];
+						DateTimeFormatter formatter;
+						DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
+						formatter = b.appendPattern("dd.MM.")
+							.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
+								SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
+							.toFormatter();
+						
+						LocalDateTime termin = LocalDateTime.parse(str, formatter);
 						termine.add(termin);
-					});
-					
+					}
+					System.out.println("fertig");
 					m.addAttribute("status", true);
 					
 				} catch (Exception ex) {
 					m.addAttribute("message",
-							"An error occurred while processing the CSV file.");
+						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten!");
 					m.addAttribute("status", false);
 				}
 				
@@ -229,12 +239,10 @@ public class TermineNeuController {
 				m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 				
 				m.addAttribute("terminfindung", terminfindung);
-				
 			}
-			
-			
 		}
-		return "termin-neu";
+		
+		return "termine-neu";
 	}
 	
 }

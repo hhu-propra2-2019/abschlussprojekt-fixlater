@@ -80,7 +80,8 @@
             <h1 class="h1">Neuer Termin</h1>
         </div>
 
-        <form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}">
+        <form class="row" enctype="multipart/form-data" method="post" th:action="@{/termine2/termine-neu}"
+              th:object="${terminfindung}">
             <div class="col">
                 <!-- Übersicht -->
                 <div class="mb-3 border-bottom">
@@ -150,7 +151,8 @@
                             Beschreibung (optional)
                         </label>
 
-                        <textarea class="form-control" id="beschreibung" placeholder="Gibt es Besonderheiten oder Anmerkungen?"
+                        <textarea class="form-control" id="beschreibung"
+                                  placeholder="Gibt es Besonderheiten oder Anmerkungen?"
                                   rows="4"
                                   th:field="*{beschreibung}" type="text"></textarea>
                     </div>
@@ -221,10 +223,10 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="file">Select a CSV file</label>
-                            <input type="file" name="file" class="form-control-file" id="file" accept=".csv">
+                            <label for="file"> ... oder wähle eine CSV-Datei aus: </label>
+                            <input accept=".csv" class="form-control-file" id="file" name="file" type="file">
                         </div>
-                        <button type="submit" name = "upload" class="btn btn-outline-success">Upload CSV</button>
+                        <button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
                     </div>
                 </div>
 
