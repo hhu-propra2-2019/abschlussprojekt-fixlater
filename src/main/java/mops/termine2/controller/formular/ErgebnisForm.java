@@ -42,6 +42,12 @@ public class ErgebnisForm {
 	
 	List<Boolean> isNutzerAntwortVielleicht = new ArrayList<>();
 	
+	List<String> jaAntwortPseud = new ArrayList<>();
+	
+	List<String> vielleichtAntwortPseudo = new ArrayList<>();
+	
+	List<String> neinAntwortPseudo = new ArrayList<>();
+	
 	boolean fristNichtAbgelaufen = false;
 	
 	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung,
@@ -62,19 +68,24 @@ public class ErgebnisForm {
 			int ja = 0;
 			int nein = 0;
 			int vielleicht = 0;
-			
+			String jaAnt = "";
+			String vielleichtAnt = "";
+			String neinAnt = "";
 			
 			nutzerAntworten.add(nutzerAntwortenMap.get(localDateTime));
-			
 			for (TerminfindungAntwort antwort : antworten) {
 				HashMap<LocalDateTime, Antwort> antwortMap = antwort.getAntworten();
 				Antwort a = antwortMap.get(localDateTime);
+				String pseudonym = antwort.getPseudonym();
 				if (a == Antwort.JA) {
 					ja++;
+					jaAnt = jaAnt + pseudonym + " ; ";
 				} else if (a == Antwort.NEIN) {
 					nein++;
+					neinAnt = neinAnt + pseudonym + " ; ";
 				} else {
 					vielleicht++;
+					vielleichtAnt = vielleichtAnt + pseudonym + " ; ";
 				}
 				
 			}
@@ -82,6 +93,9 @@ public class ErgebnisForm {
 			anzahlStimmenJa.add(ja);
 			anzahlStimmenNein.add(nein);
 			anzahlStimmenVielleicht.add(vielleicht);
+			jaAntwortPseud.add(jaAnt);
+			vielleichtAntwortPseudo.add(vielleichtAnt);
+			neinAntwortPseudo.add(neinAnt);
 			
 			double jaAnteil = 100 * (ja * 1.) / anzahlAntworten;
 			double vielleichtAnteil = 100 * (vielleicht * 1.) / anzahlAntworten;
