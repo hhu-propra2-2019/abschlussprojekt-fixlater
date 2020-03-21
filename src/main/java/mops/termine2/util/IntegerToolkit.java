@@ -2,11 +2,7 @@ package mops.termine2.util;
 
 public class IntegerToolkit {
 	
-	public static int getFirstZiffer(int zahl) {
-		return zahl % 10;
-	}
-	
-	public static int getSecondZiffer(int zahl) {
-		return zahl / 10 % 10;
+	public static int getZiffer(int stelle, int zahl) {
+		return zahl / ((int) Math.pow(10, stelle)) % 10;
 	}
 }
