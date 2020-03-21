@@ -222,10 +222,9 @@ public class TermineNeuController {
 							+ "übergeben werden.");
 					m.addAttribute("error", true);
 				}
-				
-				m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-				m.addAttribute("terminfindung", terminfindung);
 			}
+			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+			m.addAttribute("terminfindung", terminfindung);
 		}
 		return "termine-neu";
 	}
