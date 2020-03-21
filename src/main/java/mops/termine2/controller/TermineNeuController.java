@@ -25,10 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
@@ -204,7 +203,7 @@ public class TermineNeuController {
 				m.addAttribute("status", false);
 			} else {
 				try (CSVReader csvReader = new CSVReader(
-					new InputStreamReader(file.getInputStream()))) {
+					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 					
 					// Daten einlesen
 					List<String[]> datumUndUhrzeit = csvReader.readAll();
