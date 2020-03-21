@@ -30,7 +30,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
@@ -196,14 +195,9 @@ public class TermineNeuController {
 			// Terminvorschlag hinzufügen
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
 			
-			// entferne überflüssige Datumsbox
-			if (termine.get(0) == null) {
-				terminfindung.getVorschlaege().remove(0);
-			}
-			
 			if (file.isEmpty()) {
-				m.addAttribute("message", "Bitte eine CSV-Datei zum Upload auswählen!");
-				m.addAttribute("status", false);
+				m.addAttribute("message", "Bitte eine CSV-Datei zum Upload auswählen.");
+				m.addAttribute("error", true);
 			} else {
 				try (CSVReader csvReader = new CSVReader(
 					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -211,35 +205,39 @@ public class TermineNeuController {
 					// Daten einlesen
 					List<String[]> datumUndUhrzeit = csvReader.readAll();
 					
-					// Strings in LocalDateTime umwandeln und ins Model hinzufügen
+					// setze benötigtes Format für die Daten
+					DateTimeFormatter formatter;
+					DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
+					formatter = b.appendPattern("dd.MM.")
+						.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
+							SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
+						.toFormatter();
+					
+					// alle Strings in LocalDateTime umwandeln und überprüfen,
+					// ob sie im richtigen Format sind
 					for (String[] terminEingelesen : datumUndUhrzeit) {
-						String str = terminEingelesen[0] + " " + terminEingelesen[1];
-						DateTimeFormatter formatter;
-						DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
-						formatter = b.appendPattern("dd.MM.")
-							.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
-								SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
-							.toFormatter();
-						
-						// überprüfe, ob Daten das benötigte Format haben
-						if (pruefeTerminRichtigesFormat(str, formatter)) {
-							LocalDateTime termin = LocalDateTime.parse(str, formatter);
-							termine.add(termin);
-						} else {
-							m.addAttribute("message",
-								"Die CSV-Datei hat nicht das benötigte Format!");
-							m.addAttribute("status", false);
-							return "termine-neu";
-						}
+						LocalDateTime.parse(terminEingelesen[0]
+							+ " " + terminEingelesen[1], formatter);
 					}
 					
-					csvReader.close();
-					m.addAttribute("status", true);
+					// entferne ggf. überflüssige Datumsbox und trage Termine ein
+					if (termine.get(0) == null) {
+						terminfindung.getVorschlaege().remove(0);
+					}
+					for (String[] terminEingelesen : datumUndUhrzeit) {
+						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+							+ " " + terminEingelesen[1], formatter);
+						termine.add(termin);
+					}
+					m.addAttribute("message", "Upload erfolgreich!");
+					m.addAttribute("erfolg", true);
 					
 				} catch (Exception ex) {
 					m.addAttribute("message",
-						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten!");
-					m.addAttribute("status", false);
+						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. "
+							+ "Alle Termine müssen im Format 'TT.MM.JJJJ,HH:MM' "
+							+ "übergeben werden.");
+					m.addAttribute("error", true);
 				}
 				
 				// Selektierte Gruppe
@@ -250,16 +248,6 @@ public class TermineNeuController {
 		}
 		
 		return "termine-neu";
-	}
-	
-	private boolean pruefeTerminRichtigesFormat(String eingelesenerTermin, DateTimeFormatter formatter) {
-		try {
-			LocalDateTime datum = LocalDateTime.parse(eingelesenerTermin, formatter);
-			String result = datum.format(formatter);
-			return result.equals(eingelesenerTermin);
-		} catch (DateTimeParseException exception) {
-			return false;
-		}
 	}
 	
 }

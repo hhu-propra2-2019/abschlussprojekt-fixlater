@@ -138,9 +138,9 @@
                                 ausgewählten Gruppe sichtbar.
 
                                 <span class="text-warning" th:if="${gruppen.size() == 0}">
-										Diese Option ist aber nicht verfügbar, da es im Moment keine
-										Gruppenzugehörigkeit gibt.
-									</span>
+                                    Diese Option ist aber nicht verfügbar, da es im Moment keine
+                                    Gruppenzugehörigkeit gibt.
+								</span>
                             </p>
                         </div>
                     </div>
@@ -162,8 +162,6 @@
                 <div class="mb-3 border-bottom">
                     <h2 class="h2">
                         Zeiten
-
-
                     </h2>
 
                     <div class="container mb-3">
@@ -224,10 +222,20 @@
 
                         <div class="form-group mt-3">
                             <label for="file"> Wähle eine CSV-Datei zum Import aus: </label>
-                            <input accept=".csv" class="form-control-file" id="file" name="file" type="file">
+                            <input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
                         </div>
                         <button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
+                    </div>
 
+                    <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
+                    <div class="container mb-3">
+                        <div class="alert alert-danger" role="alert" th:if="${error}">
+                            <strong>Error:</strong>
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div class="alert alert-success" role="alert" th:if="${erfolg}">
+                            <span th:text="${message}"></span>
+                        </div>
                     </div>
                 </div>
 
