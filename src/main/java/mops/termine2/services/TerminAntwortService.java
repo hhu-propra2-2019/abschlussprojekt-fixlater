@@ -116,22 +116,11 @@ public class TerminAntwortService {
 			for (TerminfindungAntwortDB antwortDB : antwortDBS) {
 				String benutzer = antwortDB.getBenutzer();
 				if (!benuternamen.contains(antwortDB.getBenutzer())) {
-
-					TerminfindungAntwort antwort = new TerminfindungAntwort();
-					antwort.setLink(antwortDB.getTerminfindung().getLink());
-					antwort.setPseudonym(antwortDB.getPseudonym());
-					antwort.setKuerzel(aktuellerBenutzer);
-					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
-					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
-						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
-							antworten.put(terminfindungAntwortDB
-									.getTerminfindung().getTermin(),
-								terminfindungAntwortDB.getAntwort());
-						}
-					}
-					antwort.setAntworten(antworten);
-					terminAntworten.add(antwort);
-					benuternamen.add(aktuellerBenutzer);
+					List<TerminfindungAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
+						antwortDBS, benutzer);
+					terminAntworten.add(buildAntwortForBenutzer(
+						benutzer, nutzerAntworten, antwortMoeglichkeiten));
+					benuternamen.add(benutzer);
 				}
 				
 			}
