@@ -50,7 +50,7 @@ public class TermineUebersichtController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
-							defaultValue = "Alle Gruppen") String gruppe) {
+							defaultValue = "-1" ) Long gruppe) {
 		if (p != null) {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
@@ -67,7 +67,7 @@ public class TermineUebersichtController {
 			
 			List<Terminfindung> terminfindungenOffen;
 			List<Terminfindung> terminfindungenAbgeschlossen;
-			if (gruppe.equals("Alle Gruppen")) {
+			if (gruppe == -1L) {
 				terminfindungenOffen =
 					terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
 				terminfindungenAbgeschlossen = terminfindunguebersichtService
