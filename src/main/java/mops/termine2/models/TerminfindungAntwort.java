@@ -23,5 +23,4 @@ public class TerminfindungAntwort {
 	
 	private String pseudonym;
 	
-	
 }

@@ -81,18 +81,25 @@
 									<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
 										 chen: Blau und Gelb lassen sich besser unterschei-
 										 den als Grün und Gelb. -->
-									<th class="col-5 bg-secondary">Termin</th>
-									<th class="col-2 bg-primary"> Ja</th>
-									<th class="col-2 bg-warning"> Vielleicht</th>
-									<th class="col-2 bg-danger"> Nein</th>
+									<th class="col bg-secondary" style="width: 10%"></th>
+									<th class="col bg-secondary" style="width: 30%">Termin</th>
+									<th class="col bg-secondary" style="width: 10%"></th>
+									<th class="col bg-primary" style="width: 16%"> Ja</th>
+									<th class="col bg-warning" style="width: 18%"> Vielleicht</th>
+									<th class="col bg-danger" style="width: 16%"> Nein</th>
 								</tr>
 								</thead>
 
 								<tbody th:remove="all-but-first" th:each="termin,terminStat: *{termine}" }>
 								<tr>
 									<!-- abwechselnd bg-white / bg-light -->
-									<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
-									<th class="col-2 table-primary">
+									<th class="col bg-white" style="width: 10%"></th>
+									<th class="col bg-white font-weight-bold text-black-50"
+									    th:text="${antwort.getTermineString()[__${terminStat.index}__]}"
+									    style="width: 30px">25.02.2084, 12:15
+									</th>
+									<th class="col bg-white " style="width: 10%"></th>
+									<th class="col table-primary" style="width: 16%">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
@@ -100,14 +107,14 @@
 										       value="JA"/>
 
 									</th>
-									<th class="col-2 table-warning">
+									<th class="col table-warning font-weight-bold text-black-50" style="width: 18%">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
 										       th:field="${antwort.antworten[__${terminStat.index}__]}"
 										       value="VIELLEICHT"/>
 									</th>
-									<th class="col-2 table-danger">
+									<th class="col table-danger" style="width: 16%">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
