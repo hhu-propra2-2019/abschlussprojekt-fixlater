@@ -91,6 +91,15 @@
 				</div>
 			</div>
 			
+			<div class="alert alert-success alert-dissmissible fade show"
+			     th:if="${erfolg != null && erfolg != ''}">
+				<span th:text="${erfolg}">
+					Erfolgsmeldung
+				</span>
+				
+				<button class="close" data-dismiss="alert">×</button>
+			</div>
+			
 			<!-- Listen -->
 			<div class="row">
 				<!-- Linke Liste: Anstehende Termine -->

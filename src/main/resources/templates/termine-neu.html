@@ -89,6 +89,15 @@
 								Titel
 							</label>
 							
+							<div class="alert alert-danger alert-dissmissible fade show"
+							     th:if="${fehler != null && fehler != ''}">
+								<span th:text="${fehler}">
+									Fehlermeldung
+								</span>
+								
+								<button class="close" data-dismiss="alert">×</button>
+							</div>
+							
 							<input class="form-control" id="titel" name="titel" type="text"
 							       required placeholder="Worum geht es?" th:value="*{titel}"/>
 						</div>
