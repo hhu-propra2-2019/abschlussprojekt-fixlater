@@ -108,27 +108,25 @@ public class TerminAntwortService {
 	
 	private List<TerminfindungAntwort> buildAntworten(
 		List<TerminfindungAntwortDB> antwortDBS, List<TerminfindungDB> antwortMoeglichkeiten) {
-		if (antwortDBS != null) {
-			List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
-			if (!antwortDBS.isEmpty()) {
-				List<String> benuternamen = new ArrayList<>();
-				
-				for (TerminfindungAntwortDB antwortDB : antwortDBS) {
-					String benutzer = antwortDB.getBenutzer();
-					if (!benuternamen.contains(antwortDB.getBenutzer())) {
-						List<TerminfindungAntwortDB> nutzerAntwort = filterAntwortenDbBenutzer(
-							antwortDBS, benutzer);
-						terminAntworten.add(buildAntwortForBenutzer(
-							benutzer, nutzerAntwort, antwortMoeglichkeiten));
-						benuternamen.add(benutzer);
-					}
-					
+		
+		List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
+		if (!antwortDBS.isEmpty()) {
+			List<String> benuternamen = new ArrayList<>();
+			
+			for (TerminfindungAntwortDB antwortDB : antwortDBS) {
+				String benutzer = antwortDB.getBenutzer();
+				if (!benuternamen.contains(antwortDB.getBenutzer())) {
+					List<TerminfindungAntwortDB> nutzerAntwort = filterAntwortenDbBenutzer(
+						antwortDBS, benutzer);
+					terminAntworten.add(buildAntwortForBenutzer(
+						benutzer, nutzerAntwort, antwortMoeglichkeiten));
+					benuternamen.add(benutzer);
 				}
 				
 			}
-			return terminAntworten;
 		}
-		return null;
+		return terminAntworten;
+		
 	}
 	
 	private TerminfindungAntwort buildAntwortForBenutzer(
