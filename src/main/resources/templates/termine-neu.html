@@ -164,6 +164,17 @@
                         Zeiten
                     </h2>
 
+                    <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
+                    <div class="container mb-3">
+                        <div class="alert alert-danger" role="alert" th:if="${error}">
+                            <strong>Error:</strong>
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div class="alert alert-success" role="alert" th:if="${erfolg}">
+                            <span th:text="${message}"></span>
+                        </div>
+                    </div>
+
                     <div class="container mb-3">
                         <!-- Datum und Uhrzeit -->
                         <div class="row" th:each="zeit, iter : *{vorschlaege}">
@@ -221,21 +232,13 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="file"> Wähle eine CSV-Datei zum Import aus: </label>
+                            <label for="file">
+                                Oder wählen Sie eine CSV-Datei zum Import von Terminen
+                                (im Format TT.MM.JJJJ,HH:MM) aus:
+                            </label>
                             <input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
                         </div>
                         <button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
-                    </div>
-
-                    <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
-                    <div class="container mb-3">
-                        <div class="alert alert-danger" role="alert" th:if="${error}">
-                            <strong>Error:</strong>
-                            <span th:text="${message}"></span>
-                        </div>
-                        <div class="alert alert-success" role="alert" th:if="${erfolg}">
-                            <span th:text="${message}"></span>
-                        </div>
                     </div>
                 </div>
 
