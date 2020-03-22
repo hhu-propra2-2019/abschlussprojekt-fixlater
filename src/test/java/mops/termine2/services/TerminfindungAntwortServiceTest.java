@@ -123,7 +123,6 @@ public class TerminfindungAntwortServiceTest {
 		terminfindungAntwort.setLink(LINK);
 		terminfindungAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
 		terminfindungAntwort.setKuerzel(benutzer);
-		terminfindungAntwort.setTeilgenommen(true);
 		return terminfindungAntwort;
 	}
 	

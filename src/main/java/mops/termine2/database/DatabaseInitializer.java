@@ -42,7 +42,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = false;
+	private static final boolean EINGESCHALTET = true;
 	
 	
 	@Autowired
@@ -265,7 +265,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			umfrageDB.setBeschreibung(beschreibung);
 			umfrageDB.setErsteller(benutzerGruppeDB.getBenutzer());
 			umfrageDB.setFrist(frist);
-			umfrageDB.setGruppe(benutzerGruppeDB.getGruppe());
+			umfrageDB.setGruppeId(benutzerGruppeDB.getGruppeId());
 			umfrageDB.setLink(link);
 			umfrageDB.setLoeschdatum(loeschdatum);
 			umfrageDB.setModus(Modus.GRUPPE);

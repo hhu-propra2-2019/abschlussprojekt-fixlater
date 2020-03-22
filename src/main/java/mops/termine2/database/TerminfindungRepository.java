@@ -18,7 +18,7 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	List<TerminfindungDB> findByErsteller(@Param("ersteller") String ersteller);
 	
 	@Query("select db from TerminfindungDB db where db.gruppeId = :gruppeId order by db.frist")
-	List<TerminfindungDB> findByGruppe(@Param("gruppeId") Long gruppeId);
+	List<TerminfindungDB> findByGruppeId(@Param("gruppeId") Long gruppeId);
 	
 	@Query("delete from TerminfindungDB db where db.link like : link")
 	void deleteByLink(@Param("link") String link);

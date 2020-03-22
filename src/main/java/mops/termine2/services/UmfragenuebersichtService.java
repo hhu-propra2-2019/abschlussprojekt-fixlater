@@ -21,14 +21,14 @@ public class UmfragenuebersichtService {
 	
 	/**
 	 * Geht die Umfragen durch und filtert nach offenen die zu einer Gruppe gehören
-	 * @param gruppe
+	 * @param gruppeId
 	 * @return eine Liste von offenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadOffeneUmfragenFuerGruppe(String gruppe) {
+	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Long gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
 		
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppe));
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) > 0) {
@@ -41,14 +41,14 @@ public class UmfragenuebersichtService {
 	
 	/**
 	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
-	 * @param gruppe
+	 * @param gruppeId
 	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(String gruppe) {
+	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Long gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Umfrage> abgeschlosseneUmfragen = new ArrayList<>();
 		
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppe));
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) <= 0) {
@@ -98,7 +98,7 @@ public class UmfragenuebersichtService {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		for (Gruppe g : gruppen) {
-			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getName()));
+			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getId()));
 		}
 		return umfragen;
 	}

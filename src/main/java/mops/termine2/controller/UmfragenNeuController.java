@@ -141,7 +141,7 @@ public class UmfragenNeuController {
 			umfrage.setLoeschdatum(umfrage.getFrist().plusWeeks(3));
 			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
 				Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
-				umfrage.setGruppe(gruppe.getName());
+				umfrage.setGruppeId(gruppe.getId());
 			}
 			
 			String link = linkService.generiereEindeutigenLink();

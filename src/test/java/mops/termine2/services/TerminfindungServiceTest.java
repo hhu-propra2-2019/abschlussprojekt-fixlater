@@ -30,8 +30,8 @@ public class TerminfindungServiceTest {
 	private transient List<String> erstellerListe = new ArrayList<>(
 		Arrays.asList("Leon", "Loen", "Thomas", "Anthon"));
 	
-	private transient List<String> gruppenListe = new ArrayList<>(
-		Arrays.asList("G1", "G2", "G3", null));
+	private transient List<Long> gruppenListe = new ArrayList<>(
+		Arrays.asList(1L, 2L, 3L, null));
 	
 	private transient List<String> titelListe = new ArrayList<>(
 		Arrays.asList("Titel1", "Titel2", "Titel3", "Titel4"));
@@ -173,9 +173,9 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(terminRepository.findByGruppe(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppeId(gruppenListe.get(dummie))).thenReturn(terminfindungDBs);
 		
-		Terminfindung ergebnis = service.loadByGruppeOhneTermine(erstellerListe.get(dummie)).get(0);
+		Terminfindung ergebnis = service.loadByGruppeOhneTermine(gruppenListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
@@ -193,7 +193,7 @@ public class TerminfindungServiceTest {
 		terminfindungDBs.addAll(terminfindungDBs1);
 		terminfindungDBs.addAll(terminfindungDBs2);
 		
-		when(terminRepository.findByGruppe(gruppenListe.get(0))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppeId(gruppenListe.get(0))).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
 			Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
@@ -287,9 +287,9 @@ public class TerminfindungServiceTest {
 			terminfindungDB.setLoeschdatum(loeschdatumListe.get(dummie));
 			terminfindungDB.setLink(linkListe.get(dummie));
 			terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
-			terminfindungDB.setGruppe(gruppenListe.get(dummie));
+			terminfindungDB.setGruppeId(gruppenListe.get(dummie));
 			terminfindungDB.setTermin(termin);
-			if (terminfindungDB.getGruppe() != null) {
+			if (terminfindungDB.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
 			} else {
 				terminfindungDB.setModus(Modus.LINK);
@@ -312,8 +312,8 @@ public class TerminfindungServiceTest {
 		terminfindungDB.setLoeschdatum(loeschdatumListe.get(dummie));
 		terminfindungDB.setLink(linkListe.get(dummie));
 		terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
-		terminfindungDB.setGruppe(gruppenListe.get(dummie));
-		if (terminfindungDB.getGruppe() != null) {
+		terminfindungDB.setGruppeId(gruppenListe.get(dummie));
+		if (terminfindungDB.getGruppeId() != null) {
 			terminfindungDB.setModus(Modus.GRUPPE);
 		} else {
 			terminfindungDB.setModus(Modus.LINK);
