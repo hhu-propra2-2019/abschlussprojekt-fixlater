@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 
@@ -60,10 +61,7 @@ public class TerminAntwortService {
 		List<TerminfindungAntwortDB> antworten =
 			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
 				link);
-		if (antworten.isEmpty()) {
-			return false;
-		}
-		return true;
+		return !antworten.isEmpty();
 	}
 	
 	/**
@@ -78,8 +76,8 @@ public class TerminAntwortService {
 	/**
 	 * Lädt eine Liste von Antworten nach Benutzer und Link
 	 *
-	 * @param benutzer
-	 * @param link
+	 * @param benutzer der Benutzer dessen Antwort gesucht wir
+	 * @param link     der Link der Terminumfrage
 	 * @return gibt eine Antwort zu einer Terminfindung
 	 */
 	
@@ -96,7 +94,7 @@ public class TerminAntwortService {
 	/**
 	 * Lädt alle Antworten die zu einem Link gehören
 	 *
-	 * @param link
+	 * @param link der Link der Terminumfrage
 	 * @return eine Liste von Antworten
 	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
@@ -104,10 +102,8 @@ public class TerminAntwortService {
 			antwortRepo.findAllByTerminfindungLink(link);
 		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
 		
-		List<TerminfindungAntwort> antworten = buildAntworten(terminfindungAntwortDBList,
+		return buildAntworten(terminfindungAntwortDBList,
 			antwortMoeglichkeiten);
-		
-		return antworten;
 	}
 	
 	private List<TerminfindungAntwort> buildAntworten(
@@ -158,11 +154,7 @@ public class TerminAntwortService {
 		for (TerminfindungDB antwortMoglichkeit : antwortMoglichkeiten) {
 			LocalDateTime termin = antwortMoglichkeit.getTermin();
 			Antwort alteAntwort = alteAntwortenMap.get(termin);
-			if (alteAntwort != null) {
-				antwortenMap.put(termin, alteAntwort);
-			} else {
-				antwortenMap.put(termin, Antwort.VIELLEICHT);
-			}
+			antwortenMap.put(termin, Objects.requireNonNullElse(alteAntwort, Antwort.VIELLEICHT));
 		}
 		
 		antwort.setAntworten(antwortenMap);
