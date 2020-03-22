@@ -1,22 +1,6 @@
 package mops.termine2.controller;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.annotation.SessionScope;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -27,6 +11,20 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.UmfrageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.annotation.SessionScope;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionScope
@@ -101,7 +99,7 @@ public class UmfragenNeuController {
 	@PostMapping(path = "/umfragen-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String voorschlagLoeschen(Principal p, Model m, Umfrage umfrage, Gruppe gruppeSelektiert,
-								 final HttpServletRequest request) {
+									 final HttpServletRequest request) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -124,7 +122,7 @@ public class UmfragenNeuController {
 	@PostMapping(path = "/umfragen-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String umfrageErstellen(Principal p, Model m, Umfrage umfrage,
-										 Gruppe gruppeSelektiert) {
+								   Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -142,7 +140,7 @@ public class UmfragenNeuController {
 			umfrage.setErsteller(account.getName());
 			umfrage.setLoeschdatum(umfrage.getFrist().plusWeeks(3));
 			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
-				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
+				Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
 				umfrage.setGruppe(gruppe.getName());
 			}
 			
@@ -150,7 +148,7 @@ public class UmfragenNeuController {
 			umfrage.setLink(link);
 			
 			umfrageService.save(umfrage);
-		}	
+		}
 		return "redirect:/termine2/umfragen";
 	}
 }

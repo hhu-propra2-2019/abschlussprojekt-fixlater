@@ -23,8 +23,9 @@ import org.springframework.web.context.annotation.SessionScope;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -50,19 +51,24 @@ public class TermineUebersichtController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
-							defaultValue = "-1" ) Long gruppe) {
+							defaultValue = "-1") Long gruppe) {
 		if (p != null) {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
 			authenticatedAccess.increment();
 			
-			List<String> gruppenNamen = new ArrayList<>();
-			List<Long> gruppenIds = new ArrayList<>();
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			for (Gruppe g : gruppen) {
-				gruppenNamen.add(g.getName());
-				gruppenIds.add(g.getId());
+			gruppen = gruppen.stream()
+				.sorted(Comparator.comparing(Gruppe::getName))
+				.collect(Collectors.toList());
+			
+			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+			
+			if (selGruppe == null) {
+				selGruppe = new Gruppe();
+				selGruppe.setId(-1L);
+				selGruppe.setName("Alle Gruppen");
 			}
 			
 			List<Terminfindung> terminfindungenOffen;
@@ -74,15 +80,14 @@ public class TermineUebersichtController {
 					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 			} else {
 				terminfindungenOffen = terminfindunguebersichtService
-					.loadOffeneTerminfindungenFuerGruppe(account, 1L);
+					.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
 				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, 1L);
+					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
 			}
 			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
-				terminfindungenOffen, gruppenNamen);
+				terminfindungenOffen, gruppen, selGruppe);
 			
 			m.addAttribute("termine", termine);
-			m.addAttribute("selektierteGruppe", gruppe);
 		}
 		return "termine";
 	}

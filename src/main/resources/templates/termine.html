@@ -63,7 +63,7 @@
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
 						        data-toggle="dropdown" id="dropOperator" type="button"
-						        th:text="${selektierteGruppe}">
+						        th:text="${termine.selektierteGruppe.name}  + ' (id: ' + ${termine.selektierteGruppe.id} + ')'">
 							Alle Gruppen
 						</button>
 						
@@ -78,7 +78,8 @@
 							</div>
 							
 							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe})}" th:text="${gruppe}"
+							   th:href="@{/termine2(gruppe=${gruppe.id})}"
+							   th:text="${gruppe.name} + ' (id: ' + ${gruppe.id} + ')'"
 							   th:value="${gruppe}">
 								Gruppe
 							</a>
@@ -127,8 +128,8 @@
 								
 								<!-- Gruppe, falls verfügbar -->
 								<div class="mt-1 text-secondary"
-								     th:if="*{termin.gruppe != null && termin.gruppe != ''}">
-									für Gruppe <i><span th:text="${termin.gruppe}">Gruppe</span></i>
+								     th:if="*{termin.gruppeId != null}">
+									für Gruppe <i><span th:text="${termin.gruppeId}">Gruppe</span></i>
 								</div>
 							</div>
 							
@@ -186,8 +187,8 @@
 								
 								<!-- Gruppe, falls verfügbar -->
 								<div class="mt-1 text-secondary"
-								     th:if="*{termin.gruppe != null && termin.gruppe != ''}">
-									für Gruppe <i><span th:text="${termin.gruppe}">Gruppe</span></i>
+								     th:if="*{termin.gruppeId != null}">
+									für Gruppe <i><span th:text="${termin.gruppeId}">Gruppe</span></i>
 								</div>
 							</div>
 							

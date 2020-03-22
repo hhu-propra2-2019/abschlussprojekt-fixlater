@@ -127,7 +127,7 @@ public class TermineNeuController {
 			terminfindung.setErsteller(account.getName());
 			terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
 			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
-				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
+				Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
 				terminfindung.setGruppeId(gruppe.getId());
 			}
 			

@@ -11,5 +11,7 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
 	
+	List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);
+	
 	List<BenutzerGruppeDB> findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 }
