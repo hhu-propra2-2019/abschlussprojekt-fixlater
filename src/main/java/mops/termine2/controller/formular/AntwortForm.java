@@ -20,6 +20,8 @@ public class AntwortForm {
 	
 	public List<LocalDateTime> termine = new ArrayList<>();
 	
+	public List<String> termineString = new ArrayList<>();
+	
 	public List<Antwort> antworten = new ArrayList<>();
 	
 	public String pseudonym;
@@ -37,6 +39,7 @@ public class AntwortForm {
 		LocalDateTimeManager.sortTermine(termine);
 		for (LocalDateTime termin : termine) {
 			antworten.add(antwortenMap.get(termin));
+			termineString.add(LocalDateTimeManager.toString(termin));
 		}
 	}
 	
