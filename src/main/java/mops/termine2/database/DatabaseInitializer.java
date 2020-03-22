@@ -42,7 +42,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = true;
+	private static final boolean EINGESCHALTET = false;
 	
 	
 	@Autowired
@@ -143,7 +143,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setBeschreibung(beschreibung);
 			terminfindungdb.setErsteller(benutzerGruppeDB.getBenutzer());
 			terminfindungdb.setFrist(frist);
-			terminfindungdb.setGruppe(benutzerGruppeDB.getGruppe());
+			terminfindungdb.setGruppeId(benutzerGruppeDB.getGruppeId());
 			terminfindungdb.setLink(link);
 			terminfindungdb.setLoeschdatum(loeschdatum);
 			terminfindungdb.setOrt(ort);

@@ -128,7 +128,7 @@ public class TermineNeuController {
 			terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
 			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
 				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
-				terminfindung.setGruppe(gruppe.getName());
+				terminfindung.setGruppeId(gruppe.getId());
 			}
 			
 			String link = linkService.generiereEindeutigenLink();

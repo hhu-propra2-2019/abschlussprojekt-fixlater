@@ -46,8 +46,6 @@ public class AntwortForm {
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setKuerzel(nutzer);
 		terminfindungAntwort.setLink(terminf.getLink());
-		terminfindungAntwort.setTeilgenommen(true);
-		terminfindungAntwort.setGruppe(terminf.getGruppe());
 		if (antwortFrm.getPseudonym().equals("")) {
 			terminfindungAntwort.setPseudonym(nutzer);
 		} else {

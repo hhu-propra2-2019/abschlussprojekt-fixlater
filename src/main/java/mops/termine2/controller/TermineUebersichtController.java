@@ -58,9 +58,11 @@ public class TermineUebersichtController {
 			authenticatedAccess.increment();
 			
 			List<String> gruppenNamen = new ArrayList<>();
+			List<Long> gruppenIds = new ArrayList<>();
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			for (Gruppe g : gruppen) {
 				gruppenNamen.add(g.getName());
+				gruppenIds.add(g.getId());
 			}
 			
 			List<Terminfindung> terminfindungenOffen;
@@ -72,9 +74,9 @@ public class TermineUebersichtController {
 					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 			} else {
 				terminfindungenOffen = terminfindunguebersichtService
-					.loadOffeneTerminfindungenFuerGruppe(account, gruppe);
+					.loadOffeneTerminfindungenFuerGruppe(account, 1L);
 				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe);
+					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, 1L);
 			}
 			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 				terminfindungenOffen, gruppenNamen);

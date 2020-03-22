@@ -145,7 +145,6 @@ public class TerminAntwortService {
 					antwort.setLink(antwortDB.getTerminfindung().getLink());
 					antwort.setPseudonym(antwortDB.getPseudonym());
 					antwort.setKuerzel(aktuellerBenutzer);
-					antwort.setGruppe(antwortDB.getTerminfindung().getGruppe());
 					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
 					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
 						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
@@ -155,7 +154,6 @@ public class TerminAntwortService {
 						}
 					}
 					antwort.setAntworten(antworten);
-					antwort.setTeilgenommen(true);
 					terminAntworten.add(antwort);
 					benuternamen.add(aktuellerBenutzer);
 				}

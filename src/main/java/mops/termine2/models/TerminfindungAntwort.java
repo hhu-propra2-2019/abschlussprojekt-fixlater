@@ -17,15 +17,11 @@ public class TerminfindungAntwort {
 	
 	private String link;
 	
-	private String gruppe;
-	
 	private String kuerzel;
 	
 	private HashMap<LocalDateTime, Antwort> antworten;
 	
 	private String pseudonym;
 	
-	// Brauchen wir vermutlich nicht
-	private Boolean teilgenommen;
 	
 }

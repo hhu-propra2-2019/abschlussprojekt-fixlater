@@ -1,21 +1,20 @@
 package mops.termine2.services;
 
+import mops.termine2.database.TerminfindungAntwortRepository;
+import mops.termine2.database.TerminfindungRepository;
+import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.enums.Modus;
+import mops.termine2.models.Terminfindung;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import mops.termine2.database.TerminfindungAntwortRepository;
-import mops.termine2.database.TerminfindungRepository;
-import mops.termine2.database.entities.TerminfindungDB;
-import mops.termine2.enums.Modus;
-import mops.termine2.models.Terminfindung;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -236,7 +235,7 @@ public class TerminfindungServiceTest {
 		
 		termine.setLoeschdatum(loeschdatumListe.get(dummie));
 		termine.setFrist(fristListe.get(dummie));
-		termine.setGruppe(gruppenListe.get(dummie));
+		termine.setGruppeId(gruppenListe.get(dummie));
 		termine.setLink(linkListe.get(dummie));
 		termine.setOrt(ortListe.get(dummie));
 		termine.setTitel(titelListe.get(dummie));
@@ -256,7 +255,7 @@ public class TerminfindungServiceTest {
 		
 		termine.setLoeschdatum(loeschdatumListe.get(dummie));
 		termine.setFrist(fristListe.get(dummie));
-		termine.setGruppe(gruppenListe.get(dummie));
+		termine.setGruppeId(gruppenListe.get(dummie));
 		termine.setLink(linkListe.get(dummie));
 		termine.setOrt(ortListe.get(dummie));
 		termine.setTitel(titelListe.get(dummie));
