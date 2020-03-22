@@ -122,7 +122,6 @@ public class TerminfindungAntwortServiceTest {
 		terminfindungAntwort.setLink(LINK);
 		terminfindungAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
 		terminfindungAntwort.setKuerzel(benutzer);
-		terminfindungAntwort.setTeilgenommen(true);
 		return terminfindungAntwort;
 	}
 	
@@ -165,6 +164,7 @@ public class TerminfindungAntwortServiceTest {
 		List<TerminfindungDB> terminfindungAntwortDBS = new ArrayList<>();
 		for (int i = 0; i < anzahl; i++) {
 			TerminfindungDB terminfindungDB = new TerminfindungDB();
+			terminfindungDB.setLink(LINK);
 			terminfindungDB.setTermin(
 				LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(i));
 			terminfindungAntwortDBS.add(terminfindungDB);

@@ -136,7 +136,6 @@ public class TerminAntwortService {
 		List<TerminfindungDB> antwortMoglichkeiten) {
 		
 		TerminfindungAntwort antwort = new TerminfindungAntwort();
-		
 		antwort.setKuerzel(benutzer);
 		antwort.setLink(antwortMoglichkeiten.get(0).getLink());
 		if (!alteAntworten.isEmpty()) {
