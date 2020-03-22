@@ -36,13 +36,12 @@ public class TerminAntwortService {
 	 */
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
-		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
 		List<TerminfindungAntwortDB> antwortenToDelete =
 			antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
 				terminVorschlag.getLink());
 		
 		antwortRepo.deleteAll(antwortenToDelete);
-		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
+		for (LocalDateTime termin : terminVorschlag.getVorschlaege()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
 			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminVorschlag.getLink(),
 				termin);
@@ -72,18 +71,25 @@ public class TerminAntwortService {
 		
 		TerminfindungAntwort antwort = buildAntwortFromDB(terminfindungAntwortDBList);
 		if (antwort == null) {
-			antwort = erstelleLeereAntwort(benutzer, link);
+			return erstelleNeueAntwort(benutzer, link);
 		}
 		
 		return aktuelleOptionenEinfuegen(antwort, link);
 	}
 	
-	private TerminfindungAntwort erstelleLeereAntwort(String benutzer, String link) {
+	private TerminfindungAntwort erstelleNeueAntwort(String benutzer, String link) {
+		List<TerminfindungDB> terminfindungDBS = terminRepo.findByLink(link);
+		
 		TerminfindungAntwort antwort = new TerminfindungAntwort();
 		antwort.setPseudonym(benutzer);
 		antwort.setKuerzel(benutzer);
 		antwort.setLink(link);
 		antwort.setAntworten(new HashMap<>());
+		
+		for (TerminfindungDB terminfindungDB : terminfindungDBS) {
+			antwort.getAntworten().put(terminfindungDB.getTermin(), Antwort.VIELLEICHT);
+		}
+		
 		return antwort;
 	}
 	
