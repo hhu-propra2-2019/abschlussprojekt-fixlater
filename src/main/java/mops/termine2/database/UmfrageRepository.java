@@ -21,7 +21,8 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	@Query("select db from UmfrageDB db where db.gruppe like :gruppe order by db.frist")
 	List<UmfrageDB> findByGruppe(@Param("gruppe") String gruppe);
 	
-	void deleteByLink(String link);
+	@Query("delete from UmfrageDB db where db.link like : link")
+	void deleteByLink(@Param("link") String link);
 	
 	void deleteByGruppe(String gruppe);
 	
