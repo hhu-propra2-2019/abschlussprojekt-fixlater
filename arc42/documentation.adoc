@@ -340,6 +340,9 @@ Alls alle Probleme gelößt wurden ging es ans Refactoring.
 Dabei wurde auch Nachgedacht wie das Ergebnis angezeigt werden könnte: 
 Und die Grundlagen für die Implementierung geschaffen
 
+=== GruppeScheduler (Leon, Marcel)
+Zum Testen der Schnittstelle zur Gruppe Gruppenbildung haben wir uns überlegt, ein Programm zu schreiben, welches Antworten für die nötige Anfrage liefert. Dabei gab es zunächst ein paar Probleme, die JSON-Objekte richtig zurückzugeben. Die Lösung des Problems war anschließend, ein ResponseEntity zu verwenden, da vorher lediglich ein reiner String verwendet wurde. Bevor wir mit dem GruppeScheduler begonnen haben, klärten wir einige Fragen mit den Tutoren. Unter anderem haben wir geklärt, welche Informationen uns die API der Gruppenbildung liefert und welche Anfragen für uns relevant sind. Im Anschluss haben wir die ersten Ansätze umgesetzt und mit unserem Testprogramm zwischenzeitlich getestet. Dabei gab es noch einen Fehler, dass die Scheduled-Methode nicht ausgeführt wird. Dieser Fehler lag darin, dass wir noch die Annotation @RequestMapping("/termine2") verwendet haben. Am Ende gab es noch eine NullPointerException beim Speichern der Objekte. Für dieses Problem reichte allerdings die Zeit nicht mehr und es wurde auf den nächsten Tag verschoben.
+
 === Fehlerbehebung und Import (Kathi, Julia)
 Zunächst haben wir Jan den Großteil des Tages beim Debugging und bei der Fehlersuche geholfen. Anschließend
 haben wir uns Gedanken über den Import von Terminen in einer CSV-Datei bei der Erstellung einer neuen Terminfindung gemacht.
@@ -402,6 +405,9 @@ In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer
 GetMapping und PostMappings geschrieben damit man im Formular neue Umfragen Vorschläge hinzufügen kann
 und die entsprechende HTML Seite um nötige Thymeleaf Attribute erweitert.
 
+=== GruppeScheduler (Leon, Marcel)
+Erstes Thema war die Problembehebung der NullPointerException. Dieses haben wir während der Videokonferenz in Jitsi behoben, indem wir an das Repository die Annotation @Autowired geschrieben haben. Nachdem dies nun funktioniert, haben wir als nächstes die Implementierung des Löschens einer Gruppe vorgenommen. Dies geschieht, wenn beim Request an die API der Gruppenbildung der Titel der Gruppe "null" ist. Bei den anschließenden Tests ist uns aufgefallen, dass die Daten bei einer Änderung mehrfach gespeichert werden, anstatt dass die vorhandenen Daten geändert werden. Um dies effizient zu realisieren haben wir uns überlegt, eine Differenz zwischen den aktuellen Benutzern und den übergebenen Benutzern zu bilden. So werden neue Benutzer gespeichert, bereits gespeicherte Benutzer werden nicht verändert und nicht mehr enthaltene Benutzer werden gelöscht. Um diese Änderungen zu testen, haben wir noch einmal Änderungen an unserem Hilfsprogramm vorgenommen. Anschließend war der GruppeScheduler zu dem Zeitpunkt fertiggestellt.
+
 === ImportService (Kathi und Julia)
 Wir haben die Klasse für den ImportService geschrieben und ein POST in TermineNeuController
 hinzugefügt. Es wurden erste Versuche unternommen, den Upload in termine-neu.html zu integrieren,
@@ -435,11 +441,13 @@ Bis zuletzt gingen wir von der falschen Annahme aus, dass Gruppennamen
 eindeutig seien. Nach dem wir erfuren , dass dem nicht so war , musste 
 die Datenbank, Teile der Logik und die Ui umgebaut werden.
 
+=== GruppeScheduler (Leon, Marcel)
+Für diesen Tag standen Tests zum GruppeScheduler auf der Agenda. Dazu haben wir uns ausgiebig überlegt und mit den Tutoren geredet, wie wir die Tests gestalten und ausführen können. Beim Ausführen des ersten Tests ist uns aufgefallen, dass wir einen Konstruktor für die Klasse GruppeScheduler benötigen. Das Problem dabei war jedoch, dass das Programm beim Ausführen das RestTemplate nicht als Bean kannte, da dies als Autowired benötigt wurde. Dies haben wir behoben, indem wir mit Hilfe der Tutoren in Termine2Application eine Bean für das RestTemplate hinzugefügt haben. Anschließend liefen die Tests und das Programm ordnungsgemäß durch und es wurden weitere Tests geschrieben. Beim erstellten Pull Request kam es dann zu einigen Fehlern mit Checkstyle, welche umgehend gelöst wurden. Nach der Teambesprechung haben wir die Information erhalten, dass sich auch die Titel der Gruppen ändern können. Aus diesem Grund mussten wir noch einmal den GruppeScheduler überarbeiten und eine Funktion hinzufügen, sodass die Titel geändert werden. Anschließend wurde dazu noch ein Test geschrieben.
+
 === ImportService (Kathi, Julia)
 Nun wurde der Fehler behoben und der Controller wird aufgerufen. Allerdings gab es noch Probleme
 bei der Verarbeitung der CSV-Datei. Den ganzen Tag wurde also daran gearbeitet, die Fehler zu
 beheben.
-
 
 == Tag 16
 
