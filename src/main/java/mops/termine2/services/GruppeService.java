@@ -19,6 +19,11 @@ public class GruppeService {
 		this.benutzerGruppeRepository = benutzerGruppeRepository;
 	}
 	
+	/**
+	 * Bekommt den Account übergeben und lädt die zugehörigen Gruppen
+	 * @param account
+	 * @return Liste von Gruppen
+	 */
 	public List<Gruppe> loadByBenutzer(Account account) {
 		List<BenutzerGruppeDB> gruppenDB = benutzerGruppeRepository.findByBenutzer(account.getName());
 		List<Gruppe> gruppen = new ArrayList<>();
@@ -33,6 +38,11 @@ public class GruppeService {
 		return gruppen;
 	}
 	
+	/**
+	 * Lädt Gruppe nach Id
+	 * @param id
+	 * @return
+	 */
 	public Gruppe loadById(Long id) {
 		Optional gruppeDB = benutzerGruppeRepository.findById(id);
 		
