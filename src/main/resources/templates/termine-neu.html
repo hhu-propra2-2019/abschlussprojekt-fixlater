@@ -80,7 +80,8 @@
 				<h1 class="h1">Neuer Termin</h1>
 			</div>
 			
-			<form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}">
+			<form class="row" method="post" th:action="@{/termine2/termine-neu}"
+			      th:object="${terminfindung}">
 				<div class="col">
 					<!-- Übersicht -->
 					<div class="mb-3 border-bottom">
@@ -109,7 +110,8 @@
 							</label>
 							
 							<input class="form-control" id="ort" name="ort" type="text"
-							       required placeholder="Wo soll man sich treffen?" th:value="*{ort}"/>
+							       required placeholder="Wo soll man sich treffen?"
+							       th:value="*{ort}"/>
 						</div>
 						
 						<!-- Erreichbarkeit -->
@@ -125,7 +127,7 @@
 							
 							<select class="custom-select"
 							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
-								<option selected th:value="-1">Link</option>
+								<option selected value="-1">Link</option>
 								
 								<optgroup label="Gruppen">
 									<option th:each="gruppe, iter : ${gruppen}"
@@ -185,12 +187,13 @@
 									</div>
 									
 									<input class="form-control datetimepicker-input" type="text"
-									       placeholder="Datum und Stunde"
+									       placeholder="Datum und Uhrzeit"
 									       th:attr="data-target='#zeit'+${iter.count}"
 									       th:field="*{vorschlaege[__${iter.index}__]}"
 									       th:value="${zeit}"/>
 									
-									<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+									<div class="input-group-append"
+									     th:if="*{vorschlaege.size() > 1}">
 										<button class="btn btn-outline-danger" name="delete"
 											    th:value="${iter.index}" type="submit">
 											Löschen
@@ -199,7 +202,8 @@
 								</div>
 								
 								<script th:inline="javascript">
-									/* This comment is necessary for thymeleaf inline, DO NOT REMOVE */
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
 									/*[+
 										$(function () {
 											var pickerID = '#zeit' + '[[${iter.count}]]';

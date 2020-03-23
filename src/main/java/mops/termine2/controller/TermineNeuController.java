@@ -86,19 +86,19 @@ public class TermineNeuController {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
-			// Account
+			/* Account */
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
-			// Gruppen
+			/* Gruppen */
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			m.addAttribute("gruppen", gruppen);
 			
-			// Terminvorschlag hinzufügen
+			/* Terminvorschlag hinzufügen */
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
 			termine.add(LocalDateTime.now());
 			
-			// Selektierte Gruppe
+			/* Selektierte Gruppe */
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			
 			m.addAttribute("terminfindung", terminfindung);
@@ -121,16 +121,28 @@ public class TermineNeuController {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
+			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+			
 			for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-				if (ldt == null) {
-					// terminfindung.getVorschlaege().remove(ldt);
-					m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-					m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-					m.addAttribute("terminfindung", terminfindung);
-					m.addAttribute("fehler", "Alle Zeiten müssen ausgefüllt und gültig sein.");
-					return "termine-neu";
-					// TODO: Fehlermeldung ausgeben und auf Terminfindung erstellen weiterleiten
+				if (ldt != null) {
+					gueltigeVorschlaege.add(ldt);
 				}
+			}
+			
+			if (gueltigeVorschlaege.isEmpty()) {
+				gueltigeVorschlaege.add(null);
+				fehler = "Es muss mindestens einen Vorschlag geben.";
+			}
+			
+			terminfindung.setVorschlaege(gueltigeVorschlaege);
+			
+			if (!fehler.equals("")) {
+				m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+				m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+				m.addAttribute("terminfindung", terminfindung);
+				m.addAttribute("fehler", fehler);
+				
+				return "termine-neu";
 			}
 			
 			// Terminfindung erstellen
@@ -143,17 +155,18 @@ public class TermineNeuController {
 			
 			String link = linkService.generiereEindeutigenLink();
 			terminfindung.setLink(link);
+			
+			terminfindungService.save(terminfindung);
 		}
 		
-		terminfindungService.save(terminfindung);
-		ra.addFlashAttribute("erfolg", "Der Termine wurde gespeichert.");
+		ra.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
-								 final HttpServletRequest request) {
+			final HttpServletRequest request) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -179,3 +192,4 @@ public class TermineNeuController {
 	}
 	
 }
+

@@ -80,7 +80,8 @@
 				<h1 class="h1">Neue Umfrage</h1>
 			</div>
 			
-			<form class="row" method="post" th:action="@{/termine2/umfragen-neu}" th:object="${umfrage}">
+			<form class="row" method="post" th:action="@{/termine2/umfragen-neu}"
+			      th:object="${umfrage}">
 				<div class="col">
 					<!-- Übersicht -->
 					<div class="mb-3 border-bottom">
@@ -88,6 +89,15 @@
 							<label for="titel">
 								Titel
 							</label>
+							
+							<div class="alert alert-danger alert-dissmissible fade show"
+							     th:if="${fehler != null && fehler != ''}">
+								<span th:text="${fehler}">
+									Fehlermeldung
+								</span>
+								
+								<button class="close" data-dismiss="alert">×</button>
+							</div>
 							
 							<input class="form-control" id="titel" name="titel" type="text"
 							       required placeholder="Worum geht es?" th:value="*{titel}"/>
@@ -146,7 +156,7 @@
 					</div>
 					
 					<!-- Vorschläge -->
-					<div class="mb-3 pb-3 border-bottom">
+					<div class="mb-3 border-bottom">
 						<h2 class="h2">
 							Vorschläge
 						</h2>
@@ -169,7 +179,6 @@
 								</div>
 							</div>
 							
-							<!-- Button für neue Vorschläge-->
 							<div class="row justify-content-center mt-1">
 								<button class="btn btn-outline-success" type="submit" name="add">
 									Hinzufügen
