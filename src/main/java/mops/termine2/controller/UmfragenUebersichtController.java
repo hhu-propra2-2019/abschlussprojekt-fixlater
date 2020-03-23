@@ -80,7 +80,7 @@ public class UmfragenUebersichtController {
 					.loadAbgeschlosseneUmfragenFuerBenutzer(account);
 			} else {
 				umfrageOffen = umfragenuebersichtService
-					.loadOffeneUmfragenFuerGruppe(selGruppe.getId());
+					.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
 				umfrageAbgeschlossen = umfragenuebersichtService
 					.loadAbgeschlosseneUmfragenFuerGruppe(selGruppe.getId());
 			}

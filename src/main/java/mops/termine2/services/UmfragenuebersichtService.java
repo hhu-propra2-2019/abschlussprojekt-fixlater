@@ -60,7 +60,7 @@ public class UmfragenuebersichtService {
 	 * @param gruppeId
 	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, Long gruppeId) {
+	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Long gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		List<Umfrage> abgeschlosseneUmfragen = filterClosedSurveys(umfragen);

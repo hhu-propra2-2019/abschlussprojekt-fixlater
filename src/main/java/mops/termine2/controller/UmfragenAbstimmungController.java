@@ -74,8 +74,8 @@ public class UmfragenAbstimmungController {
 			return "error/404";
 		}
 		
-		if (umfrage.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppe())) {
+		if (umfrage.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -114,8 +114,8 @@ public class UmfragenAbstimmungController {
 			return "error/404";
 		}
 		
-		if (umfrage.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppe())) {
+		if (umfrage.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -161,8 +161,8 @@ public class UmfragenAbstimmungController {
 			return "error/404";
 		}
 		
-		if (umfrage.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppe())) {
+		if (umfrage.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -212,8 +212,8 @@ public class UmfragenAbstimmungController {
 			return "error/404";
 		}
 		
-		if (umfrage.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppe())) {
+		if (umfrage.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
 			return "error/403";
 		}
 		

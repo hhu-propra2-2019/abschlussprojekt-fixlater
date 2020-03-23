@@ -141,4 +141,9 @@ public class UmfrageAntwortService {
 		}
 		return null;
 	}
+	
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<UmfrageAntwortDB> antworten = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
+		return !antworten.isEmpty();
+	}
 }
