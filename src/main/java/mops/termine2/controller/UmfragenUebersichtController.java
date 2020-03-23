@@ -71,9 +71,9 @@ public class UmfragenUebersichtController {
 					.loadAbgeschlosseneUmfragenFuerBenutzer(account);
 			} else {
 				umfragenOffen =
-					umfragenuebersichtService.loadOffeneUmfragenFuerGruppe(gruppe);
+					umfragenuebersichtService.loadOffeneUmfragenFuerGruppe(account, gruppe);
 				umfragenAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerGruppe(gruppe);
+					.loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe);
 			}
 			Umfrageuebersicht umfragen =
 					new Umfrageuebersicht(umfragenAbgeschlossen, umfragenOffen, gruppenNamen);
