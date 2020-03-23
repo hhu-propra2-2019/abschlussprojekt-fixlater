@@ -52,6 +52,8 @@ public class GruppeSchedulerTest {
 		+ "\"title\": \"null\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
+	private static String groupNoChange = "{ \"groupList\": [], \"status\": 0 }";
+	
 	private transient GruppeScheduler scheduler;
 	
 	private transient RestTemplate rt;
@@ -171,6 +173,22 @@ public class GruppeSchedulerTest {
 		
 		verify(bgrepo, times(1)).deleteAllByGruppeId(0L);
 		verify(bgrepo, times(1)).save(erwartetNeu);
+	}
+	
+	@Test
+	public void keineAenderung() {
+		server.expect(ExpectedCount.once(),
+			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
+			.andExpect(method(HttpMethod.GET))
+			.andRespond(withSuccess(groupNoChange, MediaType.APPLICATION_JSON));
+		
+		scheduler.updateGruppe();
+		
+		verify(bgrepo, never()).deleteAllByGruppeId(any());
+		verify(bgrepo, never()).save(any());
+		verify(bgrepo, never()).findGruppeByGruppeId(any());
+		verify(bgrepo, never()).findBenutzerByGruppeId(any());
+		verify(bgrepo, never()).deleteByBenutzerAndGruppeId(any(), any());
 	}
 	
 }
