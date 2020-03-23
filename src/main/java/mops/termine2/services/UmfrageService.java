@@ -19,9 +19,9 @@ public class UmfrageService {
 	
 	private transient UmfrageAntwortRepository umfrageAntwortRepository;
 	
-	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepository) {
-		umfrageRepository = umfrageRepo;
-		umfrageAntwortRepository = antwortRepository;
+	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepo) {
+		this.umfrageRepository = umfrageRepo;
+		this.umfrageAntwortRepository = antwortRepo;
 	}
 	
 	/**
@@ -139,6 +139,31 @@ public class UmfrageService {
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
 		return umfrage;
+	}
+
+	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
+		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
+		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
+		
+		return umfragen;
+	}
+	
+	private List<Umfrage> getDistinctUmfrageList(List<UmfrageDB> umfrageDB) {
+		List<UmfrageDB> distinctUmfrageDB = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		for (UmfrageDB umfragen : umfrageDB) {
+			if (!links.contains(umfragen.getLink())) {
+				distinctUmfrageDB.add(umfragen);
+				links.add(umfragen.getLink());
+			}
+		}
+		
+		List<Umfrage> umfragen = new ArrayList<>();
+		for (UmfrageDB db : distinctUmfrageDB) {
+			umfragen.add(erstelleUmfrageOhneVorschlaege(db));
+		}
+		
+		return umfragen;
 	}
 	
 }
