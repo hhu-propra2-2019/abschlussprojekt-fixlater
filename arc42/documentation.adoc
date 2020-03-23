@@ -340,6 +340,11 @@ Alls alle Probleme gelößt wurden ging es ans Refactoring.
 Dabei wurde auch Nachgedacht wie das Ergebnis angezeigt werden könnte: 
 Und die Grundlagen für die Implementierung geschaffen
 
+=== Fehlerbehebung und Import (Kathi, Julia)
+Zunächst haben wir Jan den Großteil des Tages beim Debugging und bei der Fehlersuche geholfen. Anschließend
+haben wir uns Gedanken über den Import von Terminen in einer CSV-Datei bei der Erstellung einer neuen Terminfindung gemacht.
+Dazu haben wir die Möglichkeiten dafür recherchiert und erste Pläne aufgestellt.
+
 == Tag 14 
 
 === Implementierung der Antwort-Funktion und des Ergebnis oder auch TerminAbstimmungsDetails(Jan)
@@ -397,6 +402,11 @@ In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer
 GetMapping und PostMappings geschrieben damit man im Formular neue Umfragen Vorschläge hinzufügen kann
 und die entsprechende HTML Seite um nötige Thymeleaf Attribute erweitert.
 
+=== ImportService (Kathi und Julia)
+Wir haben die Klasse für den ImportService geschrieben und ein POST in TermineNeuController
+hinzugefügt. Es wurden erste Versuche unternommen, den Upload in termine-neu.html zu integrieren,
+allerdings hat es aufgrund eines Fehler noch nicht ganz funktioniert (der Controller wurde nicht
+aufgerufen). Dies sollte am folgenden Tag behoben werden.
 
 == Tag 15
 
@@ -425,3 +435,21 @@ Bis zuletzt gingen wir von der falschen Annahme aus, dass Gruppennamen
 eindeutig seien. Nach dem wir erfuren , dass dem nicht so war , musste 
 die Datenbank, Teile der Logik und die Ui umgebaut werden.
 
+=== ImportService (Kathi, Julia)
+Nun wurde der Fehler behoben und der Controller wird aufgerufen. Allerdings gab es noch Probleme
+bei der Verarbeitung der CSV-Datei. Den ganzen Tag wurde also daran gearbeitet, die Fehler zu
+beheben.
+
+
+== Tag 16
+
+=== ImportService und Kommentare (Kathi, Julia)
+Am Wochenende hat Julia sich mit dem ImportService beschäftigt und die Fehler behoben. Es war nun
+also an diesem Tag möglich, bei Erstellung einer Terminfindung eine CSV-Datei mit Terminen zu
+importieren, die dann direkt in die Felder geschrieben werden. Bei einem erfolgreichen Upload bzw.
+einem Fehler beim Upload bekommt der Nutzer Feedback auf der Seite angezeigt.
+Anschließend haben wir den TermineNeuController refactored (und dafür die Klasse ImportService durch
+TerminFormatierung ersetzt) und die bei Erstellung des pull-requests resultierenden merge-Konflikte
+gelöst. Zudem haben wir die View bei der Terminabstimmung soweit angepasst, dass man die schon vorhandenen
+Kommentare angezeigt bekommt (wenn man noch nicht abgestimmt hat). Dafür haben wir die termine-abstimmung.html
+und den TermineAbstimmungController überarbeitet.
