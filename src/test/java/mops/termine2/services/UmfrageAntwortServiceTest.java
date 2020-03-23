@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import mops.termine2.database.UmfrageAntwortRepository;
+import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Antwort;
@@ -27,14 +28,18 @@ public class UmfrageAntwortServiceTest {
 	
 	private static final String BENUTZER1 = "Me";
 	
-	private UmfrageAntwortRepository repo;
+	private UmfrageAntwortRepository antwortRepo;
+	
+	private UmfrageRepository umfrageRepo;
 	
 	private UmfrageAntwortService antwortService;
 	
 	@BeforeEach
 	public void setUp() {
-		repo = mock(UmfrageAntwortRepository.class);
-		antwortService = new UmfrageAntwortService(repo);
+		antwortRepo = mock(UmfrageAntwortRepository.class);
+		umfrageRepo = mock(UmfrageRepository.class);
+		
+		antwortService = new UmfrageAntwortService(antwortRepo, umfrageRepo);
 	}
 	
 	@Test
@@ -47,8 +52,8 @@ public class UmfrageAntwortServiceTest {
 		
 		antwortService.abstimmen(umfrageAntwort, umfrage);
 		
-		Mockito.verify(repo, times(anzahl)).save(any());
-		Mockito.verify(repo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
+		Mockito.verify(antwortRepo, times(anzahl)).save(any());
+		Mockito.verify(antwortRepo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
 	}
 	
 	@Test
@@ -61,15 +66,15 @@ public class UmfrageAntwortServiceTest {
 		
 		antwortService.abstimmen(umfrageAntwort, umfrage);
 		
-		Mockito.verify(repo, times(anzahl)).save(any());
-		Mockito.verify(repo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
+		Mockito.verify(antwortRepo, times(anzahl)).save(any());
+		Mockito.verify(antwortRepo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
 	}
 	
 	@Test
 	public void loadByBenutzerAndLinkEinBenutzer3Moeglichkeiten() {
 		int anzahl = 3;
 		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispielAntwortDBList(anzahl, BENUTZER1);
-		when(repo.findByBenutzerAndUmfrageLink(BENUTZER1, LINK)).thenReturn(umfrageAntwortDBs);
+		when(antwortRepo.findByBenutzerAndUmfrageLink(BENUTZER1, LINK)).thenReturn(umfrageAntwortDBs);
 		UmfrageAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
 		UmfrageAntwort erwartet = getBeispielUmfrageAntwort(anzahl, BENUTZER1);
 		
@@ -81,7 +86,7 @@ public class UmfrageAntwortServiceTest {
 		int anzahl = 3;
 		int anzahlBenutzer = 3;
 		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispieleAntwortDBList(anzahl, anzahlBenutzer);
-		when(repo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
+		when(antwortRepo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
 		List<UmfrageAntwort> ergebnis = antwortService.loadAllByLink(LINK);
 		List<UmfrageAntwort> erwartet = getBeispieleUmfrageAntwort(anzahl, anzahlBenutzer);
 		
@@ -93,7 +98,7 @@ public class UmfrageAntwortServiceTest {
 		int anzahl = 7;
 		int anzahlBenutzer = 11;
 		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispieleAntwortDBList(anzahl, anzahlBenutzer);
-		when(repo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
+		when(antwortRepo.findAllByUmfrageLink(LINK)).thenReturn(umfrageAntwortDBs);
 		List<UmfrageAntwort> ergebnis = antwortService.loadAllByLink(LINK);
 		List<UmfrageAntwort> erwartet = getBeispieleUmfrageAntwort(anzahl, anzahlBenutzer);
 		
