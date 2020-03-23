@@ -10,6 +10,7 @@ import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.imports.TerminFormatierung;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.SignStyle;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,15 +200,25 @@ public class TermineNeuController {
 					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 					
 					List<String[]> termineEingelesen = csvReader.readAll();
-					DateTimeFormatter formatter = setzeFormatFuerTermine();
-					pruefeFuerJedenTerminGueltigesFormat(termineEingelesen, formatter);
+					
+					TerminFormatierung terminFormatierung =
+						new TerminFormatierung(termineEingelesen);
+					terminFormatierung.pruefeFuerJedenTerminGueltigesFormat(
+						termineEingelesen, terminFormatierung.getDateTimeFormatter());
 					
 					// entferne ggf. überflüssige Datumsbox
 					if (termine.get(0) == null) {
 						terminfindung.getVorschlaege().remove(0);
 					}
 					
-					fuegeTermineInModelEin(termineEingelesen, formatter, termine);
+					// füge Termine ins Model ein
+					for (String[] terminEingelesen : termineEingelesen) {
+						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+							+ " " + terminEingelesen[1], terminFormatierung
+							.getDateTimeFormatter());
+						termine.add(termin);
+					}
+					
 					m.addAttribute("message", "Upload erfolgreich!");
 					m.addAttribute("erfolg", true);
 					
@@ -227,30 +234,5 @@ public class TermineNeuController {
 			m.addAttribute("terminfindung", terminfindung);
 		}
 		return "termine-neu";
-	}
-	
-	private DateTimeFormatter setzeFormatFuerTermine() {
-		DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
-		return b.appendPattern("dd.MM.")
-			.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
-				SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
-			.toFormatter();
-	}
-	
-	private void pruefeFuerJedenTerminGueltigesFormat(
-		List<String[]> termineEingelesen, DateTimeFormatter formatter) {
-		for (String[] terminEingelesen : termineEingelesen) {
-			LocalDateTime.parse(terminEingelesen[0]
-				+ " " + terminEingelesen[1], formatter);
-		}
-	}
-	
-	private void fuegeTermineInModelEin(
-		List<String[]> termineEingelesen, DateTimeFormatter formatter, List<LocalDateTime> termine) {
-		for (String[] terminEingelesen : termineEingelesen) {
-			LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
-				+ " " + terminEingelesen[1], formatter);
-			termine.add(termin);
-		}
 	}
 }
