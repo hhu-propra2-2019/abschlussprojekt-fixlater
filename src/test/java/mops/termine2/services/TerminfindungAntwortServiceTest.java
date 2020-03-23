@@ -1,14 +1,5 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
@@ -16,6 +7,14 @@ import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Antwort;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,7 +43,7 @@ public class TerminfindungAntwortServiceTest {
 	
 	@Test
 	public void saveAntwortFuerTerminfindungMit4Moeglichkeiten() {
-		Terminfindung terminfindung = getBeispielTerminfindung();
+		Terminfindung terminfindung = getBeispielTerminfindung(4);
 		TerminfindungAntwort toSave = new TerminfindungAntwort();
 		
 		toSave.setAntworten(getBeispielAntwortenAlleJa(4));
@@ -58,7 +57,7 @@ public class TerminfindungAntwortServiceTest {
 	
 	@Test
 	public void saveAntwortFuerTerminfindungMit9Moeglichkeiten() {
-		Terminfindung terminfindung = getBeispielTerminfindung();
+		Terminfindung terminfindung = getBeispielTerminfindung(9);
 		TerminfindungAntwort toSave = new TerminfindungAntwort();
 		
 		toSave.setAntworten(getBeispielAntwortenAlleJa(9));
@@ -77,9 +76,9 @@ public class TerminfindungAntwortServiceTest {
 		List<TerminfindungDB> terminfindungDBs = getBeispielTerminDBList(anzahl);
 		
 		when(antwortRepo.findByBenutzerAndTerminfindungLink(BENUTZER1, LINK))
-				.thenReturn(terminfindungAntwortDBs);
+			.thenReturn(terminfindungAntwortDBs);
 		when(terminRepo.findByLink(LINK))
-				.thenReturn(terminfindungDBs);
+			.thenReturn(terminfindungDBs);
 		TerminfindungAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
 		TerminfindungAntwort erwartet = getBeispielTerminAntwort(anzahl, BENUTZER1);
 		
@@ -93,7 +92,7 @@ public class TerminfindungAntwortServiceTest {
 		List<TerminfindungDB> terminfindungDBs = getBeispielTerminDBList(4);
 		when(antwortRepo.findAllByTerminfindungLink(LINK)).thenReturn(terminfindungAntwortDBs);
 		when(terminRepo.findByLink(LINK))
-				.thenReturn(terminfindungDBs);
+			.thenReturn(terminfindungDBs);
 		List<TerminfindungAntwort> ergebnis = antwortService.loadAllByLink(LINK);
 		List<TerminfindungAntwort> erwartet = getBeispieleTerminAntwort(anzahlBenutzer);
 		
@@ -123,7 +122,6 @@ public class TerminfindungAntwortServiceTest {
 		terminfindungAntwort.setLink(LINK);
 		terminfindungAntwort.setAntworten(getBeispielAntwortenAlleJa(anzahl));
 		terminfindungAntwort.setKuerzel(benutzer);
-		terminfindungAntwort.setTeilgenommen(true);
 		return terminfindungAntwort;
 	}
 	
@@ -135,9 +133,13 @@ public class TerminfindungAntwortServiceTest {
 		return antworten;
 	}
 	
-	private Terminfindung getBeispielTerminfindung() {
+	private Terminfindung getBeispielTerminfindung(int anzahl) {
 		Terminfindung terminfindung = new Terminfindung();
 		terminfindung.setLink(LINK);
+		terminfindung.setVorschlaege(new ArrayList<>());
+		for (int j = 0; j < anzahl; j++) {
+			terminfindung.getVorschlaege().add(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(j));
+		}
 		return terminfindung;
 	}
 	
@@ -162,8 +164,9 @@ public class TerminfindungAntwortServiceTest {
 		List<TerminfindungDB> terminfindungAntwortDBS = new ArrayList<>();
 		for (int i = 0; i < anzahl; i++) {
 			TerminfindungDB terminfindungDB = new TerminfindungDB();
+			terminfindungDB.setLink(LINK);
 			terminfindungDB.setTermin(
-					LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(i));
+				LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(i));
 			terminfindungAntwortDBS.add(terminfindungDB);
 		}
 		return terminfindungAntwortDBS;

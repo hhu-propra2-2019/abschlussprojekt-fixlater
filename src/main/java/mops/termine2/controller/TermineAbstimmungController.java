@@ -74,15 +74,15 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -121,15 +121,15 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -168,8 +168,8 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -178,14 +178,17 @@ public class TermineAbstimmungController {
 		// muss dies hier noch abgefragt werden und evtl auf die
 		//Abstimmungsseite umgeleitet werden;
 		
+		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (!bereitsTeilgenommen) {
+		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
 			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
 		antworten = terminAntwortService.loadAllByLink(link);
-		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung);
+		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
+			account.getName(), link);
+		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
 		
@@ -217,15 +220,15 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ErgebnisMussAngezeigtWeren");
+			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -236,12 +239,10 @@ public class TermineAbstimmungController {
 		}
 		
 		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
-				antwortForm);
+			antwortForm);
 		
-		System.out.println("jetzt wird abgestimmt");
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
 		authenticatedAccess.increment();
-		
 		
 		return "redirect:/termine2/" + link;
 	}

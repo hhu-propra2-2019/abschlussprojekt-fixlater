@@ -15,13 +15,13 @@ import mops.termine2.database.entities.BenutzerGruppeDB;
 public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeDB, Long> {
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
-	
-	List<BenutzerGruppeDB> findByBenutzerAndGruppe(String benutzer, String gruppe);
+  
+  List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);  
+  
+	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 	
 	@Transactional
 	void deleteAllByGruppeId(Long gruppeId);
-	
-	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 	
 	@Query("select db.benutzer from BenutzerGruppeDB db where db.gruppeId like :gruppeId")
 	List<String> findBenutzerByGruppeId(@Param("gruppeId") Long gruppeId);

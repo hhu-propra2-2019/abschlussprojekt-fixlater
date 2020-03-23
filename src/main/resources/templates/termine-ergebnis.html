@@ -20,14 +20,14 @@
 			<li>
 				<a th:href="@{/termine2}">
 					<img src="../static/img/resized/calendar_small.jpg"
-					     th:src="@{/static/img/resized/calendar_small.jpg}">
+					     th:src="@{/img/resized/calendar_small.jpg}">
 					Termine
 				</a>
 			</li>
 			<li>
 				<a th:href="@{/termine2/umfragen}">
 					<img src="../static/img/resized/survey_small.jpg"
-					     th:src="@{/static/img/resized/survey_small.jpg}">
+					     th:src="@{/img/resized/survey_small.jpg}">
 					Umfragen
 				</a>
 			</li>
@@ -69,7 +69,8 @@
 					<div class="d-flex justify-content-between align-items-center">
 						<h2 class="h2">Zeiten</h2>
 
-						<a th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
+						<a th:if="${ergebnis.isFristNichtAbgelaufen()}"
+						   th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
 							<button class="btn btn-success">Abstimmung ändern</button>
 						</a>
 					</div>
@@ -82,32 +83,146 @@
 								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
 									 chen: Blau und Gelb lassen sich besser unterschei-
 									 den als Grün und Gelb. -->
-								<th class="col-5 bg-secondary">Termin</th>
-								<th class="col-2 bg-primary"> Ja</th>
-								<th class="col-2 bg-warning"> Vielleicht</th>
-								<th class="col-2 bg-danger"> Nein</th>
+								<th class="col bg-secondary" style="width: 5%;">
+									<a class="text-white" href="" data-toggle="tooltip"
+									   title="meine Antworten">m.An</a>
+								</th>
+								<th class="col bg-secondary" style="width: 8%;"></th>
+								<th class="col bg-secondary" style="width: 15%;">Termin</th>
+								<th class="col bg-secondary" style="width: 18%;"></th>
+								<th class="col bg-secondary" style="width: 6%;">Ja</th>
+								<th class="col bg-secondary" style="width: 6%;">
+									<div class="progress" style="height: 20px;width: 20px;">
+										<div class="progress-bar bg-primary "
+										     role="progressbar"
+										     style="width: 100%;"
+										     aria-valuenow="100"
+										></div>
+									</div>
+								</th>
+								<th class="col bg-secondary" style="width: 10%;">
+									<a class="text-white" href="" data-toggle="tooltip"
+									   title="Vielleicht">Vlt.</a>
+								</th>
+								<th class="col bg-secondary" style="width: 6%;">
+									<div class="progress" style="height: 20px;width: 20px;">
+										<div class="progress-bar bg-warning "
+										     role="progressbar"
+										     style="width: 100%;"
+										     aria-valuenow="100"
+										></div>
+									</div>
+								</th>
+								<th class="col bg-secondary" style="width: 6%;">Nein</th>
+								<th class="col bg-secondary" style="width: 6%;">
+									<div class="progress" style="height: 20px;width: 20px;">
+										<div class="progress-bar bg-danger "
+										     role="progressbar"
+										     style="width: 100%;"
+										     aria-valuenow="100"
+										></div>
+									</div>
+								</th>
+								<th class="col bg-secondary" style="width: 14%;">
+
+								</th>
+
 							</tr>
 							</thead>
-
-							<tbody th:each="termin,terminStat: ${ergebnis.termine}">
-							<tr>
-								<!-- abwechselnd bg-white / bg-light -->
-								<th class="col-5 bg-white" th:text="${termin}">25.02.2084, 12:15</th>
-								<th class="col-2 table-primary"
-								    th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}">7
-								</th>
-								<th class="col-2 table-warning"
-								    th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}">8
-								</th>
-								<th class="col-2 table-danger"
-								    th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}">9
-								</th>
-							</tr>
-							</tbody>
 						</table>
+						<details th:each="termin,terminStat: ${ergebnis.termineString}">
+							<summary>
+								<span class="font-weight-light text-black-50">Für Details klicken</span>
+								<div class="table-responsive">
+									<table class="table table-sm" style="text-align: center">
+										<tbody>
+										<tr>
+											<!-- abwechselnd bg-white / bg-light -->
+											<th class="col font-weight-bold" style="width: 2%;"
+											    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'bg-primary text-white'
+								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning text-black-50': 'bg-danger text-white' )"
+
+											    th:text="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'J'
+								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'V': 'N' )">
+
+											</th>
+											<th class="col bg-light font-weight-bold text-black-50" th:text="${termin}"
+											    style="width: 38%;">
+												25.02.2084, 12:15
+											</th>
+											<th class="col bg-light" style="width: 48%;">
+												<div class="progress" style="height: 100%">
+													<div class="progress-bar bg-primary font-weight-bold"
+													     role="progressbar"
+													     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${terminStat.index}__]} +'%;'"
+													     style="width: 34%;"
+													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
+													     aria-valuenow="34"
+													     th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
+													></div>
+													<div class="progress-bar bg-warning font-weight-bold text-black-50"
+													     role="progressbar"
+													     th:style="'width:'+ ${ergebnis.getAnteilStimmenVielleicht()[__${terminStat.index}__]} +'%;'"
+													     style="width: 34%;"
+													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
+													     aria-valuenow="34"
+													     th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
+													></div>
+													<div class="progress-bar bg-danger font-weight-bold "
+													     role="progressbar"
+													     th:style="'width:'+ ${ergebnis.getAnteilStimmenNein()[__${terminStat.index}__]} +'%;'"
+													     style="width: 34%;"
+													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+													     aria-valuenow="34"
+													     th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+													></div>
+												</div>
+											</th>
+											<th class="col bg-light" style="width: 12%;">
+											</th>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</summary>
+
+							<div class="table-responsive">
+								<table class="table table-sm" style="text-align: center">
+									<thead class="bg-light">
+									<tr>
+										<th class="col text-black-50 font-weight-bold" style="width: 33%">Zugestimmt
+										</th>
+										<th class="col text-black-50 font-weight-bold" style="width: 33%">Vielleicht
+										</th>
+										<th class="col text-black-50 font-weight-bold" style="width: 33%">Abgesagt
+										</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<th class="col text-black-50 bg-light" style="width: 33%"
+										    th:text="${ergebnis.getJaAntwortPseud()[__${terminStat.index}__]}">1
+										</th>
+										<th class="col text-black-50 bg-white" style="width: 33%"
+										    th:text="${ergebnis.getVielleichtAntwortPseudo()[__${terminStat.index}__]}">
+											2
+										</th>
+										<th class="col text-black-50 bg-light" style="width: 33%"
+										    th:text="${ergebnis.getNeinAntwortPseudo()[__${terminStat.index}__]}">1
+										</th>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</details>
+					</div>
+					<div class="d-flex justify-content-between align-items-center">
+						<span class="text-black-50">m.A. = meine Antwort</span>
 					</div>
 				</div>
-
+				<br>
+				<br>
+				<br>
 				<!-- Kommentare -->
 				<div>
 					<h2 class="h2">Kommentare</h2>

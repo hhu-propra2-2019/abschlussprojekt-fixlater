@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 
@@ -36,13 +37,12 @@ public class TerminAntwortService {
 	 */
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
 		
-		//antwortRepo.deleteAllByTerminfindungLinkAndBenutzer(terminVorschlag.getLink(), antwort.getKuerzel());
 		List<TerminfindungAntwortDB> antwortenToDelete =
 			antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
 				terminVorschlag.getLink());
 		
 		antwortRepo.deleteAll(antwortenToDelete);
-		for (LocalDateTime termin : antwort.getAntworten().keySet()) {
+		for (LocalDateTime termin : terminVorschlag.getVorschlaege()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
 			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminVorschlag.getLink(),
 				termin);
@@ -57,34 +57,11 @@ public class TerminAntwortService {
 		}
 	}
 	
-	
-	/**
-	 * Lädt eine Liste von Antworten nach Benutzer und Link
-	 *
-	 * @param benutzer
-	 * @param link
-	 * @return gibt eine Antwort zu einer Terminfindung
-	 */
-	
-	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
-		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
-			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
-		
-		TerminfindungAntwort antwort = buildAntwortFromDB(terminfindungAntwortDBList);
-		if (antwort == null) {
-			antwort = erstelleLeereAntwort(benutzer, link);
-		}
-		
-		return aktuelleOptionenEinfuegen(antwort, link);
-	}
-	
-	private TerminfindungAntwort erstelleLeereAntwort(String benutzer, String link) {
-		TerminfindungAntwort antwort = new TerminfindungAntwort();
-		antwort.setPseudonym(benutzer);
-		antwort.setKuerzel(benutzer);
-		antwort.setLink(link);
-		antwort.setAntworten(new HashMap<>());
-		return antwort;
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<TerminfindungAntwortDB> antworten =
+			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
+				link);
+		return !antworten.isEmpty();
 	}
 	
 	/**
@@ -97,89 +74,99 @@ public class TerminAntwortService {
 	}
 	
 	/**
+	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 *
+	 * @param benutzer der Benutzer dessen Antwort gesucht wir
+	 * @param link     der Link der Terminumfrage
+	 * @return gibt eine Antwort zu einer Terminfindung
+	 */
+	
+	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
+		
+		List<TerminfindungAntwortDB> alteAntwort =
+			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
+		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
+		
+		return buildAntwortForBenutzer(benutzer, alteAntwort,
+			antwortMoeglichkeiten);
+	}
+	
+	/**
 	 * Lädt alle Antworten die zu einem Link gehören
 	 *
-	 * @param link
+	 * @param link der Link der Terminumfrage
 	 * @return eine Liste von Antworten
 	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 			antwortRepo.findAllByTerminfindungLink(link);
+		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
 		
-		List<TerminfindungAntwort> antworten = buildAntwortenFromDB(terminfindungAntwortDBList);
-		if (antworten == null) {
-			antworten = new ArrayList<>();
-		}
-		for (TerminfindungAntwort antwort : antworten) {
-			aktuelleOptionenEinfuegen(antwort, link);
-		}
-		return antworten;
+		return buildAntworten(terminfindungAntwortDBList,
+			antwortMoeglichkeiten);
 	}
 	
-	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
-		List<TerminfindungAntwortDB> antworten =
-			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
-				link);
-		if (antworten.isEmpty()) {
-			return false;
-		}
-		return true;
-	}
-	
-	private TerminfindungAntwort buildAntwortFromDB(List<TerminfindungAntwortDB> db) {
-		if (db != null && !db.isEmpty()) {
-			return buildAntwortenFromDB(db).get(0);
-		}
-		return null;
-	}
-	
-	private List<TerminfindungAntwort> buildAntwortenFromDB(List<TerminfindungAntwortDB> db) {
-		if (db != null && !db.isEmpty()) {
+	private List<TerminfindungAntwort> buildAntworten(
+		List<TerminfindungAntwortDB> antwortDBS, List<TerminfindungDB> antwortMoeglichkeiten) {
+		
+		List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
+		if (!antwortDBS.isEmpty()) {
 			List<String> benuternamen = new ArrayList<>();
-			List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
 			
-			for (TerminfindungAntwortDB antwortDB : db) {
-				String aktuellerBenutzer = antwortDB.getBenutzer();
+			for (TerminfindungAntwortDB antwortDB : antwortDBS) {
+				String benutzer = antwortDB.getBenutzer();
 				if (!benuternamen.contains(antwortDB.getBenutzer())) {
-					TerminfindungAntwort antwort = new TerminfindungAntwort();
-					antwort.setLink(antwortDB.getTerminfindung().getLink());
-					antwort.setPseudonym(antwortDB.getPseudonym());
-					antwort.setKuerzel(aktuellerBenutzer);
-					antwort.setGruppe(antwortDB.getTerminfindung().getGruppe());
-					HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
-					for (TerminfindungAntwortDB terminfindungAntwortDB : db) {
-						if (terminfindungAntwortDB.getBenutzer().equals(aktuellerBenutzer)) {
-							antworten.put(terminfindungAntwortDB
-									.getTerminfindung().getTermin(),
-								terminfindungAntwortDB.getAntwort());
-						}
-					}
-					antwort.setAntworten(antworten);
-					antwort.setTeilgenommen(true);
-					terminAntworten.add(antwort);
-					benuternamen.add(aktuellerBenutzer);
+					List<TerminfindungAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
+						antwortDBS, benutzer);
+					terminAntworten.add(buildAntwortForBenutzer(
+						benutzer, nutzerAntworten, antwortMoeglichkeiten));
+					benuternamen.add(benutzer);
 				}
 				
 			}
-			return terminAntworten;
 		}
-		return null;
+		return terminAntworten;
+		
 	}
 	
-	private TerminfindungAntwort aktuelleOptionenEinfuegen(TerminfindungAntwort antwort, String link) {
-		List<TerminfindungDB> terminfindungDBS = terminRepo.findByLink(link);
-		HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
-		HashMap<LocalDateTime, Antwort> alteAntworten = antwort.getAntworten();
-		for (TerminfindungDB db : terminfindungDBS) {
-			LocalDateTime termin = db.getTermin();
-			if (alteAntworten.get(termin) != null) {
-				antworten.put(termin, alteAntworten.get(termin));
-			} else {
-				antworten.put(termin, Antwort.VIELLEICHT);
-			}
+	private TerminfindungAntwort buildAntwortForBenutzer(
+		String benutzer, List<TerminfindungAntwortDB> alteAntworten,
+		List<TerminfindungDB> antwortMoglichkeiten) {
+		
+		TerminfindungAntwort antwort = new TerminfindungAntwort();
+		antwort.setKuerzel(benutzer);
+		antwort.setLink(antwortMoglichkeiten.get(0).getLink());
+		if (!alteAntworten.isEmpty()) {
+			antwort.setPseudonym(alteAntworten.get(0).getPseudonym());
+		} else {
+			antwort.setPseudonym(benutzer);
 		}
-		antwort.setAntworten(antworten);
+		
+		HashMap<LocalDateTime, Antwort> alteAntwortenMap = new HashMap<>();
+		for (TerminfindungAntwortDB alteAntwort : alteAntworten) {
+			alteAntwortenMap.put(alteAntwort.getTerminfindung().getTermin(), alteAntwort.getAntwort());
+		}
+		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
+		
+		for (TerminfindungDB antwortMoglichkeit : antwortMoglichkeiten) {
+			LocalDateTime termin = antwortMoglichkeit.getTermin();
+			Antwort alteAntwort = alteAntwortenMap.get(termin);
+			antwortenMap.put(termin, Objects.requireNonNullElse(alteAntwort, Antwort.VIELLEICHT));
+		}
+		
+		antwort.setAntworten(antwortenMap);
 		return antwort;
 	}
 	
+	
+	private List<TerminfindungAntwortDB> filterAntwortenDbBenutzer(
+		List<TerminfindungAntwortDB> antwortDBS, String benutzer) {
+		List<TerminfindungAntwortDB> nutzerAntwortenDB = new ArrayList<>();
+		for (TerminfindungAntwortDB terminAntwortDB : antwortDBS) {
+			if (benutzer.equals(terminAntwortDB.getBenutzer())) {
+				nutzerAntwortenDB.add(terminAntwortDB);
+			}
+		}
+		return nutzerAntwortenDB;
+	}
 }
