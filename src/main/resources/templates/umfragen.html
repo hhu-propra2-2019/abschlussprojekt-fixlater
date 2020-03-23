@@ -213,8 +213,16 @@
 										     hat, dann btn-outline-info, ansonsten btn-primary. -->
 										<button class="btn btn-outline-info"
 										        style="font-size: small" type="submit"
-										        name="details" th:value="${offeneUmfrage.link}">
+										        name="details"
+										        th:value="${offeneUmfrage.link}"
+										        th:if="${offeneUmfrage.teilgenommen}">
 											Details
+										</button>
+										<button class="btn btn-primary" style="font-size: small"
+												type="submit" name="details"
+												th:value="offeneUmfrage.link"
+												th:if="!${offeneUmfrage.teilgenommen}">
+											Abstimmen
 										</button>
 									</form>
 									
