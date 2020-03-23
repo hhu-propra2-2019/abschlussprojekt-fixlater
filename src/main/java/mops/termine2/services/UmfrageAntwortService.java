@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mops.termine2.database.UmfrageAntwortRepository;
+import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Antwort;
@@ -17,10 +19,16 @@ import mops.termine2.models.UmfrageAntwort;
 @Service
 public class UmfrageAntwortService {
 	
+	@Autowired
 	private UmfrageAntwortRepository antwortRepo;
 	
-	public UmfrageAntwortService(UmfrageAntwortRepository umfrageAntwortRepository) {
-		antwortRepo = umfrageAntwortRepository;
+	@Autowired
+	private UmfrageRepository umfrageRepo;
+	
+	public UmfrageAntwortService(UmfrageAntwortRepository umfrageAntwortRepository,
+								UmfrageRepository umfrageRepository) {
+		this.antwortRepo = umfrageAntwortRepository;
+		this.umfrageRepo = umfrageRepository;
 	}
 	
 	/**
@@ -140,6 +148,11 @@ public class UmfrageAntwortService {
 			return umfrageAntworten;
 		}
 		return null;
+	}
+
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<UmfrageAntwortDB> antworten = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
+		return !antworten.isEmpty();
 	}
 	
 }
