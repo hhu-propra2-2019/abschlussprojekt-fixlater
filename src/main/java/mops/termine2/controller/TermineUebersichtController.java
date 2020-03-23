@@ -52,43 +52,51 @@ public class TermineUebersichtController {
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
 							defaultValue = "-1") Long gruppe) {
+		Account account;
 		if (p != null) {
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
 			authenticatedAccess.increment();
-			
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			gruppen = gruppen.stream()
-				.sorted(Comparator.comparing(Gruppe::getName))
-				.collect(Collectors.toList());
-			
-			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
-			
-			if (selGruppe == null) {
-				selGruppe = new Gruppe();
-				selGruppe.setId(-1L);
-				selGruppe.setName("Alle Gruppen");
-			}
-			
-			List<Terminfindung> terminfindungenOffen;
-			List<Terminfindung> terminfindungenAbgeschlossen;
-			if (gruppe == -1L) {
-				terminfindungenOffen =
-					terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
-			} else {
-				terminfindungenOffen = terminfindunguebersichtService
-					.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
-			}
-			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
-				terminfindungenOffen, gruppen, selGruppe);
-			
-			m.addAttribute("termine", termine);
+		} else {
+			return "error/403";
 		}
+		
+		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
+			return "error/403";
+		}
+		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		
+		gruppen = gruppen.stream()
+			.sorted(Comparator.comparing(Gruppe::getName))
+			.collect(Collectors.toList());
+		
+		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+		
+		if (selGruppe == null) {
+			selGruppe = new Gruppe();
+			selGruppe.setId(-1L);
+			selGruppe.setName("Alle Gruppen");
+		}
+		
+		List<Terminfindung> terminfindungenOffen;
+		List<Terminfindung> terminfindungenAbgeschlossen;
+		if (gruppe == -1L) {
+			terminfindungenOffen =
+				terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+		} else {
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
+		}
+		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
+			terminfindungenOffen, gruppen, selGruppe);
+		
+		m.addAttribute("termine", termine);
+		
 		return "termine";
 	}
 	
