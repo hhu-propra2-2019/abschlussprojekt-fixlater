@@ -23,6 +23,11 @@ public class UmfrageAntwortService {
 		antwortRepo = umfrageAntwortRepository;
 	}
 	
+	/**
+	 * Speichert Antworten zu einer Umfragenabstimmung
+	 * @param antwort
+	 * @param umfrage
+	 */
 	public void abstimmen(UmfrageAntwort antwort, Umfrage umfrage) {
 		
 		antwortRepo.deleteAllByUmfrageLinkAndBenutzer(umfrage.getLink(), antwort.getBenutzer());
@@ -34,12 +39,12 @@ public class UmfrageAntwortService {
 			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
 			umfrageDB.setErsteller(umfrage.getErsteller());
 			umfrageDB.setFrist(umfrage.getFrist());
-			umfrageDB.setGruppe(umfrage.getGruppe());
+			umfrageDB.setGruppeId(umfrage.getGruppeId());
 			umfrageDB.setLink(umfrage.getLink());
 			umfrageDB.setLoeschdatum(umfrage.getLoeschdatum());
 			umfrageDB.setMaxAntwortAnzahl(umfrage.getMaxAntwortAnzahl());
 			umfrageDB.setTitel(umfrage.getTitel());
-			if (umfrage.getGruppe() == null) {
+			if (umfrage.getGruppeId() == null) {
 				umfrageDB.setModus(Modus.LINK);
 			} else {
 				umfrageDB.setModus(Modus.GRUPPE);
@@ -54,16 +59,31 @@ public class UmfrageAntwortService {
 		}
 	}
 	
+	/**
+	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 * @param benutzer
+	 * @param link
+	 * @returngibt eine Antwort zu einer Umfrage
+	 */
 	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
 		return buildAntwortFromDB(umfrageAntwortDBs);
 	}
 	
+	/**
+	 * Lädt alle Antworten die zu einem Link gehören
+	 * @param link
+	 * @return eine Liste von Antworten
+	 */
 	public List<UmfrageAntwort> loadAllByLink(String link) {
 		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findAllByUmfrageLink(link);
 		return buildAntwortenFromDB(umfrageAntwortDBs);
 	}
 	
+	/**
+	 * Löscht alle Antworten nach Link
+	 * @param link
+	 */
 	public void deleteAllByLink(String link) {
 		antwortRepo.deleteAllByUmfrageLink(link);
 	}
@@ -73,7 +93,7 @@ public class UmfrageAntwortService {
 			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
 			UmfrageAntwort antwort = new UmfrageAntwort();
 			antwort.setBenutzer(ersteAntwortDB.getBenutzer());
-			antwort.setGruppe(ersteAntwortDB.getUmfrage().getGruppe());
+			antwort.setGruppeId(ersteAntwortDB.getUmfrage().getGruppeId());
 			antwort.setLink(ersteAntwortDB.getUmfrage().getLink());
 			antwort.setPseudonym(ersteAntwortDB.getPseudonym());
 			antwort.setTeilgenommen(true);
@@ -99,7 +119,7 @@ public class UmfrageAntwortService {
 				if (!benutzernamen.contains(aktuellerBenutzer)) {
 					UmfrageAntwort antwort = new UmfrageAntwort();
 					antwort.setBenutzer(aktuellerBenutzer);
-					antwort.setGruppe(aktuelleAntwortDB.getUmfrage().getGruppe());
+					antwort.setGruppeId(aktuelleAntwortDB.getUmfrage().getGruppeId());
 					antwort.setLink(aktuelleAntwortDB.getUmfrage().getLink());
 					antwort.setPseudonym(aktuelleAntwortDB.getPseudonym());
 					antwort.setTeilgenommen(true);

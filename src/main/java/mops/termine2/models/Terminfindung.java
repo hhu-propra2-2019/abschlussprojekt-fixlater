@@ -3,11 +3,10 @@ package mops.termine2.models;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -32,8 +31,10 @@ public class Terminfindung {
 	
 	private LocalDateTime loeschdatum;
 	
-	private String gruppe;
+	private Long gruppeId;
 	
 	private LocalDateTime ergebnis;
+	
+	private boolean teilgenommen = false;
 	
 }

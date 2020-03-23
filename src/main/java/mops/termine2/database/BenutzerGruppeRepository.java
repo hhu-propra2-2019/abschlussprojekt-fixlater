@@ -10,4 +10,8 @@ import java.util.List;
 public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeDB, Long> {
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
+	
+	List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);
+	
+	List<BenutzerGruppeDB> findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 }

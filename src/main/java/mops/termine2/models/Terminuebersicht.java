@@ -15,6 +15,8 @@ public class Terminuebersicht {
 	
 	private List<Terminfindung> offen;
 	
-	private List<String> gruppen;
+	private List<Gruppe> gruppen;
+	
+	private Gruppe selektierteGruppe;
 	
 }

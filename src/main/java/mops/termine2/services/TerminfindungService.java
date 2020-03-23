@@ -24,6 +24,11 @@ public class TerminfindungService {
 		this.antwortRepo = antwortRepo;
 	}
 	
+	/**
+	 * Speichert eine neue Terminfindung in der DB
+	 *
+	 * @param terminfindung
+	 */
 	public void save(Terminfindung terminfindung) {
 		
 		for (LocalDateTime termin : terminfindung.getVorschlaege()) {
@@ -35,10 +40,11 @@ public class TerminfindungService {
 			terminfindungDB.setLoeschdatum(terminfindung.getLoeschdatum());
 			terminfindungDB.setLink(terminfindung.getLink());
 			terminfindungDB.setBeschreibung(terminfindung.getBeschreibung());
-			terminfindungDB.setGruppe(terminfindung.getGruppe());
+			terminfindungDB.setGruppeId(terminfindung.getGruppeId());
 			terminfindungDB.setTermin(termin);
+			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
 			
-			if (terminfindung.getGruppe() != null) {
+			if (terminfindung.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
 			} else {
 				terminfindungDB.setModus(Modus.LINK);
@@ -48,11 +54,19 @@ public class TerminfindungService {
 		}
 	}
 	
+	/**
+	 * Löscht eine Terminfindung und zugehörige Antworten nach Link
+	 *
+	 * @param link
+	 */
 	public void loescheByLink(String link) {
 		antwortRepo.deleteByLink(link);
 		terminfindungRepo.deleteByLink(link);
 	}
 	
+	/**
+	 * Löscht eine abgelaufene Terminfindung und zugehörige Antworten
+	 */
 	public void loescheAbgelaufene() {
 		LocalDateTime timeNow = LocalDateTime.now();
 		antwortRepo.loescheAelterAls(timeNow);
@@ -66,8 +80,8 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
-	public List<Terminfindung> loadByGruppeOhneTermine(String gruppe) {
-		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppe(gruppe);
+	public List<Terminfindung> loadByGruppeOhneTermine(Long gruppeId) {
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeId(gruppeId);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
@@ -89,9 +103,10 @@ public class TerminfindungService {
 			terminfindung.setOrt(ersterTermin.getOrt());
 			terminfindung.setLoeschdatum(ersterTermin.getLoeschdatum());
 			terminfindung.setFrist(ersterTermin.getFrist());
-			terminfindung.setGruppe(ersterTermin.getGruppe());
+			terminfindung.setGruppeId(ersterTermin.getGruppeId());
 			terminfindung.setLink(ersterTermin.getLink());
 			terminfindung.setErsteller(ersterTermin.getErsteller());
+			terminfindung.setErgebnis(ersterTermin.getErgebnis());
 			
 			List<LocalDateTime> terminMoeglichkeiten = new ArrayList<>();
 			for (TerminfindungDB termin : termineDB) {
@@ -127,9 +142,10 @@ public class TerminfindungService {
 		terminfindung.setErsteller(db.getErsteller());
 		terminfindung.setLoeschdatum(db.getLoeschdatum());
 		terminfindung.setFrist(db.getFrist());
-		terminfindung.setGruppe(db.getGruppe());
+		terminfindung.setGruppeId(db.getGruppeId());
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
+		terminfindung.setErgebnis(db.getErgebnis());
 		
 		return terminfindung;
 	}
