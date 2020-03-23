@@ -15,9 +15,9 @@ import mops.termine2.database.entities.BenutzerGruppeDB;
 public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeDB, Long> {
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
-  
-  List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);  
-  
+	
+	List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);
+	
 	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
 	
 	@Transactional
