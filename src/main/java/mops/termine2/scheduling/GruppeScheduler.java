@@ -43,7 +43,6 @@ public class GruppeScheduler {
 	
 	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
-		System.out.println("Starte Update");
 		ResponseEntity<GruppenDTO> result;
 		try {
 			result = template.getForEntity(url, GruppenDTO.class, statusnummer);
