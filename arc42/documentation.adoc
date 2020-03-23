@@ -403,3 +403,25 @@ und die entsprechende HTML Seite um nötige Thymeleaf Attribute erweitert.
 === UI Neue Umfragen (Anton, Ingrid)
 Formular für neue Termine wurde komplett überholt und die UX (Funktion/Optik) wurde deutlich verbessert.
 Formular für neue Umfragen ist jetzt vollständig mit allen input Komponenten und die VIEW ist verfollständigt und überarbeitet worden. Jetzt werden falsche Eingaben korrekt abgefangen und die Bedienung ist einfacher.
+
+=== Ergebnis und Ansicht(Jan)(Tag15 und Wochenende)
+Die Ergebnis Ansicht wurde für den Nutzer intuitiver gestaltet und mit mehr informationen gefüllt.
+So hat der Nutzer nun einen Blick darauf , wer wie abgestimmt hat und wie viele ja nein vielleicht Stimmen ein Termin bekommen hat.
+Die Anzeige eines Termins wurde Formatiert (z.B Sa. 09.11.2020 19:08),
+da sich die Standartformatierungen von LocalDateTime nicht anboten.
+Es gibt nun eine Art Legende.
+
+image::ourimages/tag15/ergebnis.png[]
+
+Mit einem Klick auf eine Terminszeile wird angezeigt wer wie abgestimmt hat. 
+
+=== AbstimmungsSeite(Jan)(Tag15 und Wochenende)
+Es wurde die Spaltenbreite angepasst
+Die Anzeige eines Termins wurde Formatiert (z.B Sa. 09.11.2020 19:08),
+da sich die Standartformatierungen von LocalDateTime nicht anboten.
+
+=== Umbauen des Programms(Thomas ,Jan)(Wochenende):
+Bis zuletzt gingen wir von der falschen Annahme aus, dass Gruppennamen 
+eindeutig seien. Nach dem wir erfuren , dass dem nicht so war , musste 
+die Datenbank, Teile der Logik und die Ui umgebaut werden.
+
