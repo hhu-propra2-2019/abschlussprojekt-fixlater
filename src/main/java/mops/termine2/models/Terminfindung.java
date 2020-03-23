@@ -35,5 +35,7 @@ public class Terminfindung {
 	
 	private LocalDateTime ergebnis;
 	
+	private boolean teilgenommen = false;
+	
 	private Boolean ergebnisVorFrist;
 }

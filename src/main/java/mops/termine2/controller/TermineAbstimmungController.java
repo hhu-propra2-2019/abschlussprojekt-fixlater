@@ -91,7 +91,7 @@ public class TermineAbstimmungController {
 		//Abstimmungsseite umgeleitet werden;
 		
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (bereitsTeilgenommen) {
+		if (bereitsTeilgenommen && terminfindung.getErgebnisVorFrist()) {
 			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
@@ -159,7 +159,7 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
+			System.out.println("403");
 			return "error/403";
 		}
 		
@@ -182,6 +182,10 @@ public class TermineAbstimmungController {
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
 			System.out.println("abstimmung");
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
+		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		

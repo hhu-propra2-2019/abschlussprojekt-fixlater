@@ -70,7 +70,7 @@ public class TermineNeuController {
 			terminfindung.setVorschlaege(new ArrayList<>());
 			terminfindung.getVorschlaege().add(LocalDateTime.now());
 			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
-			
+			terminfindung.setErgebnisVorFrist(true);
 			m.addAttribute("terminfindung", terminfindung);
 		}
 		
