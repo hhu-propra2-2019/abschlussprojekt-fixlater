@@ -35,4 +35,6 @@ public class Umfrage {
 	
 	private String umfragenErgebnis;
 	
+	private boolean teilgenommen = false;
+	
 }
