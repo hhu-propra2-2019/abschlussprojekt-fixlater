@@ -23,8 +23,9 @@ import org.springframework.web.context.annotation.SessionScope;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -48,40 +49,46 @@ public class UmfragenUebersichtController {
 	
 	@GetMapping("/umfragen")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfragen(Principal p, Model m,
-						   @RequestParam(name = "gruppe", defaultValue = "Alle Gruppen") String gruppe) {
+	public String index(Principal p, Model m,
+						@RequestParam(name = "gruppe",
+							defaultValue = "-1") Long gruppe) {
 		if (p != null) {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
 			authenticatedAccess.increment();
 			
-			List<String> gruppenNamen = new ArrayList<>();
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			for (Gruppe g : gruppen) {
-				gruppenNamen.add(g.getName());
+			gruppen = gruppen.stream()
+				.sorted(Comparator.comparing(Gruppe::getName))
+				.collect(Collectors.toList());
+			
+			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+			
+			if (selGruppe == null) {
+				selGruppe = new Gruppe();
+				selGruppe.setId(-1L);
+				selGruppe.setName("Alle Gruppen");
 			}
 			
-			List<Umfrage> umfragenOffen;
-			List<Umfrage> umfragenAbgeschlossen;
-			if (gruppe.equals("Alle Gruppen")) {
-				umfragenOffen =
+			List<Umfrage> umfrageOffen;
+			List<Umfrage> umfrageAbgeschlossen;
+			if (gruppe == -1L) {
+				umfrageOffen =
 					umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
-				umfragenAbgeschlossen = umfragenuebersichtService
+				umfrageAbgeschlossen = umfragenuebersichtService
 					.loadAbgeschlosseneUmfragenFuerBenutzer(account);
 			} else {
-				umfragenOffen =
-					umfragenuebersichtService.loadOffeneUmfragenFuerGruppe(account, gruppe);
-				umfragenAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe);
+				umfrageOffen = umfragenuebersichtService
+					.loadOffeneUmfragenFuerGruppe(selGruppe.getId());
+				umfrageAbgeschlossen = umfragenuebersichtService
+					.loadAbgeschlosseneUmfragenFuerGruppe(selGruppe.getId());
 			}
-			Umfrageuebersicht umfragen =
-				new Umfrageuebersicht(umfragenAbgeschlossen, umfragenOffen, gruppenNamen);
-			
-			m.addAttribute("umfragen", umfragen);
-			m.addAttribute("selektierteGruppe", gruppe);
+			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
+				umfrageOffen, gruppen, selGruppe);
+			System.out.println(umfrage);
+			m.addAttribute("umfragen", umfrage);
 		}
-		
 		return "umfragen";
 	}
 	

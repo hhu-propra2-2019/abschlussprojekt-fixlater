@@ -28,7 +28,7 @@ public class Umfrage {
 	
 	private LocalDateTime loeschdatum;
 	
-	private String gruppe;
+	private Long gruppeId;
 	
 	private Long maxAntwortAnzahl;
 	

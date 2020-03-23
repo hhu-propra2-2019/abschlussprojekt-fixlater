@@ -25,7 +25,8 @@ public class UmfragenuebersichtService {
 	private UmfrageAntwortService umfrageAntwortService;
 	
 	public UmfragenuebersichtService(UmfrageService umfrageService,
-									 GruppeService gruppeService, UmfrageAntwortService umfrageAntwortService) {
+									 GruppeService gruppeService,
+									 UmfrageAntwortService umfrageAntwortService) {
 		this.umfrageService = umfrageService;
 		this.gruppeService = gruppeService;
 		this.umfrageAntwortService = umfrageAntwortService;
@@ -35,12 +36,12 @@ public class UmfragenuebersichtService {
 	 * Geht die Umfragen durch und filtert nach offenen die zu einer Gruppe gehören
 	 *
 	 * @param account
-	 * @param gruppe
+	 * @param gruppeId
 	 * @return eine Liste von offenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, String gruppe) {
+	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, Long gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppe));
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
 		
 		offeneUmfragen = offeneUmfragen.stream()
@@ -56,12 +57,12 @@ public class UmfragenuebersichtService {
 	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
 	 *
 	 * @param account
-	 * @param gruppe
+	 * @param gruppeId
 	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, String gruppe) {
+	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, Long gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppe));
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		List<Umfrage> abgeschlosseneUmfragen = filterClosedSurveys(umfragen);
 		
 		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
@@ -108,7 +109,7 @@ public class UmfragenuebersichtService {
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		for (Gruppe g : gruppen) {
-			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getName()));
+			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getId()));
 		}
 		return umfragen;
 	}
