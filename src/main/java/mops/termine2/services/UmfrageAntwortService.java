@@ -39,12 +39,12 @@ public class UmfrageAntwortService {
 			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
 			umfrageDB.setErsteller(umfrage.getErsteller());
 			umfrageDB.setFrist(umfrage.getFrist());
-			umfrageDB.setGruppe(umfrage.getGruppe());
+			umfrageDB.setGruppeId(umfrage.getGruppeId());
 			umfrageDB.setLink(umfrage.getLink());
 			umfrageDB.setLoeschdatum(umfrage.getLoeschdatum());
 			umfrageDB.setMaxAntwortAnzahl(umfrage.getMaxAntwortAnzahl());
 			umfrageDB.setTitel(umfrage.getTitel());
-			if (umfrage.getGruppe() == null) {
+			if (umfrage.getGruppeId() == null) {
 				umfrageDB.setModus(Modus.LINK);
 			} else {
 				umfrageDB.setModus(Modus.GRUPPE);
@@ -93,7 +93,7 @@ public class UmfrageAntwortService {
 			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
 			UmfrageAntwort antwort = new UmfrageAntwort();
 			antwort.setBenutzer(ersteAntwortDB.getBenutzer());
-			antwort.setGruppe(ersteAntwortDB.getUmfrage().getGruppe());
+			antwort.setGruppeId(ersteAntwortDB.getUmfrage().getGruppeId());
 			antwort.setLink(ersteAntwortDB.getUmfrage().getLink());
 			antwort.setPseudonym(ersteAntwortDB.getPseudonym());
 			antwort.setTeilgenommen(true);
@@ -119,7 +119,7 @@ public class UmfrageAntwortService {
 				if (!benutzernamen.contains(aktuellerBenutzer)) {
 					UmfrageAntwort antwort = new UmfrageAntwort();
 					antwort.setBenutzer(aktuellerBenutzer);
-					antwort.setGruppe(aktuelleAntwortDB.getUmfrage().getGruppe());
+					antwort.setGruppeId(aktuelleAntwortDB.getUmfrage().getGruppeId());
 					antwort.setLink(aktuelleAntwortDB.getUmfrage().getLink());
 					antwort.setPseudonym(aktuelleAntwortDB.getPseudonym());
 					antwort.setTeilgenommen(true);

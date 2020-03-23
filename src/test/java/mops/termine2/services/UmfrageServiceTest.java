@@ -1,19 +1,18 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +30,7 @@ public class UmfrageServiceTest {
 	
 	private static final String[] LINK = {"BruderJakob", "AlleMeineEntchen", "BieneMaya"};
 	
-	private static final String[] GRUPPE = {"FIXLATER", "TollEinAndererMachts", "Proprapri"};
+	private static final Long[] GRUPPE = {1L, 2L, 3L};
 	
 	private static final LocalDateTime FRIST = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
 	
@@ -131,7 +130,7 @@ public class UmfrageServiceTest {
 	public void loadUmfragenByGruppeEineUmfrageKeineVorschlaege() {
 		int anzahl = 3;
 		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
-		when(umfrageRepository.findByGruppe(GRUPPE[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByGruppeId(GRUPPE[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		erwartet.setVorschlaege(new ArrayList<String>());
 		
@@ -148,7 +147,7 @@ public class UmfrageServiceTest {
 		for (UmfrageDB db : umfrageDBs2) {
 			umfrageDBs.add(db);
 		}
-		when(umfrageRepository.findByGruppe(GRUPPE[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByGruppeId(GRUPPE[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet1 = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
 		erwartet1.setVorschlaege(new ArrayList<String>());
 		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 1, 0, 1, 1);
@@ -183,8 +182,8 @@ public class UmfrageServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
-	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(int anzahl, int bIndex,
-		int eIndex, int gIndex, int lIndex, int tIndex) {
+	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(
+		int anzahl, int bIndex, int eIndex, int gIndex, int lIndex, int tIndex) {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
 		if (anzahl != 0) {
 			List<String> vorschlaege = erstelleVorschlaege(anzahl);
@@ -194,7 +193,7 @@ public class UmfrageServiceTest {
 				umfrageDB.setBeschreibung(BESCHREIBUNG[bIndex]);
 				umfrageDB.setErsteller(ERSTELLER[eIndex]);
 				umfrageDB.setFrist(FRIST);
-				umfrageDB.setGruppe(GRUPPE[gIndex]);
+				umfrageDB.setGruppeId(GRUPPE[gIndex]);
 				umfrageDB.setLink(LINK[lIndex]);
 				umfrageDB.setLoeschdatum(LOESCHDATUM);
 				umfrageDB.setMaxAntwortAnzahl(13L);
@@ -207,7 +206,7 @@ public class UmfrageServiceTest {
 			umfrageDB.setBeschreibung(BESCHREIBUNG[bIndex]);
 			umfrageDB.setErsteller(ERSTELLER[eIndex]);
 			umfrageDB.setFrist(FRIST);
-			umfrageDB.setGruppe(GRUPPE[gIndex]);
+			umfrageDB.setGruppeId(GRUPPE[gIndex]);
 			umfrageDB.setLink(LINK[lIndex]);
 			umfrageDB.setLoeschdatum(LOESCHDATUM);
 			umfrageDB.setMaxAntwortAnzahl(13L);
@@ -219,13 +218,13 @@ public class UmfrageServiceTest {
 		
 	}
 	
-	private Umfrage erstelleBeispielUmfrage(int anzahl, int bIndex, int eIndex,
-		int gIndex, int lIndex, int tIndex) {
+	private Umfrage erstelleBeispielUmfrage(
+		int anzahl, int bIndex, int eIndex, int gIndex, int lIndex, int tIndex) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setBeschreibung(BESCHREIBUNG[bIndex]);
 		umfrage.setErsteller(ERSTELLER[eIndex]);
 		umfrage.setFrist(FRIST);
-		umfrage.setGruppe(GRUPPE[gIndex]);
+		umfrage.setGruppeId(GRUPPE[gIndex]);
 		umfrage.setLink(LINK[lIndex]);
 		umfrage.setLoeschdatum(LOESCHDATUM);
 		umfrage.setMaxAntwortAnzahl(MAXANTWORT);

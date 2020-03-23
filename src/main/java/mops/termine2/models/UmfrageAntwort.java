@@ -14,7 +14,7 @@ public class UmfrageAntwort {
 	
 	private String link;
 	
-	private String gruppe;
+	private Long gruppeId;
 	
 	private String benutzer;
 	

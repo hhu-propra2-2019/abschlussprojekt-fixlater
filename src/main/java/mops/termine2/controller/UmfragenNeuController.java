@@ -1,23 +1,6 @@
 package mops.termine2.controller;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -28,6 +11,21 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.UmfrageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -181,8 +179,8 @@ public class UmfragenNeuController {
 			umfrage.setErsteller(account.getName());
 			umfrage.setLoeschdatum(umfrage.getFrist().plusWeeks(3));
 			if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
-				Gruppe gruppe = gruppeService.loadById(gruppeSelektiert.getId());
-				umfrage.setGruppe(gruppe.getName());
+				Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
+				umfrage.setGruppeId(gruppe.getId());
 			}
 			
 			String link = linkService.generiereEindeutigenLink();
