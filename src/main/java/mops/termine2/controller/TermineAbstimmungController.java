@@ -7,11 +7,13 @@ import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortForm;
 import mops.termine2.controller.formular.ErgebnisForm;
+import mops.termine2.models.Kommentar;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class TermineAbstimmungController {
 	
 	@Autowired
 	private GruppeService gruppeService;
+	
+	@Autowired
+	private KommentarService kommentarService;
 	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
@@ -133,6 +138,7 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
 		AntwortForm antwortForm = new AntwortForm();
 		antwortForm.init(antwort);
@@ -141,6 +147,7 @@ public class TermineAbstimmungController {
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("antwort", antwortForm);
+		m.addAttribute("kommentare", kommentare);
 		
 		authenticatedAccess.increment();
 		
@@ -185,12 +192,14 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
+		m.addAttribute("kommentare", kommentare);
 		
 		authenticatedAccess.increment();
 		
