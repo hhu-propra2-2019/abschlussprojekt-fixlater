@@ -63,7 +63,9 @@
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
 						        data-toggle="dropdown" id="dropOperator" type="button"
-						        th:text="${termine.selektierteGruppe.name}  + ' (id: ' + ${termine.selektierteGruppe.id} + ')'">
+						        th:text="${termine.selektierteGruppe.id != -1}?
+						        ${termine.selektierteGruppe.name}  + ' (id: ' + ${termine.selektierteGruppe.id} + ')' :
+						        ${termine.selektierteGruppe.name}">
 							Alle Gruppen
 						</button>
 						
