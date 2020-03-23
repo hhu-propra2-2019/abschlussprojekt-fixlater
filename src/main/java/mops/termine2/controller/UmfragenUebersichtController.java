@@ -49,7 +49,7 @@ public class UmfragenUebersichtController {
 	@GetMapping("/umfragen")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String umfragen(Principal p, Model m,
-					@RequestParam(name = "gruppe", defaultValue = "Alle Gruppen") String gruppe) {
+						   @RequestParam(name = "gruppe", defaultValue = "Alle Gruppen") String gruppe) {
 		if (p != null) {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
@@ -76,7 +76,7 @@ public class UmfragenUebersichtController {
 					.loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe);
 			}
 			Umfrageuebersicht umfragen =
-					new Umfrageuebersicht(umfragenAbgeschlossen, umfragenOffen, gruppenNamen);
+				new Umfrageuebersicht(umfragenAbgeschlossen, umfragenOffen, gruppenNamen);
 			
 			m.addAttribute("umfragen", umfragen);
 			m.addAttribute("selektierteGruppe", gruppe);
@@ -92,7 +92,7 @@ public class UmfragenUebersichtController {
 		if (p != null) {
 			link = req.getParameter("details");
 		}
-		return "redirect:/termine2/umfragen" + link;
+		return "redirect:/termine2/umfragen/" + link;
 	}
 }
 

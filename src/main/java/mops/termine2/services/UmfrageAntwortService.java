@@ -1,12 +1,5 @@
 package mops.termine2.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
@@ -15,6 +8,13 @@ import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UmfrageAntwortService {
@@ -26,13 +26,14 @@ public class UmfrageAntwortService {
 	private UmfrageRepository umfrageRepo;
 	
 	public UmfrageAntwortService(UmfrageAntwortRepository umfrageAntwortRepository,
-								UmfrageRepository umfrageRepository) {
+								 UmfrageRepository umfrageRepository) {
 		this.antwortRepo = umfrageAntwortRepository;
 		this.umfrageRepo = umfrageRepository;
 	}
 	
 	/**
 	 * Speichert Antworten zu einer Umfragenabstimmung
+	 *
 	 * @param antwort
 	 * @param umfrage
 	 */
@@ -69,17 +70,20 @@ public class UmfrageAntwortService {
 	
 	/**
 	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 *
 	 * @param benutzer
 	 * @param link
 	 * @returngibt eine Antwort zu einer Umfrage
 	 */
 	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
-		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
-		return buildAntwortFromDB(umfrageAntwortDBs);
+		List<UmfrageAntwortDB> alteAntwort = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
+		List<UmfrageDB> antwortMoeglichkeiten = umfrageRepo.findByLink(link);
+		return buildAntwortForBenutzer(benutzer, alteAntwort, antwortMoeglichkeiten);
 	}
 	
 	/**
 	 * Lädt alle Antworten die zu einem Link gehören
+	 *
 	 * @param link
 	 * @return eine Liste von Antworten
 	 */
@@ -90,10 +94,16 @@ public class UmfrageAntwortService {
 	
 	/**
 	 * Löscht alle Antworten nach Link
+	 *
 	 * @param link
 	 */
 	public void deleteAllByLink(String link) {
 		antwortRepo.deleteAllByUmfrageLink(link);
+	}
+	
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<UmfrageAntwortDB> antworten = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
+		return !antworten.isEmpty();
 	}
 	
 	private UmfrageAntwort buildAntwortFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
@@ -149,10 +159,34 @@ public class UmfrageAntwortService {
 		}
 		return null;
 	}
-
-	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
-		List<UmfrageAntwortDB> antworten = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
-		return !antworten.isEmpty();
+	
+	private UmfrageAntwort buildAntwortForBenutzer(
+		String benutzer, List<UmfrageAntwortDB> alteAntworten,
+		List<UmfrageDB> antwortMoglichkeiten) {
+		
+		UmfrageAntwort antwort = new UmfrageAntwort();
+		antwort.setBenutzer(benutzer);
+		antwort.setLink(antwortMoglichkeiten.get(0).getLink());
+		if (!alteAntworten.isEmpty()) {
+			antwort.setPseudonym(alteAntworten.get(0).getPseudonym());
+		} else {
+			antwort.setPseudonym(benutzer);
+		}
+		
+		HashMap<String, Antwort> alteAntwortenMap = new HashMap<>();
+		for (UmfrageAntwortDB alteAntwort : alteAntworten) {
+			alteAntwortenMap.put(alteAntwort.getUmfrage().getAuswahlmoeglichkeit(), alteAntwort.getAntwort());
+		}
+		HashMap<String, Antwort> antwortenMap = new HashMap<>();
+		
+		for (UmfrageDB antwortMoglichkeit : antwortMoglichkeiten) {
+			String vorschalg = antwortMoglichkeit.getAuswahlmoeglichkeit();
+			Antwort alteAntwort = alteAntwortenMap.get(vorschalg);
+			antwortenMap.put(vorschalg, Objects.requireNonNullElse(alteAntwort, Antwort.NEIN));
+		}
+		
+		antwort.setAntworten(antwortenMap);
+		return antwort;
 	}
 	
 }

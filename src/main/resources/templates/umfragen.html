@@ -145,7 +145,7 @@
 							<div class="mt-3" style="text-align: center">
 								<form th:action="@{/termine2/umfragen}" method="post">
 									<button class="btn btn-outline-info" style="font-size: small"
-									        type="submit" name="details" th:value="*{umfrage.link}">
+									        type="submit" name="details" th:value="${umfrage.link}">
 										Details
 									</button>
 								</form>
@@ -220,7 +220,7 @@
 										</button>
 										<button class="btn btn-primary" style="font-size: small"
 												type="submit" name="details"
-												th:value="offeneUmfrage.link"
+												th:value="${offeneUmfrage.link}"
 												th:if="!${offeneUmfrage.teilgenommen}">
 											Abstimmen
 										</button>

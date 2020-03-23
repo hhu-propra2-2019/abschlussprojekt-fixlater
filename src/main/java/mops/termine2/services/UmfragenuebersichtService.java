@@ -1,17 +1,16 @@
 package mops.termine2.services;
 
+import mops.termine2.authentication.Account;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Umfrage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import mops.termine2.authentication.Account;
-import mops.termine2.models.Gruppe;
-import mops.termine2.models.Umfrage;
 
 @Service
 public class UmfragenuebersichtService {
@@ -26,7 +25,7 @@ public class UmfragenuebersichtService {
 	private UmfrageAntwortService umfrageAntwortService;
 	
 	public UmfragenuebersichtService(UmfrageService umfrageService,
-				GruppeService gruppeService, UmfrageAntwortService umfrageAntwortService) {
+									 GruppeService gruppeService, UmfrageAntwortService umfrageAntwortService) {
 		this.umfrageService = umfrageService;
 		this.gruppeService = gruppeService;
 		this.umfrageAntwortService = umfrageAntwortService;
@@ -34,6 +33,7 @@ public class UmfragenuebersichtService {
 	
 	/**
 	 * Geht die Umfragen durch und filtert nach offenen die zu einer Gruppe gehören
+	 *
 	 * @param account
 	 * @param gruppe
 	 * @return eine Liste von offenen Umfragen nach Gruppe
@@ -44,8 +44,8 @@ public class UmfragenuebersichtService {
 		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
 		
 		offeneUmfragen = offeneUmfragen.stream()
-				.sorted(Comparator.comparing(Umfrage::getFrist))
-				.collect(Collectors.toList());
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
 		
 		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
 		
@@ -54,6 +54,7 @@ public class UmfragenuebersichtService {
 	
 	/**
 	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
+	 *
 	 * @param account
 	 * @param gruppe
 	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
@@ -70,6 +71,7 @@ public class UmfragenuebersichtService {
 	
 	/**
 	 * Geht die Umfragen durch und filtert nach offenen die zu einem Nutzer gehören
+	 *
 	 * @param account
 	 * @return eine Liste von offenen Umfragen nach Nutzer
 	 */
@@ -78,17 +80,18 @@ public class UmfragenuebersichtService {
 		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
 		
 		offeneUmfragen = offeneUmfragen.stream()
-				.sorted(Comparator.comparing(Umfrage::getFrist))
-				.collect(Collectors.toList());
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
 		
 		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
 		
 		return offeneUmfragen;
 	}
 	
-
+	
 	/**
 	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einem Nutzer gehören
+	 *
 	 * @param account
 	 * @return eine Liste von abgeschlossenen Umfragen nach Nutzer
 	 */
@@ -133,7 +136,7 @@ public class UmfragenuebersichtService {
 	private List<Umfrage> setTeilgenommen(List<Umfrage> umfragen, Account account) {
 		for (Umfrage umfrage : umfragen) {
 			umfrage.setTeilgenommen(umfrageAntwortService
-					.hatNutzerAbgestimmt(account.getName(), umfrage.getLink()));
+				.hatNutzerAbgestimmt(account.getName(), umfrage.getLink()));
 		}
 		return umfragen;
 	}
@@ -151,12 +154,12 @@ public class UmfragenuebersichtService {
 		}
 		
 		umfragenInVergangenheit = umfragenInVergangenheit.stream()
-				.sorted(Comparator.comparing(Umfrage::getFrist))
-				.collect(Collectors.toList());
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
 		
 		umfragenInZukunft = umfragenInZukunft.stream()
-				.sorted(Comparator.comparing(Umfrage::getFrist))
-				.collect(Collectors.toList());
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
 		
 		List<Umfrage> umfragenSortiert = new ArrayList<>();
 		umfragenSortiert.addAll(umfragenInVergangenheit);
@@ -168,7 +171,10 @@ public class UmfragenuebersichtService {
 	private List<Umfrage> getAllUmfragenVonBenutzer(Account account) {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		umfragen.addAll(umfrageService.loadAllBenutzerHatAbgestimmtOhneUmfrage(account.getName()));
-		return null;
+		
+		umfragen = distinct(umfragen);
+		
+		return umfragen;
 	}
 	
 	private List<Umfrage> distinct(List<Umfrage> umfragen) {

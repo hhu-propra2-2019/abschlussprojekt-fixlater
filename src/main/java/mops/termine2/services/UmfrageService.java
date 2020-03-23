@@ -1,16 +1,15 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UmfrageService {
@@ -26,6 +25,7 @@ public class UmfrageService {
 	
 	/**
 	 * Speichert eine neue Umfrage in der DB
+	 *
 	 * @param umfrage
 	 */
 	public void save(Umfrage umfrage) {
@@ -53,6 +53,7 @@ public class UmfrageService {
 	
 	/**
 	 * Löscht eine Umfrage und zugehörige Antworten nach Link
+	 *
 	 * @param link
 	 */
 	public void deleteByLink(String link) {
@@ -62,6 +63,7 @@ public class UmfrageService {
 	
 	/**
 	 * Löscht eine abgelaufene Umfrage und zugehörige Antworten
+	 *
 	 * @param gruppe
 	 */
 	public void deleteByGruppe(String gruppe) {
@@ -127,6 +129,38 @@ public class UmfrageService {
 		return distinctUmfrage;
 	}
 	
+	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
+		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
+		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
+		
+		return umfragen;
+	}
+	
+	public Umfrage loadByLinkMitVorschlaegen(String link) {
+		List<UmfrageDB> vorschlaegeDB = umfrageRepository.findByLink(link);
+		if (vorschlaegeDB != null && !vorschlaegeDB.isEmpty()) {
+			Umfrage umfrage = new Umfrage();
+			UmfrageDB ersteUmfrage = vorschlaegeDB.get(0);
+			
+			umfrage.setTitel(ersteUmfrage.getTitel());
+			umfrage.setBeschreibung(ersteUmfrage.getBeschreibung());
+			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
+			umfrage.setFrist(ersteUmfrage.getFrist());
+			umfrage.setGruppe(ersteUmfrage.getGruppe());
+			umfrage.setLink(ersteUmfrage.getLink());
+			umfrage.setErsteller(ersteUmfrage.getErsteller());
+			umfrage.setErgebnis(ersteUmfrage.getErgebnis());
+			
+			List<String> vorschlaege = new ArrayList<>();
+			for (UmfrageDB vorschlag : vorschlaegeDB) {
+				vorschlaege.add(vorschlag.getAuswahlmoeglichkeit());
+			}
+			umfrage.setVorschlaege(vorschlaege);
+			return umfrage;
+		}
+		return null;
+	}
+	
 	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setBeschreibung(umfragedb.getBeschreibung());
@@ -139,13 +173,6 @@ public class UmfrageService {
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
 		return umfrage;
-	}
-
-	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
-		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
-		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
-		
-		return umfragen;
 	}
 	
 	private List<Umfrage> getDistinctUmfrageList(List<UmfrageDB> umfrageDB) {
