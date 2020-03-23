@@ -78,7 +78,7 @@
 						</div>
 
 						<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
-						   th:href="@{/termine2/umfragen(gruppe=${gruppe})}"
+						   th:href="@{/termine2/umfragen(gruppe=${gruppe.Id})}"
 						   th:text="${gruppe.name} + ' (id: ' + ${gruppe.id} + ')'">
 							Gruppe
 						</a>

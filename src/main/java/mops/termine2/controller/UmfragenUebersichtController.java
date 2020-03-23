@@ -48,6 +48,7 @@ public class UmfragenUebersichtController {
 	}
 	
 	@GetMapping("/umfragen")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
 							defaultValue = "-1") Long gruppe) {
