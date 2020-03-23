@@ -116,10 +116,10 @@ public class TerminAntwortService {
 			for (TerminfindungAntwortDB antwortDB : antwortDBS) {
 				String benutzer = antwortDB.getBenutzer();
 				if (!benuternamen.contains(antwortDB.getBenutzer())) {
-					List<TerminfindungAntwortDB> nutzerAntwort = filterAntwortenDbBenutzer(
+					List<TerminfindungAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
 						antwortDBS, benutzer);
 					terminAntworten.add(buildAntwortForBenutzer(
-						benutzer, nutzerAntwort, antwortMoeglichkeiten));
+						benutzer, nutzerAntworten, antwortMoeglichkeiten));
 					benuternamen.add(benutzer);
 				}
 				

@@ -79,7 +79,7 @@ public class TerminfindunguebersichtServiceTest {
 			new ArrayList<TerminfindungAntwortDB>());
 		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
 			new ArrayList<>(Arrays.asList(gruppe)));
-		when(terminfindungRepository.findByGruppe(gruppe.getGruppe())).thenReturn(terminfindungenDB);
+		when(terminfindungRepository.findByGruppeId(gruppe.getGruppeId())).thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
@@ -118,7 +118,7 @@ public class TerminfindunguebersichtServiceTest {
 		
 		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
 			new ArrayList<>(Arrays.asList(gruppe)));
-		when(terminfindungRepository.findByGruppe(gruppe.getGruppe())).thenReturn(terminfindungenDB);
+		when(terminfindungRepository.findByGruppeId(gruppe.getGruppeId())).thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
