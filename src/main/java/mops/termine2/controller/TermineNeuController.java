@@ -214,7 +214,7 @@ public class TermineNeuController {
 					// füge Termine ins Model ein
 					for (String[] terminEingelesen : termineEingelesen) {
 						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
-							+ " " + terminEingelesen[1], terminFormatierung
+							+ ", " + terminEingelesen[1], terminFormatierung
 							.getDateTimeFormatter());
 						termine.add(termin);
 					}

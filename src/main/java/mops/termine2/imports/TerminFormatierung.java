@@ -25,7 +25,7 @@ public class TerminFormatierung {
 		DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
 		return b.appendPattern("dd.MM.")
 			.appendValue(ChronoField.YEAR_OF_ERA, 4, 4,
-				SignStyle.EXCEEDS_PAD).appendPattern(" HH:mm")
+				SignStyle.EXCEEDS_PAD).appendPattern(", HH:mm")
 			.toFormatter();
 	}
 	
@@ -33,7 +33,7 @@ public class TerminFormatierung {
 		List<String[]> termineEingelesen, DateTimeFormatter formatter) {
 		for (String[] terminEingelesen : termineEingelesen) {
 			LocalDateTime.parse(terminEingelesen[0]
-				+ " " + terminEingelesen[1], formatter);
+				+ ", " + terminEingelesen[1], formatter);
 		}
 	}
 	
