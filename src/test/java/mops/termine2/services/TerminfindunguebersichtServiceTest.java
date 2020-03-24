@@ -65,11 +65,13 @@ public class TerminfindunguebersichtServiceTest {
 			Terminfindung termin = new Terminfindung();
 			termin.setLink(day.toString());
 			termin.setFrist(ldt.plusDays(day));
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(day.toString());
 			terminDB.setFrist(ldt.plusDays(day));
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
