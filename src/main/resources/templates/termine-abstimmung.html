@@ -24,6 +24,7 @@
 					Termine
 				</a>
 			</li>
+			
 			<li>
 				<a th:href="@{/termine2/umfragen}">
 					<img src="../static/img/resized/survey_small.jpg"
@@ -41,7 +42,7 @@
 		<div class="row my-3 border-bottom">
 			<h1 class="h1">Terminabstimmung</h1>
 		</div>
-
+		
 		<div class="row">
 			<div class="col">
 				<!-- Termin -->
@@ -49,13 +50,18 @@
 					<div class="mb-3 p-3 bg-light rounded">
 						<!-- Zusammenfassung -->
 						<div class="pb-2 border-bottom">
-							<div class="h3" th:text="${terminfindung.getTitel()}">Wir basteln uns eine Terminplanung
+							<div class="h3" th:text="${terminfindung.getTitel()}">
+								Titel
 							</div>
-							<div th:text="${terminfindung.getOrt()}">25.13.U1.24</div>
+							
+							<div th:text="${terminfindung.getOrt()}">
+								Ort
+							</div>
 						</div>
-
+						
 						<!-- Beschreibung -->
-						<div class="mt-2" style="font-size: small" th:text="${terminfindung.getBeschreibung()}">
+						<div class="mt-2" style="font-size: small"
+						     th:text="${terminfindung.getBeschreibung()}">
 							Floppy macaroni are assumed to be dissatisfying. Few can name a
 							springtime flower that doesn't profit from rainstorms. In modern
 							times, clothes were lost without the long thin bands that were
@@ -63,15 +69,15 @@
 						</div>
 					</div>
 				</div>
-
+				
 				<!-- Wahl -->
 				<div class="mb-3 border-bottom">
 					<div class="d-flex justify-content-between align-items-center">
 						<h2 class="h2">Zeiten</h2>
-
+						
 						<button class="btn btn-outline-warning">Zurücksetzen</button>
 					</div>
-
+					
 					<form class="my-3" th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
 					      th:object="${antwort}" method="post">
 						<div class="table-responsive">
@@ -89,7 +95,7 @@
 									<th class="col bg-danger" style="width: 16%"> Nein</th>
 								</tr>
 								</thead>
-
+								
 								<tbody th:remove="all-but-first" th:each="termin,terminStat: *{termine}" }>
 								<tr>
 									<!-- abwechselnd bg-white / bg-light -->
@@ -105,9 +111,10 @@
 										       th:name="${termin}"
 										       th:field="${antwort.antworten[__${terminStat.index}__]}"
 										       value="JA"/>
-
+										
 									</th>
-									<th class="col table-warning font-weight-bold text-black-50" style="width: 18%">
+									<th class="col table-warning font-weight-bold text-black-50"
+									    style="width: 18%">
 										<input type="radio"
 										       name="abstimmung1"
 										       th:name="${termin}"
@@ -125,93 +132,71 @@
 								</tbody>
 							</table>
 						</div>
-
+						
 						<div style="text-align: center">
 							<input type="text" name="pseudonym" placeholder="Benjamin"
 							       th:placeholder="*{getBenutzer()}"
-							       th:field="${antwort.pseudonym}"
-							>
-							<button class="btn btn-primary" type="submit" name="sichern">Abschicken</button>
+							       th:field="${antwort.pseudonym}">
+							<button class="btn btn-primary" type="submit" name="sichern">
+								Abschicken
+							</button>
 						</div>
 					</form>
 				</div>
-
+				
 				<!-- Kommentare -->
 				<div>
 					<h2 class="h2">Kommentare</h2>
-
+					
 					<!-- Vorhandene Kommentare -->
-					<div class="mb-3">
+					<div class="mb-3" th:each="kommentar : *{kommentare}">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Sendedaten -->
 							<div class="pb-2 border-bottom">
-								<div class="h4">Benjamin</div>
-								<div>am [Datum, Zeit]</div>
+								<h4 class="h4" th:text="${kommentar.pseudonym}">Pseudonym</h4>
+								
+								<div>
+									am
+									
+									<span th:text="${#temporals.format(kommentar.erstellungsdatum,
+									               'dd.MM.yyyy, HH:mm')}">
+										Datum
+									</span>
+								</div>
 							</div>
-
+							
 							<!-- Inhalt -->
-							<div class="mt-2">
-								A leopard of the army is assumed to be an oversized toy. A
-								tragic Saturday comes with losing sleep over a napkin.
-								Literature would have us believe that molten margarine is
-								nothing but water.
-							</div>
-						</div>
-
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<div class="h4">Bibi Bloxberg</div>
-								<div>am [Datum, Zeit]</div>
-							</div>
-
-							<!-- Inhalt -->
-							<div class="mt-2">
-								The lunchbox can be turned into a tinfoil hat with some magic.
-								Some antelopes are thought of as prefaces to evolution. In
-								modern times an impulse is enough to change the mind of one's
-								step-brother. A hottest desert is a dry segment of a coast.
-							</div>
-						</div>
-
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<div class="h4">RNA-abhängige DNA-Polymerase</div>
-								<div>am [Datum, Zeit]</div>
-							</div>
-
-							<!-- Inhalt -->
-							<div class="mt-2">
-								The tip of a bow can become an instrument of astrology when used
-								right. We can assume that any instance of an antler can be made
-								into a lightbulb. A policeman is akin to a puny god. Experts
-								would have us believe that a respected cook can prepare a tasty
-								meal out of cicadas.
+							<div class="mt-2" th:text="${kommentar.inhalt}">
+								Inhalt
 							</div>
 						</div>
 					</div>
-
+					
 					<!-- Kommentarbox -->
 					<div class="container mb-3">
 						<h3 class="h3 mb-3">Verfassen</h3>
-
-						<form method="post">
+						
+						<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
+						      th:object="${neuerKommentar}" method="post">
 							<!-- Inhalt -->
 							<div class="mb-3">
-								<textarea class="form-control" rows="5" id="comment"></textarea>
+								<textarea class="form-control" rows="5" id="comment"
+								          th:field="*{inhalt}">
+									Inhalt
+								</textarea>
 							</div>
-
+							
 							<!-- Name -->
 							<div class="mb-3 form-group">
-								<label for="pseudonym">Name</label>
-
-								<input class="form-control" id="pseudonym" type="text"
-								       placeholder="Benjamin"/>
+								<label>Name</label>
+								
+								<input class="form-control" id="pseudonym"
+								       type="text" th:placeholder="*{pseudonym}"
+								       th:field="*{pseudonym}"/>
 							</div>
-
+							
 							<div style="text-align: center">
-								<button class="btn btn-success">Veröffentlichen</button>
+								<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
 							</div>
 						</form>
 					</div>
@@ -222,4 +207,3 @@
 </main>
 </body>
 </html>
-
