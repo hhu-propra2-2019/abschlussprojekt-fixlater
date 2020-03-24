@@ -187,8 +187,7 @@
 							<div class="mt-1 text-secondary"
 							     th:if="*{offeneUmfrage.gruppeId != null &&
 								              offeneUmfrage.gruppeId != ''}">
-								für Gruppe <i><span th:text="${offeneUmfrage.gruppeId
-								}">Gruppe</span></i>
+								für Gruppe <i><span th:text="${offeneUmfrage.gruppeId}">Gruppe</span></i>
 							</div>
 						</div>
 
@@ -206,24 +205,32 @@
 							     style="font-size: small; text-align: center"
 							     th:text="'offen bis ' + ${#temporals.format(offeneUmfrage.frist,
 								              'dd.MM.yyyy, HH:mm')}">
-								offen bis DD.MM.YYYY, HH:MM
-							</div>
-
-							<div class="mt-2" style="text-align: center">
-								<form th:action="@{/termine2/umfragen}" method="post">
-									<!-- Falls der Nutzer schon an der Abstimmung teilgenommen
-										 hat, dann btn-outline-info, ansonsten btn-primary. -->
-									<button class="btn btn-outline-info"
-									        style="font-size: small" type="submit"
-									        name="details" th:value="${offeneUmfrage.link}">
-										Details
-									</button>
-								</form>
-
-								<div class="mt-2 text-secondary" style="font-size: small">
-									Link:
-
-									<span class="text-info" th:text="${offeneUmfrage.link}">
+									offen bis DD.MM.YYYY, HH:MM
+								</div>
+								
+								<div class="mt-2" style="text-align: center">
+									<form th:action="@{/termine2/umfragen}" method="post">
+										<!-- Falls der Nutzer schon an der Abstimmung teilgenommen
+										     hat, dann btn-outline-info, ansonsten btn-primary. -->
+										<button class="btn btn-outline-info"
+										        style="font-size: small" type="submit"
+										        name="details"
+										        th:value="${offeneUmfrage.link}"
+										        th:if="${offeneUmfrage.teilgenommen}">
+											Details
+										</button>
+										<button class="btn btn-primary" style="font-size: small"
+												type="submit" name="details"
+												th:value="${offeneUmfrage.link}"
+												th:if="!${offeneUmfrage.teilgenommen}">
+											Abstimmen
+										</button>
+									</form>
+									
+									<div class="mt-2 text-secondary" style="font-size: small">
+										Link:
+										
+										<span class="text-info" th:text="${offeneUmfrage.link}">
 											Link
 										</span>
 								</div>
