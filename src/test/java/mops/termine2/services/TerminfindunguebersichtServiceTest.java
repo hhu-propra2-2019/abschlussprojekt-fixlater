@@ -107,12 +107,14 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setLink(fristTage.get(i).toString());
 			termin.setFrist(ldt.plusDays(fristTage.get(i)));
 			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(fristTage.get(i).toString());
 			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
 			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
