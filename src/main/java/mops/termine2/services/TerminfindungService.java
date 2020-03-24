@@ -1,15 +1,17 @@
 package mops.termine2.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TerminfindungService {
@@ -19,7 +21,7 @@ public class TerminfindungService {
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
 	public TerminfindungService(TerminfindungRepository terminfindungRepo,
-								TerminfindungAntwortRepository antwortRepo) {
+		TerminfindungAntwortRepository antwortRepo) {
 		this.terminfindungRepo = terminfindungRepo;
 		this.antwortRepo = antwortRepo;
 	}
@@ -67,12 +69,12 @@ public class TerminfindungService {
 	/**
 	 * Löscht eine abgelaufene Terminfindung und zugehörige Antworten
 	 */
+	@Transactional
 	public void loescheAbgelaufene() {
 		LocalDateTime timeNow = LocalDateTime.now();
 		antwortRepo.loescheAelterAls(timeNow);
 		terminfindungRepo.loescheAelterAls(timeNow);
 	}
-	
 	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
@@ -149,6 +151,5 @@ public class TerminfindungService {
 		
 		return terminfindung;
 	}
-	
 	
 }
