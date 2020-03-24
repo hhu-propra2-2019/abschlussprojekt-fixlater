@@ -53,93 +53,103 @@
 </head>
 
 <body>
-<header>
-	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-		<ul>
-			<li>
-				<a th:href="@{/termine2}">
-					<img src="../static/img/resized/calendar_small.jpg"
-					     th:src="@{/img/resized/calendar_small.jpg}">
-					Termine
-				</a>
-			</li>
-
-			<li>
-				<a th:href="@{/termine2/umfragen}">
-					<img src="../static/img/resized/survey_small.jpg"
-					     th:src="@{/img/resized/survey_small.jpg}">
-					Umfragen
-				</a>
-			</li>
-		</ul>
-	</nav>
-</header>
-
-<main th:fragment="bodycontent">
-	<div class="container mb-3">
-		<!-- Header -->
-		<div class="row my-3 border-bottom">
-			<h1 class="h1">Neuer Termin</h1>
-		</div>
-
-		<form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}">
-			<div class="col">
-				<!-- Übersicht -->
-				<div class="mb-3 border-bottom">
-					<div class="mb-3 form-group">
-						<label for="titel">
-							Titel
-						</label>
-
-						<input class="form-control" id="titel" name="titel" type="text"
-						       required placeholder="Worum geht es?" th:value="*{titel}"/>
-					</div>
-
-					<!-- Ort -->
-					<div class="mb-3 form-group">
-						<label for="ort">
-							Ort
-						</label>
-
-						<input class="form-control" id="ort" name="ort" type="text"
-						       required placeholder="Wo soll man sich treffen?" th:value="*{ort}"/>
-					</div>
-
-					<!-- Erreichbarkeit -->
-					<div class="mb-3 form-group">
-						<label for="erreichbarkeit">
-							Erreichbarkeit
-						</label>
-
-						<select class="custom-select" id="erreichbarkeit"
-						        th:if="${gruppen.size() == 0}" disabled>
-							<option selected th:value="-1">Link</option>
-						</select>
-
-						<select class="custom-select"
-						        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
-							<option selected th:value="-1">Link</option>
-
-							<optgroup label="Gruppen">
-								<option th:each="gruppe, iter : ${gruppen}"
-								        th:value="${gruppen[__${iter.index}__].id}"
-								        th:text="${gruppe.name}">Gruppe
-								</option>
-							</optgroup>
-						</select>
-
-						<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-							<p class="mb-1">
-								<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
-								kennen. Der Link wird dabei automatisch vom System generiert.
-							</p>
-
-							<p>
-								<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
-								ausgewählten Gruppe sichtbar.
-
-								<span class="text-warning" th:if="${gruppen.size() == 0}">
+	<header>
+		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main th:fragment="bodycontent">
+		<div class="container mb-3">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Neuer Termin</h1>
+			</div>
+			
+			<form class="row" method="post" th:action="@{/termine2/termine-neu}"
+			      th:object="${terminfindung}">
+				<div class="col">
+					<!-- Übersicht -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 form-group">
+							<label for="titel">
+								Titel
+							</label>
+							
+							<div class="alert alert-danger alert-dissmissible fade show"
+							     th:if="${fehler != null && fehler != ''}">
+								<span th:text="${fehler}">
+									Fehlermeldung
+								</span>
+								
+								<button class="close" data-dismiss="alert">×</button>
+							</div>
+							
+							<input class="form-control" id="titel" name="titel" type="text"
+							       required placeholder="Worum geht es?" th:value="*{titel}"/>
+						</div>
+						
+						<!-- Ort -->
+						<div class="mb-3 form-group">
+							<label for="ort">
+								Ort
+							</label>
+							
+							<input class="form-control" id="ort" name="ort" type="text"
+							       required placeholder="Wo soll man sich treffen?"
+							       th:value="*{ort}"/>
+						</div>
+						
+						<!-- Erreichbarkeit -->
+						<div class="mb-3 form-group">
+							<label for="erreichbarkeit">
+								Erreichbarkeit
+							</label>
+							
+							<select class="custom-select" id="erreichbarkeit"
+							        th:if="${gruppen.size() == 0}" disabled>
+								<option selected th:value="-1">Link</option>
+							</select>
+							
+							<select class="custom-select"
+							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+								<option selected value="-1">Link</option>
+								
+								<optgroup label="Gruppen">
+									<option th:each="gruppe, iter : ${gruppen}"
+									        th:value="${gruppen[__${iter.index}__].id}"
+									        th:text="${gruppe.name}">Gruppe</option>
+								</optgroup>
+							</select>
+							
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+									kennen. Der Link wird dabei automatisch vom System generiert.
+								</p>
+								
+								<p>
+									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+									ausgewählten Gruppe sichtbar.
+									
+									<span class="text-warning" th:if="${gruppen.size() == 0}">
 										Diese Option ist aber nicht verfügbar, da es im Moment keine
 										Gruppenzugehörigkeit gibt.
 									</span>

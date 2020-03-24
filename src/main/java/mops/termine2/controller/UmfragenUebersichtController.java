@@ -80,9 +80,9 @@ public class UmfragenUebersichtController {
 					.loadAbgeschlosseneUmfragenFuerBenutzer(account);
 			} else {
 				umfrageOffen = umfragenuebersichtService
-					.loadOffeneUmfragenFuerGruppe(selGruppe.getId());
+					.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
 				umfrageAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerGruppe(selGruppe.getId());
+					.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
 			}
 			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 				umfrageOffen, gruppen, selGruppe);
@@ -99,7 +99,7 @@ public class UmfragenUebersichtController {
 		if (p != null) {
 			link = req.getParameter("details");
 		}
-		return "redirect:/termine2/umfragen" + link;
+		return "redirect:/termine2/umfragen/" + link;
 	}
 }
 
