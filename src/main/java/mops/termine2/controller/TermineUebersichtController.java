@@ -22,9 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -65,13 +63,9 @@ public class TermineUebersichtController {
 		}
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		
-		gruppen = gruppen.stream()
-			.sorted(Comparator.comparing(Gruppe::getName))
-			.collect(Collectors.toList());
+		gruppen = gruppeService.sortGroupsByName(gruppen);
 		
 		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
-		
 		if (selGruppe == null) {
 			selGruppe = new Gruppe();
 			selGruppe.setId(-1L);
@@ -81,8 +75,8 @@ public class TermineUebersichtController {
 		List<Terminfindung> terminfindungenOffen;
 		List<Terminfindung> terminfindungenAbgeschlossen;
 		if (gruppe == -1L) {
-			terminfindungenOffen =
-				terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerBenutzer(account);
 			terminfindungenAbgeschlossen = terminfindunguebersichtService
 				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 		} else {
