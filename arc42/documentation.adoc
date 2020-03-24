@@ -414,11 +414,13 @@ hinzugefügt. Es wurden erste Versuche unternommen, den Upload in termine-neu.ht
 allerdings hat es aufgrund eines Fehler noch nicht ganz funktioniert (der Controller wurde nicht
 aufgerufen). Dies sollte am folgenden Tag behoben werden.
 
-== Tag 15
-
 === UI Neue Umfragen (Anton, Ingrid)
 Formular für neue Termine wurde komplett überholt und die UX (Funktion/Optik) wurde deutlich verbessert.
 Formular für neue Umfragen ist jetzt vollständig mit allen input Komponenten und die VIEW ist verfollständigt und überarbeitet worden. Jetzt werden falsche Eingaben korrekt abgefangen und die Bedienung ist einfacher.
+
+
+
+== Tag 15
 
 === Ergebnis und Ansicht(Jan)(Tag15 und Wochenende)
 Die Ergebnis Ansicht wurde für den Nutzer intuitiver gestaltet und mit mehr informationen gefüllt.
@@ -444,6 +446,10 @@ die Datenbank, Teile der Logik und die Ui umgebaut werden.
 === GruppeScheduler (Leon, Marcel)
 Für diesen Tag standen Tests zum GruppeScheduler auf der Agenda. Dazu haben wir uns ausgiebig überlegt und mit den Tutoren geredet, wie wir die Tests gestalten und ausführen können. Beim Ausführen des ersten Tests ist uns aufgefallen, dass wir einen Konstruktor für die Klasse GruppeScheduler benötigen. Das Problem dabei war jedoch, dass das Programm beim Ausführen das RestTemplate nicht als Bean kannte, da dies als Autowired benötigt wurde. Dies haben wir behoben, indem wir mit Hilfe der Tutoren in Termine2Application eine Bean für das RestTemplate hinzugefügt haben. Anschließend liefen die Tests und das Programm ordnungsgemäß durch und es wurden weitere Tests geschrieben. Beim erstellten Pull Request kam es dann zu einigen Fehlern mit Checkstyle, welche umgehend gelöst wurden. Nach der Teambesprechung haben wir die Information erhalten, dass sich auch die Titel der Gruppen ändern können. Aus diesem Grund mussten wir noch einmal den GruppeScheduler überarbeiten und eine Funktion hinzufügen, sodass die Titel geändert werden. Anschließend wurde dazu noch ein Test geschrieben.
 
+=== Umfragenabstimmung (Anton)
+Services und Controller für die Abstimmung bei Umfragen geschrieben und dann mit Hilfe von Thomas fertiggestellt, so dass diese auch funktionieren.
+Um sicherzustellen dass der merge in master auch ohne Probleme klappt, habe ich den Master zunächst in meine branch gemergt. Dabei sind sehr viele Konflikte entstanden, die ich gelöst habe. Komischerweise klappten mehrere Methoden danach nicht mehr und ich musste den aktuellen Stand des Projektes Stück für Stück analysieren.
+
 === ImportService (Kathi, Julia)
 Nun wurde der Fehler behoben und der Controller wird aufgerufen. Allerdings gab es noch Probleme
 bei der Verarbeitung der CSV-Datei. Den ganzen Tag wurde also daran gearbeitet, die Fehler zu
@@ -461,3 +467,7 @@ TerminFormatierung ersetzt) und die bei Erstellung des pull-requests resultieren
 gelöst. Zudem haben wir die View bei der Terminabstimmung soweit angepasst, dass man die schon vorhandenen
 Kommentare angezeigt bekommt (wenn man noch nicht abgestimmt hat). Dafür haben wir die termine-abstimmung.html
 und den TermineAbstimmungController überarbeitet.
+
+===Umfragenabstimmung (Anton)
+Das schlimmste an der merge-Korrektur war, dass mehrere Dateien die automatisch erfolgreich gemergt wurden, stark beschädigt wurden (zb, Teile von Methoden waren weg, oder ganze Methoden wurden übersehen, oder ganze Dateien wurden überschrieben ohne zu vergleichen). Das musste ich dann manuell lösen indem ich mir alte und neue Dateien Zeile für Zeile angeschaut und selbst die korrekten Änderungen gemacht habe.
+Danach habe ich den Selektor für Gruppen auf der Umfragenübersicht durch thymeleaf Attribute korrigiert, go dass "Alle Gruppen" korrekt angezeigt werden, und dass die ausgewählte Gruppe auch weiterhin im Selektor bleibt nachdem die Seite neugeladen wird.
