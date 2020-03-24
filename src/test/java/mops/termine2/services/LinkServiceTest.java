@@ -30,7 +30,7 @@ public class LinkServiceTest {
 	
 	private transient String beschreibung = "SchokoBons";
 	
-	private transient String gruppe = "Fixlater";
+	private transient Long gruppeId = 1L;
 	
 	private transient String ort = "hoersaal5b";
 	
@@ -109,7 +109,7 @@ public class LinkServiceTest {
 			terminfindungDB.setLoeschdatum(LocalDateTime.now().plusMonths(2));
 			terminfindungDB.setLink(link);
 			terminfindungDB.setBeschreibung(beschreibung);
-			terminfindungDB.setGruppe(gruppe);
+			terminfindungDB.setGruppeId(gruppeId);
 			terminfindungDB.setTermin(termin);
 			terminfindungDB.setModus(Modus.GRUPPE);
 			
@@ -132,7 +132,7 @@ public class LinkServiceTest {
 			umfrageDB.setLoeschdatum(LocalDateTime.now().plusMonths(2));
 			umfrageDB.setLink(link);
 			umfrageDB.setBeschreibung(beschreibung);
-			umfrageDB.setGruppe(gruppe);
+			umfrageDB.setGruppeId(gruppeId);
 			umfrageDB.setModus(Modus.GRUPPE);
 			umfrageDB.setMaxAntwortAnzahl(3L);
 			umfrageDB.setAuswahlmoeglichkeit(option);

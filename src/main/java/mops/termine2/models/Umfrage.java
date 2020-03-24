@@ -1,13 +1,12 @@
 package mops.termine2.models;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,10 +28,14 @@ public class Umfrage {
 	
 	private LocalDateTime loeschdatum;
 	
-	private String gruppe;
+	private Long gruppeId;
 	
 	private Long maxAntwortAnzahl;
 	
 	private String umfragenErgebnis;
+	
+	private boolean teilgenommen = false;
+	
+	private String ergebnis;
 	
 }

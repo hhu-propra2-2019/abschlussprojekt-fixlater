@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GruppeService {
@@ -19,13 +18,19 @@ public class GruppeService {
 		this.benutzerGruppeRepository = benutzerGruppeRepository;
 	}
 	
+	/**
+	 * Bekommt den Account übergeben und lädt die zugehörigen Gruppen
+	 *
+	 * @param account
+	 * @return Liste von Gruppen
+	 */
 	public List<Gruppe> loadByBenutzer(Account account) {
 		List<BenutzerGruppeDB> gruppenDB = benutzerGruppeRepository.findByBenutzer(account.getName());
 		List<Gruppe> gruppen = new ArrayList<>();
 		
 		for (BenutzerGruppeDB gruppeDB : gruppenDB) {
 			Gruppe g = new Gruppe();
-			g.setId(gruppeDB.getId());
+			g.setId(gruppeDB.getGruppeId());
 			g.setName(gruppeDB.getGruppe());
 			gruppen.add(g);
 		}
@@ -33,23 +38,27 @@ public class GruppeService {
 		return gruppen;
 	}
 	
-	public Gruppe loadById(Long id) {
-		Optional gruppeDB = benutzerGruppeRepository.findById(id);
+	/**
+	 * Lädt Gruppe nach Id
+	 *
+	 * @param id
+	 * @return
+	 */
+	public Gruppe loadByGruppeId(Long id) {
+		List<BenutzerGruppeDB> gruppeDB = benutzerGruppeRepository.findByGruppeId(id);
 		
-		if (gruppeDB.isPresent()) {
-			BenutzerGruppeDB gruppeDB1 = (BenutzerGruppeDB) gruppeDB.get();
+		if (gruppeDB.size() > 0) {
 			Gruppe gruppe = new Gruppe();
-			gruppe.setName(gruppeDB1.getGruppe());
-			gruppe.setId(gruppeDB1.getId());
+			gruppe.setName(gruppeDB.get(0).getGruppe());
+			gruppe.setId(gruppeDB.get(0).getGruppeId());
 			return gruppe;
 		}
 		
 		return null;
 	}
 	
-	public boolean accountInGruppe(Account account, String gruppe) {
+	public boolean accountInGruppe(Account account, Long gruppeId) {
 		String benutzer = account.getName();
-		return !benutzerGruppeRepository.findByBenutzerAndGruppe(benutzer, gruppe).isEmpty();
+		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
 	}
-	
 }

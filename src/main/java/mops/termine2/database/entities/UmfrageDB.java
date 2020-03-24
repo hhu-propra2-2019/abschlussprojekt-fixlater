@@ -33,8 +33,10 @@ public class UmfrageDB {
 	
 	private String beschreibung;
 	
-	private String gruppe;
+	private Long gruppeId;
 	
 	private Long maxAntwortAnzahl;
+	
+	private String ergebnis;
 	
 }

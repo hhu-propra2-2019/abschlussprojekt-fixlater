@@ -15,6 +15,8 @@ public class Umfrageuebersicht {
 	
 	private List<Umfrage> offen;
 	
-	private List<String> gruppen;
+	private List<Gruppe> gruppen;
+	
+	private Gruppe selektierteGruppe;
 	
 }

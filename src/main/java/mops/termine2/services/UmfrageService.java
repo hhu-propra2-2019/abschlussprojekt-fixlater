@@ -1,16 +1,15 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UmfrageService {
@@ -19,13 +18,14 @@ public class UmfrageService {
 	
 	private transient UmfrageAntwortRepository umfrageAntwortRepository;
 	
-	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepository) {
-		umfrageRepository = umfrageRepo;
-		umfrageAntwortRepository = antwortRepository;
+	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepo) {
+		this.umfrageRepository = umfrageRepo;
+		this.umfrageAntwortRepository = antwortRepo;
 	}
 	
 	/**
 	 * Speichert eine neue Umfrage in der DB
+	 *
 	 * @param umfrage
 	 */
 	public void save(Umfrage umfrage) {
@@ -35,13 +35,13 @@ public class UmfrageService {
 			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
 			umfrageDB.setErsteller(umfrage.getErsteller());
 			umfrageDB.setFrist(umfrage.getFrist());
-			umfrageDB.setGruppe(umfrage.getGruppe());
+			umfrageDB.setGruppeId(umfrage.getGruppeId());
 			umfrageDB.setLink(umfrage.getLink());
 			umfrageDB.setLoeschdatum(umfrage.getLoeschdatum());
 			umfrageDB.setMaxAntwortAnzahl(umfrage.getMaxAntwortAnzahl());
 			umfrageDB.setTitel(umfrage.getTitel());
 			
-			if (umfrage.getGruppe() != null) {
+			if (umfrage.getGruppeId() != null) {
 				umfrageDB.setModus(Modus.GRUPPE);
 			} else {
 				umfrageDB.setModus(Modus.LINK);
@@ -53,6 +53,7 @@ public class UmfrageService {
 	
 	/**
 	 * Löscht eine Umfrage und zugehörige Antworten nach Link
+	 *
 	 * @param link
 	 */
 	public void deleteByLink(String link) {
@@ -62,10 +63,11 @@ public class UmfrageService {
 	
 	/**
 	 * Löscht eine abgelaufene Umfrage und zugehörige Antworten
-	 * @param gruppe
+	 *
+	 * @param gruppeId
 	 */
-	public void deleteByGruppe(String gruppe) {
-		umfrageRepository.deleteByGruppe(gruppe);
+	public void deleteByGruppe(Long gruppeId) {
+		umfrageRepository.deleteByGruppeId(gruppeId);
 	}
 	
 	public void deleteOutdated() {
@@ -83,7 +85,7 @@ public class UmfrageService {
 			umfrage.setBeschreibung(ersteUmfrage.getBeschreibung());
 			umfrage.setErsteller(ersteUmfrage.getErsteller());
 			umfrage.setFrist(ersteUmfrage.getFrist());
-			umfrage.setGruppe(ersteUmfrage.getGruppe());
+			umfrage.setGruppeId(ersteUmfrage.getGruppeId());
 			umfrage.setLink(ersteUmfrage.getLink());
 			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
 			umfrage.setMaxAntwortAnzahl(ersteUmfrage.getMaxAntwortAnzahl());
@@ -104,8 +106,8 @@ public class UmfrageService {
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppeOhneUmfragen(String gruppe) {
-		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppe(gruppe);
+	public List<Umfrage> loadByGruppeOhneUmfragen(Long gruppeId) {
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeId(gruppeId);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
@@ -127,18 +129,68 @@ public class UmfrageService {
 		return distinctUmfrage;
 	}
 	
+	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
+		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
+		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
+		
+		return umfragen;
+	}
+	
+	public Umfrage loadByLinkMitVorschlaegen(String link) {
+		List<UmfrageDB> vorschlaegeDB = umfrageRepository.findByLink(link);
+		if (vorschlaegeDB != null && !vorschlaegeDB.isEmpty()) {
+			Umfrage umfrage = new Umfrage();
+			UmfrageDB ersteUmfrage = vorschlaegeDB.get(0);
+			
+			umfrage.setTitel(ersteUmfrage.getTitel());
+			umfrage.setBeschreibung(ersteUmfrage.getBeschreibung());
+			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
+			umfrage.setFrist(ersteUmfrage.getFrist());
+			umfrage.setGruppeId(ersteUmfrage.getGruppeId());
+			umfrage.setLink(ersteUmfrage.getLink());
+			umfrage.setErsteller(ersteUmfrage.getErsteller());
+			umfrage.setErgebnis(ersteUmfrage.getErgebnis());
+			
+			List<String> vorschlaege = new ArrayList<>();
+			for (UmfrageDB vorschlag : vorschlaegeDB) {
+				vorschlaege.add(vorschlag.getAuswahlmoeglichkeit());
+			}
+			umfrage.setVorschlaege(vorschlaege);
+			return umfrage;
+		}
+		return null;
+	}
+	
 	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setBeschreibung(umfragedb.getBeschreibung());
 		umfrage.setErsteller(umfragedb.getErsteller());
 		umfrage.setFrist(umfragedb.getFrist());
-		umfrage.setGruppe(umfragedb.getGruppe());
+		umfrage.setGruppeId(umfragedb.getGruppeId());
 		umfrage.setLink(umfragedb.getLink());
 		umfrage.setLoeschdatum(umfragedb.getLoeschdatum());
 		umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
 		return umfrage;
+	}
+	
+	private List<Umfrage> getDistinctUmfrageList(List<UmfrageDB> umfrageDB) {
+		List<UmfrageDB> distinctUmfrageDB = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		for (UmfrageDB umfragen : umfrageDB) {
+			if (!links.contains(umfragen.getLink())) {
+				distinctUmfrageDB.add(umfragen);
+				links.add(umfragen.getLink());
+			}
+		}
+		
+		List<Umfrage> umfragen = new ArrayList<>();
+		for (UmfrageDB db : distinctUmfrageDB) {
+			umfragen.add(erstelleUmfrageOhneVorschlaege(db));
+		}
+		
+		return umfragen;
 	}
 	
 }

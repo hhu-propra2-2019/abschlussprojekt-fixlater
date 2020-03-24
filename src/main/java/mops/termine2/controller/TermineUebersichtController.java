@@ -15,16 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -50,48 +49,52 @@ public class TermineUebersichtController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
-							defaultValue = "Alle Gruppen") String gruppe) {
+							defaultValue = "-1") Long gruppe) {
+		Account account;
 		if (p != null) {
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
 			authenticatedAccess.increment();
-			
-			List<String> gruppenNamen = new ArrayList<>();
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			for (Gruppe g : gruppen) {
-				gruppenNamen.add(g.getName());
-			}
-			
-			List<Terminfindung> terminfindungenOffen;
-			List<Terminfindung> terminfindungenAbgeschlossen;
-			if (gruppe.equals("Alle Gruppen")) {
-				terminfindungenOffen =
-					terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
-			} else {
-				terminfindungenOffen = terminfindunguebersichtService
-					.loadOffeneTerminfindungenFuerGruppe(account, gruppe);
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe);
-			}
-			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
-				terminfindungenOffen, gruppenNamen);
-			
-			m.addAttribute("termine", termine);
-			m.addAttribute("selektierteGruppe", gruppe);
+		} else {
+			return "error/403";
 		}
+		
+		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
+			return "error/403";
+		}
+		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		
+		gruppen = gruppen.stream()
+			.sorted(Comparator.comparing(Gruppe::getName))
+			.collect(Collectors.toList());
+		
+		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+		
+		if (selGruppe == null) {
+			selGruppe = new Gruppe();
+			selGruppe.setId(-1L);
+			selGruppe.setName("Alle Gruppen");
+		}
+		
+		List<Terminfindung> terminfindungenOffen;
+		List<Terminfindung> terminfindungenAbgeschlossen;
+		if (gruppe == -1L) {
+			terminfindungenOffen =
+				terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+		} else {
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
+		}
+		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
+			terminfindungenOffen, gruppen, selGruppe);
+		
+		m.addAttribute("termine", termine);
+		
 		return "termine";
-	}
-	
-	@PostMapping(path = "", params = "details")
-	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String details(Principal p, Model m, final HttpServletRequest req) {
-		String link = "";
-		if (p != null) {
-			link = req.getParameter("details");
-		}
-		return "redirect:/termine2/" + link;
 	}
 }

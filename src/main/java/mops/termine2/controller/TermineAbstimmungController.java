@@ -74,8 +74,8 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -121,8 +121,8 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -168,8 +168,8 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
@@ -220,8 +220,8 @@ public class TermineAbstimmungController {
 			return "error/404";
 		}
 		
-		if (terminfindung.getGruppe() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppe())) {
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}
