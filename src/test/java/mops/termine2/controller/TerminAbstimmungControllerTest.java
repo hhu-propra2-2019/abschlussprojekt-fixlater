@@ -13,7 +13,7 @@ public class TerminAbstimmungControllerTest {
 	transient MockMvc mvc;
 	/*
 	@Test
-	@WithMockKeycloackAuth(name = "studentin", roles = "studentin")
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmung() throws Exception {
 		mvc.perform(get("/termine2/termine-abstimmung")).andExpect(status().isOk());
 	}
