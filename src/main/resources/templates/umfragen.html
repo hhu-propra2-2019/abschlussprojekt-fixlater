@@ -63,7 +63,9 @@
 				<div class="dropdown">
 					<button class="btn btn-outline-secondary dropdown-toggle mx-2"
 					        data-toggle="dropdown" id="dropOperator" type="button"
-					        th:text="${umfragen.selektierteGruppe.name}  + ' (id: ' + ${umfragen.selektierteGruppe.id} + ')'">
+					        th:text="${umfragen.selektierteGruppe.id != -1}?
+						        ${umfragen.selektierteGruppe.name}  + ' (id: ' + ${umfragen.selektierteGruppe.id} + ')' :
+						        ${umfragen.selektierteGruppe.name}">
 						Alle Gruppen
 					</button>
 
@@ -79,7 +81,8 @@
 
 						<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
 						   th:href="@{/termine2/umfragen(gruppe=${gruppe.Id})}"
-						   th:text="${gruppe.name} + ' (id: ' + ${gruppe.id} + ')'">
+						   th:text="${gruppe.name} + ' (id: ' + ${gruppe.id} + ')'"
+						   th:value="${gruppe}">
 							Gruppe
 						</a>
 					</div>
@@ -136,8 +139,7 @@
 
 						<!-- Beschreibung -->
 						<div class="mt-2 pb-2 border-bottom" style="font-size: small"
-						     th:if="${umfrage.beschreibung != null &&
-							            umfrage.beschreibung != ''}"
+						     th:if="${umfrage.beschreibung != null && umfrage.beschreibung != ''}"
 						     th:text="${#strings.abbreviate(umfrage.beschreibung,300)}">
 							Beschreibung
 						</div>
