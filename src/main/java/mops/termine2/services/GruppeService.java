@@ -1,14 +1,13 @@
 package mops.termine2.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GruppeService {
@@ -21,6 +20,7 @@ public class GruppeService {
 	
 	/**
 	 * Bekommt den Account übergeben und lädt die zugehörigen Gruppen
+	 *
 	 * @param account
 	 * @return Liste von Gruppen
 	 */
@@ -40,10 +40,11 @@ public class GruppeService {
 	
 	/**
 	 * Lädt Gruppe nach Id
+	 *
 	 * @param id
 	 * @return
 	 */
-	public Gruppe loadGruppeById(Long id) {
+	public Gruppe loadByGruppeId(Long id) {
 		List<BenutzerGruppeDB> gruppeDB = benutzerGruppeRepository.findByGruppeId(id);
 		
 		if (gruppeDB.size() > 0) {
@@ -59,10 +60,5 @@ public class GruppeService {
 	public boolean accountInGruppe(Account account, Long gruppeId) {
 		String benutzer = account.getName();
 		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
-	}
-
-	public Gruppe loadByGruppeId(Long id) {
-		List<BenutzerGruppeDB> gruppeDB = benutzerGruppeRepository.findByGruppeId(id);
-		return null;
 	}
 }
