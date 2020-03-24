@@ -12,6 +12,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.TerminfindunguebersichtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,11 +57,11 @@ public class TermineUebersichtController {
 			account = authenticationService.createAccountFromPrincipal(p);
 			authenticatedAccess.increment();
 		} else {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
