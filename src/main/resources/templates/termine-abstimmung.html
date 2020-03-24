@@ -147,7 +147,7 @@
                             <!-- Sendedaten -->
                             <div class="pb-2 border-bottom">
                                 <div class="h4" > <span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
-                                <div> am <span th:text="${kommentar.erstellungsdatum}"> </span></div>
+                                <div> am <span th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span></div>
                             </div>
 
                             <!-- Inhalt -->
@@ -162,7 +162,7 @@
                 <div class="container mb-3">
                     <h3 class="h3 mb-3">Verfassen</h3>
 
-                    <form th:action="@{/termine2/{path}/abstimmung (path=${terminfindung.getLink()})}"
+                    <form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
                           th:object="${neuerKommentar}"  method="post">
                         <!-- Inhalt -->
                         <div class="mb-3">

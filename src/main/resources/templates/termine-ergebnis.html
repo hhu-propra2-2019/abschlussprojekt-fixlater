@@ -232,7 +232,7 @@
 							<!-- Sendedaten -->
 							<div class="pb-2 border-bottom">
 								<div class="h4" > <span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
-								<div> am <span th:text="${kommentar.erstellungsdatum}"> </span></div>
+								<div> am <span th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span></div>
 							</div>
 
 							<!-- Inhalt -->
