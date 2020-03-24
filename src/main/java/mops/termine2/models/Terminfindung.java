@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "teilgenommen")
 @ToString
 public class Terminfindung {
 	
