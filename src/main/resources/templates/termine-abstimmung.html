@@ -137,57 +137,57 @@
 				</div>
 
 				<!-- Kommentare -->
-				<div>
-					<h2 class="h2">Kommentare</h2>
-					<!-- Vorhandene Kommentare -->
+                <h2 class="h2">Kommentare</h2>
+                <!-- Vorhandene Kommentare -->
 
 
-					<tbody th:remove="all-but-first" th:each="kommentar: *{kommentare}" } >
-						<div class="mb-3">
-							<div class="my-3 p-3 bg-light rounded">
-								<!-- Sendedaten -->
-								<div class="pb-2 border-bottom">
-									<div class="h4" > <td th:text="${kommentar.pseudonym}">  Benjamin </td></div>
-									<div> am <td th:text="${kommentar.erstellungsdatum}"> </td></div>
-								</div>
+                <div th:each="kommentar: *{kommentare}" } >
+                    <div class="mb-3">
+                        <div class="my-3 p-3 bg-light rounded">
+                            <!-- Sendedaten -->
+                            <div class="pb-2 border-bottom">
+                                <div class="h4" > <span th:text="${kommentar.pseudonym}">  Benjamin </span></div>
+                                <div> am <span th:text="${kommentar.erstellungsdatum}"> </span></div>
+                            </div>
 
-								<!-- Inhalt -->
-								<div class="mt-2" >
-									<td th:text="${kommentar.inhalt}">
-									A leopard of the army is assumed to be an oversized toy. A
-									tragic Saturday comes with losing sleep over a napkin.
-									Literature would have us believe that molten margarine is
-									nothing but water.
-									</td>
-								</div>
-							</div>
-						</div>
+                            <!-- Inhalt -->
+                            <div class="mt-2" >
+                                <span th:text="${kommentar.inhalt}">
+                                A leopard of the army is assumed to be an oversized toy. A
+                                tragic Saturday comes with losing sleep over a napkin.
+                                Literature would have us believe that molten margarine is
+                                nothing but water.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-					</tbody>
+                </div>
 
-					<!-- Kommentarbox -->
-					<div class="container mb-3">
-						<h3 class="h3 mb-3">Verfassen</h3>
 
-						<form method="post">
-							<!-- Inhalt -->
-							<div class="mb-3">
-								<textarea class="form-control" rows="5" id="comment"></textarea>
-							</div>
+                <!-- Kommentarbox -->
+                <div class="container mb-3">
+                    <h3 class="h3 mb-3">Verfassen</h3>
 
-							<!-- Name -->
-							<div class="mb-3 form-group">
-								<label for="pseudonym">Name</label>
+                    <form method="post">
+                        <!-- Inhalt -->
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                        </div>
 
-								<input class="form-control" id="pseudonym" type="text"
-								       placeholder="Benjamin"/>
-							</div>
+                        <!-- Name -->
+                        <div class="mb-3 form-group">
+                            <label for="pseudonym">Name</label>
 
-							<div style="text-align: center">
-								<button class="btn btn-success">Veröffentlichen</button>
-							</div>
-						</form>
-					</div>
+                            <input class="form-control" id="pseudonym" type="text"
+                                   placeholder="Benjamin"/>
+                        </div>
+
+                        <div style="text-align: center">
+                            <button class="btn btn-success">Veröffentlichen</button>
+                        </div>
+                    </form>
+                </div>
 				</div>
 			</div>
 		</div>
