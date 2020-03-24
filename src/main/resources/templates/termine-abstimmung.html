@@ -126,7 +126,8 @@
 							</table>
 						</div>
 
-						<div style="text-align: center">
+						<div style="text-align: center"
+						     th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
 							<input type="text" name="pseudonym" placeholder="Benjamin"
 							       th:placeholder="*{getBenutzer()}"
 							       th:field="${antwort.pseudonym}"

@@ -239,6 +239,7 @@ public class TerminfindungServiceTest {
 		termine.setLink(linkListe.get(dummie));
 		termine.setOrt(ortListe.get(dummie));
 		termine.setTitel(titelListe.get(dummie));
+		termine.setEinmaligeAbstimmung(false);
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		termine.setVorschlaege(terminVorschlaege);
 		return termine;
@@ -259,6 +260,7 @@ public class TerminfindungServiceTest {
 		termine.setLink(linkListe.get(dummie));
 		termine.setOrt(ortListe.get(dummie));
 		termine.setTitel(titelListe.get(dummie));
+		termine.setEinmaligeAbstimmung(false);
 		return termine;
 	}
 	
@@ -289,6 +291,7 @@ public class TerminfindungServiceTest {
 			terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
 			terminfindungDB.setGruppeId(gruppenListe.get(dummie));
 			terminfindungDB.setTermin(termin);
+			terminfindungDB.setEinmaligeAbstimmung(false);
 			if (terminfindungDB.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
 			} else {
@@ -313,6 +316,7 @@ public class TerminfindungServiceTest {
 		terminfindungDB.setLink(linkListe.get(dummie));
 		terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
 		terminfindungDB.setGruppeId(gruppenListe.get(dummie));
+		terminfindungDB.setEinmaligeAbstimmung(false);
 		if (terminfindungDB.getGruppeId() != null) {
 			terminfindungDB.setModus(Modus.GRUPPE);
 		} else {

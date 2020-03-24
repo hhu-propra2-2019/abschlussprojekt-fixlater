@@ -137,6 +137,8 @@ public class TermineAbstimmungController {
 		AntwortForm antwortForm = new AntwortForm();
 		antwortForm.init(antwort);
 		
+		terminfindung.setTeilgenommen(terminAntwortService.hatNutzerAbgestimmt(account.getName(), link));
+		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
@@ -216,25 +218,26 @@ public class TermineAbstimmungController {
 		
 		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		if (terminfindung == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
+			return "error/403";
+		}
+		
+		if (terminfindung.getEinmaligeAbstimmung()
+			&& terminAntwortService.hatNutzerAbgestimmt(account.getName(), link)) {
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
 		LinkWrapper linkWrapper = new LinkWrapper(link);
 		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
-			System.out.println("Abstimmung wurde geupdated");
 			return "redirect:/termine2/" + link;
 		}
 		
