@@ -68,7 +68,7 @@
 				<div class="mb-3 border-bottom">
 					<div class="d-flex justify-content-between align-items-center">
 						<h2 class="h2">Zeiten</h2>
-						<a th:if="${ergebnis.isFristNichtAbgelaufen()}"
+						<a th:if="${ergebnis.isFristNichtAbgelaufen()} and (not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen})"
 						   th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
 							<button class="btn btn-success">zur Abstimmung</button>
 						</a>
@@ -225,17 +225,19 @@
 				<h2 class="h2">Kommentare</h2>
 
 				<!-- Vorhandene Kommentare -->
-				<div th:each="kommentar: *{kommentare}" } >
+				<div th:each="kommentar: *{kommentare}" }>
 					<div class="mb-3">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Sendedaten -->
 							<div class="pb-2 border-bottom">
-								<div class="h4" > <span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
-								<div> am <span th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span></div>
+								<div class="h4"><span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
+								<div> am <span
+										th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span>
+								</div>
 							</div>
 
 							<!-- Inhalt -->
-							<div class="mt-2" >
+							<div class="mt-2">
 								<span th:text="${kommentar.inhalt}"> Inhalt </span>
 							</div>
 						</div>
@@ -247,7 +249,7 @@
 					<h3 class="h3 mb-3">Verfassen</h3>
 
 					<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
-						  th:object="${neuerKommentar}"  method="post">
+					      th:object="${neuerKommentar}" method="post">
 						<!-- Inhalt -->
 						<div class="mb-3">
 							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment"></textarea>
@@ -258,7 +260,7 @@
 							<label for="pseudonym">Name</label>
 
 							<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
-								   placeholder="Benjamin"/>
+							       placeholder="Benjamin"/>
 						</div>
 
 						<div style="text-align: center">

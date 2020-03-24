@@ -115,11 +115,8 @@ public class TerminfindungService {
 			}
 			terminfindung.setVorschlaege(terminMoeglichkeiten);
 			
-			if (!antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link).isEmpty()) {
-				terminfindung.setEinmaligeAbstimmung(true);
-			} else {
-				terminfindung.setEinmaligeAbstimmung(false);
-			}
+			terminfindung.setTeilgenommen(
+				!antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link).isEmpty());
 			return terminfindung;
 		}
 		return null;
