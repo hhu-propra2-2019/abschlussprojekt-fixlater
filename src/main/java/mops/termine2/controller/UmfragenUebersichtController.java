@@ -82,7 +82,7 @@ public class UmfragenUebersichtController {
 				umfrageOffen = umfragenuebersichtService
 					.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
 				umfrageAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerGruppe(selGruppe.getId());
+					.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
 			}
 			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 				umfrageOffen, gruppen, selGruppe);

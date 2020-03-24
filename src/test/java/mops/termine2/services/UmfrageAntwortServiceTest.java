@@ -39,7 +39,7 @@ public class UmfrageAntwortServiceTest {
 		antwortRepo = mock(UmfrageAntwortRepository.class);
 		umfrageRepo = mock(UmfrageRepository.class);
 		
-		antwortService = new UmfrageAntwortService(antwortRepo);
+		antwortService = new UmfrageAntwortService(antwortRepo, umfrageRepo);
 	}
 	
 	@Test
