@@ -247,22 +247,23 @@
 				<div class="container mb-3">
 					<h3 class="h3 mb-3">Verfassen</h3>
 
-					<form method="post">
+					<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
+						  th:object="${neuerKommentar}"  method="post">
 						<!-- Inhalt -->
 						<div class="mb-3">
-							<textarea class="form-control" rows="5" id="comment"></textarea>
+							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment"></textarea>
 						</div>
 
 						<!-- Name -->
 						<div class="mb-3 form-group">
 							<label for="pseudonym">Name</label>
 
-							<input class="form-control" id="pseudonym" type="text"
+							<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
 								   placeholder="Benjamin"/>
 						</div>
 
 						<div style="text-align: center">
-							<button class="btn btn-success">Veröffentlichen</button>
+							<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
 						</div>
 					</form>
 				</div>

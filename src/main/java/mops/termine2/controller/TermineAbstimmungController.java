@@ -259,7 +259,7 @@ public class TermineAbstimmungController {
 	}
 	
 	
-	@PostMapping(path = "/{link}/abstimmung", params = "kommentarSichern")
+	@PostMapping(path = "/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
 		Account account;
@@ -284,18 +284,6 @@ public class TermineAbstimmungController {
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
-			return "redirect:/termine2/" + link + "/abstimmung";
-		}
-		
-		LinkWrapper linkWrapper = new LinkWrapper(link);
-		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
-			System.out.println("Abstimmung wurde geupdated");
-			return "redirect:/termine2/" + link;
-		}
-		
-		
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
 		m.addAttribute("neuerKommentar", neuerKommentar);
