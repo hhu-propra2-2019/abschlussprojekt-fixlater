@@ -58,6 +58,8 @@ public class TerminfindungServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepository;
 	
+	private String benutzer = "benutzer";
+	
 	@BeforeEach
 	public void setUp() {
 		terminRepository = mock(TerminfindungRepository.class);
@@ -104,7 +106,7 @@ public class TerminfindungServiceTest {
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
 		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
+		Terminfindung ergebnis = service.loadByLinkMitTerminenForBenutzer(linkListe.get(dummie), benutzer);
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
@@ -117,7 +119,7 @@ public class TerminfindungServiceTest {
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
 		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
+		Terminfindung ergebnis = service.loadByLinkMitTerminenForBenutzer(linkListe.get(dummie), benutzer);
 		Terminfindung erwartet = erstelleBeispielTerminfindung(dummie, anzahl);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
@@ -129,7 +131,7 @@ public class TerminfindungServiceTest {
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = new ArrayList<>();
 		when(terminRepository.findByLink(linkListe.get(dummie))).thenReturn(terminfindungDBs);
-		Terminfindung ergebnis = service.loadByLinkMitTerminen(linkListe.get(dummie));
+		Terminfindung ergebnis = service.loadByLinkMitTerminenForBenutzer(linkListe.get(dummie), benutzer);
 		assertThat(ergebnis).isEqualTo(null);
 	}
 	

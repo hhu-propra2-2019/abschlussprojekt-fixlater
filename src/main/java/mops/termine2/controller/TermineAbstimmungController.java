@@ -73,7 +73,9 @@ public class TermineAbstimmungController {
 			return "error/403";
 		}
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		
 		if (terminfindung == null) {
 			System.out.println("404");
 			return "error/404";
@@ -111,7 +113,7 @@ public class TermineAbstimmungController {
 	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Account account;
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung;
 		
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -120,6 +122,7 @@ public class TermineAbstimmungController {
 			System.out.println("404");
 			return "error/403";
 		}
+		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			System.out.println("404");
@@ -143,8 +146,6 @@ public class TermineAbstimmungController {
 		AntwortForm antwortForm = new AntwortForm();
 		antwortForm.init(antwort);
 		
-		terminfindung.setTeilgenommen(terminAntwortService.hatNutzerAbgestimmt(account.getName(), link));
-		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
@@ -161,9 +162,9 @@ public class TermineAbstimmungController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		Account account;
 		List<TerminfindungAntwort> antworten;
+		Terminfindung terminfindung;
 		
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -172,6 +173,8 @@ public class TermineAbstimmungController {
 			System.out.println("404");
 			return "error/403";
 		}
+		
+		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			System.out.println("404");
@@ -227,7 +230,8 @@ public class TermineAbstimmungController {
 			return null;
 		}
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		if (terminfindung == null) {
 			return "error/404";
 		}
@@ -274,14 +278,16 @@ public class TermineAbstimmungController {
 			return null;
 		}
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		
 		if (terminfindung == null) {
 			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
-				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}

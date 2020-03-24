@@ -93,7 +93,7 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
-	public Terminfindung loadByLinkMitTerminen(String link) {
+	public Terminfindung loadByLinkMitTerminenForBenutzer(String link, String benutzer) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
 		if (termineDB != null && !termineDB.isEmpty()) {
 			Terminfindung terminfindung = new Terminfindung();
@@ -114,6 +114,12 @@ public class TerminfindungService {
 				terminMoeglichkeiten.add(termin.getTermin());
 			}
 			terminfindung.setVorschlaege(terminMoeglichkeiten);
+			
+			if (!antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link).isEmpty()) {
+				terminfindung.setEinmaligeAbstimmung(true);
+			} else {
+				terminfindung.setEinmaligeAbstimmung(false);
+			}
 			return terminfindung;
 		}
 		return null;
