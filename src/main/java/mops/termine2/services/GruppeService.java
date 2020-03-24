@@ -58,7 +58,7 @@ public class GruppeService {
 	
 	public boolean accountInGruppe(Account account, Long gruppeId) {
 		String benutzer = account.getName();
-		return !benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId).isEmpty();
+		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
 	}
 
 	public Gruppe loadByGruppeId(Long id) {
