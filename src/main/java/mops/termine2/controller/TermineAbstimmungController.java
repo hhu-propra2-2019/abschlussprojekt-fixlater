@@ -148,6 +148,7 @@ public class TermineAbstimmungController {
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("antwort", antwortForm);
 		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -200,6 +201,7 @@ public class TermineAbstimmungController {
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
 		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -251,6 +253,53 @@ public class TermineAbstimmungController {
 			antwortForm);
 		
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
+		authenticatedAccess.increment();
+		
+		return "redirect:/termine2/" + link;
+	}
+	
+	
+	@PostMapping(path = "/{link}/abstimmung", params = "kommentarSichern")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
+		Account account;
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			System.out.println("nicht autorisiert");
+			return null;
+		}
+		
+		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		if (terminfindung == null) {
+			System.out.println("404");
+			return "error/404";
+		}
+		
+		if (terminfindung.getGruppeId() != null
+				&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+			System.out.println("403");
+			return "error/403";
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (terminfindung.getFrist().isBefore(now)) {
+			System.out.println("ergebnis");
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
+		LinkWrapper linkWrapper = new LinkWrapper(link);
+		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
+			System.out.println("Abstimmung wurde geupdated");
+			return "redirect:/termine2/" + link;
+		}
+		
+		
+		neuerKommentar.setLink(link);
+		neuerKommentar.setErstellungsdatum(now);
+		m.addAttribute("neuerKommentar", neuerKommentar);
+		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;
