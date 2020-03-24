@@ -33,6 +33,9 @@
 		<link rel="stylesheet"
 		      href="/css/all.css">
 
+		<link rel="stylesheet"
+		      href="/css/toggle-switchy.css">
+
 		<!-- MomentJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
 		        integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
@@ -156,12 +159,23 @@
 					</div>
 
 					<!-- Einstellungs Optionen -->
-					<div class="mb-3 form-group">
-						<label class="text-secondary" for="beschreibung">
-							Ergebnis vor Frist anzeigen :
-						</label>
-						<input type="checkbox" checked data-toggle="toggle">
-
+					<div class="mb-3 form-group row">
+						<div class="col" style="width: 20%">
+							Ergebnis vor Frist Anzeigen :
+						</div>
+						<div class="col" style="width: 10%">
+							<input id="ergebnisVorFristJa"
+							       type="radio" name="ergebnisVorFristJa" value="true"
+							       th:field="*{ergebnisVorFrist}">
+							<label for="ergebnisVorFristJa">Ja </label>
+						</div>
+						<div class="col" style="width: 10%">
+							<input id="ergebnisVorFristNein"
+							       type="radio" name="ergebnisVorFristJa" value="false"
+							       th:field="*{ergebnisVorFrist}">
+							<label for="ergebnisVorFristNein">Nein</label>
+						</div>
+						<div class="col" style="width: 60%;"></div>
 					</div>
 				</div>
 
