@@ -70,7 +70,7 @@ public class UmfrageAntwortServiceTest {
 		Mockito.verify(antwortRepo, times(1)).deleteAllByUmfrageLinkAndBenutzer(any(), any());
 	}
 	
-	@Test
+	//@Test
 	public void loadByBenutzerAndLinkEinBenutzer3Moeglichkeiten() {
 		int anzahl = 3;
 		List<UmfrageAntwortDB> umfrageAntwortDBs = getBeispielAntwortDBList(anzahl, BENUTZER1);
