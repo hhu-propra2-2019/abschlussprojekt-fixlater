@@ -33,9 +33,6 @@
 		<link rel="stylesheet"
 		      href="/css/all.css">
 
-		<link rel="stylesheet"
-		      href="/css/toggle-switchy.css">
-
 		<!-- MomentJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
 		        integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
@@ -45,7 +42,7 @@
 		<link rel="stylesheet"
 		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
 		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
-		      crossorigin="anonymous"/>
+		      crossorigin="anonymous" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
 		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
 		        crossorigin="anonymous"></script>
@@ -53,103 +50,103 @@
 </head>
 
 <body>
-	<header>
-		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-			<ul>
-				<li>
-					<a th:href="@{/termine2}">
-						<img src="../static/img/resized/calendar_small.jpg"
-						     th:src="@{/img/resized/calendar_small.jpg}">
-						Termine
-					</a>
-				</li>
-				
-				<li>
-					<a th:href="@{/termine2/umfragen}">
-						<img src="../static/img/resized/survey_small.jpg"
-						     th:src="@{/img/resized/survey_small.jpg}">
-						Umfragen
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</header>
-	
-	<main th:fragment="bodycontent">
-		<div class="container mb-3">
-			<!-- Header -->
-			<div class="row my-3 border-bottom">
-				<h1 class="h1">Neuer Termin</h1>
-			</div>
-			
-			<form class="row" method="post" th:action="@{/termine2/termine-neu}"
-			      th:object="${terminfindung}">
-				<div class="col">
-					<!-- Übersicht -->
-					<div class="mb-3 border-bottom">
-						<div class="mb-3 form-group">
-							<label for="titel">
-								Titel
-							</label>
-							
-							<div class="alert alert-danger alert-dissmissible fade show"
-							     th:if="${fehler != null && fehler != ''}">
+<header>
+	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+		<ul>
+			<li>
+				<a th:href="@{/termine2}">
+					<img src="../static/img/resized/calendar_small.jpg"
+					     th:src="@{/img/resized/calendar_small.jpg}">
+					Termine
+				</a>
+			</li>
+
+			<li>
+				<a th:href="@{/termine2/umfragen}">
+					<img src="../static/img/resized/survey_small.jpg"
+					     th:src="@{/img/resized/survey_small.jpg}">
+					Umfragen
+				</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+
+<main th:fragment="bodycontent">
+	<div class="container mb-3">
+		<!-- Header -->
+		<div class="row my-3 border-bottom">
+			<h1 class="h1">Neuer Termin</h1>
+		</div>
+
+		<form class="row" method="post" th:action="@{/termine2/termine-neu}"
+		      th:object="${terminfindung}">
+			<div class="col">
+				<!-- Übersicht -->
+				<div class="mb-3 border-bottom">
+					<div class="mb-3 form-group">
+						<label for="titel">
+							Titel
+						</label>
+
+						<div class="alert alert-danger alert-dissmissible fade show"
+						     th:if="${fehler != null && fehler != ''}">
 								<span th:text="${fehler}">
 									Fehlermeldung
 								</span>
-								
-								<button class="close" data-dismiss="alert">×</button>
-							</div>
-							
-							<input class="form-control" id="titel" name="titel" type="text"
-							       required placeholder="Worum geht es?" th:value="*{titel}"/>
+
+							<button class="close" data-dismiss="alert">×</button>
 						</div>
-						
-						<!-- Ort -->
-						<div class="mb-3 form-group">
-							<label for="ort">
-								Ort
-							</label>
-							
-							<input class="form-control" id="ort" name="ort" type="text"
-							       required placeholder="Wo soll man sich treffen?"
-							       th:value="*{ort}"/>
-						</div>
-						
-						<!-- Erreichbarkeit -->
-						<div class="mb-3 form-group">
-							<label for="erreichbarkeit">
-								Erreichbarkeit
-							</label>
-							
-							<select class="custom-select" id="erreichbarkeit"
-							        th:if="${gruppen.size() == 0}" disabled>
-								<option selected th:value="-1">Link</option>
-							</select>
-							
-							<select class="custom-select"
-							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
-								<option selected value="-1">Link</option>
-								
-								<optgroup label="Gruppen">
-									<option th:each="gruppe, iter : ${gruppen}"
-									        th:value="${gruppen[__${iter.index}__].id}"
-									        th:text="${gruppe.name}">Gruppe</option>
-								</optgroup>
-							</select>
-							
-							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-								<p class="mb-1">
-									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
-									kennen. Der Link wird dabei automatisch vom System generiert.
-								</p>
-								
-								<p>
-									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
-									ausgewählten Gruppe sichtbar.
-									
-									<span class="text-warning" th:if="${gruppen.size() == 0}">
+
+						<input class="form-control" id="titel" name="titel" type="text"
+						       required placeholder="Worum geht es?" th:value="*{titel}"/>
+					</div>
+
+					<!-- Ort -->
+					<div class="mb-3 form-group">
+						<label for="ort">
+							Ort
+						</label>
+
+						<input class="form-control" id="ort" name="ort" type="text"
+						       required placeholder="Wo soll man sich treffen?"
+						       th:value="*{ort}"/>
+					</div>
+
+					<!-- Erreichbarkeit -->
+					<div class="mb-3 form-group">
+						<label for="erreichbarkeit">
+							Erreichbarkeit
+						</label>
+
+						<select class="custom-select" id="erreichbarkeit"
+						        th:if="${gruppen.size() == 0}" disabled>
+							<option selected th:value="-1">Link</option>
+						</select>
+
+						<select class="custom-select"
+						        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+							<option selected value="-1">Link</option>
+
+							<optgroup label="Gruppen">
+								<option th:each="gruppe, iter : ${gruppen}"
+								        th:value="${gruppen[__${iter.index}__].id}"
+								        th:text="${gruppe.name}">Gruppe</option>
+							</optgroup>
+						</select>
+
+						<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+							<p class="mb-1">
+								<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+								kennen. Der Link wird dabei automatisch vom System generiert.
+							</p>
+
+							<p>
+								<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+								ausgewählten Gruppe sichtbar.
+
+								<span class="text-warning" th:if="${gruppen.size() == 0}">
 										Diese Option ist aber nicht verfügbar, da es im Moment keine
 										Gruppenzugehörigkeit gibt.
 									</span>
@@ -186,7 +183,6 @@
 					</div>
 				</div>
 
-
 				<!-- Zeiten -->
 				<div class="mb-3 border-bottom">
 					<h2 class="h2">
@@ -208,12 +204,13 @@
 								</div>
 
 								<input class="form-control datetimepicker-input" type="text"
-								       placeholder="Datum und Stunde"
+								       placeholder="Datum und Uhrzeit"
 								       th:attr="data-target='#zeit'+${iter.count}"
 								       th:field="*{vorschlaege[__${iter.index}__]}"
 								       th:value="${zeit}"/>
 
-								<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+								<div class="input-group-append"
+								     th:if="*{vorschlaege.size() > 1}">
 									<button class="btn btn-outline-danger" name="delete"
 									        th:value="${iter.index}" type="submit">
 										Löschen
@@ -222,7 +219,8 @@
 							</div>
 
 							<script th:inline="javascript">
-                                /* This comment is necessary for thymeleaf inline, DO NOT REMOVE */
+                                // The comment below is used by Thymeleaf for inlining.
+                                // Do NOT remove it.
                                 /*[+
 									$(function () {
 										var pickerID = '#zeit' + '[[${iter.count}]]';
@@ -295,4 +293,3 @@
 </main>
 </body>
 </html>
-
