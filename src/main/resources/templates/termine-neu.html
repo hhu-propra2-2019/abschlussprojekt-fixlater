@@ -157,6 +157,17 @@
 					</div>
 				</div>
 
+					<!-- Link -->
+					<div class="mb-3 form-group">
+						<label for="link">
+							Link ID
+						</label>
+
+						<input class="form-control" id="link" name="link" type="text"
+						       placeholder="Optional: Geben Sie einen beliebigen Link ein"
+						       th:value="*{link}"/>
+					</div>
+
 					<!-- Beschreibung -->
 				<div class="mb-3 form-group">
 						<label class="text-secondary" for="beschreibung">
@@ -317,6 +328,44 @@
                                     locale: 'de'
                                 });
                             });
+						</script>
+					</div>
+				</div>
+
+				<!-- Löschdatum -->
+				<div class="mb-3">
+					<h2 class="h2">
+						Löschdatum
+					</h2>
+
+					<div class="form-group mb-2">
+						<div class="input-group date"
+							 id="loeschdatum"
+							 data-target-input="nearest">
+							<div class="input-group-prepend"
+								 data-target="#loeschdatum"
+								 data-toggle="datetimepicker">
+								<div class="input-group-text">
+									<i class="fa fa-calendar"></i>
+								</div>
+							</div>
+
+							<input type="text"
+								   class="form-control datetimepicker-input"
+								   data-target="#loeschdatum"
+								   placeholder="Wann soll die Abstimmung gelöscht werden?"
+								   th:field="*{loeschdatum}"/>
+						</div>
+
+						<script type="text/javascript">
+							$(function () {
+								var pickerID = '#loeschdatum';
+
+								$(pickerID).datetimepicker({
+									format: 'DD.MM.YYYY, HH:mm',
+									locale: 'de'
+								});
+							});
 						</script>
 					</div>
 				</div>
