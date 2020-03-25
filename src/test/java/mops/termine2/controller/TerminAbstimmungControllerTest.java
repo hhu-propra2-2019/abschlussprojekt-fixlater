@@ -87,6 +87,18 @@ public class TerminAbstimmungControllerTest {
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
 	}
 	
+	// Abstimmung gibt es nicht
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineDetails3() throws Exception {
+		Terminfindung terminfindung = null;
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		
+		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
+	}
 	
 	private Terminfindung init1(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
