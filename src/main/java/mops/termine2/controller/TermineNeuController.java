@@ -205,28 +205,44 @@ public class TermineNeuController {
 						new TerminFormatierung(termineEingelesen);
 					terminFormatierung.pruefeFuerJedenTerminGueltigesFormat(
 						termineEingelesen, terminFormatierung.getDateTimeFormatter());
+					terminFormatierung.pruefeObExistent(termineEingelesen);
 					
-					// entferne ggf. überflüssige Datumsbox
-					if (termine.get(0) == null) {
-						terminfindung.getVorschlaege().remove(0);
+					if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
+							terminFormatierung.getDateTimeFormatter())) {
+						m.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
+						m.addAttribute("error", true);
+					} else {
+						
+						// entferne ggf. überflüssige Datumsbox
+						if (!terminFormatierung.pruefeObExistent(termineEingelesen)) {
+							m.addAttribute("message", "Die Daten sollten existieren.");
+							m.addAttribute("error", true);
+						} else {
+							// entferne ggf. überflüssige Datumsbox
+							if (termine.get(0) == null) {
+								terminfindung.getVorschlaege().remove(0);
+							}
+							
+							// füge Termine ins Model ein
+							for (String[] terminEingelesen : termineEingelesen) {
+								LocalDateTime termin = LocalDateTime.parse(
+										terminEingelesen[0] + ", "
+												+ terminEingelesen[1],
+										terminFormatierung
+										.getDateTimeFormatter());
+								termine.add(termin);
+							}
+							
+							m.addAttribute("message", "Upload erfolgreich!");
+							m.addAttribute("erfolg", true);
+						}
 					}
-					
-					// füge Termine ins Model ein
-					for (String[] terminEingelesen : termineEingelesen) {
-						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
-							+ ", " + terminEingelesen[1], terminFormatierung
-							.getDateTimeFormatter());
-						termine.add(termin);
-					}
-					
-					m.addAttribute("message", "Upload erfolgreich!");
-					m.addAttribute("erfolg", true);
 					
 				} catch (Exception ex) {
 					m.addAttribute("message",
 						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. "
 							+ "Alle Termine müssen im Format 'TT.MM.JJJJ,HH:MM' "
-							+ "übergeben werden.");
+							+ "übergeben werden und sollten existente Daten sein.");
 					m.addAttribute("error", true);
 				}
 			}
