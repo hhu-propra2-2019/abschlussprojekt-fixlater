@@ -523,9 +523,9 @@ Darstellung von Titeln und Zeiten in Übersichten korrigiert.
 === Kommentare (Julia, Kathi, Anton)
 Wir haben alle Komponenten der Kommentare für Umfragen geschrieben und in master gemergt.
 
-=== Umfrage Abstimmung und Ergebnis Seite(Thymeleaf) (Jan,Anthon)
-
+=== Umfrage Abstimmung und Ergebnis Seite(Thymeleaf, Services) (Jan, Thomas, Anton)
 Das Thymeleaf für die Abstimmungs und Ergebnisseite geschrieben.
+Services angepasst. Die entstandenen Probleme wurden alle von Thomas gefunden und korrigiert.
 
 === Termine Hinzufügen
 Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum hinzugefügt.
