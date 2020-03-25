@@ -59,6 +59,13 @@ public class UmfrageAntwortService {
 		}
 	}
 	
+	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
+		List<UmfrageAntwortDB> antworten =
+			antwortRepo.findByBenutzerAndUmfrageLink(benutzer,
+				link);
+		return !antworten.isEmpty();
+	}
+	
 	/**
 	 * Lädt eine Liste von Antworten nach Benutzer und Link
 	 *
@@ -78,78 +85,39 @@ public class UmfrageAntwortService {
 	 * @param link
 	 * @return eine Liste von Antworten
 	 */
+	
 	public List<UmfrageAntwort> loadAllByLink(String link) {
-		List<UmfrageAntwortDB> umfrageAntwortDBs = antwortRepo.findAllByUmfrageLink(link);
-		return buildAntwortenFromDB(umfrageAntwortDBs);
+		List<UmfrageAntwortDB> antwortDBList =
+			antwortRepo.findAllByUmfrageLink(link);
+		List<UmfrageDB> antwortMoeglichkeiten = umfrageRepo.findByLink(link);
+		
+		return buildAntworten(antwortDBList,
+			antwortMoeglichkeiten);
 	}
 	
-	/**
-	 * Löscht alle Antworten nach Link
-	 *
-	 * @param link
-	 */
-	public void deleteAllByLink(String link) {
-		antwortRepo.deleteAllByUmfrageLink(link);
-	}
-	
-	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
-		List<UmfrageAntwortDB> antworten = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
-		return !antworten.isEmpty();
-	}
-	
-	private UmfrageAntwort buildAntwortFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
-		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
-			UmfrageAntwortDB ersteAntwortDB = umfrageAntwortDBs.get(0);
-			UmfrageAntwort antwort = new UmfrageAntwort();
-			antwort.setBenutzer(ersteAntwortDB.getBenutzer());
-			antwort.setGruppeId(ersteAntwortDB.getUmfrage().getGruppeId());
-			antwort.setLink(ersteAntwortDB.getUmfrage().getLink());
-			antwort.setPseudonym(ersteAntwortDB.getPseudonym());
-			antwort.setTeilgenommen(true);
+	private List<UmfrageAntwort> buildAntworten(
+		List<UmfrageAntwortDB> antwortDBS, List<UmfrageDB> antwortMoeglichkeiten) {
+		
+		List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
+		if (!antwortDBS.isEmpty()) {
+			List<String> benuternamen = new ArrayList<>();
 			
-			HashMap<String, Antwort> antworten = new HashMap<>();
-			for (UmfrageAntwortDB antwortDB : umfrageAntwortDBs) {
-				antworten.put(antwortDB.getUmfrage().getAuswahlmoeglichkeit(), antwortDB.getAntwort());
-			}
-			antwort.setAntworten(antworten);
-			
-			return antwort;
-		}
-		return null;
-	}
-	
-	private List<UmfrageAntwort> buildAntwortenFromDB(List<UmfrageAntwortDB> umfrageAntwortDBs) {
-		if (umfrageAntwortDBs != null && !umfrageAntwortDBs.isEmpty()) {
-			List<String> benutzernamen = new ArrayList<>();
-			List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
-			
-			for (UmfrageAntwortDB aktuelleAntwortDB : umfrageAntwortDBs) {
-				String aktuellerBenutzer = aktuelleAntwortDB.getBenutzer();
-				if (!benutzernamen.contains(aktuellerBenutzer)) {
-					UmfrageAntwort antwort = new UmfrageAntwort();
-					antwort.setBenutzer(aktuellerBenutzer);
-					antwort.setGruppeId(aktuelleAntwortDB.getUmfrage().getGruppeId());
-					antwort.setLink(aktuelleAntwortDB.getUmfrage().getLink());
-					antwort.setPseudonym(aktuelleAntwortDB.getPseudonym());
-					antwort.setTeilgenommen(true);
-					
-					HashMap<String, Antwort> antworten = new HashMap<>();
-					for (UmfrageAntwortDB db : umfrageAntwortDBs) {
-						if (db.getBenutzer().equals(aktuellerBenutzer)) {
-							antworten.put(db.getUmfrage().getAuswahlmoeglichkeit(),
-								db.getAntwort());
-						}
-					}
-					antwort.setAntworten(antworten);
-					
-					umfrageAntworten.add(antwort);
-					benutzernamen.add(aktuellerBenutzer);
+			for (UmfrageAntwortDB antwortDB : antwortDBS) {
+				String benutzer = antwortDB.getBenutzer();
+				if (!benuternamen.contains(antwortDB.getBenutzer())) {
+					List<UmfrageAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
+						antwortDBS, benutzer);
+					umfrageAntworten.add(buildAntwortForBenutzer(
+						benutzer, nutzerAntworten, antwortMoeglichkeiten));
+					benuternamen.add(benutzer);
 				}
+				
 			}
-			return umfrageAntworten;
 		}
-		return null;
+		return umfrageAntworten;
+		
 	}
+	
 	
 	private UmfrageAntwort buildAntwortForBenutzer(
 		String benutzer, List<UmfrageAntwortDB> alteAntworten,
@@ -180,4 +148,21 @@ public class UmfrageAntwortService {
 		antwort.setAntworten(antwortenMap);
 		return antwort;
 	}
+	
+	private List<UmfrageAntwortDB> filterAntwortenDbBenutzer(
+		List<UmfrageAntwortDB> antwortDBS, String benutzer) {
+		List<UmfrageAntwortDB> nutzerAntwortenDB = new ArrayList<>();
+		for (UmfrageAntwortDB umfrageAntwortDB : antwortDBS) {
+			if (benutzer.equals(umfrageAntwortDB.getBenutzer())) {
+				nutzerAntwortenDB.add(umfrageAntwortDB);
+			}
+		}
+		return nutzerAntwortenDB;
+	}
+	
+	/**
+	 * Löscht alle Antworten nach Link
+	 *
+	 * @param link
+	 */
 }
