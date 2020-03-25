@@ -62,6 +62,7 @@ public class TerminfindungService {
 	 *
 	 * @param link
 	 */
+	@Transactional
 	public void loescheByLink(String link) {
 		antwortRepo.deleteByLink(link);
 		terminfindungRepo.deleteByLink(link);
