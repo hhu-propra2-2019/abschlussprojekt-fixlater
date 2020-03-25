@@ -136,6 +136,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		LocalDateTime ergebnis = frist.plusDays(90);
+		Boolean ergebnisVorFrist = new Random().nextBoolean();
+		Boolean einmaligeAbstimmung = new Random().nextBoolean();
 		int antwortGrenze = new Random().nextInt(4);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
@@ -151,9 +153,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
-			Random zufall = new Random();
-			terminfindungdb.setErgebnisVorFrist(zufall.nextBoolean());
-			terminfindungdb.setEinmaligeAbstimmung(zufall.nextBoolean());
+			terminfindungdb.setErgebnisVorFrist(ergebnisVorFrist);
+			terminfindungdb.setEinmaligeAbstimmung(einmaligeAbstimmung);
 			
 			
 			this.terminfindungRepository.save(terminfindungdb);
@@ -199,6 +200,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime ergebnis = LocalDateTime.now().plusDays(new Random().nextInt(90))
 			.minusDays(new Random().nextInt(90));
 		LocalDateTime loeschdatum = frist.plusDays(90);
+		Boolean ergebnisVorFrist = new Random().nextBoolean();
+		Boolean einmaligeAbstimmung = new Random().nextBoolean();
 		int antwortGrenze = new Random().nextInt(3);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
@@ -213,9 +216,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
-			Random zufall = new Random();
-			terminfindungdb.setErgebnisVorFrist(zufall.nextBoolean());
-			terminfindungdb.setEinmaligeAbstimmung(zufall.nextBoolean());
+			terminfindungdb.setErgebnisVorFrist(ergebnisVorFrist);
+			terminfindungdb.setEinmaligeAbstimmung(einmaligeAbstimmung);
 			
 			
 			this.terminfindungRepository.save(terminfindungdb);
