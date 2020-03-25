@@ -83,8 +83,7 @@
 			<h1 class="h1">Neuer Termin</h1>
 		</div>
 
-		<form class="row" method="post" th:action="@{/termine2/termine-neu}"
-		      th:object="${terminfindung}">
+    <form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
 			<div class="col">
 				<!-- Übersicht -->
 				<div class="mb-3 border-bottom">
@@ -201,6 +200,17 @@
 					<h2 class="h2">
 						Zeiten
 					</h2>
+          
+         			 <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
+					<div class="container mb-3">
+						<div class="alert alert-danger" role="alert" th:if="${error}">
+							<strong>Error:</strong>
+							<span th:text="${message}"></span>
+						</div>
+						<div class="alert alert-success" role="alert" th:if="${erfolg}">
+							<span th:text="${message}"></span>
+						</div>
+					</div>
 
 					<div class="container mb-3">
 						<div class="form-group mb-2"
@@ -254,6 +264,16 @@
 								Hinzufügen
 							</button>
 						</div>
+            
+            			<div class="form-group mt-3">
+							<label>
+								Oder wählen Sie eine CSV-Datei zum Import von Terminen
+								(im Format TT.MM.JJJJ,HH:MM) aus:
+							</label>
+							<input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
+						</div>
+						<button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
+            
 					</div>
 				</div>
 
