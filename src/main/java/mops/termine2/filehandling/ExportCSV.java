@@ -1,6 +1,5 @@
 package mops.termine2.filehandling;
 
-import com.opencsv.CSVWriter;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -30,13 +29,16 @@ public class ExportCSV {
 				.toFormatter();
 	}
 	
-	public void localDateTimeZuString(CSVWriter writer) {
-		List<String[]> stringTermine = new ArrayList<>();
+	public List<ExportFormat> localDateTimeZuExportFormat() {
+		List<ExportFormat> termineExportFormat = new ArrayList<>();
 		for (LocalDateTime localDatetermin : this.getTerminVorschlaege()) {
-			String termin = localDatetermin.format(this.getDateTimeFormatter());
-			System.out.println(termin);
-			writer.writeNext(termin.split(","));
+			if (localDatetermin != null) {
+				String termin = localDatetermin.format(this.getDateTimeFormatter());
+				String[] datumUndUhrzeit = termin.split(",");
+				termineExportFormat.add(new ExportFormat(datumUndUhrzeit[0], datumUndUhrzeit[1]));
+			}
 		}
+		return termineExportFormat;
 	}
 	
 }

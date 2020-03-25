@@ -188,6 +188,7 @@
 				<div class="mb-3 border-bottom">
 					<h2 class="h2">
 						Zeiten
+						<button class="btn btn-outline-success" name="download" type="submit">Termine exportieren</button>
 					</h2>
           
          			 <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
@@ -263,7 +264,6 @@
 						</div>
 						<button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
 
-
 					</div>
 				</div>
 
@@ -311,9 +311,6 @@
 					</button>
 				</div>
 			</div>
-		</form>
-		<form method="get" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
-			<button name="download" type="submit">Download!</button>
 		</form>
 	</div>
 </main>

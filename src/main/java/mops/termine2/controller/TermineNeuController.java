@@ -3,11 +3,16 @@ package mops.termine2.controller;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.filehandling.ExportCSV;
+import mops.termine2.filehandling.ExportFormat;
 import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
@@ -30,7 +35,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -230,6 +234,9 @@ public class TermineNeuController {
 					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 					
 					List<String[]> termineEingelesen = csvReader.readAll();
+					if ("DATUM".equals(termineEingelesen.get(0)[0])) {
+						termineEingelesen.remove(0);
+					}
 					
 					TerminFormatierung terminFormatierung =
 						new TerminFormatierung(termineEingelesen);
@@ -282,9 +289,11 @@ public class TermineNeuController {
 		return "termine-neu";
 	}
 	
-	@GetMapping(path = "/termine-neu", params = "download")
+	@RequestMapping(path = "/termine-neu", params = "download")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public void termineRunterladen(Principal p, Terminfindung terminfindung, Model m, HttpServletResponse response) throws IOException {
+	public void termineRunterladen(Principal p, Terminfindung terminfindung,
+								   Model m, HttpServletResponse response)
+			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -293,15 +302,25 @@ public class TermineNeuController {
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
 			String filename = "termine.csv";
-			response.setContentType("text/csv");
+			List<LocalDateTime> termine = terminfindung.getVorschlaege();
+			ExportCSV exportCSV = new ExportCSV(termine);
 			response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
 					"attachment; filename=\"" + filename + "\"");
-			List<LocalDateTime> termine = terminfindung.getVorschlaege();
-			System.out.println(termine);
-			ExportCSV exportCSV = new ExportCSV(termine);
-			CSVWriter writer = new CSVWriter(new FileWriter(filename));
-			exportCSV.localDateTimeZuString(writer);
-			writer.close();
+			response.setContentType("text/csv");
+			if (termine.get(0) != null) {
+				
+				
+				StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
+						response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+						.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+						.withOrderedResults(false)
+						.build();
+				
+				
+				writer.write(exportCSV.localDateTimeZuExportFormat());
+			}
+			
+			
 		}
 	}
 }
