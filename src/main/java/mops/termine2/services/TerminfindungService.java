@@ -43,9 +43,9 @@ public class TerminfindungService {
 			terminfindungDB.setGruppeId(terminfindung.getGruppeId());
 			terminfindungDB.setTermin(termin);
 			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
-      terminfindungDB.setErgebnisVorFrist(terminfindung.getErgebnisVorFrist());
-      terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
-
+			terminfindungDB.setErgebnisVorFrist(terminfindung.getErgebnisVorFrist());
+			terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
+			
 			if (terminfindung.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
 			} else {
@@ -109,9 +109,9 @@ public class TerminfindungService {
 			terminfindung.setLink(ersterTermin.getLink());
 			terminfindung.setErsteller(ersterTermin.getErsteller());
 			terminfindung.setErgebnis(ersterTermin.getErgebnis());
-      terminfindung.setErgebnisVorFrist(ersterTermin.getErgebnisVorFrist());
-       terminfindung.setEinmaligeAbstimmung(ersterTermin.getEinmaligeAbstimmung());
-
+			terminfindung.setErgebnisVorFrist(ersterTermin.getErgebnisVorFrist());
+			terminfindung.setEinmaligeAbstimmung(ersterTermin.getEinmaligeAbstimmung());
+			
 			List<LocalDateTime> terminMoeglichkeiten = new ArrayList<>();
 			for (TerminfindungDB termin : termineDB) {
 				terminMoeglichkeiten.add(termin.getTermin());
@@ -153,9 +153,9 @@ public class TerminfindungService {
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
 		terminfindung.setErgebnis(db.getErgebnis());
-    terminfindung.setErgebnisVorFrist(db.getErgebnisVorFrist());
-    terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
-
+		terminfindung.setErgebnisVorFrist(db.getErgebnisVorFrist());
+		terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
+		
 		
 		return terminfindung;
 	}

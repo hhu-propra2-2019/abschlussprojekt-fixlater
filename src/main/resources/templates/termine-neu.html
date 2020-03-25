@@ -152,13 +152,14 @@
 								<span class="text-warning" th:if="${gruppen.size() == 0}">
 										Diese Option ist aber nicht verfügbar, da es im Moment keine
 										Gruppenzugehörigkeit gibt.
-									</span>
+								</span>
 							</p>
 						</div>
 					</div>
+				</div>
 
 					<!-- Beschreibung -->
-					<div class="mb-3 form-group">
+				<div class="mb-3 form-group">
 						<label class="text-secondary" for="beschreibung">
 							Beschreibung (optional)
 						</label>
@@ -178,14 +179,12 @@
 								       th:checked="*{ergebnisVorFrist}">
 								<span class="toggle">
                                 <span class="switch"></span>
-                              </span>
+                                </span>
 								<span class="label">Ergebnis vor Frist Anzeigen : </span>
-                </label>
+                                </label>
 						</div>
 						<div class="col" style="width: 60%;"></div>
 					</div>
-				</div>
-
 					<div class="mb-3 form-group row">
 						<div class="col" style="width: 20%">
 							<label class="toggle-switchy" for="e" data-size="sm" data-label="left" data-style="rounded">
@@ -199,10 +198,10 @@ r
 						</div>
 						<div class="col" style="width: 60%;"></div>
 					</div>
-				</div>
 
 
-      
+
+
 				<!-- Zeiten -->
 				<div class="mb-3 border-bottom">
 					<h2 class="h2">

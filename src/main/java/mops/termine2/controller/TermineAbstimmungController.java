@@ -189,6 +189,11 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
+		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
+		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
