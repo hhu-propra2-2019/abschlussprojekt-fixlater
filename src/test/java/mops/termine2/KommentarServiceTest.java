@@ -66,7 +66,7 @@ public class KommentarServiceTest {
 	public void loadByLinkEinenKommentar() {
 		int anzahl = 1;
 		List<KommentarDB> kommentarDBs = erstelleKommentarDBListe(anzahl);
-		when(repository.findByLink(link)).thenReturn(kommentarDBs);
+		when(repository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
 		List<Kommentar> kommentareErwartet = erstelleKommentarListe(anzahl);
 		
 		List<Kommentar> kommentare = service.loadByLink(link);
@@ -78,7 +78,7 @@ public class KommentarServiceTest {
 	public void loadByLinkDreiKommentare() {
 		int anzahl = 3;
 		List<KommentarDB> kommentarDBs = erstelleKommentarDBListe(anzahl);
-		when(repository.findByLink(link)).thenReturn(kommentarDBs);
+		when(repository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
 		List<Kommentar> kommentareErwartet = erstelleKommentarListe(anzahl);
 		
 		List<Kommentar> kommentare = service.loadByLink(link);
