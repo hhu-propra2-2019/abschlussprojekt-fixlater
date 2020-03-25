@@ -1,6 +1,7 @@
-package mops.termine2.imports;
+package mops.termine2.filehandling;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,6 +25,7 @@ public class TerminFormatierung {
 		this.dateTimeFormatter = setzeFormatFuerTermine();
 		this.termineEingelesen = termineEingelesen;
 	}
+	
 	
 	public DateTimeFormatter setzeFormatFuerTermine() {
 		DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();

@@ -262,7 +262,8 @@
 							<input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
 						</div>
 						<button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
-            
+
+
 					</div>
 				</div>
 
@@ -310,6 +311,9 @@
 					</button>
 				</div>
 			</div>
+		</form>
+		<form method="get" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
+			<button name="download" type="submit">Download!</button>
 		</form>
 	</div>
 </main>
