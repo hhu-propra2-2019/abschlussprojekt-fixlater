@@ -1,5 +1,7 @@
 package mops.termine2.scheduling;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +14,8 @@ import mops.termine2.services.UmfrageService;
 @EnableScheduling
 public class LoeschScheduler {
 	
+	private final Logger logger = Logger.getLogger(LoeschScheduler.class.getName());
+	
 	private TerminfindungService terminfindungService;
 	
 	private UmfrageService umfrageService;
@@ -22,8 +26,9 @@ public class LoeschScheduler {
 		this.umfrageService = umfrageService;
 	}
 	
-	@Scheduled(fixedDelay = 3000)
+	@Scheduled(cron = "0 0 0,12 * * *")
 	public void loescheDaten() {
+		logger.info("Lösche abgelaufene Daten");
 		terminfindungService.loescheAbgelaufene();
 		umfrageService.deleteOutdated();
 	}
