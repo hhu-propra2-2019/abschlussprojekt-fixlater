@@ -65,21 +65,15 @@ public class TerminfindunguebersichtServiceTest {
 			Terminfindung termin = new Terminfindung();
 			termin.setLink(day.toString());
 			termin.setFrist(ldt.plusDays(day));
-
-			termin.setErgebnisVorFrist(true);
-
+      termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
-
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(day.toString());
 			terminDB.setFrist(ldt.plusDays(day));
-
-			terminDB.setErgebnisVorFrist(true);
-
+      terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
-
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -89,7 +83,8 @@ public class TerminfindunguebersichtServiceTest {
 			new ArrayList<TerminfindungAntwortDB>());
 		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
 			new ArrayList<>(Arrays.asList(gruppe)));
-		when(terminfindungRepository.findByGruppeId(gruppe.getGruppeId())).thenReturn(terminfindungenDB);
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
@@ -117,27 +112,23 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setLink(fristTage.get(i).toString());
 			termin.setFrist(ldt.plusDays(fristTage.get(i)));
 			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-			termin.setErgebnisVorFrist(true);
-
+      termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
-
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(fristTage.get(i).toString());
 			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
 			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-
-			terminDB.setErgebnisVorFrist(true);
-
+      terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
-
 			terminfindungenDB.add(terminDB);
 		}
 		
 		when(benutzerGruppeRepository.findByBenutzer(account.getName())).thenReturn(
 			new ArrayList<>(Arrays.asList(gruppe)));
-		when(terminfindungRepository.findByGruppeId(gruppe.getGruppeId())).thenReturn(terminfindungenDB);
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
