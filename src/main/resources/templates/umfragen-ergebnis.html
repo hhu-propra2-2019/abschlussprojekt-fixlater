@@ -197,83 +197,51 @@
 				<br>
 				<!-- Kommentare -->
 				<div>
-					<h2 class="h2">Kommentare</h2>
+					<!-- Kommentare -->
+				<h2 class="h2">Kommentare</h2>
 
-					<!-- Vorhandene Kommentare -->
+				<!-- Vorhandene Kommentare -->
+				<div th:each="kommentar: *{kommentare}" } >
 					<div class="mb-3">
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Sendedaten -->
 							<div class="pb-2 border-bottom">
-								<div class="h4">Benjamin</div>
-								<div>am [Datum, Zeit]</div>
+								<div class="h4" > <span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
+								<div> am <span th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span></div>
 							</div>
 
 							<!-- Inhalt -->
-							<div class="mt-2">
-								A leopard of the army is assumed to be an oversized toy. A
-								tragic Saturday comes with losing sleep over a napkin.
-								Literature would have us believe that molten margarine is
-								nothing but water.
-							</div>
-						</div>
-
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<div class="h4">Bibi Bloxberg</div>
-								<div>am [Datum, Zeit]</div>
-							</div>
-
-							<!-- Inhalt -->
-							<div class="mt-2">
-								The lunchbox can be turned into a tinfoil hat with some magic.
-								Some antelopes are thought of as prefaces to evolution. In
-								modern times an impulse is enough to change the mind of one's
-								step-brother. A hottest desert is a dry segment of a coast.
-							</div>
-						</div>
-
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<div class="h4">RNA-abhängige DNA-Polymerase</div>
-								<div>am [Datum, Zeit]</div>
-							</div>
-
-							<!-- Inhalt -->
-							<div class="mt-2">
-								The tip of a bow can become an instrument of astrology when used
-								right. We can assume that any instance of an antler can be made
-								into a lightbulb. A policeman is akin to a puny god. Experts
-								would have us believe that a respected cook can prepare a tasty
-								meal out of cicadas.
+							<div class="mt-2" >
+								<span th:text="${kommentar.inhalt}"> Inhalt </span>
 							</div>
 						</div>
 					</div>
+				</div>
 
-					<!-- Kommentarbox -->
-					<div class="container mb-3">
-						<h3 class="h3 mb-3">Verfassen</h3>
+				<!-- Kommentarbox -->
+				<div class="container mb-3">
+					<h3 class="h3 mb-3">Verfassen</h3>
 
-						<form method="post">
-							<!-- Inhalt -->
-							<div class="mb-3">
-								<textarea class="form-control" rows="5" id="comment"></textarea>
-							</div>
+					<form th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
+						  th:object="${neuerKommentar}"  method="post">
+						<!-- Inhalt -->
+						<div class="mb-3">
+							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment"></textarea>
+						</div>
 
-							<!-- Name -->
-							<div class="mb-3 form-group">
-								<label for="pseudonym">Name</label>
+						<!-- Name -->
+						<div class="mb-3 form-group">
+							<label for="pseudonym">Name</label>
 
-								<input class="form-control" id="pseudonym" type="text"
-								       placeholder="Benjamin"/>
-							</div>
+							<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
+								   placeholder="Benjamin"/>
+						</div>
 
-							<div style="text-align: center">
-								<button class="btn btn-success">Veröffentlichen</button>
-							</div>
-						</form>
-					</div>
+						<div style="text-align: center">
+							<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
+						</div>
+					</form>
+				</div>
 				</div>
 			</div>
 		</div>
