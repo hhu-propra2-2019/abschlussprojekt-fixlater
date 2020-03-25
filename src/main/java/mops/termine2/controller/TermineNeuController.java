@@ -66,6 +66,7 @@ public class TermineNeuController {
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		gruppeService.sortGroupsByName(gruppen);
 		m.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
@@ -74,8 +75,9 @@ public class TermineNeuController {
 		// Terminfindung
 		Terminfindung terminfindung = new Terminfindung();
 		terminfindung.setVorschlaege(new ArrayList<>());
-		terminfindung.getVorschlaege().add(LocalDateTime.now());
+		terminfindung.getVorschlaege().add(null);
 		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
+		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
 		
 		m.addAttribute("terminfindung", terminfindung);
 		
@@ -108,7 +110,7 @@ public class TermineNeuController {
 		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
-		termine.add(LocalDateTime.now());
+		termine.add(null);
 		
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("fehler", "");
@@ -148,6 +150,25 @@ public class TermineNeuController {
 		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
 		
+		// Terminfindung erstellen
+		terminfindung.setErsteller(account.getName());
+		if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
+			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
+			terminfindung.setGruppeId(gruppe.getId());
+		}
+		
+		if (terminfindung.getLink().isEmpty()) {
+			String link = linkService.generiereEindeutigenLink();
+			terminfindung.setLink(link);
+		} else {
+			if (!linkService.pruefeEindeutigkeitLink(terminfindung.getLink())) {
+				fehler = "Der eingegebene Link existiert bereits.";
+			}
+			if (!linkService.isLinkValid(terminfindung.getLink())) {
+				fehler = "Der eingegebene Link enthält ungültige Zeichen";
+			}
+		}
+		
 		if (!fehler.equals("")) {
 			m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
@@ -156,17 +177,6 @@ public class TermineNeuController {
 			
 			return "termine-neu";
 		}
-		
-		// Terminfindung erstellen
-		terminfindung.setErsteller(account.getName());
-		terminfindung.setLoeschdatum(terminfindung.getFrist().plusWeeks(3));
-		if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
-			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
-			terminfindung.setGruppeId(gruppe.getId());
-		}
-		
-		String link = linkService.generiereEindeutigenLink();
-		terminfindung.setLink(link);
 		
 		terminfindungService.save(terminfindung);
 		

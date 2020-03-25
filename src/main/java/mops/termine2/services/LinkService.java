@@ -46,4 +46,8 @@ public class LinkService {
 		return terminfindungDBs.isEmpty() && umfrageDBs.isEmpty();
 	}
 	
+	public Boolean isLinkValid(String link) {
+		return link.matches("[a-zA-Z0-9]");
+	}
+	
 }
