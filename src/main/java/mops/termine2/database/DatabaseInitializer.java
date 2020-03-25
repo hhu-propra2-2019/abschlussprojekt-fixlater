@@ -42,7 +42,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = false;
+	private static final boolean EINGESCHALTET = true;
 	
 	
 	@Autowired
@@ -151,7 +151,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
-			terminfindungdb.setEinmaligeAbstimmung(false);
+			Random zufallszahl = new Random();
+			terminfindungdb.setEinmaligeAbstimmung(zufallszahl.nextBoolean());
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -210,7 +211,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
-			terminfindungdb.setEinmaligeAbstimmung(false);
+			Random zufallszahl = new Random();
+			terminfindungdb.setEinmaligeAbstimmung(zufallszahl.nextBoolean());
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
