@@ -399,7 +399,7 @@ oder erst wenn jemand abgestimmt hat
 Umfrage))
 
 === Terminübersicht (Thomas)
-In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer angezeigt inklusive der Termine, die nur über einen Link erreichbar sind, an denen der Benutzer aber bereits teilgenommen hat. Die abgeschlossenen Termine (Termine, bei denen die Frist bereits abgelaufen ist) werden nach dem Ergebnis der Abstimmung sortiert. Dabei werden die aös nächstes anstehenden Termine oben angezeigt und die, die bereits in der Vergangenheit liegen ganz unten.
+In der Terminübersicht werden jetzt alle relevanten Termine für einen Benutzer angezeigt inklusive der Termine, die nur über einen Link erreichbar sind, an denen der Benutzer aber bereits teilgenommen hat. Die abgeschlossenen Termine (Termine, bei denen die Frist bereits abgelaufen ist) werden nach dem Ergebnis der Abstimmung sortiert. Dabei werden die als nächstes anstehenden Termine oben angezeigt und die, die bereits in der Vergangenheit liegen ganz unten.
 
 === Neue Umfrage (Anton)
 GetMapping und PostMappings geschrieben damit man im Formular neue Umfragen Vorschläge hinzufügen kann
@@ -440,7 +440,7 @@ da sich die Standartformatierungen von LocalDateTime nicht anboten.
 
 === Umbauen des Programms(Thomas ,Jan)(Wochenende):
 Bis zuletzt gingen wir von der falschen Annahme aus, dass Gruppennamen 
-eindeutig seien. Nach dem wir erfuren , dass dem nicht so war , musste 
+eindeutig seien. Nach dem wir erfuren, dass dem nicht so war, musste 
 die Datenbank, Teile der Logik und die Ui umgebaut werden.
 
 === GruppeScheduler (Leon, Marcel)
@@ -468,6 +468,25 @@ gelöst. Zudem haben wir die View bei der Terminabstimmung soweit angepasst, das
 Kommentare angezeigt bekommt (wenn man noch nicht abgestimmt hat). Dafür haben wir die termine-abstimmung.html
 und den TermineAbstimmungController überarbeitet.
 
-===Umfragenabstimmung (Anton)
+=== Umfragenabstimmung (Anton)
 Das schlimmste an der merge-Korrektur war, dass mehrere Dateien die automatisch erfolgreich gemergt wurden, stark beschädigt wurden (zb, Teile von Methoden waren weg, oder ganze Methoden wurden übersehen, oder ganze Dateien wurden überschrieben ohne zu vergleichen). Das musste ich dann manuell lösen indem ich mir alte und neue Dateien Zeile für Zeile angeschaut und selbst die korrekten Änderungen gemacht habe.
 Danach habe ich den Selektor für Gruppen auf der Umfragenübersicht durch thymeleaf Attribute korrigiert, go dass "Alle Gruppen" korrekt angezeigt werden, und dass die ausgewählte Gruppe auch weiterhin im Selektor bleibt nachdem die Seite neugeladen wird.
+
+=== Terminübersicht (Thomas)
+Da beim Filtern der Termine nach Gruppen ein Request Parameter verwendet wird und dieser in der Adresszeile angezeigt wird, konnte bisher auch auf Gruppen zugegriffen werden, bei denen man kein Mitglied ist. Dies wurde jetzt geändert, sodass zuerst die Gruppenzugehörigkeit geprüft wird und eine Fehlerseite angezeigt wird, wenn man nicht in der entsprechenden Gruppe ist.
+
+== Tag 17
+
+=== Authentifizierung (Thomas)
+Die Authentifizierung wurde überarbeitet. Alle Controller-Tests nutzen jetzt die Annotation @WithMockKeycloackAuth, damit die Rollen in den Tests funktionieren.
+
+=== Termineübersicht Tests (Thomas)
+Es wurden Tests den Controller der Terminübersicht geschrieben.
+Es wird der Aufruf mit und ohne Gruppenfilter getestet sowie ein Aufruf ohne eingeloggten Benutzer.
+
+== Tag 18
+
+=== Termine Hinzufügen
+Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum hinzugefügt.
+Wenn kein Link angegeben wird, wird automatisch ein eindeutiger Link erstellt.
+Eingegebene Links werden auf Eindeutigkeit geprüft und dürfen nur aus Buchstaben und Zahlen bestehen.
