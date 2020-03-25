@@ -1,24 +1,6 @@
 package mops.termine2.controller;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.annotation.SessionScope;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -283,7 +265,7 @@ public class UmfragenAbstimmungController {
 		}
 		
 		if (umfrage.getGruppeId() != null
-				&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
 			System.out.println("403");
 			return "error/403";
 		}

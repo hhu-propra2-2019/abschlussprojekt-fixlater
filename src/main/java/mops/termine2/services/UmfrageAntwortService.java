@@ -45,7 +45,8 @@ public class UmfrageAntwortService {
 		
 		for (String vorschlag : antwort.getAntworten().keySet()) {
 			UmfrageAntwortDB umfrageAntwortDB = new UmfrageAntwortDB();
-			UmfrageDB umfrageDB = umfrageRepo.findByLinkAndAuswahlmoeglichkeit(umfrage.getLink(), vorschlag);
+			UmfrageDB umfrageDB = umfrageRepo
+				.findByLinkAndAuswahlmoeglichkeit(umfrage.getLink(), vorschlag);
 			
 			umfrageAntwortDB.setAntwort(antwort.getAntworten().get(vorschlag));
 			umfrageAntwortDB.setBenutzer(antwort.getBenutzer());
