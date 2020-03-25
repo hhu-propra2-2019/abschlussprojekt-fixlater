@@ -121,7 +121,8 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung,
-										 Gruppe gruppeSelektiert, RedirectAttributes ra) {
+										 Gruppe gruppeSelektiert,
+										 RedirectAttributes ra) {
 		String fehler = "";
 		
 		// Account
