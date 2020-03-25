@@ -103,7 +103,7 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Account account;
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
@@ -152,7 +152,7 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/ergebnis")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageErgebnis(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		Account account;
@@ -249,7 +249,7 @@ public class UmfragenAbstimmungController {
 		return "redirect:/termine2/umfragen/" + link;
 	}
 	
-	@PostMapping(path = "/umfragen/{link}/abstimmung", params = "kommentarSichern")
+	@PostMapping(path = "/umfragen/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
 		Account account;
@@ -274,23 +274,12 @@ public class UmfragenAbstimmungController {
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
-		if (umfrage.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
-			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
-		}
-
-		LinkWrapper linkWrapper = new LinkWrapper(link);
-		if (!umfrage.equals(letzteUmfrage.get(linkWrapper))) {
-			System.out.println("Abstimmung wurde geupdated");
-			return "redirect:/termine2/umfragen/" + link;
-		}
-		
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
 		m.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		
-		return "redirect:/termine2/" + link;
+		return "redirect:/termine2/umfragen/" + link;
 	}
 }
