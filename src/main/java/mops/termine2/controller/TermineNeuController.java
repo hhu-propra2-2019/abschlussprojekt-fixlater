@@ -26,11 +26,14 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @SessionScope
 @RequestMapping("/termine2")
 public class TermineNeuController {
+	
+	private final Logger logger = Logger.getLogger(TermineNeuController.class.getName());
 	
 	private final transient Counter authenticatedAccess;
 	
@@ -175,11 +178,12 @@ public class TermineNeuController {
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("terminfindung", terminfindung);
 			m.addAttribute("fehler", fehler);
-			
 			return "termine-neu";
 		}
 		
 		terminfindungService.save(terminfindung);
+		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit link '"
+			+ terminfindung.getLink() + "' erstellt");
 		
 		ra.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
