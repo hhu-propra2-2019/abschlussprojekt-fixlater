@@ -29,10 +29,12 @@ public class Terminfindung {
 	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime frist;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime loeschdatum;
 	
 	private Long gruppeId;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime ergebnis;
 	
 	private boolean teilgenommen = false;

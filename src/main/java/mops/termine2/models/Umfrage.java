@@ -26,6 +26,7 @@ public class Umfrage {
 	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime frist;
 	
+	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime loeschdatum;
 	
 	private Long gruppeId;
