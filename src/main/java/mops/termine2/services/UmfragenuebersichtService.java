@@ -107,6 +107,8 @@ public class UmfragenuebersichtService {
 	
 	private List<Umfrage> getUmfragenVonBenutzer(Account account) {
 		List<Umfrage> umfragen = new ArrayList<>();
+		umfragen.addAll(umfrageService.loadByErstellerOhneUmfragen(account.getName()));
+		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		for (Gruppe g : gruppen) {
 			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getId()));
