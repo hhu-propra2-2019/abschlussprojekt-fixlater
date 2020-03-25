@@ -23,8 +23,6 @@ public class ErgebnisFormUmfragen {
 	
 	List<Antwort> nutzerAntworten = new ArrayList<>();
 	
-	//List<String> termineString = new ArrayList<>();
-	
 	List<Integer> anzahlStimmenJa = new ArrayList<>();
 	
 	List<Integer> anzahlStimmenNein = new ArrayList<>();

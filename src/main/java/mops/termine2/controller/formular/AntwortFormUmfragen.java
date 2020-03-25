@@ -18,8 +18,6 @@ public class AntwortFormUmfragen {
 	
 	public List<String> vorschlaege = new ArrayList<>();
 	
-	//public List<String> termineString = new ArrayList<>();
-	
 	public List<Antwort> antworten = new ArrayList<>();
 	
 	public String pseudonym;
@@ -28,7 +26,7 @@ public class AntwortFormUmfragen {
 	
 	@SuppressWarnings("checkstyle:LineLength")
 	public static UmfrageAntwort mergeToAnswer(Umfrage umfrage, String nutzer,
-		AntwortFormUmfragen antwortFrm) {
+											   AntwortFormUmfragen antwortFrm) {
 		UmfrageAntwort umfrageAntwort = new UmfrageAntwort();
 		umfrageAntwort.setBenutzer(nutzer);
 		umfrageAntwort.setLink(umfrage.getLink());
