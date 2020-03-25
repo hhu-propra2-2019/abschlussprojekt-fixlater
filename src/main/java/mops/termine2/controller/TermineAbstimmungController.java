@@ -83,6 +83,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
+		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
