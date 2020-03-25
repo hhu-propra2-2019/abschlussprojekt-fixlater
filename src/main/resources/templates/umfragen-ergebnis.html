@@ -98,19 +98,7 @@
 										></div>
 									</div>
 								</th>
-								<th class="col bg-secondary" style="width: 10%;">
-									<a class="text-white" href="" data-toggle="tooltip"
-									   title="Vielleicht">Vlt.</a>
-								</th>
-								<th class="col bg-secondary" style="width: 6%;">
-									<div class="progress" style="height: 20px;width: 20px;">
-										<div class="progress-bar bg-warning "
-										     role="progressbar"
-										     style="width: 100%;"
-										     aria-valuenow="100"
-										></div>
-									</div>
-								</th>
+
 								<th class="col bg-secondary" style="width: 6%;">Nein</th>
 								<th class="col bg-secondary" style="width: 6%;">
 									<div class="progress" style="height: 20px;width: 20px;">
@@ -128,7 +116,7 @@
 							</tr>
 							</thead>
 						</table>
-<!-- 						<details th:each="termin,terminStat: ${ergebnis.termineString}">
+						<details th:each="vorschlag,vorschlagStat: ${ergebnis.getVorschlaege()}">
 							<summary>
 								<span class="font-weight-light text-black-50">Für Details klicken</span>
 								<div class="table-responsive">
@@ -137,14 +125,13 @@
 										<tr>
 											
 											<th class="col font-weight-bold" style="width: 2%;"
-											    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'bg-primary text-white'
-								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'bg-warning text-black-50': 'bg-danger text-white' )"
+											    th:classappend="${ergebnis.getIsNutzerAntwortJa()[__${vorschlagStat.index}__]} ? 'bg-primary text-white'
+								                 :  'bg-danger text-white' "
 
-											    th:text="${ergebnis.getIsNutzerAntwortJa()[__${terminStat.index}__]} ? 'J'
-								    : ( ${ergebnis.getIsNutzerAntwortVielleicht()[__${terminStat.index}__]} ? 'V': 'N' )">
+											    th:text="${ergebnis.getIsNutzerAntwortJa()[__${vorschlagStat.index}__]} ? 'J' : 'N' ">
 
 											</th>
-											<th class="col bg-light font-weight-bold text-black-50" th:text="${termin}"
+											<th class="col bg-light font-weight-bold text-black-50" th:text="${vorschlag}"
 											    style="width: 38%;">
 												25.02.2084, 12:15
 											</th>
@@ -152,27 +139,19 @@
 												<div class="progress" style="height: 100%">
 													<div class="progress-bar bg-primary font-weight-bold"
 													     role="progressbar"
-													     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${terminStat.index}__]} +'%;'"
+													     th:style="'width:'+ ${ergebnis.getAnteilStimmenJa()[__${vorschlagStat.index}__]} +'%;'"
 													     style="width: 34%;"
-													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
+													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenJa()[__${vorschlagStat.index}__]}"
 													     aria-valuenow="34"
-													     th:text="${ergebnis.getAnzahlStimmenJa()[__${terminStat.index}__]}"
-													></div>
-													<div class="progress-bar bg-warning font-weight-bold text-black-50"
-													     role="progressbar"
-													     th:style="'width:'+ ${ergebnis.getAnteilStimmenVielleicht()[__${terminStat.index}__]} +'%;'"
-													     style="width: 34%;"
-													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
-													     aria-valuenow="34"
-													     th:text="${ergebnis.getAnzahlStimmenVielleicht()[__${terminStat.index}__]}"
+													     th:text="${ergebnis.getAnzahlStimmenJa()[__${vorschlagStat.index}__]}"
 													></div>
 													<div class="progress-bar bg-danger font-weight-bold "
 													     role="progressbar"
-													     th:style="'width:'+ ${ergebnis.getAnteilStimmenNein()[__${terminStat.index}__]} +'%;'"
+													     th:style="'width:'+ ${ergebnis.getAnteilStimmenNein()[__${vorschlagStat.index}__]} +'%;'"
 													     style="width: 34%;"
-													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+													     th:attr="aria-valuenow=${ergebnis.getAnzahlStimmenNein()[__${vorschlagStat.index}__]}"
 													     aria-valuenow="34"
-													     th:text="${ergebnis.getAnzahlStimmenNein()[__${terminStat.index}__]}"
+													     th:text="${ergebnis.getAnzahlStimmenNein()[__${vorschlagStat.index}__]}"
 													></div>
 												</div>
 											</th>
@@ -190,8 +169,6 @@
 									<tr>
 										<th class="col text-black-50 font-weight-bold" style="width: 33%">Zugestimmt
 										</th>
-										<th class="col text-black-50 font-weight-bold" style="width: 33%">Vielleicht
-										</th>
 										<th class="col text-black-50 font-weight-bold" style="width: 33%">Abgesagt
 										</th>
 									</tr>
@@ -199,14 +176,10 @@
 									<tbody>
 									<tr>
 										<th class="col text-black-50 bg-light" style="width: 33%"
-										    th:text="${ergebnis.getJaAntwortPseud()[__${terminStat.index}__]}">1
-										</th>
-										<th class="col text-black-50 bg-white" style="width: 33%"
-										    th:text="${ergebnis.getVielleichtAntwortPseudo()[__${terminStat.index}__]}">
-											2
+										    th:text="${ergebnis.getJaAntwortPseud()[__${vorschlagStat.index}__]}">1
 										</th>
 										<th class="col text-black-50 bg-light" style="width: 33%"
-										    th:text="${ergebnis.getNeinAntwortPseudo()[__${terminStat.index}__]}">1
+										    th:text="${ergebnis.getNeinAntwortPseudo()[__${vorschlagStat.index}__]}">1
 										</th>
 									</tr>
 									</tbody>
