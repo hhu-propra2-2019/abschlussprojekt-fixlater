@@ -5,7 +5,6 @@ import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Antwort;
-import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,28 +45,16 @@ public class UmfrageAntwortService {
 		
 		for (String vorschlag : antwort.getAntworten().keySet()) {
 			UmfrageAntwortDB umfrageAntwortDB = new UmfrageAntwortDB();
-			UmfrageDB umfrageDB = new UmfrageDB();
-			umfrageDB.setAuswahlmoeglichkeit(vorschlag);
-			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
-			umfrageDB.setErsteller(umfrage.getErsteller());
-			umfrageDB.setFrist(umfrage.getFrist());
-			umfrageDB.setGruppeId(umfrage.getGruppeId());
-			umfrageDB.setLink(umfrage.getLink());
-			umfrageDB.setLoeschdatum(umfrage.getLoeschdatum());
-			umfrageDB.setMaxAntwortAnzahl(umfrage.getMaxAntwortAnzahl());
-			umfrageDB.setTitel(umfrage.getTitel());
-			if (umfrage.getGruppeId() == null) {
-				umfrageDB.setModus(Modus.LINK);
-			} else {
-				umfrageDB.setModus(Modus.GRUPPE);
-			}
+			UmfrageDB umfrageDB = umfrageRepo.findByLinkAndAuswahlmoeglichkeit(umfrage.getLink(), vorschlag);
 			
 			umfrageAntwortDB.setAntwort(antwort.getAntworten().get(vorschlag));
 			umfrageAntwortDB.setBenutzer(antwort.getBenutzer());
 			umfrageAntwortDB.setPseudonym(antwort.getPseudonym());
 			umfrageAntwortDB.setUmfrage(umfrageDB);
 			
-			antwortRepo.save(umfrageAntwortDB);
+			if (umfrageDB != null) {
+				antwortRepo.save(umfrageAntwortDB);
+			}
 		}
 	}
 	

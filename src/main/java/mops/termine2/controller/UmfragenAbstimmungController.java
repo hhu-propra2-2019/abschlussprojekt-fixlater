@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -191,7 +190,6 @@ public class UmfragenAbstimmungController {
 	}
 	
 	
-	@Transactional
 	@PostMapping(path = "/umfragen/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal p,
@@ -207,7 +205,8 @@ public class UmfragenAbstimmungController {
 			return null;
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage =
+			umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			return "error/404";
 		}
@@ -227,10 +226,10 @@ public class UmfragenAbstimmungController {
 			return "redirect:/termine2/umfragen/" + link;
 		}
 		
-		UmfrageAntwort terminfindungAntwort = AntwortFormUmfragen.mergeToAnswer(umfrage, account.getName(),
+		UmfrageAntwort umfrageAntwort = AntwortFormUmfragen.mergeToAnswer(umfrage, account.getName(),
 			antwortForm);
 		
-		umfrageAntwortService.abstimmen(terminfindungAntwort, umfrage);
+		umfrageAntwortService.abstimmen(umfrageAntwort, umfrage);
 		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/umfragen/" + link;
