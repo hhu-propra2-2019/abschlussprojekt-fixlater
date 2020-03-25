@@ -68,25 +68,21 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("403");
 			return "error/403";
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (umfrage.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -109,24 +105,20 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
 			return "error/403";
 		}
 		
 		if (umfrage == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (umfrage.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -159,18 +151,15 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
 			return "error/403";
 		}
 		
 		if (umfrage == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
@@ -254,19 +243,16 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
 			return null;
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
