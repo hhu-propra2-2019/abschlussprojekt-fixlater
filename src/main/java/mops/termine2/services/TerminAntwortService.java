@@ -70,7 +70,7 @@ public class TerminAntwortService {
 	 * @param link
 	 */
 	public void deleteAllByLink(String link) {
-		antwortRepo.deleteByLink(link);
+		antwortRepo.deleteByTerminfindungLink(link);
 	}
 	
 	/**

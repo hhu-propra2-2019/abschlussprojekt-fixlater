@@ -159,6 +159,15 @@
 									</span>
 								</p>
 							</div>
+							
+							<!-- Link -->
+							<label for="link" class="text-secondary">
+								Link-ID (optional)
+							</label>
+							
+							<input class="form-control" id="link" name="link" type="text"
+							       placeholder="Soll diese Abstimmung eine bestimmte ID besitzen?"
+							       th:value="*{link}"/>
 						</div>
 						
 						<!-- Beschreibung -->
@@ -256,6 +265,7 @@
 														$(pickerID).datetimepicker('date');
 												
 												var minVorschlag = false;
+												var maxVorschlag = false;
 												var loopEnd = [[*{vorschlaege.size()}]];
 												
 												// find the earliest Vorschlag
@@ -274,6 +284,12 @@
 														minVorschlag = currentVorschlag;
 													}
 													
+													if (maxVorschlag == false
+															|| currentVorschlag.isAfter(
+																	maxVorschlag)) {
+														maxVorschlag = currentVorschlag;
+													}
+													
 													if (currentVorschlag.isBefore(now)) {
 														$(currentPicker).datetimepicker(
 																'minDate', now);
@@ -281,6 +297,8 @@
 												}
 												
 												$('#frist').datetimepicker('maxDate', minVorschlag);
+												$('#loeschdatum').datetimepicker('minDate',
+														maxVorschlag);
 											});
 										});
 									+]*/
@@ -334,7 +352,9 @@
 						
 						<!-- Frist -->
 						<div class="mb-3 form-group">
-							<label for="fristFeld">Frist</label>
+							<label for="fristFeld">
+								Frist
+							</label>
 							
 							<div class="form-group mb-3">
 								<div class="input-group date"
@@ -375,7 +395,57 @@
 							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
 								<p class="mb-1">
 									<b>Empfehlung:</b> Die Frist sollte am besten ein oder zwei Tage
-									vor dem ersten Termin liegen.
+									vor dem frühsten Termin liegen.
+								</p>
+							</div>
+						</div>
+						
+						<!-- Löschdatum -->
+						<div class="mb-3 form-group">
+							<label for="loeschdatumFeld">
+								Löschdatum
+							</label>
+							
+							<div class="form-group mb-3">
+								<div class="input-group date"
+								     id="loeschdatum"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     data-target="#loeschdatum"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									
+									<input type="text"
+									       id="loeschdatumFeld"
+									       class="form-control datetimepicker-input"
+									       data-target="#loeschdatum"
+									       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+									       th:field="*{loeschdatum}"/>
+								</div>
+								
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											$('#loeschdatum').datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
+											});
+										});
+									+]*/
+								</script>
+							</div>
+							
+							<!-- Empfehlung für die Wahl des Löschdatums -->
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Empfehlung:</b> Das Löschdatum muss hinter dem spätesten
+									Termin liegen.
 								</p>
 							</div>
 						</div>
@@ -392,7 +462,7 @@
 								
 								<label class="ml-3 mb-0" for="liveUpdates">
 									Der Nutzer soll die Ergebnisse auch schon während der Abstimmung
-									eingesehen können.
+									einsehen können.
 								</label>
 							</div>
 						</div>

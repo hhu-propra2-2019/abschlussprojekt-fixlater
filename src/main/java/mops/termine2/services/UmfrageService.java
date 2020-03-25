@@ -1,15 +1,17 @@
 package mops.termine2.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UmfrageService {
@@ -19,8 +21,8 @@ public class UmfrageService {
 	private transient UmfrageAntwortRepository umfrageAntwortRepository;
 	
 	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepo) {
-		this.umfrageRepository = umfrageRepo;
-		this.umfrageAntwortRepository = antwortRepo;
+		umfrageRepository = umfrageRepo;
+		umfrageAntwortRepository = antwortRepo;
 	}
 	
 	/**
@@ -70,10 +72,12 @@ public class UmfrageService {
 		umfrageRepository.deleteByGruppeId(gruppeId);
 	}
 	
+	@Transactional
 	public void deleteOutdated() {
 		LocalDateTime now = LocalDateTime.now();
-		umfrageRepository.deleteOutdated(now);
-		umfrageAntwortRepository.deleteOutdated(now);
+		umfrageAntwortRepository.deleteByUmfrageLoeschdatumBefore(now);
+		umfrageRepository.deleteByLoeschdatumBefore(now);
+		
 	}
 	
 	public Umfrage loadByLink(String link) {
@@ -102,12 +106,12 @@ public class UmfrageService {
 	}
 	
 	public List<Umfrage> loadByErstellerOhneUmfragen(String ersteller) {
-		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErstellerOrderByFristAsc(ersteller);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
 	public List<Umfrage> loadByGruppeOhneUmfragen(Long gruppeId) {
-		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeId(gruppeId);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeIdOrderByFristAsc(gruppeId);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	

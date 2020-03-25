@@ -77,22 +77,23 @@
 							<a class="dropdown-item" th:href="@{/termine2}">
 								Alle Gruppen
 							</a>
-							
-							<div th:if="*{termine.gruppen.size() > 0}">
-								<div class="dropdown-divider"></div>
-							</div>
-							
-							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe.id})}">
-								<span th:text="${gruppe.name}">
-									Gruppenname
-								</span>
+							<div style="max-height:400px; max-width:300px; overflow:auto;">
+								<div th:if="*{termine.gruppen.size() > 0}">
+									<div class="dropdown-divider"></div>
+								</div>
 								
-								<i><span class="text-secondary"
-								         th:text="'(ID: ' + ${gruppe.id} + ')'">
-									Gruppen-ID
-								</span></i>
-							</a>
+								<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
+								   th:href="@{/termine2(gruppe=${gruppe.id})}">
+									<span th:text="${gruppe.name}">
+										Gruppenname
+									</span>
+									
+									<i><span class="text-secondary"
+									         th:text="'(ID: ' + ${gruppe.id} + ')'">
+										Gruppen-ID
+									</span></i>
+								</a>
+							</div>
 						</div>
 					</div>
 					
@@ -131,13 +132,14 @@
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<div class="row d-flex justify-content-between align-items-center">
-									<h3 class="h3 col-auto" th:text="${#strings.abbreviate(termin.titel, 50)}">
+									<h3 class="h3 col-auto" style="max-width:620px;"
+										th:text="${#strings.abbreviate(termin.titel, 40)}">
 										Titel des Termins
 									</h3>
 									
-									<div class="col-5" style="text-align: right"
+									<div class="row" style="text-align: left; align:left; max-width:130px;"
 									     th:text="'am ' + ${#temporals.format(termin.ergebnis,
-									              'dd.MM.yyyy, HH:mm')}">
+									              'dd.MM.yyyy HH:mm')} + ' Uhr'">
 										am DD.MM.YYYY, HH:MM
 									</div>
 								</div>
@@ -199,7 +201,7 @@
 						     th:each="termin : ${termine.getOffen()}">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3" th:text="${#strings.abbreviate(termin.titel, 40)}">
+								<h3 class="h3" th:text="${#strings.abbreviate(termin.titel, 23)}">
 									Titel des Termins
 								</h3>
 								
