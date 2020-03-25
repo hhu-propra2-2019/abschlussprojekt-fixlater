@@ -129,13 +129,14 @@
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<div class="row d-flex justify-content-between align-items-center">
-									<h3 class="h3 col-auto" th:text="${#strings.abbreviate(umfrage.titel, 50)}">
+									<h3 class="h3 col-auto" style="max-width:620px;"
+										th:text="${#strings.abbreviate(umfrage.titel, 40)}">
 										Titel der Umfrage
 									</h3>
 									
-									<div class="col-6" style="text-align: right"
+									<div class="row" style="text-align: left; align:left; max-width:130px;"
 									     th:text="'vom ' + ${#temporals.format(umfrage.frist,
-									              'dd.MM.yyyy, HH:mm')}">
+									              'dd.MM.yyyy HH:mm')} + ' Uhr'">
 										vom DD.MM.YYYY, HH:MM
 									</div>
 								</div>
