@@ -7,7 +7,9 @@ import mops.termine2.models.Gruppe;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GruppeService {
@@ -60,5 +62,11 @@ public class GruppeService {
 	public boolean accountInGruppe(Account account, Long gruppeId) {
 		String benutzer = account.getName();
 		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
+	}
+	
+	public List<Gruppe> sortGroupsByName(List<Gruppe> gruppen) {
+		return gruppen.stream()
+			.sorted(Comparator.comparing(Gruppe::getName))
+			.collect(Collectors.toList());
 	}
 }

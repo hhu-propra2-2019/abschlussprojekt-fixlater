@@ -23,4 +23,15 @@ public class TermineUebersichtControllerTest {
 	void testIndex() throws Exception {
 		mvc.perform(get("/termine2")).andExpect(status().isOk());
 	}
+	
+	@Test
+	@WithMockKeycloackAuth(roles = {Konstanten.STUDENTIN})
+	void testTerminUebersichtMitGruppe() throws Exception {
+		mvc.perform(get("/termine2").param("gruppe", "123")).andExpect(status().is4xxClientError());
+	}
+	
+	@Test
+	void testTerminUebersichtOhneBenutzer() throws Exception {
+		mvc.perform(get("/termine2")).andExpect(status().is3xxRedirection());
+	}
 }

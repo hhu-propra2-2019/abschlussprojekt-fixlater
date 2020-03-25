@@ -12,6 +12,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.TerminfindunguebersichtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -56,21 +55,17 @@ public class TermineUebersichtController {
 			account = authenticationService.createAccountFromPrincipal(p);
 			authenticatedAccess.increment();
 		} else {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		
-		gruppen = gruppen.stream()
-			.sorted(Comparator.comparing(Gruppe::getName))
-			.collect(Collectors.toList());
+		gruppen = gruppeService.sortGroupsByName(gruppen);
 		
 		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
-		
 		if (selGruppe == null) {
 			selGruppe = new Gruppe();
 			selGruppe.setId(-1L);
@@ -80,8 +75,8 @@ public class TermineUebersichtController {
 		List<Terminfindung> terminfindungenOffen;
 		List<Terminfindung> terminfindungenAbgeschlossen;
 		if (gruppe == -1L) {
-			terminfindungenOffen =
-				terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerBenutzer(account);
 			terminfindungenAbgeschlossen = terminfindunguebersichtService
 				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
 		} else {
