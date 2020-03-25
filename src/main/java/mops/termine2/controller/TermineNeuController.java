@@ -75,7 +75,7 @@ public class TermineNeuController {
 			
 			Terminfindung terminfindung = new Terminfindung();
 			terminfindung.setVorschlaege(new ArrayList<>());
-			terminfindung.getVorschlaege().add(LocalDateTime.now());
+			terminfindung.getVorschlaege().add(null);
 			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 			
 			m.addAttribute("terminfindung", terminfindung);
@@ -270,6 +270,20 @@ public class TermineNeuController {
 					m.addAttribute("error", true);
 				}
 			}
+			
+			// If any of the Termine lies before the Frist, then the Frist has to be updated.
+			LocalDateTime min = null;
+			
+			for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
+				if (min == null || ldt.isBefore(min)) {
+					min = ldt;
+				}
+			}
+			
+			if (min.isBefore(terminfindung.getFrist())) {
+				terminfindung.setFrist(min);
+			}
+			
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("terminfindung", terminfindung);
 		}
