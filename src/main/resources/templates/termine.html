@@ -77,22 +77,23 @@
 							<a class="dropdown-item" th:href="@{/termine2}">
 								Alle Gruppen
 							</a>
-							
-							<div th:if="*{termine.gruppen.size() > 0}">
-								<div class="dropdown-divider"></div>
-							</div>
-							
-							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe.id})}">
-								<span th:text="${gruppe.name}">
-									Gruppenname
-								</span>
+							<div style="max-height:605px; max-width:290px; overflow:auto;">
+								<div th:if="*{termine.gruppen.size() > 0}">
+									<div class="dropdown-divider"></div>
+								</div>
 								
-								<i><span class="text-secondary"
-								         th:text="'(ID: ' + ${gruppe.id} + ')'">
-									Gruppen-ID
-								</span></i>
-							</a>
+								<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
+								   th:href="@{/termine2(gruppe=${gruppe.id})}">
+									<span th:text="${gruppe.name}">
+										Gruppenname
+									</span>
+									
+									<i><span class="text-secondary"
+									         th:text="'(ID: ' + ${gruppe.id} + ')'">
+										Gruppen-ID
+									</span></i>
+								</a>
+							</div>
 						</div>
 					</div>
 					
