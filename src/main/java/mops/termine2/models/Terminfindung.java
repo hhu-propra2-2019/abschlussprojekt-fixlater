@@ -3,7 +3,6 @@ package mops.termine2.models;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = "teilgenommen")
-@ToString
 public class Terminfindung {
 	
 	private String link;
