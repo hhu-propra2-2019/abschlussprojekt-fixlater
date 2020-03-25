@@ -1,5 +1,9 @@
 package mops.termine2.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.TerminfindungAntwortRepository;
@@ -10,11 +14,6 @@ import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -65,14 +64,14 @@ public class TerminfindunguebersichtServiceTest {
 			Terminfindung termin = new Terminfindung();
 			termin.setLink(day.toString());
 			termin.setFrist(ldt.plusDays(day));
-      termin.setErgebnisVorFrist(true);
+			termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(day.toString());
 			terminDB.setFrist(ldt.plusDays(day));
-      terminDB.setErgebnisVorFrist(true);
+			terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
 			terminfindungenDB.add(terminDB);
 		}
@@ -112,7 +111,7 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setLink(fristTage.get(i).toString());
 			termin.setFrist(ldt.plusDays(fristTage.get(i)));
 			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-      termin.setErgebnisVorFrist(true);
+			termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
 			terminfindungen.add(termin);
 			
@@ -120,7 +119,7 @@ public class TerminfindunguebersichtServiceTest {
 			terminDB.setLink(fristTage.get(i).toString());
 			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
 			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-      terminDB.setErgebnisVorFrist(true);
+			terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
 			terminfindungenDB.add(terminDB);
 		}

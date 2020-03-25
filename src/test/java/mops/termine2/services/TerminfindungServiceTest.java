@@ -1,5 +1,11 @@
 package mops.termine2.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
@@ -8,13 +14,6 @@ import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -247,7 +246,7 @@ public class TerminfindungServiceTest {
 		termine.setEinmaligeAbstimmung(false);
 		List<LocalDateTime> terminVorschlaege = erstelleVorschlaege(anzahlTermine);
 		termine.setVorschlaege(terminVorschlaege);
-    termine.setErgebnisVorFrist(true);
+		termine.setErgebnisVorFrist(true);
 		return termine;
 	}
 	
@@ -267,7 +266,7 @@ public class TerminfindungServiceTest {
 		termine.setOrt(ortListe.get(dummie));
 		termine.setTitel(titelListe.get(dummie));
 		termine.setEinmaligeAbstimmung(false);
-    termine.setErgebnisVorFrist(true);
+		termine.setErgebnisVorFrist(true);
 		return termine;
 	}
 	
@@ -298,7 +297,7 @@ public class TerminfindungServiceTest {
 			terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
 			terminfindungDB.setGruppeId(gruppenListe.get(dummie));
 			terminfindungDB.setTermin(termin);
-      terminfindungDB.setErgebnisVorFrist(true);
+			terminfindungDB.setErgebnisVorFrist(true);
 			terminfindungDB.setEinmaligeAbstimmung(false);
 			if (terminfindungDB.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
@@ -324,7 +323,7 @@ public class TerminfindungServiceTest {
 		terminfindungDB.setLink(linkListe.get(dummie));
 		terminfindungDB.setBeschreibung(beschreibungsListe.get(dummie));
 		terminfindungDB.setGruppeId(gruppenListe.get(dummie));
-    terminfindungDB.setErgebnisVorFrist(true);
+		terminfindungDB.setErgebnisVorFrist(true);
 		terminfindungDB.setEinmaligeAbstimmung(false);
 		if (terminfindungDB.getGruppeId() != null) {
 			terminfindungDB.setModus(Modus.GRUPPE);
