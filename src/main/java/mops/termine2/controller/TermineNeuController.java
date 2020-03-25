@@ -102,7 +102,7 @@ public class TermineNeuController {
 			
 			/* Terminvorschlag hinzufügen */
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
-			termine.add(LocalDateTime.now());
+			termine.add(null);
 			
 			/* Selektierte Gruppe */
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);

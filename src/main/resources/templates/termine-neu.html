@@ -234,41 +234,49 @@
 									/*[+
 										$(function () {
 											var pickerID = '#zeit' + '[[${iter.count}]]';
-											var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
 											
 											$(pickerID).datetimepicker({
-												minDate: now,
-												format: 'DD.MM.YYYY, HH:mm',
-												locale: 'de'
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
 											});
 											
+											// set 'minDate' of all pickers, and guarantee that the
+											// Frist lies before the earliest Vorschlag
 											$(pickerID).on("change.datetimepicker", function (e) {
-												var fristMax =
-														$('#frist').datetimepicker('maxDate');
-												var vorschlagDate =
-														$(pickerID).datetimepicker('date');
-												
-												if (fristMax == false
-														|| vorschlagDate.isBefore(fristMax)) {
-													$('#frist').datetimepicker('maxDate', e.date);
+												if (e.date.format('DD.MM.YYYY, HH:mm') ==
+														moment().format('DD.MM.YYYY, HH:mm')) {
+													return;
 												}
 												
+												var now = moment();
+												$('#frist').datetimepicker('minDate', now);
+												
+												var ownVorschlag =
+														$(pickerID).datetimepicker('date');
 												
 												var minVorschlag = false;
 												var loopEnd = [[*{vorschlaege.size()}]];
 												
+												// find the earliest Vorschlag
 												for (var i = 1; i <= loopEnd; i += 1) {
 													var currentPicker = '#zeit' + i;
-													var vorschlagDate =
+													var currentVorschlag =
 															$(currentPicker).datetimepicker('date');
 													
-													// alert('minVorschlag: ' + minVorschlag +
-													//		'; index: ' + i +
-													//		'; vorschlaege.size(): ' + loopEnd);
+													if (currentVorschlag == null) {
+														continue;
+													}
 													
 													if (minVorschlag == false
-														|| vorschlagDate.isBefore(minVorschlag)) {
-														minVorschlag = vorschlagDate;
+															|| currentVorschlag.isBefore(
+																	minVorschlag)) {
+														minVorschlag = currentVorschlag;
+													}
+													
+													if (currentVorschlag.isBefore(now)) {
+														$(currentPicker).datetimepicker(
+																'minDate', now);
 													}
 												}
 												
@@ -353,12 +361,10 @@
 									// Do NOT remove it.
 									/*[+
 										$(function () {
-											var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
-											
 											$('#frist').datetimepicker({
-												minDate: now,
-												format: 'DD.MM.YYYY, HH:mm',
-												locale: 'de'
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
 											});
 										});
 									+]*/
@@ -380,7 +386,7 @@
 								<input name="liveUpdates"
 								       data-toggle="toggle" data-size="sm"
 								       data-onstyle="outline-primary"
-								       data-offstyle="outline-secondary"
+								       data-offstyle="outline-danger"
 								       data-on="Ja" data-off="Nein"
 								       type="checkbox" checked/>
 								
@@ -397,7 +403,7 @@
 								<input name="einmaligeAbstimmung"
 								       data-toggle="toggle" data-size="sm"
 								       data-onstyle="outline-primary"
-								       data-offstyle="outline-secondary"
+								       data-offstyle="outline-danger"
 								       data-on="Ja" data-off="Nein"
 								       type="checkbox" checked value="false"/>
 								

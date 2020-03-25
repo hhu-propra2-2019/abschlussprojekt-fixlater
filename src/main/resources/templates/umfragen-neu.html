@@ -22,12 +22,17 @@
 		
 		<!-- Bootstrap -->
 		<link rel="stylesheet"
-		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 		      crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap Switch Buttons -->
+		<link rel="stylesheet"
+		      href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css">
+		<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 		
 		<!-- Font Awesome -->
 		<link rel="stylesheet"
@@ -207,7 +212,7 @@
 							Frist
 						</h2>
 						
-						<div class="form-group mb-2">
+						<div class="form-group mb-3">
 							<div class="input-group date"
 							     id="frist"
 							     data-target-input="nearest">
@@ -220,21 +225,25 @@
 								</div>
 								
 								<input type="text"
+								       name="fristFeld"
 								       class="form-control datetimepicker-input"
 								       data-target="#frist"
 								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
 								       th:field="*{frist}"/>
 							</div>
 							
-							<script type="text/javascript">
-								$(function () {
-									var pickerID = '#frist';
-									
-									$(pickerID).datetimepicker({
-										format: 'DD.MM.YYYY, HH:mm',
-										locale: 'de'
+							<script th:inline="javascript">
+								// The comment below is used by Thymeleaf for inlining.
+								// Do NOT remove it.
+								/*[+
+									$(function () {
+										$('#frist').datetimepicker({
+											minDate: moment(),
+											format: 'DD.MM.YYYY, HH:mm',
+											locale: 'de'
+										});
 									});
-								});
+								+]*/
 							</script>
 						</div>
 					</div>
