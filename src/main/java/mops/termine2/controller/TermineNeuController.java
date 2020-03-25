@@ -5,11 +5,11 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
+import mops.termine2.imports.TerminFormatierung;
 import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
-import mops.termine2.imports.TerminFormatierung;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class TermineNeuController {
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
+		gruppen = gruppeService.sortGroupsByName(gruppen);
 		m.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
@@ -110,7 +110,7 @@ public class TermineNeuController {
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
+		gruppen = gruppeService.sortGroupsByName(gruppen);
 		m.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
@@ -142,7 +142,7 @@ public class TermineNeuController {
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
+		gruppen = gruppeService.sortGroupsByName(gruppen);
 		m.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
