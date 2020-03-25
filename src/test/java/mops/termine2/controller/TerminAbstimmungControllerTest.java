@@ -3,6 +3,7 @@ package mops.termine2.controller;
 import com.c4_soft.springaddons.test.security.context.support.WithMockKeycloackAuth;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
+import mops.termine2.enums.Antwort;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
@@ -153,6 +154,55 @@ public class TerminAbstimmungControllerTest {
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().isOk());
 	}
 	
+	// AbstimmungAnpassbar FristInVergangenheit ModusLink  NochNichtTeilgenommen
+	// Erwartet redirect auf ergebnis
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineAbstimmungGet2() throws Exception {
+		Terminfindung terminfindung = initTerminfundung(null, false, false, false);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
+	}
+	
+	
+	// tests for Get ergebnis
+	
+	// AbstimmungAnpassbar FristInZukunft ModusLink  NochNichtTeilgenommen
+	// Erwartet redirect auf abstimmung
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineErgebnisGet1() throws Exception {
+		Terminfindung terminfindung = initTerminfundung(null, false, false, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
+	}
+	
+	// AbstimmungAnpassbar FristInZukunft ModusLink  Bereits abgestimmt
+	// Erwartet redirect auf abstimmung
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineErgebnisGet2() throws Exception {
+		Terminfindung terminfindung = initTerminfundung(null, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
+		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().isOk());
+	}
+	
+	
 	private Terminfindung initTerminfundung(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
 		
@@ -160,7 +210,7 @@ public class TerminAbstimmungControllerTest {
 		ret.setLink(link);
 		ret.setTitel("Hakuna");
 		
-		List<LocalDateTime> termine = new ArrayList(Arrays.asList(LocalDateTime.now()));
+		List<LocalDateTime> termine = new ArrayList(Arrays.asList(LocalDateTime.of(1, 1, 1, 1, 1)));
 		ret.setVorschlaege(termine);
 		
 		LocalDateTime frist;
@@ -179,14 +229,23 @@ public class TerminAbstimmungControllerTest {
 		return ret;
 	}
 	
+	private List<TerminfindungAntwort> initAntworten() {
+		List<TerminfindungAntwort> list = new ArrayList<>();
+		list.add(initAntwort());
+		return list;
+	}
+	
 	private TerminfindungAntwort initAntwort() {
 		TerminfindungAntwort antwot = new TerminfindungAntwort();
-		antwot.setAntworten(new HashMap<>());
+		HashMap<LocalDateTime, Antwort> antwortHashMap = new HashMap<>();
+		antwortHashMap.put(LocalDateTime.of(1, 1, 1, 1, 1), Antwort.VIELLEICHT);
+		antwot.setAntworten(antwortHashMap);
 		antwot.setPseudonym("aha");
 		antwot.setLink(link);
 		antwot.setKuerzel(Konstanten.STUDENTIN);
 		
 		return antwot;
 	}
+	
 	
 }
