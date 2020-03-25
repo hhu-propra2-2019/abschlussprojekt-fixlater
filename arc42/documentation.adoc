@@ -475,7 +475,25 @@ Danach habe ich den Selektor für Gruppen auf der Umfragenübersicht durch thyme
 === Terminübersicht (Thomas)
 Da beim Filtern der Termine nach Gruppen ein Request Parameter verwendet wird und dieser in der Adresszeile angezeigt wird, konnte bisher auch auf Gruppen zugegriffen werden, bei denen man kein Mitglied ist. Dies wurde jetzt geändert, sodass zuerst die Gruppenzugehörigkeit geprüft wird und eine Fehlerseite angezeigt wird, wenn man nicht in der entsprechenden Gruppe ist.
 
+=== Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
+Wir wollten eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
+einzustellen ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
+Die Logik dazu wurde geschrieben.
+
+=== Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
+
+
 == Tag 17
+
+=== Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
+Wir wollten eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
+einzustellen ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
+Das zugehörige Html wurde geschrieben.
+
+=== Funktion EinmaligesAbstimmen :(Terminfindung) (Jan)
+Ziel war es eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
+einzustellen ob ein Nutzer seine Abstimmung bis zur Frist bearbeiten darf.
+Html und Logik wurden geschrieben.
 
 === Authentifizierung (Thomas)
 Die Authentifizierung wurde überarbeitet. Alle Controller-Tests nutzen jetzt die Annotation @WithMockKeycloackAuth, damit die Rollen in den Tests funktionieren.
@@ -485,6 +503,15 @@ Es wurden Tests den Controller der Terminübersicht geschrieben.
 Es wird der Aufruf mit und ohne Gruppenfilter getestet sowie ein Aufruf ohne eingeloggten Benutzer.
 
 == Tag 18
+
+=== Funktion EinmaligesAbstimmen :(Terminfindung) (Jan)
+Ziel war es eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
+einzustellen ob ein Nutzer seine Abstimmung bis zur Frist bearbeiten darf.
+Behebung kleinerer Bugs
+
+=== Umfrage Abstimmung und Ergebnis Seite(Thymeleaf) (Jan,Anthon)
+
+Das Thymeleaf für die Abstimmungs und Ergebnisseite geschrieben.
 
 === Termine Hinzufügen
 Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum hinzugefügt.
