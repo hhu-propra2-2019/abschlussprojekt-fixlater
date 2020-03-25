@@ -57,19 +57,36 @@ public class TerminAbstimmungControllerTest {
 	
 	Account accountStudentin = new Account(Konstanten.STUDENTIN, "email", "Bild", roleStudentin);
 	
-	// AbstimmungAnpassbar FristInZukunft ModusLink OhneTermine NochNichtTeilgenommen
+	// AbstimmungAnpassbar FristInZukunft ModusLink  NochNichtTeilgenommen
 	//Erwarte redirect auf abstimmung
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
-	void testTermineAbstimmung() throws Exception {
+	void testTermineDetails1() throws Exception {
 		Terminfindung terminfindung = init1(null, false, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}
+	
+	// AbstimmungAnpassbar FristInZukunft ModusLink BereitsTeilgenommen
+	//Erwarte redirect auf ergebnis
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineDetails2() throws Exception {
+		Terminfindung terminfindung = init1(null, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		
+		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
+	}
+	
 	
 	private Terminfindung init1(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
