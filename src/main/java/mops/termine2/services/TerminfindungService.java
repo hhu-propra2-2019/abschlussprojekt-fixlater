@@ -64,7 +64,7 @@ public class TerminfindungService {
 	 */
 	@Transactional
 	public void loescheByLink(String link) {
-		antwortRepo.deleteByLink(link);
+		antwortRepo.deleteByTerminfindungLink(link);
 		terminfindungRepo.deleteByLink(link);
 	}
 	
@@ -79,13 +79,13 @@ public class TerminfindungService {
 	}
 	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
-		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErstellerOrderByFristAsc(ersteller);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
 	
 	public List<Terminfindung> loadByGruppeOhneTermine(Long gruppeId) {
-		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeId(gruppeId);
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeIdOrderByFristAsc(gruppeId);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
