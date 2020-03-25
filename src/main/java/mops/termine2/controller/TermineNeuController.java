@@ -240,46 +240,44 @@ public class TermineNeuController {
 					
 					TerminFormatierung terminFormatierung =
 						new TerminFormatierung(termineEingelesen);
-					terminFormatierung.pruefeFuerJedenTerminGueltigesFormat(
-						termineEingelesen, terminFormatierung.getDateTimeFormatter());
-					terminFormatierung.pruefeObExistent(termineEingelesen);
 					
-					if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
+					if (!terminFormatierung.pruefeObGueltigesFormat(
+						termineEingelesen, terminFormatierung.getDateTimeFormatter())) {
+						m.addAttribute("message",
+							"Alle Termine müssen im Format "
+								+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
+								+ "sollten existente Daten sein.");
+						m.addAttribute("error", true);
+					} else if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
 							terminFormatierung.getDateTimeFormatter())) {
 						m.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
 						m.addAttribute("error", true);
+					} else if (!terminFormatierung.pruefeObGueltigesDatum(termineEingelesen)) {
+						m.addAttribute("message",
+							"Die Termine sollten existieren.");
+						m.addAttribute("error", true);
 					} else {
-						
 						// entferne ggf. überflüssige Datumsbox
-						if (!terminFormatierung.pruefeObExistent(termineEingelesen)) {
-							m.addAttribute("message", "Die Daten sollten existieren.");
-							m.addAttribute("error", true);
-						} else {
-							// entferne ggf. überflüssige Datumsbox
-							if (termine.get(0) == null) {
-								terminfindung.getVorschlaege().remove(0);
-							}
-							
-							// füge Termine ins Model ein
-							for (String[] terminEingelesen : termineEingelesen) {
-								LocalDateTime termin = LocalDateTime.parse(
-										terminEingelesen[0] + ", "
-												+ terminEingelesen[1],
-										terminFormatierung
-										.getDateTimeFormatter());
-								termine.add(termin);
-							}
-							
-							m.addAttribute("message", "Upload erfolgreich!");
-							m.addAttribute("erfolg", true);
+						if (termine.get(0) == null) {
+							terminfindung.getVorschlaege().remove(0);
 						}
+						
+						// füge Termine ins Model ein
+						for (String[] terminEingelesen : termineEingelesen) {
+							LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+									+ ", " + terminEingelesen[1], terminFormatierung
+									.getDateTimeFormatter());
+							termine.add(termin);
+						}
+						m.addAttribute("message", "Upload erfolgreich!");
+						m.addAttribute("erfolg", true);
 					}
 					
+				} catch (RuntimeException ex) {
+					throw ex;
 				} catch (Exception ex) {
 					m.addAttribute("message",
-						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. "
-							+ "Alle Termine müssen im Format 'TT.MM.JJJJ,HH:MM' "
-							+ "übergeben werden und sollten existente Daten sein.");
+						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. ");
 					m.addAttribute("error", true);
 				}
 			}

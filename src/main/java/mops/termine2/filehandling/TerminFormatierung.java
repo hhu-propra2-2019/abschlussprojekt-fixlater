@@ -2,7 +2,6 @@ package mops.termine2.filehandling;
 
 import lombok.Getter;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -24,7 +23,6 @@ public class TerminFormatierung {
 		this.termineEingelesen = termineEingelesen;
 	}
 	
-	
 	public DateTimeFormatter setzeFormatFuerTermine() {
 		DateTimeFormatterBuilder b = new DateTimeFormatterBuilder();
 		return b.appendPattern("dd.MM.")
@@ -33,11 +31,16 @@ public class TerminFormatierung {
 			.toFormatter();
 	}
 	
-	public void pruefeFuerJedenTerminGueltigesFormat(
+	public Boolean pruefeObGueltigesFormat(
 		List<String[]> termineEingelesen, DateTimeFormatter formatter) {
-		for (String[] terminEingelesen : termineEingelesen) {
-			LocalDateTime.parse(terminEingelesen[0]
-				+ ", " + terminEingelesen[1], formatter);
+		try {
+			for (String[] terminEingelesen : termineEingelesen) {
+				LocalDateTime.parse(terminEingelesen[0]
+					+ ", " + terminEingelesen[1], formatter);
+			}
+			return true;
+		} catch (Exception ex) {
+			return false;
 		}
 	}
 	
@@ -52,11 +55,8 @@ public class TerminFormatierung {
 		return true;
 	}
 	
-	public Boolean pruefeObExistent(List<String[]> termineEingelesen) {
-		DateFormat format = new SimpleDateFormat("dd.MM.yyyy,HH:mm");
-		
-		// Input to be parsed should strictly follow the defined date format
-		// above.
+	public Boolean pruefeObGueltigesDatum(List<String[]> termineEingelesen) {
+		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy,HH:mm");
 		format.setLenient(false);
 		
 		try {
@@ -65,9 +65,6 @@ public class TerminFormatierung {
 			}
 			return true;
 		} catch (ParseException e) {
-			
-			System.out.println("Date  is not valid according to "
-					+ ((SimpleDateFormat) format).toPattern() + " pattern.");
 			return false;
 		}
 	}
