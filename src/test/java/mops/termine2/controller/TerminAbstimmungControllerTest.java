@@ -57,6 +57,8 @@ public class TerminAbstimmungControllerTest {
 	
 	Account accountStudentin = new Account(Konstanten.STUDENTIN, "email", "Bild", roleStudentin);
 	
+	// Tests für termine2/{link}
+	
 	// AbstimmungAnpassbar FristInZukunft ModusLink  NochNichtTeilgenommen
 	//Erwarte redirect auf abstimmung
 	@Test
@@ -88,6 +90,7 @@ public class TerminAbstimmungControllerTest {
 	}
 	
 	// Abstimmung gibt es nicht
+	// Erwartet 404
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails3() throws Exception {
@@ -96,6 +99,37 @@ public class TerminAbstimmungControllerTest {
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		
+		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
+	}
+	
+	// AbstimmungAnpassbar FristInZukunft ModusGruppe BereitsTeilgenommen Zugriff auf Gruppe
+	// Erwarte redirect auf ergebnis
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineDetails4() throws Exception {
+		Terminfindung terminfindung = init1(1L, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		when(gruppeService.accountInGruppe(any(), any())).thenReturn(true);
+		
+		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
+	}
+	
+	// AbstimmungAnpassbar FristInZukunft ModusGruppe BereitsTeilgenommen  NichtInGruppe
+	// Erwarte redirect auf ergebnis
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineDetails5() throws Exception {
+		Terminfindung terminfindung = init1(1L, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		when(gruppeService.accountInGruppe(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
 	}
