@@ -1,19 +1,14 @@
 package mops.termine2.controller;
 
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.Konstanten;
-import mops.termine2.authentication.Account;
-import mops.termine2.controller.formular.AntwortFormUmfragen;
-import mops.termine2.controller.formular.ErgebnisFormUmfragen;
-import mops.termine2.models.LinkWrapper;
-import mops.termine2.models.Umfrage;
-import mops.termine2.models.UmfrageAntwort;
-import mops.termine2.services.AuthenticationService;
-import mops.termine2.services.GruppeService;
-import mops.termine2.services.UmfrageAntwortService;
-import mops.termine2.services.UmfrageService;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +19,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.annotation.security.RolesAllowed;
-import javax.transaction.Transactional;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
+import mops.termine2.controller.formular.AntwortFormUmfragen;
+import mops.termine2.controller.formular.ErgebnisFormUmfragen;
+import mops.termine2.models.Kommentar;
+import mops.termine2.models.LinkWrapper;
+import mops.termine2.models.Umfrage;
+import mops.termine2.models.UmfrageAntwort;
+import mops.termine2.services.AuthenticationService;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.KommentarService;
+import mops.termine2.services.UmfrageAntwortService;
+import mops.termine2.services.UmfrageService;
 
 @Controller
 @SessionScope
@@ -49,6 +53,9 @@ public class UmfragenAbstimmungController {
 	
 	@Autowired
 	private GruppeService gruppeService;
+	
+	@Autowired
+	private KommentarService kommentarService;
 	
 	private HashMap<LinkWrapper, Umfrage> letzteUmfrage = new HashMap<>();
 	
@@ -96,7 +103,7 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Account account;
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
@@ -129,11 +136,14 @@ public class UmfragenAbstimmungController {
 		UmfrageAntwort antwort = umfrageAntwortService.loadByBenutzerAndLink(account.getName(), link);
 		AntwortFormUmfragen antwortForm = new AntwortFormUmfragen();
 		antwortForm.init(antwort);
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
 		m.addAttribute("umfrage", umfrage);
 		m.addAttribute("antwort", antwortForm);
+		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -142,7 +152,7 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/ergebnis")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageErgebnis(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		Account account;
@@ -182,8 +192,11 @@ public class UmfragenAbstimmungController {
 		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = new ErgebnisFormUmfragen(antworten, umfrage, nutzerAntwort);
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		m.addAttribute("umfrage", umfrage);
 		m.addAttribute("ergebnis", ergebnis);
+		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -231,6 +244,40 @@ public class UmfragenAbstimmungController {
 			antwortForm);
 		
 		umfrageAntwortService.abstimmen(terminfindungAntwort, umfrage);
+		authenticatedAccess.increment();
+		
+		return "redirect:/termine2/umfragen/" + link;
+	}
+	
+	@PostMapping(path = "/umfragen/{link}", params = "kommentarSichern")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
+		Account account;
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			System.out.println("nicht autorisiert");
+			return null;
+		}
+		
+		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		if (umfrage == null) {
+			System.out.println("404");
+			return "error/404";
+		}
+		
+		if (umfrage.getGruppeId() != null
+				&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+			System.out.println("403");
+			return "error/403";
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		neuerKommentar.setLink(link);
+		neuerKommentar.setErstellungsdatum(now);
+		m.addAttribute("neuerKommentar", neuerKommentar);
+		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/umfragen/" + link;
