@@ -202,6 +202,24 @@ public class TerminAbstimmungControllerTest {
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().isOk());
 	}
 	
+	// AbstimmungAnpassbar FristInZukunft ModusGruppe  Bereits abgestimmt Nicht in Gruppe
+	// Erwartet redirect auf abstimmung
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineErgebnisGet3() throws Exception {
+		Terminfindung terminfindung = initTerminfundung(1L, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
+		when(gruppeService.accountInGruppe(any(), any())).thenReturn(false);
+		
+		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is4xxClientError());
+	}
+	
+	// tests post abstimmung/
 	
 	private Terminfindung initTerminfundung(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
@@ -245,6 +263,21 @@ public class TerminAbstimmungControllerTest {
 		antwot.setKuerzel(Konstanten.STUDENTIN);
 		
 		return antwot;
+	}
+	
+	// AbstimmungAnpassbar FristInZukunft ModusLink  NochNichtTeilgenommen
+	// Erwartet
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineAbstimmungPost1() throws Exception {
+		Terminfindung terminfindung = initTerminfundung(null, false, false, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}
 	
 	
