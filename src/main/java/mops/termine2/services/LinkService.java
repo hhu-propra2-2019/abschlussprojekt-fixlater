@@ -47,7 +47,7 @@ public class LinkService {
 	}
 	
 	public Boolean isLinkValid(String link) {
-		return link.matches("[a-zA-Z0-9]");
+		return link.matches("[a-zA-Z0-9]*");
 	}
 	
 }

@@ -83,8 +83,6 @@ public class TermineNeuController {
 		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
 		
 		m.addAttribute("terminfindung", terminfindung);
-		
-		// Error
 		m.addAttribute("fehler", "");
 		
 		return "termine-neu";
@@ -106,14 +104,46 @@ public class TermineNeuController {
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		gruppeService.sortGroupsByName(gruppen);
 		m.addAttribute("gruppen", gruppen);
 		
-		/* Selektierte Gruppe */
+		// Selektierte Gruppe
 		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
+		
+		m.addAttribute("terminfindung", terminfindung);
+		m.addAttribute("fehler", "");
+		
+		return "termine-neu";
+	}
+	
+	@PostMapping(path = "/termine-neu", params = "delete")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
+								 final HttpServletRequest request) {
+		Account account;
+		if (p != null) {
+			// Account
+			account = authenticationService.createAccountFromPrincipal(p);
+			m.addAttribute(Konstanten.ACCOUNT, account);
+			authenticatedAccess.increment();
+		} else {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
+		
+		// Gruppen
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		gruppeService.sortGroupsByName(gruppen);
+		m.addAttribute("gruppen", gruppen);
+		
+		// Selektierte Gruppe
+		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		
+		// Terminvorschlag löschen
+		terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
 		
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("fehler", "");
@@ -187,36 +217,6 @@ public class TermineNeuController {
 		
 		ra.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
-	}
-	
-	@PostMapping(path = "/termine-neu", params = "delete")
-	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
-								 final HttpServletRequest request) {
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		
-		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		m.addAttribute("gruppen", gruppen);
-		
-		// Selektierte Gruppe
-		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		
-		// Terminvorschlag löschen
-		terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
-		
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("fehler", "");
-		
-		return "termine-neu";
 	}
 	
 }
