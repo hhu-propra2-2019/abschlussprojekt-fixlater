@@ -200,7 +200,7 @@
 						     th:each="offeneUmfrage : ${umfragen.getOffen()}">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3" th:text="${#strings.abbreviate(offeneUmfrage.titel, 40)}">
+								<h3 class="h3" th:text="${#strings.abbreviate(offeneUmfrage.titel, 23)}">
 									Titel der Umfrage
 								</h3>
 								
