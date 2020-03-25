@@ -151,6 +151,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
+			Random zufallszahl = new Random();
+			terminfindungdb.setEinmaligeAbstimmung(zufallszahl.nextBoolean());
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -209,6 +211,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setTermin(frist.plusDays(new Random().nextInt(80)));
 			terminfindungdb.setTitel(titel);
 			terminfindungdb.setErgebnis(ergebnis);
+			Random zufallszahl = new Random();
+			terminfindungdb.setEinmaligeAbstimmung(zufallszahl.nextBoolean());
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
