@@ -253,7 +253,8 @@ public class UmfragenAbstimmungController {
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-		
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
