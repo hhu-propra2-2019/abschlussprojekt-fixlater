@@ -43,8 +43,9 @@ public class TerminfindungService {
 			terminfindungDB.setGruppeId(terminfindung.getGruppeId());
 			terminfindungDB.setTermin(termin);
 			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
-			terminfindungDB.setErgebnisVorFrist(terminfindung.getErgebnisVorFrist());
-			
+      terminfindungDB.setErgebnisVorFrist(terminfindung.getErgebnisVorFrist());
+      terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
+
 			if (terminfindung.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
 			} else {
@@ -93,7 +94,7 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
-	public Terminfindung loadByLinkMitTerminen(String link) {
+	public Terminfindung loadByLinkMitTerminenForBenutzer(String link, String benutzer) {
 		List<TerminfindungDB> termineDB = terminfindungRepo.findByLink(link);
 		if (termineDB != null && !termineDB.isEmpty()) {
 			Terminfindung terminfindung = new Terminfindung();
@@ -108,12 +109,17 @@ public class TerminfindungService {
 			terminfindung.setLink(ersterTermin.getLink());
 			terminfindung.setErsteller(ersterTermin.getErsteller());
 			terminfindung.setErgebnis(ersterTermin.getErgebnis());
-			terminfindung.setErgebnisVorFrist(ersterTermin.getErgebnisVorFrist());
+      terminfindung.setErgebnisVorFrist(ersterTermin.getErgebnisVorFrist());
+       terminfindung.setEinmaligeAbstimmung(ersterTermin.getEinmaligeAbstimmung());
+
 			List<LocalDateTime> terminMoeglichkeiten = new ArrayList<>();
 			for (TerminfindungDB termin : termineDB) {
 				terminMoeglichkeiten.add(termin.getTermin());
 			}
 			terminfindung.setVorschlaege(terminMoeglichkeiten);
+			
+			terminfindung.setTeilgenommen(
+				!antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link).isEmpty());
 			return terminfindung;
 		}
 		return null;
@@ -147,7 +153,9 @@ public class TerminfindungService {
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
 		terminfindung.setErgebnis(db.getErgebnis());
-		terminfindung.setErgebnisVorFrist(db.getErgebnisVorFrist());
+    terminfindung.setErgebnisVorFrist(db.getErgebnisVorFrist());
+    terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
+
 		
 		return terminfindung;
 	}

@@ -41,4 +41,5 @@ public class TerminfindungDB {
 	
 	private Boolean ergebnisVorFrist;
 	
-}
+  private Boolean einmaligeAbstimmung;
+

@@ -32,6 +32,8 @@
 		<!-- Font Awesome -->
 		<link rel="stylesheet"
 		      href="/css/all.css">
+		<link rel="stylesheet"
+		      href="/css/toggle-switchy.css">
 
 		<!-- MomentJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
@@ -42,7 +44,7 @@
 		<link rel="stylesheet"
 		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
 		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
-		      crossorigin="anonymous" />
+		      crossorigin="anonymous"/>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
 		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
 		        crossorigin="anonymous"></script>
@@ -133,6 +135,7 @@
 								<option th:each="gruppe, iter : ${gruppen}"
 								        th:value="${gruppen[__${iter.index}__].id}"
 								        th:text="${gruppe.name}">Gruppe</option>
+
 							</optgroup>
 						</select>
 
@@ -177,12 +180,29 @@
                                 <span class="switch"></span>
                               </span>
 								<span class="label">Ergebnis vor Frist Anzeigen : </span>
+                </label>
+						</div>
+						<div class="col" style="width: 60%;"></div>
+					</div>
+				</div>
+
+					<div class="mb-3 form-group row">
+						<div class="col" style="width: 20%">
+							<label class="toggle-switchy" for="e" data-size="sm" data-label="left" data-style="rounded">
+								<input id="e" checked type="checkbox" name="einmaligeAbstimmung" value="false">
+								<span class="toggle">
+                                <span class="switch"></span>
+                              </span>
+								<span class="label">Nutzer kann seine Abstimmung anpassen </span>
+r
 							</label>
 						</div>
 						<div class="col" style="width: 60%;"></div>
 					</div>
 				</div>
 
+
+      
 				<!-- Zeiten -->
 				<div class="mb-3 border-bottom">
 					<h2 class="h2">

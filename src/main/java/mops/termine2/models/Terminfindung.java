@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "teilgenommen")
 public class Terminfindung {
 	
 	private String link;
@@ -36,6 +36,10 @@ public class Terminfindung {
 	private LocalDateTime ergebnis;
 	
 	private boolean teilgenommen = false;
-	
+
 	private Boolean ergebnisVorFrist = false;
-}
+
+	private Boolean einmaligeAbstimmung = true;
+	
+
+
