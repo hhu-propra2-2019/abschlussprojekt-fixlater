@@ -7,11 +7,13 @@ import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortForm;
 import mops.termine2.controller.formular.ErgebnisForm;
+import mops.termine2.models.Kommentar;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class TermineAbstimmungController {
 	@Autowired
 	private GruppeService gruppeService;
 	
+	@Autowired
+	private KommentarService kommentarService;
+	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
 	public TermineAbstimmungController(MeterRegistry registry) {
@@ -68,7 +73,9 @@ public class TermineAbstimmungController {
 			return "error/403";
 		}
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		
 		if (terminfindung == null) {
 			System.out.println("404");
 			return "error/404";
@@ -106,7 +113,7 @@ public class TermineAbstimmungController {
 	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
 		
 		Account account;
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung;
 		
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -115,6 +122,7 @@ public class TermineAbstimmungController {
 			System.out.println("404");
 			return "error/403";
 		}
+		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			System.out.println("404");
@@ -133,6 +141,7 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
 		AntwortForm antwortForm = new AntwortForm();
 		antwortForm.init(antwort);
@@ -141,6 +150,8 @@ public class TermineAbstimmungController {
 		letzteTerminfindung.put(setLink, terminfindung);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("antwort", antwortForm);
+		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -151,9 +162,9 @@ public class TermineAbstimmungController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
 		Account account;
 		List<TerminfindungAntwort> antworten;
+		Terminfindung terminfindung;
 		
 		if (p != null) {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
@@ -162,6 +173,8 @@ public class TermineAbstimmungController {
 			System.out.println("404");
 			return "error/403";
 		}
+		
+		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			System.out.println("404");
@@ -185,12 +198,15 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
+		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
+		m.addAttribute("kommentare", kommentare);
+		m.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -214,7 +230,57 @@ public class TermineAbstimmungController {
 			return null;
 		}
 		
-		Terminfindung terminfindung = terminfindungService.loadByLinkMitTerminen(link);
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		if (terminfindung == null) {
+			return "error/404";
+		}
+		
+		if (terminfindung.getGruppeId() != null
+			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+			return "error/403";
+		}
+		
+		if (terminfindung.getEinmaligeAbstimmung()
+			&& terminAntwortService.hatNutzerAbgestimmt(account.getName(), link)) {
+			return "error/403";
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (terminfindung.getFrist().isBefore(now)) {
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
+		LinkWrapper linkWrapper = new LinkWrapper(link);
+		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
+			return "redirect:/termine2/" + link;
+		}
+		
+		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
+			antwortForm);
+		
+		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
+		authenticatedAccess.increment();
+		
+		return "redirect:/termine2/" + link;
+	}
+	
+	
+	@PostMapping(path = "/{link}", params = "kommentarSichern")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
+		Account account;
+		if (p != null) {
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
+		} else {
+			System.out.println("nicht autorisiert");
+			return null;
+		}
+		
+		Terminfindung terminfindung =
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		
 		if (terminfindung == null) {
 			System.out.println("404");
 			return "error/404";
@@ -227,21 +293,10 @@ public class TermineAbstimmungController {
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
-			return "redirect:/termine2/" + link + "/abstimmung";
-		}
-		
-		LinkWrapper linkWrapper = new LinkWrapper(link);
-		if (!terminfindung.equals(letzteTerminfindung.get(linkWrapper))) {
-			System.out.println("Abstimmung wurde geupdated");
-			return "redirect:/termine2/" + link;
-		}
-		
-		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung, account.getName(),
-			antwortForm);
-		
-		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
+		neuerKommentar.setLink(link);
+		neuerKommentar.setErstellungsdatum(now);
+		m.addAttribute("neuerKommentar", neuerKommentar);
+		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;

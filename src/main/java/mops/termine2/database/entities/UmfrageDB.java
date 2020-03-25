@@ -37,4 +37,6 @@ public class UmfrageDB {
 	
 	private Long maxAntwortAnzahl;
 	
+	private String ergebnis;
+	
 }

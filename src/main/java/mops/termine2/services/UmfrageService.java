@@ -18,9 +18,9 @@ public class UmfrageService {
 	
 	private transient UmfrageAntwortRepository umfrageAntwortRepository;
 	
-	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepository) {
-		umfrageRepository = umfrageRepo;
-		umfrageAntwortRepository = antwortRepository;
+	public UmfrageService(UmfrageRepository umfrageRepo, UmfrageAntwortRepository antwortRepo) {
+		this.umfrageRepository = umfrageRepo;
+		this.umfrageAntwortRepository = antwortRepo;
 	}
 	
 	/**
@@ -129,6 +129,38 @@ public class UmfrageService {
 		return distinctUmfrage;
 	}
 	
+	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
+		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
+		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
+		
+		return umfragen;
+	}
+	
+	public Umfrage loadByLinkMitVorschlaegen(String link) {
+		List<UmfrageDB> vorschlaegeDB = umfrageRepository.findByLink(link);
+		if (vorschlaegeDB != null && !vorschlaegeDB.isEmpty()) {
+			Umfrage umfrage = new Umfrage();
+			UmfrageDB ersteUmfrage = vorschlaegeDB.get(0);
+			
+			umfrage.setTitel(ersteUmfrage.getTitel());
+			umfrage.setBeschreibung(ersteUmfrage.getBeschreibung());
+			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
+			umfrage.setFrist(ersteUmfrage.getFrist());
+			umfrage.setGruppeId(ersteUmfrage.getGruppeId());
+			umfrage.setLink(ersteUmfrage.getLink());
+			umfrage.setErsteller(ersteUmfrage.getErsteller());
+			umfrage.setErgebnis(ersteUmfrage.getErgebnis());
+			
+			List<String> vorschlaege = new ArrayList<>();
+			for (UmfrageDB vorschlag : vorschlaegeDB) {
+				vorschlaege.add(vorschlag.getAuswahlmoeglichkeit());
+			}
+			umfrage.setVorschlaege(vorschlaege);
+			return umfrage;
+		}
+		return null;
+	}
+	
 	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setBeschreibung(umfragedb.getBeschreibung());
@@ -141,6 +173,24 @@ public class UmfrageService {
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
 		return umfrage;
+	}
+	
+	private List<Umfrage> getDistinctUmfrageList(List<UmfrageDB> umfrageDB) {
+		List<UmfrageDB> distinctUmfrageDB = new ArrayList<>();
+		List<String> links = new ArrayList<>();
+		for (UmfrageDB umfragen : umfrageDB) {
+			if (!links.contains(umfragen.getLink())) {
+				distinctUmfrageDB.add(umfragen);
+				links.add(umfragen.getLink());
+			}
+		}
+		
+		List<Umfrage> umfragen = new ArrayList<>();
+		for (UmfrageDB db : distinctUmfrageDB) {
+			umfragen.add(erstelleUmfrageOhneVorschlaege(db));
+		}
+		
+		return umfragen;
 	}
 	
 }

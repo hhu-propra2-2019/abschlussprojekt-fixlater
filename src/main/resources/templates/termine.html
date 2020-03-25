@@ -18,11 +18,11 @@
 		        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
 		        crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-			    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-			    crossorigin="anonymous"></script>
+		        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		        crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-			    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-			    crossorigin="anonymous"></script>
+		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		        crossorigin="anonymous"></script>
 	</th:block>
 </head>
 
@@ -38,6 +38,7 @@
 						Termine
 					</a>
 				</li>
+				
 				<li>
 					<a th:href="@{/termine2/umfragen}">
 						<img src="../static/img/resized/survey_small.jpg"
@@ -46,13 +47,10 @@
 					</a>
 				</li>
 			</ul>
-			<div align="center">
-			</div>
 		</nav>
 	</header>
 	
 	<main th:fragment="bodycontent">
-		
 		<div class="container my-3">
 			<!-- Header mit Titel und Aktionen -->
 			<div class="row d-flex justify-content-between align-items-center mb-3 border-bottom">
@@ -62,13 +60,20 @@
 				<div class="btn-toolbar" style="font-size: small">
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-2"
-						        data-toggle="dropdown" id="dropOperator" type="button"
-						        th:text="${termine.selektierteGruppe.name}  + ' (id: ' + ${termine.selektierteGruppe.id} + ')'">
-							Alle Gruppen
+						        data-toggle="dropdown" id="dropOperator" type="button">
+							<span th:text="${termine.selektierteGruppe.name}">
+								Gruppenname
+							</span>
+							
+							<i><span class="text-secondary"
+							         th:if="${termine.selektierteGruppe.id > 0}"
+							         th:text="'(ID: ' + ${termine.selektierteGruppe.id} + ')'">
+								Gruppen-ID
+							</span></i>
 						</button>
 						
 						<!-- Auswählbare Gruppen -->
-						<div class="dropdown-menu" >
+						<div class="dropdown-menu">
 							<a class="dropdown-item" th:href="@{/termine2}">
 								Alle Gruppen
 							</a>
@@ -78,10 +83,15 @@
 							</div>
 							
 							<a class="dropdown-item" href="#" th:each="gruppe : ${termine.gruppen}"
-							   th:href="@{/termine2(gruppe=${gruppe.id})}"
-							   th:text="${gruppe.name} + ' (id: ' + ${gruppe.id} + ')'"
-							   th:value="${gruppe}">
-								Gruppe
+							   th:href="@{/termine2(gruppe=${gruppe.id})}">
+								<span th:text="${gruppe.name}">
+									Gruppenname
+								</span>
+								
+								<i><span class="text-secondary"
+								         th:text="'(ID: ' + ${gruppe.id} + ')'">
+									Gruppen-ID
+								</span></i>
 							</a>
 						</div>
 					</div>
@@ -90,6 +100,16 @@
 						<button class="btn btn-success">Neuer Termin</button>
 					</a>
 				</div>
+			</div>
+			
+			<!-- Meldung -->
+			<div class="alert alert-success alert-dissmissible fade show"
+			     th:if="${erfolg != null && erfolg != ''}">
+				<span th:text="${erfolg}">
+					Erfolgsmeldung
+				</span>
+				
+				<button class="close" data-dismiss="alert">×</button>
 			</div>
 			
 			<!-- Listen -->
@@ -129,7 +149,9 @@
 								<!-- Gruppe, falls verfügbar -->
 								<div class="mt-1 text-secondary"
 								     th:if="*{termin.gruppeId != null}">
-									für Gruppe <i><span th:text="${termin.gruppeId}">Gruppe</span></i>
+									für Gruppe
+									
+									<i><span th:text="${termin.gruppeId}">Gruppe</span></i>
 								</div>
 							</div>
 							
@@ -142,12 +164,12 @@
 							
 							<!-- Weitere Aktionen -->
 							<div class="mt-3" style="text-align: center">
-								<form th:action="@{/termine2}" method="post">
+								<a th:href="@{/termine2/{link}(link=${termin.link})}">
 									<button class="btn btn-outline-info" style="font-size: small"
-									        type="submit" name="details" th:value="*{termin.link}">
+											type="submit" name="details" th:value="*{termin.link}">
 										Details
 									</button>
-								</form>
+								</a>
 								
 								<div class="mt-2 text-secondary" style="font-size: small">
 									Link:
@@ -188,7 +210,9 @@
 								<!-- Gruppe, falls verfügbar -->
 								<div class="mt-1 text-secondary"
 								     th:if="*{termin.gruppeId != null}">
-									für Gruppe <i><span th:text="${termin.gruppeId}">Gruppe</span></i>
+									für Gruppe
+									
+									<i><span th:text="${termin.gruppeId}">Gruppe</span></i>
 								</div>
 							</div>
 							
@@ -209,21 +233,17 @@
 								</div>
 								
 								<div class="mt-2" style="text-align: center">
-									<form th:action="@{/termine2}" method="post">
-										<button class="btn btn-outline-info"
-										        style="font-size: small" type="submit"
+									<a th:href="@{/termine2/{link}(link=${termin.link})}">
+										<button class="btn" style="font-size: small" type="submit"
 										        name="details"
-												th:value="${termin.link}"
-												th:if="${termin.teilgenommen}">
-											Details
+										        th:value="*{termin.link}"
+										        th:classappend="${termin.teilgenommen}
+										                        ? 'btn-outline-info'
+										                        : 'btn-primary'"
+										        th:text="${termin.teilgenommen}
+										                 ? 'Details' : 'Abstimmen'">
 										</button>
-										<button class="btn btn-primary" style="font-size: small"
-												type="submit" name="details"
-												th:value="*{termin.link}"
-												th:if="!${termin.teilgenommen}">
-											Abstimmen
-										</button>
-									</form>
+									</a>
 									
 									<div class="mt-2 text-secondary" style="font-size: small">
 										Link:

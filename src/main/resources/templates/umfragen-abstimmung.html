@@ -50,11 +50,13 @@
 						<div class="mb-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<div class="h3">Essen bei der Praktikums-Abschluss-Party</div>
+								<div class="h3" th:text="${umfrage.getTitel()}">
+									Essen bei der Praktikums-Abschluss-Party
+								</div>
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2" style="font-size: small">
+							<div class="mt-2" style="font-size: small" th:text="${umfrage.getBeschreibung()}">
 								Floppy macaroni are assumed to be dissatisfying. Few can name a
 								springtime flower that doesn't profit from rainstorms. In modern
 								times, clothes were lost without the long thin bands that were
@@ -71,29 +73,30 @@
 							<button class="btn btn-outline-warning">Zurücksetzen</button>
 						</div>
 						
-						<form class="my-3">
+						<form class="my-3" th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
+											th:object="${umfrageAntwort}" method="post">
 							<!-- falls es eine Stimmbegrenzung gibt -->
 							<div class="mb-2">
-								Wähle <span class="text-primary">[Anzahl]</span> aus:
+								Wähle <span class="text-primary" th:text="${umfrage.maxAntwortAnzahl}">[Anzahl]</span> aus:
 							</div>
-							
+<!-- 							
 							<div class="table-responsive">
 								<table class="table table-sm" style="text-align: center">
 									<thead>
 										<tr>
-											<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
-											     chen: Blau und Gelb lassen sich besser unterschei-
-											     den als Grün und Gelb. -->
+											
 											<th class="col-7 bg-secondary">Vorschlag</th>
 											<th class="col-2 bg-primary">  Ja</th>
 											<th class="col-2 bg-danger">   Nein</th>
 										</tr>
 									</thead>
 									
-									<tbody>
+									<tbody th:remove="all-but-first" th:each="vorschlag: *{umfrage.vorschlaege}" }>
 										<tr>
-											<!-- abwechselnd bg-white / bg-light -->
-											<th class="col-7 bg-white">Grillen, grillen!</th>
+
+											<th class="col-7 bg-white"
+											th:text="${vorschlag}">
+											Generischer Vorschlag</th>
 											<th class="col-2 table-primary">
 												<input type="radio" name="abstimmung1" value="y"/>
 											</th>
@@ -101,56 +104,20 @@
 												<input type="radio" name="abstimmung1" value="n"/>
 											</th>
 										</tr>
-										
-										<tr>
-											<th class="col-7 bg-light">Pizza-Bananen-Suppe</th>
-											<th class="col-2 table-primary">
-												<input type="radio" name="abstimmung2" value="y"/>
-											</th>
-											<th class="col-2 table-danger">
-												<input type="radio" name="abstimmung2" value="n"/>
-											</th>
-										</tr>
-										
-										<tr>
-											<th class="col-7 bg-white">Gurken-Hotdog</th>
-											<th class="col-2 table-primary">
-												<input type="radio" name="abstimmung3" value="y"/>
-											</th>
-											<th class="col-2 table-danger">
-												<input type="radio" name="abstimmung3" value="n"/>
-											</th>
-										</tr>
-										
-										<tr>
-											<th class="col-7 bg-white">Mayonesen-Milkshake</th>
-											<th class="col-2 table-primary">
-												<input type="radio" name="abstimmung4" value="y"/>
-											</th>
-											<th class="col-2 table-danger">
-												<input type="radio" name="abstimmung4" value="n"/>
-											</th>
-										</tr>
+									
 									</tbody>
 								</table>
 							</div>
-							
-							<!-- Absendezeile -->
-							<div class="container">
-								<div class="form-group row justify-content-center">
-									<!-- Name -->
-									<div class="col-xs-4 mx-1">
-										<input class="form-control" id="pseudonym" type="text"
-										       placeholder="Benjamin"/>
-									</div>
-									
-									<div class="col-xs mx-1">
-										<button class="btn btn-primary">
-											Abschicken
-										</button>
-									</div>
-								</div>
-							</div>
+							 -->
+							<!-- Absendezeile
+							<div style="text-align: center">
+							<input type="text" name="pseudonym" placeholder="Benjamin"
+							       th:placeholder="*{getBenutzer()}"
+							       th:field="${antwort.pseudonym}"
+							>
+							<button class="btn btn-primary" type="submit" name="sichern">Abschicken</button>
+						</div>
+						 -->
 						</form>
 					</div>
 					

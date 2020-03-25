@@ -52,6 +52,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'com.opencsv:opencsv:5.0'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+    testImplementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
 }
 
 test {

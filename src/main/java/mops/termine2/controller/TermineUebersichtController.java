@@ -12,20 +12,17 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.TerminfindunguebersichtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -52,53 +49,47 @@ public class TermineUebersichtController {
 	public String index(Principal p, Model m,
 						@RequestParam(name = "gruppe",
 							defaultValue = "-1") Long gruppe) {
+		Account account;
 		if (p != null) {
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
+			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
+			account = authenticationService.createAccountFromPrincipal(p);
 			authenticatedAccess.increment();
-			
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			gruppen = gruppen.stream()
-				.sorted(Comparator.comparing(Gruppe::getName))
-				.collect(Collectors.toList());
-			
-			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
-			
-			if (selGruppe == null) {
-				selGruppe = new Gruppe();
-				selGruppe.setId(-1L);
-				selGruppe.setName("Alle Gruppen");
-			}
-			
-			List<Terminfindung> terminfindungenOffen;
-			List<Terminfindung> terminfindungenAbgeschlossen;
-			if (gruppe == -1L) {
-				terminfindungenOffen =
-					terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
-			} else {
-				terminfindungenOffen = terminfindunguebersichtService
-					.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
-				terminfindungenAbgeschlossen = terminfindunguebersichtService
-					.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
-			}
-			Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
-				terminfindungenOffen, gruppen, selGruppe);
-			
-			m.addAttribute("termine", termine);
+		} else {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		
+		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+		}
+		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		gruppen = gruppeService.sortGroupsByName(gruppen);
+		
+		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+		if (selGruppe == null) {
+			selGruppe = new Gruppe();
+			selGruppe.setId(-1L);
+			selGruppe.setName("Alle Gruppen");
+		}
+		
+		List<Terminfindung> terminfindungenOffen;
+		List<Terminfindung> terminfindungenAbgeschlossen;
+		if (gruppe == -1L) {
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+		} else {
+			terminfindungenOffen = terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
+			terminfindungenAbgeschlossen = terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
+		}
+		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
+			terminfindungenOffen, gruppen, selGruppe);
+		
+		m.addAttribute("termine", termine);
+		
 		return "termine";
-	}
-	
-	@PostMapping(path = "", params = "details")
-	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String details(Principal p, Model m, final HttpServletRequest req) {
-		String link = "";
-		if (p != null) {
-			link = req.getParameter("details");
-		}
-		return "redirect:/termine2/" + link;
 	}
 }

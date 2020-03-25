@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,9 +21,11 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	@Query("select db from TerminfindungDB db where db.gruppeId = :gruppeId order by db.frist")
 	List<TerminfindungDB> findByGruppeId(@Param("gruppeId") Long gruppeId);
 	
+	@Transactional
 	@Query("delete from TerminfindungDB db where db.link like : link")
 	void deleteByLink(@Param("link") String link);
 	
+	@Transactional
 	@Query("delete from TerminfindungDB db where db.loeschdatum < :timeNow")
 	void loescheAelterAls(@Param("timeNow") LocalDateTime timeNow);
 	

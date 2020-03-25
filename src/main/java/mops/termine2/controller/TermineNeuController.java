@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,7 @@ public class TermineNeuController {
 			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 			
 			m.addAttribute("terminfindung", terminfindung);
+			m.addAttribute("fehler", "");
 		}
 		
 		return "termine-neu";
@@ -90,22 +92,23 @@ public class TermineNeuController {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
-			// Account
+			/* Account */
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
-			// Gruppen
+			/* Gruppen */
 			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 			m.addAttribute("gruppen", gruppen);
 			
-			// Terminvorschlag hinzufügen
+			/* Terminvorschlag hinzufügen */
 			List<LocalDateTime> termine = terminfindung.getVorschlaege();
 			termine.add(LocalDateTime.now());
 			
-			// Selektierte Gruppe
+			/* Selektierte Gruppe */
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			
 			m.addAttribute("terminfindung", terminfindung);
+			m.addAttribute("fehler", "");
 		}
 		
 		return "termine-neu";
@@ -114,7 +117,9 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung,
-										 Gruppe gruppeSelektiert) {
+			Gruppe gruppeSelektiert, RedirectAttributes ra) {
+		String fehler = "";
+		
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -122,11 +127,28 @@ public class TermineNeuController {
 			Account account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
+			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+			
 			for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-				if (ldt == null) {
-					System.out.println("Fehler");
-					// TODO: Fehlermeldung ausgeben und auf Terminfindung erstellen weiterleiten
+				if (ldt != null) {
+					gueltigeVorschlaege.add(ldt);
 				}
+			}
+			
+			if (gueltigeVorschlaege.isEmpty()) {
+				gueltigeVorschlaege.add(null);
+				fehler = "Es muss mindestens einen Vorschlag geben.";
+			}
+			
+			terminfindung.setVorschlaege(gueltigeVorschlaege);
+			
+			if (!fehler.equals("")) {
+				m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+				m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+				m.addAttribute("terminfindung", terminfindung);
+				m.addAttribute("fehler", fehler);
+				
+				return "termine-neu";
 			}
 			
 			// Terminfindung erstellen
@@ -143,13 +165,14 @@ public class TermineNeuController {
 			terminfindungService.save(terminfindung);
 		}
 		
+		ra.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
-								 final HttpServletRequest request) {
+			final HttpServletRequest request) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -168,6 +191,7 @@ public class TermineNeuController {
 			terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
 			
 			m.addAttribute("terminfindung", terminfindung);
+			m.addAttribute("fehler", "");
 		}
 		
 		return "termine-neu";
@@ -252,3 +276,4 @@ public class TermineNeuController {
 		return "termine-neu";
 	}
 }
+

@@ -5,163 +5,192 @@
                   bodycontent=~{:: bodycontent})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Neuer Termin</title>
-    <th:block th:fragment="headcontent">
-        <!-- Links, Scripts, Styles -->
+	<meta charset="utf-8">
+	<title>Neuer Termin</title>
+	<th:block th:fragment="headcontent">
+		<!-- Links, Scripts, Styles -->
 
-        <!-- jQuery -->
-        <script crossorigin="anonymous"
-                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		        crossorigin="anonymous"></script>
 
-        <!-- PopperJS -->
-        <script crossorigin="anonymous"
-                integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
-                src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"></script>
+		<!-- PopperJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"
+		        integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
+		        crossorigin="anonymous"></script>
 
-        <!-- Bootstrap -->
-        <link crossorigin="anonymous"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              rel="stylesheet">
-        <script crossorigin="anonymous"
-                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-                src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		        crossorigin="anonymous"></script>
 
-        <!-- Font Awesome -->
-        <link href="/css/all.css"
-              rel="stylesheet">
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
 
-        <!-- MomentJS -->
-        <script crossorigin="anonymous"
-                integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
-                src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+		<link rel="stylesheet"
+		      href="/css/toggle-switchy.css">
 
-        <!-- Tempus Dominus -->
-        <link crossorigin="anonymous"
-              href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
-              integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
-              rel="stylesheet"/>
-        <script crossorigin="anonymous"
-                integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
-                src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
-    </th:block>
+		<!-- MomentJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+		        integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
+		        crossorigin="anonymous"></script>
+
+		<!-- Tempus Dominus -->
+		<link rel="stylesheet"
+		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
+		      crossorigin="anonymous"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
+		        crossorigin="anonymous"></script>
+	</th:block>
 </head>
 
 <body>
-	<header>
-		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-			<ul>
-				<li>
-					<a th:href="@{/termine2}">
-						<img src="../static/img/resized/calendar_small.jpg"
-						     th:src="@{/img/resized/calendar_small.jpg}">
-						Termine
-					</a>
-				</li>
-				
-				<li>
-					<a th:href="@{/termine2/umfragen}">
-						<img src="../static/img/resized/survey_small.jpg"
-						     th:src="@{/img/resized/survey_small.jpg}">
-						Umfragen
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</header>
-	
-	<main th:fragment="bodycontent">
-		<div class="container mb-3">
-			<!-- Header -->
-			<div class="row my-3 border-bottom">
-				<h1 class="h1">Neuer Termin</h1>
-			</div>
-			
-			<form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
-				<div class="col">
-					<!-- Übersicht -->
-					<div class="mb-3 border-bottom">
-						<div class="mb-3 form-group">
-							<label for="titel">
-								Titel
-							</label>
-							
-							<input class="form-control" id="titel" name="titel" type="text"
-							       required placeholder="Worum geht es?" th:value="*{titel}"/>
+<header>
+	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+		<ul>
+			<li>
+				<a th:href="@{/termine2}">
+					<img src="../static/img/resized/calendar_small.jpg"
+					     th:src="@{/img/resized/calendar_small.jpg}">
+					Termine
+				</a>
+			</li>
+
+			<li>
+				<a th:href="@{/termine2/umfragen}">
+					<img src="../static/img/resized/survey_small.jpg"
+					     th:src="@{/img/resized/survey_small.jpg}">
+					Umfragen
+				</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+
+<main th:fragment="bodycontent">
+	<div class="container mb-3">
+		<!-- Header -->
+		<div class="row my-3 border-bottom">
+			<h1 class="h1">Neuer Termin</h1>
+		</div>
+
+    <form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
+			<div class="col">
+				<!-- Übersicht -->
+				<div class="mb-3 border-bottom">
+					<div class="mb-3 form-group">
+						<label for="titel">
+							Titel
+						</label>
+
+						<div class="alert alert-danger alert-dissmissible fade show"
+						     th:if="${fehler != null && fehler != ''}">
+								<span th:text="${fehler}">
+									Fehlermeldung
+								</span>
+
+							<button class="close" data-dismiss="alert">×</button>
 						</div>
-						
-						<!-- Ort -->
-						<div class="mb-3 form-group">
-							<label for="ort">
-								Ort
-							</label>
-							
-							<input class="form-control" id="ort" name="ort" type="text"
-							       required placeholder="Wo soll man sich treffen?" th:value="*{ort}"/>
-						</div>
-						
-						<!-- Erreichbarkeit -->
-						<div class="mb-3 form-group">
-							<label for="erreichbarkeit">
-								Erreichbarkeit
-							</label>
-							
-							<select class="custom-select" id="erreichbarkeit"
-							        th:if="${gruppen.size() == 0}" disabled>
-								<option selected th:value="-1">Link</option>
-							</select>
-							
-							<select class="custom-select"
-							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
-								<option selected th:value="-1">Link</option>
-								
-								<optgroup label="Gruppen">
-									<option th:each="gruppe, iter : ${gruppen}"
-									        th:value="${gruppen[__${iter.index}__].id}"
-									        th:text="${gruppe.name}">Gruppe</option>
-								</optgroup>
-							</select>
-							
-							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-								<p class="mb-1">
-									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
-									kennen. Der Link wird dabei automatisch vom System generiert.
-								</p>
-								
-								<p>
-									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
-									ausgewählten Gruppe sichtbar.
-									
-									<span class="text-warning" th:if="${gruppen.size() == 0}">
+
+						<input class="form-control" id="titel" name="titel" type="text"
+						       required placeholder="Worum geht es?" th:value="*{titel}"/>
+					</div>
+
+					<!-- Ort -->
+					<div class="mb-3 form-group">
+						<label for="ort">
+							Ort
+						</label>
+
+						<input class="form-control" id="ort" name="ort" type="text"
+						       required placeholder="Wo soll man sich treffen?"
+						       th:value="*{ort}"/>
+					</div>
+
+					<!-- Erreichbarkeit -->
+					<div class="mb-3 form-group">
+						<label for="erreichbarkeit">
+							Erreichbarkeit
+						</label>
+
+						<select class="custom-select" id="erreichbarkeit"
+						        th:if="${gruppen.size() == 0}" disabled>
+							<option selected th:value="-1">Link</option>
+						</select>
+
+						<select class="custom-select"
+						        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+							<option selected value="-1">Link</option>
+
+							<optgroup label="Gruppen">
+								<option th:each="gruppe, iter : ${gruppen}"
+								        th:value="${gruppen[__${iter.index}__].id}"
+								        th:text="${gruppe.name}">Gruppe
+								</option>
+							</optgroup>
+						</select>
+
+						<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+							<p class="mb-1">
+								<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+								kennen. Der Link wird dabei automatisch vom System generiert.
+							</p>
+
+							<p>
+								<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+								ausgewählten Gruppe sichtbar.
+
+								<span class="text-warning" th:if="${gruppen.size() == 0}">
 										Diese Option ist aber nicht verfügbar, da es im Moment keine
 										Gruppenzugehörigkeit gibt.
 									</span>
-								</p>
-							</div>
-						</div>
-						
-						<!-- Beschreibung -->
-						<div class="mb-3 form-group">
-							<label class="text-secondary" for="beschreibung">
-								Beschreibung (optional)
-							</label>
-							
-							<textarea class="form-control" id="beschreibung" type="text"
-							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
-							          rows="4" th:field="*{beschreibung}"></textarea>
+							</p>
 						</div>
 					</div>
-					
-					<!-- Zeiten -->
-					<div class="mb-3 border-bottom">
-						<h2 class="h2">
-							Zeiten
-						</h2>
-						
-						<!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
+
+					<!-- Beschreibung -->
+					<div class="mb-3 form-group">
+						<label class="text-secondary" for="beschreibung">
+							Beschreibung (optional)
+						</label>
+
+						<textarea class="form-control" id="beschreibung" type="text"
+						          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
+						          rows="4" th:field="*{beschreibung}"></textarea>
+					</div>
+
+					<!-- Einstellungs Optionen -->
+					<div class="mb-3 form-group row">
+						<div class="col" style="width: 20%">
+							<label class="toggle-switchy" for="e" data-size="sm" data-label="left" data-style="rounded">
+								<input id="e" checked type="checkbox" name="einmaligeAbstimmung" value="false">
+								<span class="toggle">
+                                <span class="switch"></span>
+                              </span>
+								<span class="label">Nutzer kann seine Abstimmung anpassen </span>
+							</label>
+						</div>
+						<div class="col" style="width: 60%;"></div>
+					</div>
+				</div>
+
+
+				<!-- Zeiten -->
+				<div class="mb-3 border-bottom">
+					<h2 class="h2">
+						Zeiten
+					</h2>
+          
+          <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
 						<div class="container mb-3">
 							<div class="alert alert-danger" role="alert" th:if="${error}">
 								<strong>Error:</strong>
@@ -171,59 +200,61 @@
 								<span th:text="${message}"></span>
 							</div>
 						</div>
-            
-						<div class="container mb-3">
-							<div class="form-group mb-2"
-								 th:each="zeit, iter : *{vorschlaege}">
-								<div class="input-group date"
-								     th:id="zeit + ${iter.count}"
-								     data-target-input="nearest">
-									<div class="input-group-prepend"
-									     th:attr="data-target='#zeit' + ${iter.count}"
-									     data-toggle="datetimepicker">
-										<div class="input-group-text">
-											<i class="fa fa-calendar"></i>
-										</div>
-									</div>
-									
-									<input class="form-control datetimepicker-input" type="text"
-									       placeholder="Datum und Stunde"
-									       th:attr="data-target='#zeit'+${iter.count}"
-									       th:field="*{vorschlaege[__${iter.index}__]}"
-									       th:value="${zeit}"/>
-									
-									<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
-										<button class="btn btn-outline-danger" name="delete"
-											    th:value="${iter.index}" type="submit">
-											Löschen
-										</button>
+
+					<div class="container mb-3">
+						<div class="form-group mb-2"
+						     th:each="zeit, iter : *{vorschlaege}">
+							<div class="input-group date"
+							     th:id="zeit + ${iter.count}"
+							     data-target-input="nearest">
+								<div class="input-group-prepend"
+								     th:attr="data-target='#zeit' + ${iter.count}"
+								     data-toggle="datetimepicker">
+									<div class="input-group-text">
+										<i class="fa fa-calendar"></i>
 									</div>
 								</div>
-								
-								<script th:inline="javascript">
-									/* This comment is necessary for thymeleaf inline, DO NOT REMOVE */
-									/*[+
-										$(function () {
-											var pickerID = '#zeit' + '[[${iter.count}]]';
-											var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
-											
-											$(pickerID).datetimepicker({
-												format: 'DD.MM.YYYY, HH:mm',
-												minDate: now,
-												locale: 'de'
-											});
-										});
-									+]*/
-								</script>
-							</div>
-							
-							<div class="row justify-content-center mt-1">
-								<button class="btn btn-outline-success" type="submit" name="add">
-									Hinzufügen
-								</button>
+
+								<input class="form-control datetimepicker-input" type="text"
+								       placeholder="Datum und Uhrzeit"
+								       th:attr="data-target='#zeit'+${iter.count}"
+								       th:field="*{vorschlaege[__${iter.index}__]}"
+								       th:value="${zeit}"/>
+
+								<div class="input-group-append"
+								     th:if="*{vorschlaege.size() > 1}">
+									<button class="btn btn-outline-danger" name="delete"
+									        th:value="${iter.index}" type="submit">
+										Löschen
+									</button>
+								</div>
 							</div>
 
-							<div class="form-group mt-3">
+							<script th:inline="javascript">
+                                // The comment below is used by Thymeleaf for inlining.
+                                // Do NOT remove it.
+                                /*[+
+									$(function () {
+										var pickerID = '#zeit' + '[[${iter.count}]]';
+										var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
+
+										$(pickerID).datetimepicker({
+											format: 'DD.MM.YYYY, HH:mm',
+											minDate: now,
+											locale: 'de'
+										});
+									});
+								+]*/
+							</script>
+						</div>
+
+						<div class="row justify-content-center mt-1">
+							<button class="btn btn-outline-success" type="submit" name="add">
+								Hinzufügen
+							</button>
+						</div>
+            
+            <div class="form-group mt-3">
 								<label>
 									Oder wählen Sie eine CSV-Datei zum Import von Terminen
 									(im Format TT.MM.JJJJ,HH:MM) aus:
@@ -231,57 +262,57 @@
 								<input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
 							</div>
 							<button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
-
-						</div>
-					</div>
-					
-					<!-- Frist -->
-					<div class="mb-3">
-						<h2 class="h2">
-							Frist
-						</h2>
-						
-						<div class="form-group mb-2">
-							<div class="input-group date"
-							     id="frist"
-							     data-target-input="nearest">
-								<div class="input-group-prepend"
-								     data-target="#frist"
-								     data-toggle="datetimepicker">
-									<div class="input-group-text">
-										<i class="fa fa-calendar"></i>
-									</div>
-								</div>
-								
-								<input type="text"
-								       class="form-control datetimepicker-input"
-								       data-target="#frist"
-								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
-								       th:field="*{frist}"/>
-							</div>
-							
-							<script type="text/javascript">
-								$(function () {
-									var pickerID = '#frist';
-									
-									$(pickerID).datetimepicker({
-										format: 'DD.MM.YYYY, HH:mm',
-										locale: 'de'
-									});
-								});
-							</script>
-						</div>
-					</div>
-					
-					<div class="row justify-content-center">
-						<button class="btn btn-success" type="submit" name="create">
-							Erstellen
-						</button>
+            
 					</div>
 				</div>
-			</form>
-		</div>
-	</main>
+
+				<!-- Frist -->
+				<div class="mb-3">
+					<h2 class="h2">
+						Frist
+					</h2>
+
+					<div class="form-group mb-2">
+						<div class="input-group date"
+						     id="frist"
+						     data-target-input="nearest">
+							<div class="input-group-prepend"
+							     data-target="#frist"
+							     data-toggle="datetimepicker">
+								<div class="input-group-text">
+									<i class="fa fa-calendar"></i>
+								</div>
+							</div>
+
+							<input type="text"
+							       class="form-control datetimepicker-input"
+							       data-target="#frist"
+							       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+							       th:field="*{frist}"/>
+						</div>
+
+						<script type="text/javascript">
+                            $(function () {
+                                var pickerID = '#frist';
+
+                                $(pickerID).datetimepicker({
+                                    format: 'DD.MM.YYYY, HH:mm',
+                                    locale: 'de'
+                                });
+                            });
+						</script>
+					</div>
+				</div>
+
+				<div class="row justify-content-center">
+					<button class="btn btn-success" type="submit" name="create">
+						Erstellen
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</main>
 </body>
 </html>
 

@@ -1,11 +1,11 @@
 package mops.termine2.controller;
 
+import com.c4_soft.springaddons.test.security.context.support.WithMockKeycloackAuth;
 import mops.termine2.Konstanten;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,7 +19,7 @@ public class UmfragenNeuControllerTest {
 	transient MockMvc mvc;
 	
 	@Test
-	@WithMockUser(roles = {Konstanten.STUDENTIN})
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testUmfrageNeu() throws Exception {
 		mvc.perform(get("/termine2/umfragen-neu")).andExpect(status().isOk());
 	}
