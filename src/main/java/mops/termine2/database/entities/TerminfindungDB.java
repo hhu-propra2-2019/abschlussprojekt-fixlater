@@ -39,4 +39,5 @@ public class TerminfindungDB {
 	
 	private LocalDateTime ergebnis;
 	
+	private Boolean einmaligeAbstimmung;
 }

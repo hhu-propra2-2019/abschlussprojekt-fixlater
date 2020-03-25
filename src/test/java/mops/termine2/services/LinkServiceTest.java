@@ -1,18 +1,17 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
