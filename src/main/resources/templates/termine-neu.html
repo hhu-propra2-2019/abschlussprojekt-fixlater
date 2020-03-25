@@ -185,9 +185,9 @@
 						
 						<!-- Meldung beim Importieren der Zeiten aus einer CSV-Datei -->
 						<div class="alert alert-dissmissible fade show" role="alert"
-						     th:if="${error != null || erfolg != null}"
-						     th:classappend="${error ? 'alert-danger' :
-						                     (erfolg ? 'alert-success' : '')}">
+						     th:if="${error != null && erro || erfolg != null && erfolg}"
+						     th:classappend="${(error != null && error) ? 'alert-danger' :
+						                     ((erfolg != null && erfolg) ? 'alert-success' : '')}">
 							<strong th:if="${error}">
 								Fehler:
 							</strong>
