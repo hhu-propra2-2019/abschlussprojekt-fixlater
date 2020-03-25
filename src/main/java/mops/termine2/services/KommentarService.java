@@ -31,7 +31,7 @@ public class KommentarService {
 	}
 	
 	public List<Kommentar> loadByLink(String link) {
-		List<KommentarDB> kommentarDBs = kommentarRepo.findByLink(link);
+		List<KommentarDB> kommentarDBs = kommentarRepo.findByLinkOrderByErstellungsdatumAsc(link);
 		List<Kommentar> kommentare = new ArrayList<>();
 		for (KommentarDB kommentarDB : kommentarDBs) {
 			kommentare.add(erstelleKommentar(kommentarDB));

@@ -139,7 +139,7 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungenByErstellerKeineTreffer() {
 		int dummie = 0;
 		List<TerminfindungDB> dbs = new ArrayList<>();
-		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(dbs);
+		when(terminRepository.findByErstellerOrderByFristAsc(erstellerListe.get(dummie))).thenReturn(dbs);
 		List<Terminfindung> ergebnisse = service.loadByErstellerOhneTermine(erstellerListe.get(dummie));
 		
 		assertThat(ergebnisse.isEmpty()).isTrue();
@@ -151,7 +151,8 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByErstellerOrderByFristAsc(erstellerListe.get(dummie)))
+			.thenReturn(terminfindungDBs);
 		
 		Terminfindung ergebnis = service.loadByErstellerOhneTermine(erstellerListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
@@ -163,7 +164,8 @@ public class TerminfindungServiceTest {
 	public void loadTerminfindungenByGruppeKeineTreffer() {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
-		when(terminRepository.findByErsteller(erstellerListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByErstellerOrderByFristAsc(erstellerListe.get(dummie)))
+			.thenReturn(terminfindungDBs);
 		List<Terminfindung> ergebnisse = service.loadByErstellerOhneTermine(erstellerListe.get(dummie));
 		
 		assertThat(ergebnisse.isEmpty()).isTrue();
@@ -175,7 +177,8 @@ public class TerminfindungServiceTest {
 		int dummie = 0;
 		List<TerminfindungDB> terminfindungDBs;
 		terminfindungDBs = erstelleTerminfindungDBListeFuerEineTerminfindung(dummie, anzahl);
-		when(terminRepository.findByGruppeId(gruppenListe.get(dummie))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppeIdOrderByFristAsc(gruppenListe.get(dummie)))
+			.thenReturn(terminfindungDBs);
 		
 		Terminfindung ergebnis = service.loadByGruppeOhneTermine(gruppenListe.get(dummie)).get(0);
 		Terminfindung erwartet = erstelleBeispielTerminfindungOhneTermine(0);
@@ -195,7 +198,7 @@ public class TerminfindungServiceTest {
 		terminfindungDBs.addAll(terminfindungDBs1);
 		terminfindungDBs.addAll(terminfindungDBs2);
 		
-		when(terminRepository.findByGruppeId(gruppenListe.get(0))).thenReturn(terminfindungDBs);
+		when(terminRepository.findByGruppeIdOrderByFristAsc(gruppenListe.get(0))).thenReturn(terminfindungDBs);
 		
 		List<Terminfindung> erwartet = new ArrayList<>(
 			Arrays.asList(erstelleBeispielTerminfindungOhneTermine(dummie1),
