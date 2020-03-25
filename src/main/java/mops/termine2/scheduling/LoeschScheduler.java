@@ -28,7 +28,7 @@ public class LoeschScheduler {
 	
 	@Scheduled(cron = "0 0 0,12 * * *")
 	public void loescheDaten() {
-		logger.info("Lösche abgelaufene Daten");
+		logger.info("Loesche abgelaufene Daten");
 		terminfindungService.loescheAbgelaufene();
 		umfrageService.deleteOutdated();
 	}

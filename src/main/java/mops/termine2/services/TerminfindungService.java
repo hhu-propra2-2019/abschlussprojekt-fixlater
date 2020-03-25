@@ -45,7 +45,7 @@ public class TerminfindungService {
 			terminfindungDB.setGruppeId(terminfindung.getGruppeId());
 			terminfindungDB.setTermin(termin);
 			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
-      terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
+			terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
 			
 			if (terminfindung.getGruppeId() != null) {
 				terminfindungDB.setModus(Modus.GRUPPE);
@@ -152,7 +152,7 @@ public class TerminfindungService {
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
 		terminfindung.setErgebnis(db.getErgebnis());
-    terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
+		terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
 		
 		return terminfindung;
 	}
