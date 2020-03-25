@@ -39,6 +39,6 @@ public class Terminfindung {
 	
 	private boolean teilgenommen = false;
 	
-	private Boolean einmaligeAbstimmung = false;
+	private Boolean einmaligeAbstimmung = true;
 	
 }
