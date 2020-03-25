@@ -24,9 +24,9 @@ public class AntwortFormUmfragen {
 	
 	public String benutzer;
 	
-	@SuppressWarnings("checkstyle:LineLength")
 	public static UmfrageAntwort mergeToAnswer(Umfrage umfrage, String nutzer,
-											   AntwortFormUmfragen antwortFrm) {
+											   AntwortFormUmfragen
+												   antwortFrm) {
 		UmfrageAntwort umfrageAntwort = new UmfrageAntwort();
 		umfrageAntwort.setBenutzer(nutzer);
 		umfrageAntwort.setLink(umfrage.getLink());
