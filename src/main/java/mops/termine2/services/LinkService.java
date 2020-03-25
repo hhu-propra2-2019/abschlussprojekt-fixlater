@@ -20,6 +20,7 @@ public class LinkService {
 	
 	/**
 	 * Generiert einen eindeutigen Link
+	 *
 	 * @return eindeutiger Link
 	 */
 	public String generiereEindeutigenLink() {
@@ -34,6 +35,7 @@ public class LinkService {
 	
 	/**
 	 * Prüft ob ein Link eindeutig ist
+	 *
 	 * @param link vom Link Generator übergeben
 	 * @return boolean zur Bestätigung der Eindeutigkeit
 	 */
