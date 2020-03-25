@@ -17,6 +17,8 @@ import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
@@ -69,27 +72,24 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -99,10 +99,8 @@ public class TermineAbstimmungController {
 		
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (bereitsTeilgenommen) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
-			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -119,25 +117,22 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -170,21 +165,19 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
@@ -194,7 +187,6 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
-			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -226,24 +218,24 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
-			return null;
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		if (terminfindung == null) {
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		if (terminfindung.getEinmaligeAbstimmung()
 			&& terminAntwortService.hatNutzerAbgestimmt(account.getName(), link)) {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -274,22 +266,20 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
-			return null;
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
