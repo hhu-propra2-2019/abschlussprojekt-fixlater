@@ -1,13 +1,5 @@
 package mops.termine2.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageAntwortDB;
@@ -16,6 +8,13 @@ import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UmfrageAntwortService {
@@ -26,19 +25,24 @@ public class UmfrageAntwortService {
 	private UmfrageRepository umfrageRepo;
 	
 	public UmfrageAntwortService(UmfrageAntwortRepository umfrageAntwortRepository,
-			 UmfrageRepository umfrageRepository) {
+								 UmfrageRepository umfrageRepository) {
 		this.antwortRepo = umfrageAntwortRepository;
 		this.umfrageRepo = umfrageRepository;
 	}
 	
 	/**
 	 * Speichert Antworten zu einer Umfragenabstimmung
+	 *
 	 * @param antwort
 	 * @param umfrage
 	 */
 	public void abstimmen(UmfrageAntwort antwort, Umfrage umfrage) {
 		
-		antwortRepo.deleteAllByUmfrageLinkAndBenutzer(umfrage.getLink(), antwort.getBenutzer());
+		List<UmfrageAntwortDB> antwortenToDelete =
+			antwortRepo.findByBenutzerAndUmfrageLink(antwort.getBenutzer(),
+				umfrage.getLink());
+		
+		antwortRepo.deleteAll(antwortenToDelete);
 		
 		for (String vorschlag : antwort.getAntworten().keySet()) {
 			UmfrageAntwortDB umfrageAntwortDB = new UmfrageAntwortDB();
@@ -69,6 +73,7 @@ public class UmfrageAntwortService {
 	
 	/**
 	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 *
 	 * @param benutzer
 	 * @param link
 	 * @returngibt eine Antwort zu einer Umfrage
@@ -81,6 +86,7 @@ public class UmfrageAntwortService {
 	
 	/**
 	 * Lädt alle Antworten die zu einem Link gehören
+	 *
 	 * @param link
 	 * @return eine Liste von Antworten
 	 */
@@ -91,6 +97,7 @@ public class UmfrageAntwortService {
 	
 	/**
 	 * Löscht alle Antworten nach Link
+	 *
 	 * @param link
 	 */
 	public void deleteAllByLink(String link) {
@@ -157,9 +164,9 @@ public class UmfrageAntwortService {
 	}
 	
 	private UmfrageAntwort buildAntwortForBenutzer(
-			String benutzer, List<UmfrageAntwortDB> alteAntworten,
-			List<UmfrageDB> antwortMoglichkeiten) {
-			
+		String benutzer, List<UmfrageAntwortDB> alteAntworten,
+		List<UmfrageDB> antwortMoglichkeiten) {
+		
 		UmfrageAntwort antwort = new UmfrageAntwort();
 		antwort.setBenutzer(benutzer);
 		antwort.setLink(antwortMoglichkeiten.get(0).getLink());
@@ -168,11 +175,11 @@ public class UmfrageAntwortService {
 		} else {
 			antwort.setPseudonym(benutzer);
 		}
-					
+		
 		HashMap<String, Antwort> alteAntwortenMap = new HashMap<>();
 		for (UmfrageAntwortDB alteAntwort : alteAntworten) {
 			alteAntwortenMap.put(alteAntwort.getUmfrage().getAuswahlmoeglichkeit(),
-					alteAntwort.getAntwort());
+				alteAntwort.getAntwort());
 		}
 		HashMap<String, Antwort> antwortenMap = new HashMap<>();
 		
