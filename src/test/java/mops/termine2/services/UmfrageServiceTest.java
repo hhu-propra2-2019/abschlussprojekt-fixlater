@@ -96,7 +96,7 @@ public class UmfrageServiceTest {
 	public void loadUmfragenByErstellerEineUmfrageKeineVorschlaege() {
 		int anzahl = 3;
 		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
-		when(umfrageRepository.findByErsteller(ERSTELLER[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByErstellerOrderByFristAsc(ERSTELLER[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		erwartet.setVorschlaege(new ArrayList<String>());
 		
@@ -113,7 +113,7 @@ public class UmfrageServiceTest {
 		for (UmfrageDB db : umfrageDBs2) {
 			umfrageDBs.add(db);
 		}
-		when(umfrageRepository.findByErsteller(ERSTELLER[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByErstellerOrderByFristAsc(ERSTELLER[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet1 = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
 		erwartet1.setVorschlaege(new ArrayList<String>());
 		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 0, 1, 1, 1);
@@ -130,7 +130,7 @@ public class UmfrageServiceTest {
 	public void loadUmfragenByGruppeEineUmfrageKeineVorschlaege() {
 		int anzahl = 3;
 		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListeGruppe(anzahl, 0, 0, 0, 0, 0);
-		when(umfrageRepository.findByGruppeId(GRUPPE[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByGruppeIdOrderByFristAsc(GRUPPE[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		erwartet.setVorschlaege(new ArrayList<String>());
 		
@@ -147,7 +147,7 @@ public class UmfrageServiceTest {
 		for (UmfrageDB db : umfrageDBs2) {
 			umfrageDBs.add(db);
 		}
-		when(umfrageRepository.findByGruppeId(GRUPPE[0])).thenReturn(umfrageDBs);
+		when(umfrageRepository.findByGruppeIdOrderByFristAsc(GRUPPE[0])).thenReturn(umfrageDBs);
 		Umfrage erwartet1 = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
 		erwartet1.setVorschlaege(new ArrayList<String>());
 		Umfrage erwartet2 = erstelleBeispielUmfrage(3, 1, 1, 0, 1, 1);

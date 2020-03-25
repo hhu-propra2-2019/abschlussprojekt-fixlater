@@ -106,12 +106,12 @@ public class UmfrageService {
 	}
 	
 	public List<Umfrage> loadByErstellerOhneUmfragen(String ersteller) {
-		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErsteller(ersteller);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErstellerOrderByFristAsc(ersteller);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
 	public List<Umfrage> loadByGruppeOhneUmfragen(Long gruppeId) {
-		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeId(gruppeId);
+		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeIdOrderByFristAsc(gruppeId);
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
