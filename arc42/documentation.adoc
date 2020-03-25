@@ -495,6 +495,13 @@ Ziel war es eine Funktion implenentieren , die es Ermöglicht bei der Erstellung
 einzustellen ob ein Nutzer seine Abstimmung bis zur Frist bearbeiten darf.
 Html und Logik wurden geschrieben.
 
+=== Umfragen (Anton)
+Angefangen thymeleaf in die Abstimmungs- und Ergebnisviews für Umfragen einzubinden.
+Es ist aufgefallen, dass der automerge mehrere Dateien beschädigt hat, deshalb musste ich manuell alte und neue Dateien vergleichen um die Probleme zu finden und zu lösen.
+Mit Hilfe von Thomas haben wir es nach viel Aufwand endlich geschafft.
+Den Selector für Gruppenauswahl auf der Umfragenübersicht gefixt.
+Versucht mit Ingrid die Frist der Abstimmunegn so festzulegen, dass die Frist erst nach den möglichen Terminen liegen muss, es hat aber nicht funktioniert.
+
 === Authentifizierung (Thomas)
 Die Authentifizierung wurde überarbeitet. Alle Controller-Tests nutzen jetzt die Annotation @WithMockKeycloackAuth, damit die Rollen in den Tests funktionieren.
 
@@ -508,6 +515,13 @@ Es wird der Aufruf mit und ohne Gruppenfilter getestet sowie ein Aufruf ohne ein
 Ziel war es eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
 einzustellen ob ein Nutzer seine Abstimmung bis zur Frist bearbeiten darf.
 Behebung kleinerer Bugs
+
+=== UI Fixes (Anton)
+Die Auswahl der Gruppen und den Übersichten bearbeitet, so dass sie nicht überläuft und man bei großer Anzahl von Gruppen in der Liste nicht durch die ganze scrollen muss.
+Darstellung von Titeln und Zeiten in Übersichten korrigiert.
+
+=== Kommentare (Julia, Kathi, Anton)
+Wir haben alle Komponenten der Kommentare für Umfragen geschrieben und in master gemergt.
 
 === Umfrage Abstimmung und Ergebnis Seite(Thymeleaf) (Jan,Anthon)
 
