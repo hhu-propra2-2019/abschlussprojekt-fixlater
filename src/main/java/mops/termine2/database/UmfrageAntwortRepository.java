@@ -36,4 +36,7 @@ public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortD
 	@Query("select db.umfrage from UmfrageAntwortDB db where db.benutzer like :benutzer")
 	List<UmfrageDB> findUmfrageDbByBenutzer(@Param("benutzer") String benutzer);
 	
+	@Transactional
+	void deleteByUmfrageLoeschdatumBefore(LocalDateTime timeNow);
+	
 }

@@ -33,4 +33,7 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	@Query("delete from UmfrageDB where loeschdatum < :timeNow")
 	void deleteOutdated(@Param("timeNow") LocalDateTime timeNow);
 	
+	@Transactional
+	void deleteByLoeschdatumBefore(LocalDateTime timeNow);
+	
 }

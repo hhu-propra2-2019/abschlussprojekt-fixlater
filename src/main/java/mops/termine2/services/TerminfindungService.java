@@ -72,8 +72,8 @@ public class TerminfindungService {
 	@Transactional
 	public void loescheAbgelaufene() {
 		LocalDateTime timeNow = LocalDateTime.now();
-		antwortRepo.loescheAelterAls(timeNow);
-		terminfindungRepo.loescheAelterAls(timeNow);
+		antwortRepo.deleteByTerminfindungLoeschdatumBefore(timeNow);
+		terminfindungRepo.deleteByLoeschdatumBefore(timeNow);
 	}
 	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {

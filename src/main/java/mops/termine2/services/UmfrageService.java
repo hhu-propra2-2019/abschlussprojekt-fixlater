@@ -75,8 +75,9 @@ public class UmfrageService {
 	@Transactional
 	public void deleteOutdated() {
 		LocalDateTime now = LocalDateTime.now();
-		umfrageRepository.deleteOutdated(now);
-		umfrageAntwortRepository.deleteOutdated(now);
+		umfrageAntwortRepository.deleteByUmfrageLoeschdatumBefore(now);
+		umfrageRepository.deleteByLoeschdatumBefore(now);
+		
 	}
 	
 	public Umfrage loadByLink(String link) {
