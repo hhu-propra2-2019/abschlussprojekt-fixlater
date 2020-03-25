@@ -34,4 +34,5 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	UmfrageDB findByLinkAndAuswahlmoeglichkeit(String link, String vorschlag);
 	
+	List<UmfrageDB> findByBenutzerAndUmfrageLink(String benutzer, String link);
 }
