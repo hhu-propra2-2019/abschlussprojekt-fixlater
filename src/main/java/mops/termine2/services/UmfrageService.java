@@ -95,7 +95,7 @@ public class UmfrageService {
 	}
 	
 	@Transactional
-	public void deleteOutdated() {
+	public void loescheAbgelaufeneUmfragen() {
 		LocalDateTime now = LocalDateTime.now();
 		umfrageAntwortRepository.deleteByUmfrageLoeschdatumBefore(now);
 		umfrageRepository.deleteByLoeschdatumBefore(now);

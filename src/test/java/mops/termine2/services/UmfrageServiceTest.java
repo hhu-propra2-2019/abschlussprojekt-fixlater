@@ -182,6 +182,14 @@ public class UmfrageServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loescheAbgelaufene() {
+		service.loescheAbgelaufeneUmfragen();
+		
+		Mockito.verify(umfrageAntwortRepository, times(1)).deleteByUmfrageLoeschdatumBefore(any());
+		Mockito.verify(umfrageRepository, times(1)).deleteByLoeschdatumBefore(any());
+	}
+	
 	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(
 		int anzahl, int bIndex, int eIndex, int gIndex, int lIndex, int tIndex) {
 		List<UmfrageDB> umfrageDBs = new ArrayList<UmfrageDB>();
