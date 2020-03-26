@@ -24,6 +24,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,11 @@ public class UmfragenUebersichtController {
 				.sorted(Comparator.comparing(Gruppe::getName))
 				.collect(Collectors.toList());
 			
+			HashMap<Long, String> groups = new HashMap<>();
+			for (Gruppe group : gruppen) {
+				groups.put(group.getId(), group.getName());
+			}
+			
 			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
 			
 			if (selGruppe == null) {
@@ -83,6 +89,12 @@ public class UmfragenUebersichtController {
 					.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
 				umfrageAbgeschlossen = umfragenuebersichtService
 					.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
+			}
+			for (Umfrage umfrage : umfrageOffen) {
+				umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
+			}
+			for (Umfrage umfrage : umfrageAbgeschlossen) {
+				umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
 			}
 			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 				umfrageOffen, gruppen, selGruppe);

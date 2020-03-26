@@ -34,6 +34,8 @@ public class Terminfindung {
 	
 	private Long gruppeId;
 	
+	private String gruppeName;
+	
 	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime ergebnis;
 	

@@ -22,6 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -65,6 +66,11 @@ public class TermineUebersichtController {
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
 		
+		HashMap<Long, String> groups = new HashMap<>();
+		for (Gruppe group : gruppen) {
+			groups.put(group.getId(), group.getName());
+		}
+		
 		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
 		if (selGruppe == null) {
 			selGruppe = new Gruppe();
@@ -84,6 +90,12 @@ public class TermineUebersichtController {
 				.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
 			terminfindungenAbgeschlossen = terminfindunguebersichtService
 				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
+		}
+		for (Terminfindung terminfindung : terminfindungenOffen) {
+			terminfindung.setGruppeName(groups.get(terminfindung.getGruppeId()));
+		}
+		for (Terminfindung terminfindung : terminfindungenAbgeschlossen) {
+			terminfindung.setGruppeName(groups.get(terminfindung.getGruppeId()));
 		}
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 			terminfindungenOffen, gruppen, selGruppe);
