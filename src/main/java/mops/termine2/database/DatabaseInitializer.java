@@ -262,7 +262,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	}
 	
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
-								  double entscheidungswert) {		
+								  double entscheidungswert) {
+
 		Random r = new Random();
 		AtomicInteger i = new AtomicInteger(1);
 		

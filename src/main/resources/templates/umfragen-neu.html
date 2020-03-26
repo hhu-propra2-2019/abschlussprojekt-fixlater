@@ -22,12 +22,17 @@
 		
 		<!-- Bootstrap -->
 		<link rel="stylesheet"
-		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 		      crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap Switch Buttons -->
+		<link rel="stylesheet"
+		      href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css">
+		<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 		
 		<!-- Font Awesome -->
 		<link rel="stylesheet"
@@ -42,7 +47,7 @@
 		<link rel="stylesheet"
 		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
 		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
-		      crossorigin="anonymous" />
+		      crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
 		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
 		        crossorigin="anonymous"></script>
@@ -105,11 +110,11 @@
 						
 						<!-- Erreichbarkeit -->
 						<div class="mb-3 form-group">
-							<label for="erreichbarkeit">
+							<label for="id">
 								Erreichbarkeit
 							</label>
 							
-							<select class="custom-select" id="erreichbarkeit"
+							<select class="custom-select" id="id"
 							        th:if="${gruppen.size() == 0}" disabled>
 								<option selected th:value="-1">Link</option>
 							</select>
@@ -121,18 +126,20 @@
 								<optgroup label="Gruppen">
 									<option th:each="gruppe, iter : ${gruppen}"
 									        th:value="${gruppen[__${iter.index}__].id}"
-									        th:text="${gruppe.name}">Gruppe</option>
+									        th:text="${gruppe.name}">
+										Gruppe
+									</option>
 								</optgroup>
 							</select>
 							
 							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
 								<p class="mb-1">
-									<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
+									<b>Link:</b> Die Abstimmung ist für alle sichtbar, die den Link
 									kennen. Der Link wird dabei automatisch vom System generiert.
 								</p>
 								
 								<p>
-									<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
+									<b>Gruppe:</b> Die Abstimmung ist für alle Mitglieder der
 									ausgewählten Gruppe sichtbar.
 									
 									<span class="text-warning" th:if="${gruppen.size() == 0}">
@@ -141,17 +148,15 @@
 									</span>
 								</p>
 							</div>
-						</div>
-
-						<!-- Link -->
-						<div class="mb-3 form-group">
-							<label for="link">
-								Link ID
+							
+							<!-- Link -->
+							<label for="link" class="text-secondary">
+								Link-ID (optional)
 							</label>
-
+							
 							<input class="form-control" id="link" name="link" type="text"
-								   placeholder="Optional: Geben Sie einen beliebigen Link ein"
-								   th:value="*{link}"/>
+							       placeholder="Soll diese Abstimmung eine bestimmte ID besitzen?"
+							       th:value="*{link}"/>
 						</div>
 						
 						<!-- Beschreibung -->
@@ -176,12 +181,14 @@
 							<div class="form-group mb-2"
 							     th:each="vorschlag, iter : *{vorschlaege}">
 								<div class="input-group">
-									<input class="form-control" type="text" placeholder="Vorschlag"
+									<input class="form-control" type="text"
+									       placeholder="Vorschlag"
 									       th:id="vorschlag + ${iter.count}"
 									       th:field="*{vorschlaege[__${iter.index}__]}"
 									       th:value="${vorschlag}"/>
 									
-									<div class="input-group-append" th:if="*{vorschlaege.size() > 1}">
+									<div class="input-group-append"
+									     th:if="*{vorschlaege.size() > 1}">
 										<button class="btn btn-outline-danger" name="delete"
 										        th:value="${iter.index}" type="submit">
 											Löschen
@@ -212,79 +219,110 @@
 						</div>
 					</div>
 					
-					<!-- Frist -->
-					<div class="mb-3">
+					<!-- Einstellungen -->
+					<div class="mb-3 border-bottom">
 						<h2 class="h2">
-							Frist
+							Einstellungen
 						</h2>
 						
-						<div class="form-group mb-2">
-							<div class="input-group date"
-							     id="frist"
-							     data-target-input="nearest">
-								<div class="input-group-prepend"
-								     data-target="#frist"
-								     data-toggle="datetimepicker">
-									<div class="input-group-text">
-										<i class="fa fa-calendar"></i>
+						<!-- Frist -->
+						<div class="mb-3 form-group">
+							<label for="fristFeld">
+								Frist
+							</label>
+							
+							<div class="form-group mb-3">
+								<div class="input-group date"
+								     id="frist"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     data-target="#frist"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
 									</div>
+									
+									<input type="text"
+									       id="fristFeld"
+									       class="form-control datetimepicker-input"
+									       data-target="#frist"
+									       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+									       th:field="*{frist}"/>
 								</div>
 								
-								<input type="text"
-								       class="form-control datetimepicker-input"
-								       data-target="#frist"
-								       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
-								       th:field="*{frist}"/>
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											$('#frist').datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
+											});
+										});
+									+]*/
+								</script>
 							</div>
 							
-							<script type="text/javascript">
-								$(function () {
-									var pickerID = '#frist';
-									
-									$(pickerID).datetimepicker({
-										format: 'DD.MM.YYYY, HH:mm',
-										locale: 'de'
-									});
-								});
-							</script>
-						</div>
-					</div>
-
-					<!-- Löschdatum -->
-					<div class="mb-3">
-						<h2 class="h2">
-							Löschdatum
-						</h2>
-
-						<div class="form-group mb-2">
-							<div class="input-group date"
-								 id="loeschdatum"
-								 data-target-input="nearest">
-								<div class="input-group-prepend"
-									 data-target="#loeschdatum"
-									 data-toggle="datetimepicker">
-									<div class="input-group-text">
-										<i class="fa fa-calendar"></i>
-									</div>
-								</div>
-
-								<input type="text"
-									   class="form-control datetimepicker-input"
-									   data-target="#loeschdatum"
-									   placeholder="Wann soll die Abstimmung gelöscht werden?"
-									   th:field="*{loeschdatum}"/>
+							<!-- Empfehlung für die Wahl der Frist -->
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Empfehlung:</b> Die Frist sollte am besten ein oder zwei Tage
+									vor dem frühsten Termin liegen.
+								</p>
 							</div>
-
-							<script type="text/javascript">
-								$(function () {
-									var pickerID = '#loeschdatum';
-
-									$(pickerID).datetimepicker({
-										format: 'DD.MM.YYYY, HH:mm',
-										locale: 'de'
-									});
-								});
-							</script>
+						</div>
+						
+						<!-- Löschdatum -->
+						<div class="mb-3 form-group">
+							<label for="loeschdatumFeld">
+								Löschdatum
+							</label>
+							
+							<div class="form-group mb-3">
+								<div class="input-group date"
+								     id="loeschdatum"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     data-target="#loeschdatum"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									
+									<input type="text"
+									       id="loeschdatumFeld"
+									       class="form-control datetimepicker-input"
+									       data-target="#loeschdatum"
+									       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+									       th:field="*{loeschdatum}"/>
+								</div>
+								
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											$('#loeschdatum').datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
+											});
+										});
+									+]*/
+								</script>
+							</div>
+							
+							<!-- Empfehlung für die Wahl des Löschdatums -->
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Empfehlung:</b> Das Löschdatum muss hinter dem spätesten
+									Termin liegen.
+								</p>
+							</div>
 						</div>
 					</div>
 					

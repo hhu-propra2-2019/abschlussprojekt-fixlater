@@ -9,42 +9,45 @@
 	<title>Neuer Termin</title>
 	<th:block th:fragment="headcontent">
 		<!-- Links, Scripts, Styles -->
-
+		
 		<!-- jQuery -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 		        crossorigin="anonymous"></script>
-
+		
 		<!-- PopperJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"
 		        integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
 		        crossorigin="anonymous"></script>
-
+		
 		<!-- Bootstrap -->
 		<link rel="stylesheet"
-		      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 		      crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-		        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		        crossorigin="anonymous"></script>
-
+		
+		<!-- Bootstrap Switch Buttons -->
+		<link rel="stylesheet"
+		      href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css">
+		<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+		
 		<!-- Font Awesome -->
 		<link rel="stylesheet"
 		      href="/css/all.css">
-		<link rel="stylesheet"
-		      href="/css/toggle-switchy.css">
-
+		
 		<!-- MomentJS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
 		        integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo="
 		        crossorigin="anonymous"></script>
-
+		
 		<!-- Tempus Dominus -->
 		<link rel="stylesheet"
 		      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
 		      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
-		      crossorigin="anonymous"/>
+		      crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
 		        integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
 		        crossorigin="anonymous"></script>
@@ -52,332 +55,458 @@
 </head>
 
 <body>
-<header>
-	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-		<ul>
-			<li>
-				<a th:href="@{/termine2}">
-					<img src="../static/img/resized/calendar_small.jpg"
-					     th:src="@{/img/resized/calendar_small.jpg}">
-					Termine
-				</a>
-			</li>
-
-			<li>
-				<a th:href="@{/termine2/umfragen}">
-					<img src="../static/img/resized/survey_small.jpg"
-					     th:src="@{/img/resized/survey_small.jpg}">
-					Umfragen
-				</a>
-			</li>
-		</ul>
-	</nav>
-</header>
-
-<main th:fragment="bodycontent">
-	<div class="container mb-3">
-		<!-- Header -->
-		<div class="row my-3 border-bottom">
-			<h1 class="h1">Neuer Termin</h1>
-		</div>
-
-    <form class="row" method="post" th:action="@{/termine2/termine-neu}" th:object="${terminfindung}" enctype="multipart/form-data">
-			<div class="col">
-				<!-- Übersicht -->
-				<div class="mb-3 border-bottom">
-					<div class="mb-3 form-group">
-						<label for="titel">
-							Titel
-						</label>
-
-						<div class="alert alert-danger alert-dissmissible fade show"
-						     th:if="${fehler != null && fehler != ''}">
+	<header>
+		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main th:fragment="bodycontent">
+		<div class="container mb-3">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Neuer Termin</h1>
+			</div>
+			
+			<form class="row" method="post" th:action="@{/termine2/termine-neu}"
+			      th:object="${terminfindung}" enctype="multipart/form-data">
+				<div class="col">
+					<!-- Übersicht -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 form-group">
+							<label for="titel">
+								Titel
+							</label>
+							
+							<div class="alert alert-danger alert-dissmissible fade show"
+							     th:if="${fehler != null && fehler != ''}">
 								<span th:text="${fehler}">
 									Fehlermeldung
 								</span>
-
-							<button class="close" data-dismiss="alert">×</button>
+								
+								<button class="close" data-dismiss="alert">×</button>
+							</div>
+							
+							<input class="form-control" id="titel" name="titel" type="text"
+							       required placeholder="Worum geht es?" th:value="*{titel}"/>
 						</div>
-
-						<input class="form-control" id="titel" name="titel" type="text"
-						       required placeholder="Worum geht es?" th:value="*{titel}"/>
-					</div>
-
-					<!-- Ort -->
-					<div class="mb-3 form-group">
-						<label for="ort">
-							Ort
-						</label>
-
-						<input class="form-control" id="ort" name="ort" type="text"
-						       required placeholder="Wo soll man sich treffen?"
-						       th:value="*{ort}"/>
-					</div>
-
-					<!-- Erreichbarkeit -->
-					<div class="mb-3 form-group">
-						<label for="erreichbarkeit">
-							Erreichbarkeit
-						</label>
-
-						<select class="custom-select" id="erreichbarkeit"
-						        th:if="${gruppen.size() == 0}" disabled>
-							<option selected th:value="-1">Link</option>
-						</select>
-
-						<select class="custom-select"
-						        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
-							<option selected value="-1">Link</option>
-
-							<optgroup label="Gruppen">
-								<option th:each="gruppe, iter : ${gruppen}"
-								        th:value="${gruppen[__${iter.index}__].id}"
-								        th:text="${gruppe.name}">Gruppe</option>
-
-							</optgroup>
-						</select>
-
-						<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-							<p class="mb-1">
-								<b>Link</b>: Die Abstimmung ist für alle sichtbar, die den Link
-								kennen. Der Link wird dabei automatisch vom System generiert.
-							</p>
-
-							<p>
-								<b>Gruppe</b>: Die Abstimmung ist für alle Mitglieder der
-								ausgewählten Gruppe sichtbar.
-
-								<span class="text-warning" th:if="${gruppen.size() == 0}">
+						
+						<!-- Ort -->
+						<div class="mb-3 form-group">
+							<label for="ort">
+								Ort
+							</label>
+							
+							<input class="form-control" id="ort" name="ort" type="text"
+							       required placeholder="Wo soll man sich treffen?"
+							       th:value="*{ort}"/>
+						</div>
+						
+						<!-- Erreichbarkeit -->
+						<div class="mb-3 form-group">
+							<label for="id">
+								Erreichbarkeit
+							</label>
+							
+							<select class="custom-select" id="id"
+							        th:if="${gruppen.size() == 0}" disabled>
+								<option selected th:value="-1">Link</option>
+							</select>
+							
+							<select class="custom-select"
+							        th:if="${gruppen.size() != 0}" th:field="${gruppeSelektiert.id}">
+								<option selected value="-1">Link</option>
+								
+								<optgroup label="Gruppen">
+									<option th:each="gruppe, iter : ${gruppen}"
+									        th:value="${gruppen[__${iter.index}__].id}"
+									        th:text="${gruppe.name}">
+										Gruppe
+									</option>
+								</optgroup>
+							</select>
+							
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Link:</b> Die Abstimmung ist für alle sichtbar, die den Link
+									kennen. Der Link wird dabei automatisch vom System generiert.
+								</p>
+								
+								<p>
+									<b>Gruppe:</b> Die Abstimmung ist für alle Mitglieder der
+									ausgewählten Gruppe sichtbar.
+									
+									<span class="text-warning" th:if="${gruppen.size() == 0}">
 										Diese Option ist aber nicht verfügbar, da es im Moment keine
 										Gruppenzugehörigkeit gibt.
-								</span>
-							</p>
-						</div>
-					</div>
-				</div>
-
-					<!-- Link -->
-					<div class="mb-3 form-group">
-						<label for="link">
-							Link ID
-						</label>
-
-						<input class="form-control" id="link" name="link" type="text"
-						       placeholder="Optional: Geben Sie einen beliebigen Link ein"
-						       th:value="*{link}"/>
-					</div>
-
-					<!-- Beschreibung -->
-				<div class="mb-3 form-group">
-						<label class="text-secondary" for="beschreibung">
-							Beschreibung (optional)
-						</label>
-
-						<textarea class="form-control" id="beschreibung" type="text"
-						          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
-						          rows="4" th:field="*{beschreibung}"></textarea>
-					</div>
-
-					<!-- Einstellungs Optionen -->
-
-					<div class="mb-3 form-group row">
-						<div class="col" style="width: 20%">
-							<label class="toggle-switchy" for="ergebnisVorFrist" data-size="sm" data-label="left"
-							       data-style="rounded">
-								<input id="ergebnisVorFrist" checked type="checkbox" name="ergebnisVorFrist"
-								       th:checked="*{ergebnisVorFrist}">
-								<span class="toggle">
-                                <span class="switch"></span>
-                                </span>
-								<span class="label">Ergebnis vor Frist Anzeigen : </span>
-                                </label>
-						</div>
-						<div class="col" style="width: 60%;"></div>
-					</div>
-					<div class="mb-3 form-group row">
-						<div class="col" style="width: 20%">
-							<label class="toggle-switchy" for="e" data-size="sm" data-label="left" data-style="rounded">
-								<input id="e" checked type="checkbox" name="einmaligeAbstimmung" value="false">
-								<span class="toggle">
-                                <span class="switch"></span>
-                              </span>
-								<span class="label">Nutzer kann seine Abstimmung anpassen </span>
-
+									</span>
+								</p>
+							</div>
+							
+							<!-- Link -->
+							<label class="text-secondary" for="link">
+								Link-ID (optional)
 							</label>
+							
+							<input class="form-control" id="link" name="link" type="text"
+							       placeholder="Soll diese Abstimmung eine bestimmte ID besitzen?"
+							       th:value="*{link}"/>
 						</div>
-						<div class="col" style="width: 60%;"></div>
-					</div>
-
-
-
-
-				<!-- Zeiten -->
-				<div class="mb-3 border-bottom">
-					<h2 class="h2">
-						Zeiten
-					</h2>
-          
-         			 <!-- Ausgabe der Error- bzw. Erfolgnachricht bei Upload einer CSV-Datei -->
-					<div class="container mb-3">
-						<div class="alert alert-danger" role="alert" th:if="${error}">
-							<strong>Error:</strong>
-							<span th:text="${message}"></span>
-						</div>
-						<div class="alert alert-success" role="alert" th:if="${erfolg}">
-							<span th:text="${message}"></span>
+						
+						<!-- Beschreibung -->
+						<div class="mb-3 form-group">
+							<label class="text-secondary" for="beschreibung">
+								Beschreibung (optional)
+							</label>
+							
+							<textarea class="form-control" id="beschreibung" type="text"
+							          placeholder="Gibt es Besonderheiten oder Anmerkungen?"
+							          rows="4" th:field="*{beschreibung}"></textarea>
 						</div>
 					</div>
-
-					<div class="container mb-3">
-						<div class="form-group mb-2"
-						     th:each="zeit, iter : *{vorschlaege}">
-							<div class="input-group date"
-							     th:id="zeit + ${iter.count}"
-							     data-target-input="nearest">
-								<div class="input-group-prepend"
-								     th:attr="data-target='#zeit' + ${iter.count}"
-								     data-toggle="datetimepicker">
-									<div class="input-group-text">
-										<i class="fa fa-calendar"></i>
+					
+					<!-- Zeiten -->
+					<div class="mb-3 border-bottom">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<h2 class="mb-0 h2">
+								Zeiten
+							</h2>
+							
+							<button class="mb-0 btn btn-outline-success"
+							        name="download" type="submit">
+								Exportieren
+							</button>
+						</div>
+						
+						<!-- Meldung beim Importieren der Zeiten aus einer CSV-Datei -->
+						<div class="alert alert-dismissible fade show" role="alert"
+						     th:if="${error != null && error || erfolg != null && erfolg}"
+						     th:classappend="${(error != null && error) ? 'alert-danger' :
+						                     ((erfolg != null && erfolg) ? 'alert-success' : '')}">
+							<strong th:if="${error != null && error}">
+								Fehler:
+							</strong>
+							
+							<span th:text="${message}">
+								Meldung
+							</span>
+							
+							<button class="close" data-dismiss="alert">×</button>
+						</div>
+						
+						<div class="container mb-3">
+							<div class="form-group mb-2"
+								 th:each="zeit, iter : *{vorschlaege}">
+								<div class="input-group date"
+								     th:id="zeit + ${iter.count}"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     th:attr="data-target='#zeit' + ${iter.count}"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									
+									<input class="form-control datetimepicker-input" type="text"
+									       placeholder="Datum und Uhrzeit"
+									       th:attr="data-target='#zeit'+${iter.count}"
+									       th:field="*{vorschlaege[__${iter.index}__]}"
+									       th:value="${zeit}"/>
+									
+									<div class="input-group-append"
+									     th:if="*{vorschlaege.size() > 1}">
+										<button class="btn btn-outline-danger" name="delete"
+										        th:value="${iter.index}" type="submit">
+											Löschen
+										</button>
 									</div>
 								</div>
-
-								<input class="form-control datetimepicker-input" type="text"
-								       placeholder="Datum und Uhrzeit"
-								       th:attr="data-target='#zeit'+${iter.count}"
-								       th:field="*{vorschlaege[__${iter.index}__]}"
-								       th:value="${zeit}"/>
-
-								<div class="input-group-append"
-								     th:if="*{vorschlaege.size() > 1}">
-									<button class="btn btn-outline-danger" name="delete"
-									        th:value="${iter.index}" type="submit">
-										Löschen
+								
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											var pickerID = '#zeit' + '[[${iter.count}]]';
+											
+											$(pickerID).datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
+											});
+											
+											// set 'minDate' of all pickers, and guarantee that the
+											// Frist lies before the earliest Vorschlag
+											$(pickerID).on("change.datetimepicker", function (e) {
+												if (e.date.format('DD.MM.YYYY, HH:mm') ==
+														moment().format('DD.MM.YYYY, HH:mm')) {
+													return;
+												}
+												
+												var now = moment();
+												$('#frist').datetimepicker('minDate', now);
+												
+												var ownVorschlag =
+														$(pickerID).datetimepicker('date');
+												
+												var minVorschlag = false;
+												var maxVorschlag = false;
+												var loopEnd = [[*{vorschlaege.size()}]];
+												
+												// find the earliest Vorschlag
+												for (var i = 1; i <= loopEnd; i += 1) {
+													var currentPicker = '#zeit' + i;
+													var currentVorschlag =
+															$(currentPicker).datetimepicker('date');
+													
+													if (currentVorschlag == null) {
+														continue;
+													}
+													
+													if (minVorschlag == false
+															|| currentVorschlag.isBefore(
+																	minVorschlag)) {
+														minVorschlag = currentVorschlag;
+													}
+													
+													if (maxVorschlag == false
+															|| currentVorschlag.isAfter(
+																	maxVorschlag)) {
+														maxVorschlag = currentVorschlag;
+													}
+													
+													if (currentVorschlag.isBefore(now)) {
+														$(currentPicker).datetimepicker(
+																'minDate', now);
+													}
+												}
+												
+												$('#frist').datetimepicker('maxDate', minVorschlag);
+												$('#loeschdatum').datetimepicker('minDate',
+														maxVorschlag);
+											});
+										});
+									+]*/
+								</script>
+							</div>
+							
+							<div class="row justify-content-center mt-1">
+								<button class="btn btn-outline-success" type="submit" name="add">
+									Hinzufügen
+								</button>
+							</div>
+						</div>
+						
+						<div class="container mb-3">
+							<label for="file">
+								Import
+							</label>
+							
+							<div class="input-group mb-3">
+								<div class="custom-file">
+									<input class="custom-file-input"
+									       type="file" accept=".csv" id="file" name="file"/>
+									
+									<label class="custom-file-label" for="file">
+										Datei wählen
+									</label>
+									
+									<script>
+										$('#file').on('change', function(){
+											var fileName =
+													$(this).val().replace('C:\\fakepath\\', " ");
+											
+											$(this).next('.custom-file-label').html(fileName);
+										})
+									</script>
+									
+								</div>
+								
+								<div class="input-group-append">
+									<button class="btn btn-outline-success" name="upload"
+									        type="submit">
+										Importieren
 									</button>
 								</div>
 							</div>
-
-							<script th:inline="javascript">
-                                // The comment below is used by Thymeleaf for inlining.
-                                // Do NOT remove it.
-                                /*[+
-									$(function () {
-										var pickerID = '#zeit' + '[[${iter.count}]]';
-										var now = [[${#temporals.format(jetzt, 'MM/dd/yyyy')}]];
-
-										$(pickerID).datetimepicker({
-											format: 'DD.MM.YYYY, HH:mm',
-											minDate: now,
-											locale: 'de'
-										});
-									});
-								+]*/
-							</script>
+							
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									Es kann auch eine CSV-Datei (im Format
+									<code>DD.MM.YYYY,HH:MM</code>) importiert werden.
+								</p>
+							</div>
 						</div>
-
-						<div class="row justify-content-center mt-1">
-							<button class="btn btn-outline-success" type="submit" name="add">
-								Hinzufügen
-							</button>
-						</div>
-            
-            			<div class="form-group mt-3">
-							<label>
-								Oder wählen Sie eine CSV-Datei zum Import von Terminen
-								(im Format TT.MM.JJJJ,HH:MM) aus:
+					</div>
+					
+					<!-- Einstellungen -->
+					<div class="mb-3 border-bottom">
+						<h2 class="h2">
+							Einstellungen
+						</h2>
+						
+						<!-- Frist -->
+						<div class="mb-3 form-group">
+							<label for="fristFeld">
+								Frist
 							</label>
-							<input accept=".csv" class="form-control-file" id="file" name="file" type="file"/>
-						</div>
-						<button class="btn btn-outline-success" name="upload" type="submit">Upload CSV</button>
-            
-					</div>
-				</div>
-
-				<!-- Frist -->
-				<div class="mb-3">
-					<h2 class="h2">
-						Frist
-					</h2>
-
-					<div class="form-group mb-2">
-						<div class="input-group date"
-						     id="frist"
-						     data-target-input="nearest">
-							<div class="input-group-prepend"
-							     data-target="#frist"
-							     data-toggle="datetimepicker">
-								<div class="input-group-text">
-									<i class="fa fa-calendar"></i>
+							
+							<div class="form-group mb-3">
+								<div class="input-group date"
+								     id="frist"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     data-target="#frist"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									
+									<input type="text"
+									       id="fristFeld"
+									       class="form-control datetimepicker-input"
+									       data-target="#frist"
+									       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+									       th:field="*{frist}"/>
 								</div>
+								
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											$('#frist').datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, HH:mm',
+												locale:  'de'
+											});
+										});
+									+]*/
+								</script>
 							</div>
-
-							<input type="text"
-							       class="form-control datetimepicker-input"
-							       data-target="#frist"
-							       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
-							       th:field="*{frist}"/>
+							
+							<!-- Empfehlung für die Wahl der Frist -->
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Empfehlung:</b> Die Frist sollte am besten ein oder zwei Tage
+									vor dem frühsten Termin liegen.
+								</p>
+							</div>
 						</div>
-
-						<script type="text/javascript">
-                            $(function () {
-                                var pickerID = '#frist';
-
-                                $(pickerID).datetimepicker({
-                                    format: 'DD.MM.YYYY, HH:mm',
-                                    locale: 'de'
-                                });
-                            });
-						</script>
-					</div>
-				</div>
-
-				<!-- Löschdatum -->
-				<div class="mb-3">
-					<h2 class="h2">
-						Löschdatum
-					</h2>
-
-					<div class="form-group mb-2">
-						<div class="input-group date"
-							 id="loeschdatum"
-							 data-target-input="nearest">
-							<div class="input-group-prepend"
-								 data-target="#loeschdatum"
-								 data-toggle="datetimepicker">
-								<div class="input-group-text">
-									<i class="fa fa-calendar"></i>
+						
+						<!-- Löschdatum -->
+						<div class="mb-3 form-group">
+							<label for="loeschdatumFeld">
+								Löschdatum
+							</label>
+							
+							<div class="form-group mb-3">
+								<div class="input-group date"
+								     id="loeschdatum"
+								     data-target-input="nearest">
+									<div class="input-group-prepend"
+									     data-target="#loeschdatum"
+									     data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
+									
+									<input type="text"
+									       id="loeschdatumFeld"
+									       class="form-control datetimepicker-input"
+									       data-target="#loeschdatum"
+									       placeholder="Bis wann soll man an der Abstimmung teilnehmen können?"
+									       th:field="*{loeschdatum}"/>
 								</div>
+								
+								<script th:inline="javascript">
+									// The comment below is used by Thymeleaf for inlining.
+									// Do NOT remove it.
+									/*[+
+										$(function () {
+											$('#loeschdatum').datetimepicker({
+												minDate: moment(),
+												format:  'DD.MM.YYYY, 00:00',
+												locale:  'de'
+											});
+										});
+									+]*/
+								</script>
 							</div>
-
-							<input type="text"
-								   class="form-control datetimepicker-input"
-								   data-target="#loeschdatum"
-								   placeholder="Wann soll die Abstimmung gelöscht werden?"
-								   th:field="*{loeschdatum}"/>
+							
+							<!-- Empfehlung für die Wahl des Löschdatums -->
+							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
+								<p class="mb-1">
+									<b>Empfehlung:</b> Das Löschdatum muss hinter dem spätesten
+									Termin liegen.
+								</p>
+							</div>
 						</div>
-
-						<script type="text/javascript">
-							$(function () {
-								var pickerID = '#loeschdatum';
-
-								$(pickerID).datetimepicker({
-									format: 'DD.MM.YYYY, HH:mm',
-									locale: 'de'
-								});
-							});
-						</script>
+						
+						<div class="mb-3 form-group">
+							<!-- Einsehen der Ergebnisse während der Abstimmung -->
+							<div class="d-flex justify-content-left align-items-center mb-2">
+								<input id ="ergebnisVorFrist" name="ergebnisVorFrist"
+								       data-toggle="toggle" data-size="sm"
+								       data-onstyle="outline-primary"
+								       data-offstyle="outline-danger"
+								       data-on="Ja" data-off="Nein"
+								       type="checkbox" checked th:checked="*{ergebnisVorFrist}"/>
+								
+								<label class="ml-3 mb-0" for="ergebnisVorFrist">
+									Der Nutzer soll die Ergebnisse auch schon während der Abstimmung
+									einsehen können.
+								</label>
+							</div>
+						</div>
+						
+						<div class="mb-3 form-group">
+							<!-- nachträgliche Änderung der Wahl -->
+							<div class="d-flex justify-content-left align-items-center">
+								<input id="einmaligeAbstimmung" name="einmaligeAbstimmung"
+								       data-toggle="toggle" data-size="sm"
+								       data-onstyle="outline-primary"
+								       data-offstyle="outline-danger"
+								       data-on="Ja" data-off="Nein"
+								       type="checkbox" checked value="false"/>
+								
+								<label class="ml-3 mb-0" for="einmaligeAbstimmung">
+									Der Nutzer soll seine Auswahl während der Abstimmungsphase
+									beliebig oft ändern dürfen.
+								</label>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row justify-content-center">
+						<button class="btn btn-success" type="submit" name="create">
+							Erstellen
+						</button>
 					</div>
 				</div>
-
-				<div class="row justify-content-center">
-					<button class="btn btn-success" type="submit" name="create">
-						Erstellen
-					</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</main>
+			</form>
+		</div>
+	</main>
 </body>
 </html>
+

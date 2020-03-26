@@ -37,7 +37,7 @@ public class Terminfindung {
 	@DateTimeFormat(pattern = "dd.MM.yyyy, HH:mm")
 	private LocalDateTime ergebnis;
 	
-	private boolean teilgenommen = false;
+	private Boolean teilgenommen = false;
 	
 	private Boolean ergebnisVorFrist = false;
 	

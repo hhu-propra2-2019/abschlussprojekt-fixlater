@@ -209,6 +209,7 @@ public class UmfrageService {
 		umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
+		umfrage.setErgebnis(umfragedb.getErgebnis());
 		return umfrage;
 	}
 	
