@@ -177,9 +177,6 @@ public class UmfragenAbstimmungController {
 			return "error/403";
 		}
 		
-		//Wenn Ergebnis erst nach Frist angezeigt werden soll,
-		//muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
 		
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);

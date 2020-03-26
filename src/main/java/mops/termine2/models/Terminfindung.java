@@ -39,6 +39,10 @@ public class Terminfindung {
 	
 	private boolean teilgenommen = false;
 	
-	private Boolean einmaligeAbstimmung = true;
+	private Boolean ergebnisVorFrist = false;
 	
+	private Boolean einmaligeAbstimmung = true;
 }
+	
+
+

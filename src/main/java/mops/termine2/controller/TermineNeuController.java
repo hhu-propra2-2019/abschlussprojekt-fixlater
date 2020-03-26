@@ -77,6 +77,7 @@ public class TermineNeuController {
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
+		
 		m.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
@@ -88,6 +89,7 @@ public class TermineNeuController {
 		terminfindung.getVorschlaege().add(null);
 		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
+		terminfindung.setErgebnisVorFrist(true);
 		
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("fehler", "");
@@ -229,8 +231,7 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal p,
-								   Model m, Terminfindung terminfindung,
-								   Gruppe gruppeSelektiert) {
+			Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			

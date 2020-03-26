@@ -161,7 +161,7 @@
 							</div>
 							
 							<!-- Link -->
-							<label for="link" class="text-secondary">
+							<label for="link">
 								Link-ID (optional)
 							</label>
 							
@@ -184,13 +184,9 @@
 					
 					<!-- Zeiten -->
 					<div class="mb-3 border-bottom">
-						<div class="d-flex justify-content-between align-items-center">
-							<h2 class="h2">
-								Zeiten
-							</h2>
-							
-							<!-- Import (künftig) -->
-						</div>
+						<h2 class="h2">
+							Zeiten
+						</h2>
 						
 						<!-- Meldung beim Importieren der Zeiten aus einer CSV-Datei -->
 						<div class="alert alert-dissmissible fade show" role="alert"
@@ -453,14 +449,14 @@
 						<div class="mb-3 form-group">
 							<!-- Einsehen der Ergebnisse während der Abstimmung -->
 							<div class="d-flex justify-content-left align-items-center mb-2">
-								<input name="liveUpdates"
+								<input id ="ergebnisVorFrist" name="ergebnisVorFrist"
 								       data-toggle="toggle" data-size="sm"
 								       data-onstyle="outline-primary"
 								       data-offstyle="outline-danger"
 								       data-on="Ja" data-off="Nein"
-								       type="checkbox" checked/>
+								       type="checkbox" checked th:checked="*{ergebnisVorFrist}"/>
 								
-								<label class="ml-3 mb-0" for="liveUpdates">
+								<label class="ml-3 mb-0" for="ergebnisVorFrist">
 									Der Nutzer soll die Ergebnisse auch schon während der Abstimmung
 									einsehen können.
 								</label>
@@ -470,7 +466,7 @@
 						<div class="mb-3 form-group">
 							<!-- nachträgliche Änderung der Wahl -->
 							<div class="d-flex justify-content-left align-items-center">
-								<input name="einmaligeAbstimmung"
+								<input id="einmaligeAbstimmung" name="einmaligeAbstimmung"
 								       data-toggle="toggle" data-size="sm"
 								       data-onstyle="outline-primary"
 								       data-offstyle="outline-danger"
