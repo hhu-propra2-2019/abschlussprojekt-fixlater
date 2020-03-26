@@ -38,7 +38,7 @@ public class AbstimmungsInfortmationenTermineForm {
 	}
 	
 	private void setAbstimmungsBerechtigungNutzer(Terminfindung terminfindung) {
-		if (terminfindung.isTeilgenommen() && terminfindung.getEinmaligeAbstimmung()) {
+		if (terminfindung.getTeilgenommen() && terminfindung.getEinmaligeAbstimmung()) {
 			abstimmungsBerechtigungNutzer = KonstantenAbstimmung.NUTZER_DARF_NICHTMEHR_ABSTIMMEN;
 		} else {
 			abstimmungsBerechtigungNutzer = KonstantenAbstimmung.NUTZER_DARF_NOCH_ABSTIMMEN;
