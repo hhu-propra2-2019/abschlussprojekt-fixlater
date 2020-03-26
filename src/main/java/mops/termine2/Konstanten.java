@@ -15,4 +15,7 @@ public class Konstanten {
 	public static final String NOT_LOGGED_IN = "Nicht eingeloggt";
 	
 	public static final String PAGE_NOT_FOUND = "Seite nicht gefunden";
+  
+	public static final String ACCESS_DENIED = "Zugriff verweigert";
+
 }
