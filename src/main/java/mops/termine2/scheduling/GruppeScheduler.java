@@ -32,7 +32,7 @@ public class GruppeScheduler {
 	private int statusnummer = 0;
 	
 	@Value("${termine2.gruppescheduler.url}")
-	private String urlPrefix;
+	private String urlPrefix = "http://localhost:8082";
 	
 	private RestTemplate template;
 	
