@@ -31,6 +31,8 @@ public class Umfrage {
 	
 	private Long gruppeId;
 	
+	private String gruppeName;
+	
 	private Long maxAntwortAnzahl;
 	
 	private String umfragenErgebnis;
