@@ -1,9 +1,10 @@
-package mops.termine2;
+package mops.termine2.services;
 
 import mops.termine2.database.KommentarRepository;
+import mops.termine2.database.TerminfindungRepository;
+import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.KommentarDB;
 import mops.termine2.models.Kommentar;
-import mops.termine2.services.KommentarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,11 @@ public class KommentarServiceTest {
 	
 	private transient KommentarService service;
 	
-	private transient KommentarRepository repository;
+	private transient KommentarRepository kommentarRepository;
+	
+	private transient TerminfindungRepository terminfindungRepository;
+	
+	private transient UmfrageRepository umfrageRepository;
 	
 	private transient String inhalt = "kommentar";
 	
@@ -35,8 +40,10 @@ public class KommentarServiceTest {
 	
 	@BeforeEach
 	public void setUp() {
-		repository = mock(KommentarRepository.class);
-		service = new KommentarService(repository);
+		kommentarRepository = mock(KommentarRepository.class);
+		terminfindungRepository = mock(TerminfindungRepository.class);
+		umfrageRepository = mock(UmfrageRepository.class);
+		service = new KommentarService(kommentarRepository, terminfindungRepository, umfrageRepository);
 	}
 	
 	@Test
@@ -46,7 +53,7 @@ public class KommentarServiceTest {
 		
 		service.save(kommentar.get(0));
 		
-		Mockito.verify(repository, times(anzahl)).save(any());
+		Mockito.verify(kommentarRepository, times(anzahl)).save(any());
 	}
 	
 	@Test
@@ -58,7 +65,7 @@ public class KommentarServiceTest {
 			service.save(kommentare.get(kommentarNummer - 1));
 		});
 		
-		Mockito.verify(repository, times(anzahl)).save(any());
+		Mockito.verify(kommentarRepository, times(anzahl)).save(any());
 		
 	}
 	
@@ -66,7 +73,7 @@ public class KommentarServiceTest {
 	public void loadByLinkEinenKommentar() {
 		int anzahl = 1;
 		List<KommentarDB> kommentarDBs = erstelleKommentarDBListe(anzahl);
-		when(repository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
+		when(kommentarRepository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
 		List<Kommentar> kommentareErwartet = erstelleKommentarListe(anzahl);
 		
 		List<Kommentar> kommentare = service.loadByLink(link);
@@ -78,7 +85,7 @@ public class KommentarServiceTest {
 	public void loadByLinkDreiKommentare() {
 		int anzahl = 3;
 		List<KommentarDB> kommentarDBs = erstelleKommentarDBListe(anzahl);
-		when(repository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
+		when(kommentarRepository.findByLinkOrderByErstellungsdatumAsc(link)).thenReturn(kommentarDBs);
 		List<Kommentar> kommentareErwartet = erstelleKommentarListe(anzahl);
 		
 		List<Kommentar> kommentare = service.loadByLink(link);
