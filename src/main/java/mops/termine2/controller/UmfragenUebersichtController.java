@@ -98,7 +98,6 @@ public class UmfragenUebersichtController {
 			}
 			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 				umfrageOffen, gruppen, selGruppe);
-			System.out.println(umfrage);
 			m.addAttribute("umfragen", umfrage);
 		}
 		return "umfragen";
