@@ -4,6 +4,8 @@ import mops.termine2.database.KommentarRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.KommentarDB;
+import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.enums.Modus;
 import mops.termine2.models.Kommentar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,13 +32,29 @@ public class KommentarServiceTest {
 	
 	private transient UmfrageRepository umfrageRepository;
 	
+	private transient String beschreibung = "Beschreibung";
+	
+	private transient LocalDateTime ergebnisTermin = LocalDateTime.of(1, 1, 2, 1, 1, 1, 1);
+	
+	private transient String ersteller = "studentin1";
+	
+	private transient LocalDateTime erstellungsdatum = LocalDateTime.now();
+	
+	private transient LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
+	
+	private transient Long gruppeId = 1L;
+	
 	private transient String inhalt = "kommentar";
 	
 	private transient String link = "link";
 	
+	private transient LocalDateTime loeschdatum = LocalDateTime.of(1, 1, 3, 1, 1, 1, 1);
+	
+	private transient String ort = "Ort";
+	
 	private transient String pseudonym = "pseudonym";
 	
-	private transient LocalDateTime erstellungsdatum = LocalDateTime.now();
+	private transient String titel = "Titel";
 	
 	@BeforeEach
 	public void setUp() {
@@ -93,6 +111,18 @@ public class KommentarServiceTest {
 		assertThat(kommentare).isEqualTo(kommentareErwartet);
 	}
 	
+	@Test
+	public void loescheAbgelaufeneKommentareFuerEinenTermin() {
+		int anzahl = 1;
+		List<TerminfindungDB> terminfindungDBs = erstelleTerminfindungDBListe(anzahl);
+		when(terminfindungRepository.findByLoeschdatumBefore(any())).thenReturn(terminfindungDBs);
+		String linkErwartet = link + 1;
+		
+		service.loescheAbgelaufeneKommentareFuerTermine();
+		
+		Mockito.verify(kommentarRepository, times(anzahl)).deleteByLink(linkErwartet);
+	}
+	
 	private List<KommentarDB> erstelleKommentarDBListe(int anzahl) {
 		List<KommentarDB> kommentarDBs = new ArrayList<>();
 		IntStream.range(1, anzahl + 1).forEach(kommentarDBNummer -> {
@@ -117,6 +147,27 @@ public class KommentarServiceTest {
 			kommentare.add(kommentar);
 		});
 		return kommentare;
+	}
+	
+	private List<TerminfindungDB> erstelleTerminfindungDBListe(int anzahl) {
+		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
+		IntStream.range(1, anzahl + 1).forEach(terminDBNummer -> {
+			TerminfindungDB terminfindungDB = new TerminfindungDB();
+			terminfindungDB.setBeschreibung(beschreibung + terminDBNummer);
+			terminfindungDB.setEinmaligeAbstimmung(false);
+			terminfindungDB.setErgebnis(ergebnisTermin);
+			terminfindungDB.setErsteller(ersteller);
+			terminfindungDB.setFrist(frist);
+			terminfindungDB.setGruppeId(gruppeId);
+			terminfindungDB.setLink(link + terminDBNummer);
+			terminfindungDB.setLoeschdatum(loeschdatum);
+			terminfindungDB.setModus(Modus.GRUPPE);
+			terminfindungDB.setOrt(ort + terminDBNummer);
+			terminfindungDB.setTermin(ergebnisTermin);
+			terminfindungDB.setTitel(titel + terminDBNummer);
+			terminfindungDBs.add(terminfindungDB);
+		});
+		return terminfindungDBs;
 	}
 	
 }
