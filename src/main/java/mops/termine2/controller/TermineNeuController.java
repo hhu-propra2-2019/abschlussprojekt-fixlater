@@ -305,21 +305,16 @@ public class TermineNeuController {
 			response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
 					"attachment; filename=\"" + filename + "\"");
 			response.setContentType("text/csv");
+			
 			if (termine.get(0) != null) {
-				
-				
 				StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
 						response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
 						.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
 						.withOrderedResults(false)
 						.build();
-				
-				
 				writer.write(exportCSV.localDateTimeZuExportFormat());
 			}
-			
-			
 		}
 	}
+	
 }
-
