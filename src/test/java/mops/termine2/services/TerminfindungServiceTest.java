@@ -233,6 +233,14 @@ public class TerminfindungServiceTest {
 		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
+	@Test
+	public void loescheAbgelaufene() {
+		service.loescheAbgelaufene();
+		
+		Mockito.verify(antwortRepository, times(1)).deleteByTerminfindungLoeschdatumBefore(any());
+		Mockito.verify(terminRepository, times(1)).deleteByLoeschdatumBefore(any());
+	}
+	
 	private Terminfindung erstelleBeispielTerminfindung(int dummie, int anzahlTermine) {
 		Terminfindung termine = new Terminfindung();
 		termine.setBeschreibung(beschreibungsListe.get(dummie));
