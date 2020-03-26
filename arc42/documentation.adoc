@@ -522,3 +522,12 @@ Der ImportService wurde in den Master gemerged, wobei ein paar Mergekonflikte en
 dem Export von Terminen gearbeitet. Die angegebenen Termine können beim Erstellen einer Terminfindung direkt in eine
 CSV-Datei exportiert werden. Das Format entspricht dem für den Upload, sodass beim Erstellen einer neuen Terminfindung
 diese Datei hochgeladen werden kann.
+
+=== Controller Tests, Scheduler (Thomas, Marcel)
+
+=== UI Warnung (Jan)
+
+
+== Tag 20
+
+=== steht an: letzte merges, docker-compose.yml für production, dockerfile
