@@ -82,20 +82,6 @@ public class TermineNeuController {
 			account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			
-			/* Gruppen */
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			m.addAttribute("gruppen", gruppen);
-			Gruppe noGroup = new Gruppe();
-			noGroup.setId(-1L);
-			m.addAttribute("gruppeSelektiert", noGroup);
-			
-			Terminfindung terminfindung = new Terminfindung();
-			terminfindung.setVorschlaege(new ArrayList<>());
-			terminfindung.getVorschlaege().add(LocalDateTime.now());
-			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
-			terminfindung.setErgebnisVorFrist(true);
-			m.addAttribute("terminfindung", terminfindung);
-			m.addAttribute("fehler", "");
 			authenticatedAccess.increment();
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
@@ -104,6 +90,7 @@ public class TermineNeuController {
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
+		
 		m.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
@@ -115,6 +102,7 @@ public class TermineNeuController {
 		terminfindung.getVorschlaege().add(null);
 		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
+		terminfindung.setErgebnisVorFrist(true);
 		
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("fehler", "");
@@ -125,7 +113,7 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String neuerTermin(Principal p, Model m, Terminfindung terminfindung,
-							  Gruppe gruppeSelektiert) {
+			Gruppe gruppeSelektiert) {
 		// Account
 		Account account;
 		if (p != null) {
@@ -157,7 +145,7 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
-								 final HttpServletRequest request) {
+			final HttpServletRequest request) {
 		Account account;
 		if (p != null) {
 			// Account
@@ -188,14 +176,12 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung,
-										 Gruppe gruppeSelektiert,
-										 RedirectAttributes ra) {
+			Gruppe gruppeSelektiert, RedirectAttributes ra) {
 		String fehler = "";
 		
 		// Account
 		Account account;
 		if (p != null) {
-			// Account
 			account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
 			authenticatedAccess.increment();
@@ -203,11 +189,27 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		// Vorschläge filtern. Doppelte und nicht gesetzte Daten löschen
 		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+		LocalDateTime minVorschlag = null;
+		LocalDateTime maxVorschlag = null;
+		
 		for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
-				gueltigeVorschlaege.add(ldt);
+			// ungültige oder doppelte Vorschläge ignorieren
+			if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
+				continue;
+			}
+			
+			// gültige Vorschläge merken
+			gueltigeVorschlaege.add(ldt);
+			
+			// frühsten Vorschlag merken
+			if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
+				minVorschlag = ldt;
+			}
+			
+			// spätesten Vorschlag merken
+			if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
+				maxVorschlag = ldt;
 			}
 		}
 		
@@ -216,10 +218,30 @@ public class TermineNeuController {
 			fehler = "Es muss mindestens einen Vorschlag geben.";
 		}
 		
+		// minVorschlag and maxVorschlag are always null together
+		if (minVorschlag != null) {
+			if (terminfindung.getFrist().isAfter(minVorschlag)) {
+				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusDays(1));
+				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusHours(2));
+				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusMinutes(5));
+				} else {
+					terminfindung.setFrist(minVorschlag);
+				}
+			}
+			
+			if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
+			}
+		}
+		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
 		
 		// Terminfindung erstellen
 		terminfindung.setErsteller(account.getName());
+		
 		if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
 			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
 			terminfindung.setGruppeId(gruppe.getId());
@@ -242,6 +264,7 @@ public class TermineNeuController {
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("terminfindung", terminfindung);
 			m.addAttribute("fehler", fehler);
+			
 			return "termine-neu";
 		}
 		
@@ -256,8 +279,7 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal p,
-								   Model m, Terminfindung terminfindung,
-								   Gruppe gruppeSelektiert) {
+			Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
 		if (p != null) {
 			authenticatedAccess.increment();
 			
@@ -327,9 +349,55 @@ public class TermineNeuController {
 					m.addAttribute("error", true);
 				}
 			}
+			
+			// If any of the Termine lies before the Frist, then the Frist has to be updated.
+			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+			LocalDateTime minVorschlag = null;
+			LocalDateTime maxVorschlag = null;
+			
+			for (LocalDateTime ldt : termine) {
+				// ungültige oder doppelte Vorschläge ignorieren
+				if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
+					continue;
+				}
+				
+				// gültige Vorschläge merken
+				gueltigeVorschlaege.add(ldt);
+				
+				// frühsten Vorschlag merken
+				if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
+					minVorschlag = ldt;
+				}
+				
+				// spätesten Vorschlag merken
+				if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
+					maxVorschlag = ldt;
+				}
+			}
+			
+			// minVorschlag and maxVorschlag are always null together
+			if (minVorschlag != null) {
+				if (terminfindung.getFrist().isAfter(minVorschlag)) {
+					if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusDays(1));
+					} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusHours(2));
+					} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusMinutes(5));
+					} else {
+						terminfindung.setFrist(minVorschlag);
+					}
+				}
+				
+				if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+					terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
+				}
+			}
+			
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("terminfindung", terminfindung);
 		}
+		
 		return "termine-neu";
 	}
 	
@@ -364,3 +432,4 @@ public class TermineNeuController {
 	}
 	
 }
+
