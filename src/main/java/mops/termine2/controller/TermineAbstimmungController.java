@@ -79,6 +79,7 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
+
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
@@ -86,6 +87,7 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -98,6 +100,7 @@ public class TermineAbstimmungController {
 		// muss dies hier noch abgefragt werden und evtl auf die
 		//Abstimmungsseite umgeleitet werden;
 		
+
 		if (terminfindung.getTeilgenommen()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
@@ -129,6 +132,7 @@ public class TermineAbstimmungController {
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -166,6 +170,7 @@ public class TermineAbstimmungController {
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+
 		}
 		
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -177,6 +182,7 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -189,6 +195,11 @@ public class TermineAbstimmungController {
 		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
+		
+		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		antworten = terminAntwortService.loadAllByLink(link);
@@ -219,6 +230,7 @@ public class TermineAbstimmungController {
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+
 		}
 		
 		Terminfindung terminfindung =
@@ -280,6 +292,7 @@ public class TermineAbstimmungController {
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+
 		}
 		
 		LocalDateTime now = LocalDateTime.now();

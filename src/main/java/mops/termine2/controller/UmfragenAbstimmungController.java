@@ -1,24 +1,6 @@
 package mops.termine2.controller;
 
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.annotation.SessionScope;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -34,6 +16,24 @@ import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.UmfrageAntwortService;
 import mops.termine2.services.UmfrageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.annotation.security.RolesAllowed;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @SessionScope
@@ -71,25 +71,22 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (umfrage.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -112,24 +109,21 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		if (umfrage == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (umfrage.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -162,29 +156,22 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		if (umfrage == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
-		
-		//Wenn Ergebnis erst nach Frist angezeigt werden soll,
-		//muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
 		
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (!bereitsTeilgenommen && umfrage.getFrist().isAfter(now)) {
-			System.out.println("abstimmung");
 			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 		}
 		
@@ -204,7 +191,6 @@ public class UmfragenAbstimmungController {
 	}
 	
 	
-	@Transactional
 	@PostMapping(path = "/umfragen/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal p,
@@ -216,18 +202,19 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
-			return null;
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage =
+			umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			return "error/403";
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -240,10 +227,10 @@ public class UmfragenAbstimmungController {
 			return "redirect:/termine2/umfragen/" + link;
 		}
 		
-		UmfrageAntwort terminfindungAntwort = AntwortFormUmfragen.mergeToAnswer(umfrage, account.getName(),
+		UmfrageAntwort umfrageAntwort = AntwortFormUmfragen.mergeToAnswer(umfrage, account.getName(),
 			antwortForm);
 		
-		umfrageAntwortService.abstimmen(terminfindungAntwort, umfrage);
+		umfrageAntwortService.abstimmen(umfrageAntwort, umfrage);
 		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/umfragen/" + link;
@@ -257,20 +244,18 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
-			return null;
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
-			System.out.println("404");
-			return "error/404";
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
 		if (umfrage.getGruppeId() != null
-				&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
-			System.out.println("403");
-			return "error/403";
+			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
