@@ -69,7 +69,7 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("403");
+			
 			return "error/403";
 		}
 		
@@ -77,19 +77,19 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
+			
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
+			
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
+			
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -98,11 +98,9 @@ public class TermineAbstimmungController {
 		//Abstimmungsseite umgeleitet werden;
 		
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (bereitsTeilgenommen) {
-			System.out.println("ergebnis");
+		if (bereitsTeilgenommen && terminfindung.getErgebnisVorFrist()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
-			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -119,25 +117,21 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
 			return "error/403";
 		}
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (terminfindung.getFrist().isBefore(now)) {
-			System.out.println("ergebnis");
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -170,20 +164,18 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("404");
 			return "error/403";
 		}
 		
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
+			
 			return "error/403";
 		}
 		
@@ -194,9 +186,13 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
-			System.out.println("abstimmung");
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
+		
+		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
+			return "redirect:/termine2/" + link + "/abstimmung";
+		}
+		
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		antworten = terminAntwortService.loadAllByLink(link);
@@ -226,7 +222,7 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
+			
 			return null;
 		}
 		
@@ -274,7 +270,6 @@ public class TermineAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			System.out.println("nicht autorisiert");
 			return null;
 		}
 		
@@ -282,13 +277,11 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			System.out.println("404");
 			return "error/404";
 		}
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			System.out.println("403");
 			return "error/403";
 		}
 		
