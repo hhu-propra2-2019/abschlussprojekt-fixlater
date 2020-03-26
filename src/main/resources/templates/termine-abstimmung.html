@@ -176,6 +176,9 @@
 												<li th:text="${info.getEinmaligesAbstimmen()}">Coffee</li>
 												<li th:text="${info.getAbstimmungsBerechtigungNutzer()}">Coffee</li>
 											</ul>
+											<div class="text-center">
+												!!!DIESE INFORMATIONEN KÖNNEN UNTER HILFE NACHGELESEN WERDEN!!!
+											</div>
 										</div>
 
 										<!-- Modal footer -->
@@ -186,10 +189,13 @@
 									</div>
 								</div>
 							</div>
-							<script type="text/javascript">
+							<script th:inline="javascript" >
+                                /*<![CDATA[*/
                                 $(window).on('load',function(){
-                                    $('#myModal').modal('show');
+                                    if( [[not ${terminfindung.teilgenommen}]] )
+                                        $('#myModal').modal('show');
                                 });
+                                /*]]>*/
 							</script>
 						</div>
 					</form>
