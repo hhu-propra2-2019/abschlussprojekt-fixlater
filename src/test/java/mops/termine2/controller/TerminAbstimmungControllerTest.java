@@ -232,27 +232,25 @@ public class TerminAbstimmungControllerTest {
 	private Terminfindung initTerminfindung(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
 		
-		Terminfindung ret = new Terminfindung();
-		ret.setLink(link);
-		ret.setTitel("Hakuna");
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setLink(link);
+		terminfindung.setTitel("Hakuna");
 		
 		List<LocalDateTime> termine = new ArrayList(Arrays.asList(LocalDateTime.of(1, 1, 1, 1, 1)));
-		ret.setVorschlaege(termine);
+		terminfindung.setVorschlaege(termine);
 		
-		LocalDateTime frist;
 		if (fristInZukunft) {
-			frist = LocalDateTime.now().plusWeeks(1);
+			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
 		} else {
-			frist = LocalDateTime.now().minusWeeks(1);
+			terminfindung.setFrist(LocalDateTime.now().minusWeeks(1));
 		}
-		ret.setFrist(frist);
 		
-		ret.setGruppeId(gruppeId);
-		ret.setEinmaligeAbstimmung(einmaligeAbstimmung);
+		terminfindung.setGruppeId(gruppeId);
+		terminfindung.setEinmaligeAbstimmung(einmaligeAbstimmung);
 		
-		ret.setTeilgenommen(teilgenommen);
+		terminfindung.setTeilgenommen(teilgenommen);
 		
-		return ret;
+		return terminfindung;
 	}
 	
 	private List<TerminfindungAntwort> initAntworten() {
