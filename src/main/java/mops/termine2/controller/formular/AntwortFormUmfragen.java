@@ -24,9 +24,8 @@ public class AntwortFormUmfragen {
 	
 	public String benutzer;
 	
-	public static UmfrageAntwort mergeToAnswer(Umfrage umfrage, String nutzer,
-											   AntwortFormUmfragen
-												   antwortFrm) {
+	public static UmfrageAntwort mergeToAnswer(
+		Umfrage umfrage, String nutzer, AntwortFormUmfragen antwortFrm) {
 		UmfrageAntwort umfrageAntwort = new UmfrageAntwort();
 		umfrageAntwort.setBenutzer(nutzer);
 		umfrageAntwort.setLink(umfrage.getLink());
@@ -60,7 +59,6 @@ public class AntwortFormUmfragen {
 		vorschlaege.addAll(antwortenMap.keySet());
 		for (String vorschlag : vorschlaege) {
 			antworten.add(antwortenMap.get(vorschlag));
-			//termineString.add(LocalDateTimeManager.toString(termin));
 		}
 	}
 }

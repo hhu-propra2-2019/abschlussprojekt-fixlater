@@ -169,10 +169,6 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		//Wenn Ergebnis erst nach Frist angezeigt werden soll,
-		//muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
-		
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (!bereitsTeilgenommen && umfrage.getFrist().isAfter(now)) {
@@ -248,7 +244,7 @@ public class UmfragenAbstimmungController {
 			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
-			return null;
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);

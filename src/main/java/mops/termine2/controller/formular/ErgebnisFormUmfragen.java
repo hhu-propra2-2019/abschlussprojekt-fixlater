@@ -68,7 +68,7 @@ public class ErgebnisFormUmfragen {
 				}
 				
 			}
-			//termineString.add(LocalDateTimeManager.toString(localDateTime));
+			
 			anzahlStimmenJa.add(ja);
 			anzahlStimmenNein.add(nein);
 			jaAntwortPseud.add(jaAnt);

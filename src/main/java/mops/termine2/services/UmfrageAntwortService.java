@@ -18,6 +18,7 @@ import java.util.Objects;
 @Service
 public class UmfrageAntwortService {
 	
+	@Autowired
 	private UmfrageAntwortRepository antwortRepo;
 	
 	@Autowired
