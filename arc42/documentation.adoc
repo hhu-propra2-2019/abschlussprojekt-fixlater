@@ -476,18 +476,15 @@ Danach habe ich den Selektor für Gruppen auf der Umfragenübersicht durch thyme
 Da beim Filtern der Termine nach Gruppen ein Request Parameter verwendet wird und dieser in der Adresszeile angezeigt wird, konnte bisher auch auf Gruppen zugegriffen werden, bei denen man kein Mitglied ist. Dies wurde jetzt geändert, sodass zuerst die Gruppenzugehörigkeit geprüft wird und eine Fehlerseite angezeigt wird, wenn man nicht in der entsprechenden Gruppe ist.
 
 === Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
-Wir wollten eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
-einzustellen ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
+Wir wollten eine Funktion implementieren, die es ermöglicht bei der Erstellung einer Terminfindung
+einzustellen, ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
 Die Logik dazu wurde geschrieben.
-
-=== Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
-
 
 == Tag 17
 
 === Funktion Einstellbar: ErgebnisVorFristAnzeigen(Terminfindung) (Marcel,Leon,Jan)
-Wir wollten eine Funktion implenentieren , die es Ermöglicht bei der Erstellung einer Terminfindung
-einzustellen ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
+Wir wollten eine Funktion implementieren , die es ermöglicht bei der Erstellung einer Terminfindung
+einzustellen, ob das (Zwischen)Ergebnis erst nach der Frist einsehbar ist.
 Das zugehörige Html wurde geschrieben.
 
 === Funktion EinmaligesAbstimmen :(Terminfindung) (Jan)
@@ -508,6 +505,17 @@ Die Authentifizierung wurde überarbeitet. Alle Controller-Tests nutzen jetzt di
 === Termineübersicht Tests (Thomas)
 Es wurden Tests den Controller der Terminübersicht geschrieben.
 Es wird der Aufruf mit und ohne Gruppenfilter getestet sowie ein Aufruf ohne eingeloggten Benutzer.
+
+=== Löschscheduler (Leon, Marcel)
+Eine Funktion die bisher noch fehlte, aber wichtig ist, war, dass vergangene Terminfindungen und Umfragen gelöscht werden, wenn sie ihr Löschdatum erreicht haben.
+Dies haben wir wie mit dem GruppeScheduler mit einer Scheduled-Methode gelöst. Die Funktion des Schedulers war schnell geschrieben, da in den Services bereits die Funktionen existierten, um
+abgelaufene Terminfindungen und Umfragen zu löschen. Das einzige Problem, das hierbei aufgetreten ist, war, dass Spring an den delete Methoden in den Repositories jeweils die Annotation @Transactional
+erwartet. Dies macht Sinn, da besonders wenn mehrere Zeilen aus einer Tabelle gelöscht werden und mittendrin ein Fehler auftritt, dass dann nicht nur die Hälfte der Daten gelöscht werden.
+Ebenfalls wurden die delete Methoden in den Terminfindungsservice und umfrageservice Klassen mit @Transactional annotiert, da beide Methoden mehrere Repositories aufrufen um Daten zu löschen. 
+Hier ist es ebenfalls gewünscht, dass alles auf einmal gelöscht wird.
+Die Frage, die uns danach kam, war, inwieweit wir diesen Löschscheduler testen können, da die einzige eigene Logik die SQL Queries in den Repositories sind.
+Mit den Tutoren haben wir dann besprochen, wie man SQL Queries mit JPA testen kann, und wie wir allgemein vermeiden könnten, eigene Logik einzubringen.
+Zu diesem Zeitpunkt war allerdings die Arbeitszeit vorbei, weswegen wir uns entschieden haben, das Problem am nächsten Tag anzugehen.
 
 == Tag 18
 
@@ -531,3 +539,15 @@ Services angepasst. Die entstandenen Probleme wurden alle von Thomas gefunden un
 Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum hinzugefügt.
 Wenn kein Link angegeben wird, wird automatisch ein eindeutiger Link erstellt.
 Eingegebene Links werden auf Eindeutigkeit geprüft und dürfen nur aus Buchstaben und Zahlen bestehen.
+
+=== Löschscheduler (Leon, Marcel)
+Nach der Videokonferenz direkt zu Anfang des Tages haben wir uns damit befasst, wie wir in unseren Repositories die delete Methoden umschreiben können, damit wir auf @Query verzichten können, und somit
+keine eigene Logik in den Löschscheduler einbringen, sodass es nicht nötig ist, Tests zu schreiben, da man nur eigene Logik testen sollte.
+Als wir damit fertig waren und unseren Scheduler mit der Datenbank testen wollten, kam das Problem auf, dass scheinbar die Daten nicht in die Datenbank geschrieben wurden, sodass wir auch nicht testen konnten.
+Schnell fiel uns auf, dass der Löschscheduler im Hintergrund lief, und alle paar Sekunden ausgeführt wurde. Das Problem war somit nicht, dass die Daten nicht eingefügt wurden, sondern zu schnell gelöscht wurden.
+Also haben wir den Löschscheduler weniger laufen lassen, und nun konnten wir richtig testen und alle Testdaten wurden erfolgreich gelöscht.
+Anschließend haben wir uns mit Cron Expressions befasst, damit der Löschscheduler zweimal täglich ausgeführt werden soll. Dies wird mit dem Cron Ausdruck "0 0 0,12 * * *" erreicht.
+die ersten drei Stellen sagen, dass der Scheduler an Sekunde 0, Minute 0 und Stunde 0 und 12 aktiviert werden soll. Die letzten drei Stellen geben an, dass der Scheduler täglich laufen soll.
+Anschließend haben wir im Code von Thomas geschaut, wie man den Logger einbindet, damit wir keine einfachen System.out Konsolenausgaben verwenden.
+Den Logger haben wir direkt auch in den Gruppescheduler eingebaut.
+Anschließend haben wir die Mergekonflikte behoben und in den Repositories einige Methoden so umgeschrieben, dass dort auch keine @Query Annotation mehr verwendet wird.
