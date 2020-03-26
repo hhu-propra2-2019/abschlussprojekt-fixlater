@@ -517,6 +517,12 @@ Die Frage, die uns danach kam, war, inwieweit wir diesen Löschscheduler testen 
 Mit den Tutoren haben wir dann besprochen, wie man SQL Queries mit JPA testen kann, und wie wir allgemein vermeiden könnten, eigene Logik einzubringen.
 Zu diesem Zeitpunkt war allerdings die Arbeitszeit vorbei, weswegen wir uns entschieden haben, das Problem am nächsten Tag anzugehen.
 
+== Kommentare/Import (Julia, Kathi)
+Die termin-ergebnis.html und der Controller wurden so bearbeitet, dass Kommentare auch auf der Ergebnisseite von Terminfindungen angezeigt werden. Das Erstellungsdatum wird auf der Ergebnisseite und der Abstimmungsseite im schönen Format angezeigt.
+Außerdem wurde das erstellen eines Kommentars auf der Abstimmungsseite und der
+Ergebnisseite ermöglicht.
+Beim Import wurden Abfragen eingebaut, damit keine vergangenen Daten oder nicht existente Daten eingelesen werden.
+
 == Tag 18
 
 === Funktion EinmaligesAbstimmen :(Terminfindung) (Jan)
@@ -551,3 +557,10 @@ die ersten drei Stellen sagen, dass der Scheduler an Sekunde 0, Minute 0 und Stu
 Anschließend haben wir im Code von Thomas geschaut, wie man den Logger einbindet, damit wir keine einfachen System.out Konsolenausgaben verwenden.
 Den Logger haben wir direkt auch in den Gruppescheduler eingebaut.
 Anschließend haben wir die Mergekonflikte behoben und in den Repositories einige Methoden so umgeschrieben, dass dort auch keine @Query Annotation mehr verwendet wird.
+
+
+== ImportService/Export (Julia, Kathi)
+Der ImportService wurde in den Master gemerged, wobei ein paar Mergekonflikte entstanden sind. Außerdem wurde an
+dem Export von Terminen gearbeitet. Die angegebenen Termine können beim Erstellen einer Terminfindung direkt in eine
+CSV-Datei exportiert werden. Das Format entspricht dem für den Upload, sodass beim Ertsellen einer neuen Terminfindung
+diese Datei hochgeladen werden kann.
