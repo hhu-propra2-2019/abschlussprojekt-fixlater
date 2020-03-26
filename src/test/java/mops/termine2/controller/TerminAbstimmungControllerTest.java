@@ -68,7 +68,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails1() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -83,7 +83,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails2() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -112,7 +112,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails4() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -128,7 +128,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails5() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -147,7 +147,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet1() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -161,7 +161,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet2() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, false, false);
+		Terminfindung terminfindung = initTerminfindung(null, false, false, false);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -180,7 +180,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet1() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -195,7 +195,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet2() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(null, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -210,7 +210,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet3() throws Exception {
-		Terminfindung terminfindung = initTerminfundung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -229,7 +229,7 @@ public class TerminAbstimmungControllerTest {
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Terminfindung initTerminfundung(
+	private Terminfindung initTerminfindung(
 		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
 		
 		Terminfindung ret = new Terminfindung();
@@ -262,15 +262,15 @@ public class TerminAbstimmungControllerTest {
 	}
 	
 	private TerminfindungAntwort initAntwort() {
-		TerminfindungAntwort antwot = new TerminfindungAntwort();
+		TerminfindungAntwort antwort = new TerminfindungAntwort();
 		HashMap<LocalDateTime, Antwort> antwortHashMap = new HashMap<>();
 		antwortHashMap.put(LocalDateTime.of(1, 1, 1, 1, 1), Antwort.VIELLEICHT);
-		antwot.setAntworten(antwortHashMap);
-		antwot.setPseudonym("aha");
-		antwot.setLink(link);
-		antwot.setKuerzel(Konstanten.STUDENTIN);
+		antwort.setAntworten(antwortHashMap);
+		antwort.setPseudonym("aha");
+		antwort.setLink(link);
+		antwort.setKuerzel(Konstanten.STUDENTIN);
 		
-		return antwot;
+		return antwort;
 	}
 	
 	
