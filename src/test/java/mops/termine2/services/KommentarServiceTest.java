@@ -5,6 +5,7 @@ import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.KommentarDB;
 import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Kommentar;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ public class KommentarServiceTest {
 	
 	private transient LocalDateTime ergebnisTermin = LocalDateTime.of(1, 1, 2, 1, 1, 1, 1);
 	
+	private transient String ergebnisUmfrage = "Vorschlag";
+	
 	private transient String ersteller = "studentin1";
 	
 	private transient LocalDateTime erstellungsdatum = LocalDateTime.now();
@@ -49,6 +52,8 @@ public class KommentarServiceTest {
 	private transient String link = "link";
 	
 	private transient LocalDateTime loeschdatum = LocalDateTime.of(1, 1, 3, 1, 1, 1, 1);
+	
+	private transient Long maxAntwortAnzahl = 1L;
 	
 	private transient String ort = "Ort";
 	
@@ -139,6 +144,18 @@ public class KommentarServiceTest {
 		Mockito.verify(kommentarRepository, times(1)).deleteByLink(linkErwartet3);
 	}
 	
+	@Test
+	public void loescheAbgelaufeneKommentareFuerEineUmfrage() {
+		int anzahl = 1;
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListe(anzahl);
+		when(umfrageRepository.findByLoeschdatumBefore(any())).thenReturn(umfrageDBs);
+		String linkErwartet = link + 1;
+		
+		service.loescheAbgelaufeneKommentareFuerUmfragen();
+		
+		Mockito.verify(kommentarRepository, times(anzahl)).deleteByLink(linkErwartet);
+	}
+	
 	private List<KommentarDB> erstelleKommentarDBListe(int anzahl) {
 		List<KommentarDB> kommentarDBs = new ArrayList<>();
 		IntStream.range(1, anzahl + 1).forEach(kommentarDBNummer -> {
@@ -184,6 +201,26 @@ public class KommentarServiceTest {
 			terminfindungDBs.add(terminfindungDB);
 		});
 		return terminfindungDBs;
+	}
+	
+	private List<UmfrageDB> erstelleUmfrageDBListe(int anzahl) {
+		List<UmfrageDB> umfrageDBs = new ArrayList<>();
+		IntStream.range(1, anzahl + 1).forEach(umfrageDBNummer -> {
+			UmfrageDB umfrageDB = new UmfrageDB();
+			umfrageDB.setAuswahlmoeglichkeit(ergebnisUmfrage + umfrageDBNummer);
+			umfrageDB.setBeschreibung(beschreibung + umfrageDBNummer);
+			umfrageDB.setErgebnis(ergebnisUmfrage + umfrageDBNummer);
+			umfrageDB.setErsteller(ersteller);
+			umfrageDB.setFrist(frist);
+			umfrageDB.setGruppeId(gruppeId);
+			umfrageDB.setLink(link + umfrageDBNummer);
+			umfrageDB.setLoeschdatum(loeschdatum);
+			umfrageDB.setMaxAntwortAnzahl(maxAntwortAnzahl);
+			umfrageDB.setModus(Modus.GRUPPE);
+			umfrageDB.setTitel(titel + umfrageDBNummer);
+			umfrageDBs.add(umfrageDB);
+		});
+		return umfrageDBs;
 	}
 	
 }
