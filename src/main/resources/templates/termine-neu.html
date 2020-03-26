@@ -184,16 +184,23 @@
 					
 					<!-- Zeiten -->
 					<div class="mb-3 border-bottom">
-						<h2 class="h2">
-							Zeiten
-						</h2>
+						<div class="d-flex justify-content-between align-items-center">
+							<h2 class="mb-0 h2">
+								Zeiten
+							</h2>
+							
+							<button class="mb-0 btn btn-outline-success"
+							        name="download" type="submit">
+								Exportieren
+							</button>
+						</div>
 						
 						<!-- Meldung beim Importieren der Zeiten aus einer CSV-Datei -->
-						<div class="alert alert-dissmissible fade show" role="alert"
+						<div class="alert alert-dismissible fade show" role="alert"
 						     th:if="${error != null && error || erfolg != null && erfolg}"
 						     th:classappend="${(error != null && error) ? 'alert-danger' :
 						                     ((erfolg != null && erfolg) ? 'alert-success' : '')}">
-							<strong th:if="${error}">
+							<strong th:if="${error != null && error}">
 								Fehler:
 							</strong>
 							

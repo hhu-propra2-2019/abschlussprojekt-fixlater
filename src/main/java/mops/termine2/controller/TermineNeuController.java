@@ -1,18 +1,20 @@
 package mops.termine2.controller;
 
-import com.opencsv.CSVReader;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.Konstanten;
-import mops.termine2.authentication.Account;
-import mops.termine2.imports.TerminFormatierung;
-import mops.termine2.models.Gruppe;
-import mops.termine2.models.Terminfindung;
-import mops.termine2.services.AuthenticationService;
-import mops.termine2.services.GruppeService;
-import mops.termine2.services.LinkService;
-import mops.termine2.services.TerminfindungService;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +26,26 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
+import mops.termine2.filehandling.ExportCSV;
+import mops.termine2.filehandling.ExportFormat;
+import mops.termine2.filehandling.TerminFormatierung;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.services.AuthenticationService;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.LinkService;
+import mops.termine2.services.TerminfindungService;
 
 @Controller
 @SessionScope
@@ -289,49 +302,50 @@ public class TermineNeuController {
 					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 					
 					List<String[]> termineEingelesen = csvReader.readAll();
+					if ("DATUM".equals(termineEingelesen.get(0)[0])) {
+						termineEingelesen.remove(0);
+					}
 					
 					TerminFormatierung terminFormatierung =
 						new TerminFormatierung(termineEingelesen);
-					terminFormatierung.pruefeFuerJedenTerminGueltigesFormat(
-						termineEingelesen, terminFormatierung.getDateTimeFormatter());
-					terminFormatierung.pruefeObExistent(termineEingelesen);
 					
-					if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
+					if (!terminFormatierung.pruefeObGueltigesFormat(
+						termineEingelesen, terminFormatierung.getDateTimeFormatter())) {
+						m.addAttribute("message",
+							"Alle Termine müssen im Format "
+								+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
+								+ "sollten existente Daten sein.");
+						m.addAttribute("error", true);
+					} else if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
 							terminFormatierung.getDateTimeFormatter())) {
 						m.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
 						m.addAttribute("error", true);
+					} else if (!terminFormatierung.pruefeObGueltigesDatum(termineEingelesen)) {
+						m.addAttribute("message",
+							"Die Termine sollten existieren.");
+						m.addAttribute("error", true);
 					} else {
-						
 						// entferne ggf. überflüssige Datumsbox
-						if (!terminFormatierung.pruefeObExistent(termineEingelesen)) {
-							m.addAttribute("message", "Die Daten sollten existieren.");
-							m.addAttribute("error", true);
-						} else {
-							// entferne ggf. überflüssige Datumsbox
-							if (termine.get(0) == null) {
-								terminfindung.getVorschlaege().remove(0);
-							}
-							
-							// füge Termine ins Model ein
-							for (String[] terminEingelesen : termineEingelesen) {
-								LocalDateTime termin = LocalDateTime.parse(
-										terminEingelesen[0] + ", "
-												+ terminEingelesen[1],
-										terminFormatierung
-										.getDateTimeFormatter());
-								termine.add(termin);
-							}
-							
-							m.addAttribute("message", "Upload erfolgreich!");
-							m.addAttribute("erfolg", true);
+						if (termine.get(0) == null) {
+							terminfindung.getVorschlaege().remove(0);
 						}
+						
+						// füge Termine ins Model ein
+						for (String[] terminEingelesen : termineEingelesen) {
+							LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+									+ ", " + terminEingelesen[1], terminFormatierung
+									.getDateTimeFormatter());
+							termine.add(termin);
+						}
+						m.addAttribute("message", "Upload erfolgreich!");
+						m.addAttribute("erfolg", true);
 					}
 					
+				} catch (RuntimeException ex) {
+					throw ex;
 				} catch (Exception ex) {
 					m.addAttribute("message",
-						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. "
-							+ "Alle Termine müssen im Format 'TT.MM.JJJJ,HH:MM' "
-							+ "übergeben werden und sollten existente Daten sein.");
+						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. ");
 					m.addAttribute("error", true);
 				}
 			}
@@ -386,5 +400,36 @@ public class TermineNeuController {
 		
 		return "termine-neu";
 	}
+	
+	@RequestMapping(path = "/termine-neu", params = "download")
+	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
+	public void termineRunterladen(Principal p, Terminfindung terminfindung,
+								   Model m, HttpServletResponse response)
+			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+		if (p != null) {
+			authenticatedAccess.increment();
+			
+			// Account
+			Account account = authenticationService.createAccountFromPrincipal(p);
+			m.addAttribute(Konstanten.ACCOUNT, account);
+			
+			String filename = "termine.csv";
+			List<LocalDateTime> termine = terminfindung.getVorschlaege();
+			ExportCSV exportCSV = new ExportCSV(termine);
+			response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + filename + "\"");
+			response.setContentType("text/csv");
+			
+			if (termine.get(0) != null) {
+				StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
+						response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+						.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+						.withOrderedResults(false)
+						.build();
+				writer.write(exportCSV.localDateTimeZuExportFormat());
+			}
+		}
+	}
+	
 }
 

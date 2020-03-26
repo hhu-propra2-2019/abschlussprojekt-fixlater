@@ -74,12 +74,12 @@
 						</div>
 						
 						<form class="my-3" th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
-											th:object="${umfrageAntwort}" method="post">
+											th:object="${antwort}" method="post">
 							<!-- falls es eine Stimmbegrenzung gibt -->
 							<div class="mb-2">
 								Wähle <span class="text-primary" th:text="${umfrage.maxAntwortAnzahl}">[Anzahl]</span> aus:
 							</div>
-<!-- 							
+
 							<div class="table-responsive">
 								<table class="table table-sm" style="text-align: center">
 									<thead>
@@ -91,25 +91,31 @@
 										</tr>
 									</thead>
 									
-									<tbody th:remove="all-but-first" th:each="vorschlag: *{umfrage.vorschlaege}" }>
+									<tbody th:remove="all-but-first" th:each="vorschlag,vorschlagStat: *{vorschlaege}">
 										<tr>
-
 											<th class="col-7 bg-white"
 											th:text="${vorschlag}">
 											Generischer Vorschlag</th>
 											<th class="col-2 table-primary">
-												<input type="radio" name="abstimmung1" value="y"/>
+												<input type="radio"
+												       name="abstimmung1"
+												       th:name="${vorschlag}"
+												       th:field="${antwort.antworten[__${vorschlagStat.index}__]}"
+												       value="JA"/>
 											</th>
 											<th class="col-2 table-danger">
-												<input type="radio" name="abstimmung1" value="n"/>
+												<input type="radio"
+												       name="abstimmung1"
+												       th:name="${vorschlag}"
+												       th:field="${antwort.antworten[__${vorschlagStat.index}__]}"
+												       value="NEIN"/>
 											</th>
 										</tr>
 									
 									</tbody>
 								</table>
 							</div>
-							 -->
-							<!-- Absendezeile
+
 							<div style="text-align: center">
 							<input type="text" name="pseudonym" placeholder="Benjamin"
 							       th:placeholder="*{getBenutzer()}"
@@ -117,7 +123,6 @@
 							>
 							<button class="btn btn-primary" type="submit" name="sichern">Abschicken</button>
 						</div>
-						 -->
 						</form>
 					</div>
 					

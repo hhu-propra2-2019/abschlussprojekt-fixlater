@@ -15,20 +15,18 @@ import mops.termine2.database.entities.UmfrageDB;
 @Repository
 public interface UmfrageAntwortRepository extends CrudRepository<UmfrageAntwortDB, Long> {
 	
-	@Query
 	List<UmfrageAntwortDB> findByBenutzerAndUmfrageLink(String benutzer, String link);
 	
-	@Query
 	List<UmfrageAntwortDB> findAllByUmfrageLink(String link);
+	
+	@Query("select db.umfrage from UmfrageAntwortDB db where db.benutzer like :benutzer")
+	List<UmfrageDB> findUmfrageDbByBenutzer(@Param("benutzer") String benutzer);
 	
 	@Transactional
 	void deleteAllByUmfrageLinkAndBenutzer(String link, String benutzer);
 	
 	@Transactional
-	void deleteAllByUmfrageLink(@Param("link") String link);
-	
-	@Query("select db.umfrage from UmfrageAntwortDB db where db.benutzer like :benutzer")
-	List<UmfrageDB> findUmfrageDbByBenutzer(@Param("benutzer") String benutzer);
+	void deleteAllByUmfrageLink(String link);
 	
 	@Transactional
 	void deleteByUmfrageLoeschdatumBefore(LocalDateTime timeNow);

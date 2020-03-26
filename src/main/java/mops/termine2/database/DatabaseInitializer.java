@@ -76,8 +76,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 					.boxed().collect(Collectors.toList());
 				
 				for (int value2 = 0; value2 < ANZAHL_BENUTZER_GRUPPE; value2++) {
-					final BenutzerGruppeDB benutzerGruppeDB = 
-						new BenutzerGruppeDB();					
+					final BenutzerGruppeDB benutzerGruppeDB =
+						new BenutzerGruppeDB();
 					int indexStudent = r.nextInt(ANZAHL_STUDENTEN - value2);
 					benutzerGruppeDB.setBenutzer("studentin" + studenten.get(indexStudent));
 					studenten.remove(indexStudent);
@@ -264,7 +264,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
 								  double entscheidungswert) {
-
+		
 		Random r = new Random();
 		String beschreibung = faker.lorem().sentence();
 		String link = faker.name().firstName() + benutzerGruppeDB.getId();
