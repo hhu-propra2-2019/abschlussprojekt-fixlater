@@ -58,7 +58,7 @@ public class UmfrageServiceTest {
 		int anzahl = 3;
 		Umfrage umfrage = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		service.save(umfrage);
-		Mockito.verify(umfrageRepository, times(anzahl)).save(any());
+		Mockito.verify(umfrageRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
