@@ -154,7 +154,7 @@ public class UmfrageuebersichtServiceTest {
 			umfrage.setGruppeId(gruppenIds.get(i));
 			umfragen.add(umfrage);
 			
-			if (gruppenIds.get(i) == gruppe.getGruppeId()) {
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
 				UmfrageDB umfrageDB = new UmfrageDB();
 				umfrageDB.setLink(days.get(i).toString());
 				umfrageDB.setFrist(ldt.plusDays(days.get(i)));
@@ -198,7 +198,7 @@ public class UmfrageuebersichtServiceTest {
 			umfrage.setErgebnis(ergebnisse.get(i));
 			umfragen.add(umfrage);
 			
-			if (gruppenIds.get(i) == gruppe.getGruppeId()) {
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
 				UmfrageDB umfrageDB = new UmfrageDB();
 				umfrageDB.setLink(days.get(i).toString());
 				umfrageDB.setFrist(ldt.plusDays(days.get(i)));

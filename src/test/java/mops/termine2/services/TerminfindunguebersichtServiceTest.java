@@ -160,7 +160,7 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setGruppeId(gruppenIds.get(i));
 			terminfindungen.add(termin);
 			
-			if (gruppenIds.get(i) == gruppe.getGruppeId()) {
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
 				TerminfindungDB terminDB = new TerminfindungDB();
 				terminDB.setLink(days.get(i).toString());
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
@@ -207,7 +207,7 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setErgebnis(LocalDateTime.now().plusDays(ergebnis.get(i)));
 			terminfindungen.add(termin);
 			
-			if (gruppenIds.get(i) == gruppe.getGruppeId()) {
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
 				TerminfindungDB terminDB = new TerminfindungDB();
 				terminDB.setLink(days.get(i).toString());
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
