@@ -1,26 +1,21 @@
 package mops.termine2.controller;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import mops.termine2.Konstanten;
-import mops.termine2.authentication.Account;
-import mops.termine2.filehandling.ExportCSV;
-import mops.termine2.filehandling.ExportFormat;
-import mops.termine2.models.Gruppe;
-import mops.termine2.models.Terminfindung;
-import mops.termine2.services.AuthenticationService;
-import mops.termine2.services.GruppeService;
-import mops.termine2.filehandling.TerminFormatierung;
-import mops.termine2.services.LinkService;
-import mops.termine2.services.TerminfindungService;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,17 +26,26 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
+import mops.termine2.filehandling.ExportCSV;
+import mops.termine2.filehandling.ExportFormat;
+import mops.termine2.filehandling.TerminFormatierung;
+import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.services.AuthenticationService;
+import mops.termine2.services.GruppeService;
+import mops.termine2.services.LinkService;
+import mops.termine2.services.TerminfindungService;
 
 @Controller
 @SessionScope
