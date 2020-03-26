@@ -35,9 +35,9 @@ public class LoeschSchedulerTest {
 		scheduler.loescheDaten();
 		
 		verify(kommentarService, times(1)).loescheAbgelaufeneKommentareFuerTermine();
-		verify(terminfindungService, times(1)).loescheAbgelaufene();
+		verify(terminfindungService, times(1)).loescheAbgelaufeneTermine();
 		verify(kommentarService, times(1)).loescheAbgelaufeneKommentareFuerUmfragen();
-		verify(umfrageService, times(1)).deleteOutdated();
+		verify(umfrageService, times(1)).loescheAbgelaufeneUmfragen();
 	}
 	
 }

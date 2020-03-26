@@ -95,7 +95,7 @@ public class TerminfindungService {
 	 * Löscht eine abgelaufene Terminfindung und zugehörige Antworten
 	 */
 	@Transactional
-	public void loescheAbgelaufene() {
+	public void loescheAbgelaufeneTermine() {
 		LocalDateTime timeNow = LocalDateTime.now();
 		antwortRepo.deleteByTerminfindungLoeschdatumBefore(timeNow);
 		terminfindungRepo.deleteByLoeschdatumBefore(timeNow);

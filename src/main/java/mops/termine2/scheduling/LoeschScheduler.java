@@ -40,14 +40,14 @@ public class LoeschScheduler {
 	}
 	
 	@Transactional
-	private void loescheTermine() {
+	public void loescheTermine() {
 		kommentarService.loescheAbgelaufeneKommentareFuerTermine();
-		terminfindungService.loescheAbgelaufene();
+		terminfindungService.loescheAbgelaufeneTermine();
 	}
 	
 	@Transactional
-	private void loescheUmfragen() {
+	public void loescheUmfragen() {
 		kommentarService.loescheAbgelaufeneKommentareFuerUmfragen();
-		umfrageService.deleteOutdated();
+		umfrageService.loescheAbgelaufeneUmfragen();
 	}
 }

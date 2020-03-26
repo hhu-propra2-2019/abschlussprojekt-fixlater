@@ -184,7 +184,7 @@ public class UmfrageServiceTest {
 	
 	@Test
 	public void loescheAbgelaufene() {
-		service.deleteOutdated();
+		service.loescheAbgelaufeneUmfragen();
 		
 		Mockito.verify(umfrageAntwortRepository, times(1)).deleteByUmfrageLoeschdatumBefore(any());
 		Mockito.verify(umfrageRepository, times(1)).deleteByLoeschdatumBefore(any());

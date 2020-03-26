@@ -235,7 +235,7 @@ public class TerminfindungServiceTest {
 	
 	@Test
 	public void loescheAbgelaufene() {
-		service.loescheAbgelaufene();
+		service.loescheAbgelaufeneTermine();
 		
 		Mockito.verify(antwortRepository, times(1)).deleteByTerminfindungLoeschdatumBefore(any());
 		Mockito.verify(terminRepository, times(1)).deleteByLoeschdatumBefore(any());
