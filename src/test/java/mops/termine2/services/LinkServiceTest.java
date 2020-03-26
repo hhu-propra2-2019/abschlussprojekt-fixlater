@@ -94,6 +94,24 @@ public class LinkServiceTest {
 		
 	}
 	
+	@Test
+	public void testValidLink() {
+		Boolean bool = linkService.isLinkValid("baum");
+		assertThat(bool).isTrue();
+	}
+	
+	@Test
+	public void testValidLinkWithDash() {
+		Boolean bool = linkService.isLinkValid("-b-a-u-m-123");
+		assertThat(bool).isTrue();
+	}
+	
+	@Test
+	public void testInvalidLink() {
+		Boolean bool = linkService.isLinkValid("bähh");
+		assertThat(bool).isFalse();
+	}
+	
 	private List<TerminfindungDB> erstelleTerminfindungDBListeFuerGruppe(String link) {
 		List<TerminfindungDB> terminfindungDBs = new ArrayList<>();
 		List<LocalDateTime> terminVorschlaege = Arrays.asList(LocalDateTime.now(),
