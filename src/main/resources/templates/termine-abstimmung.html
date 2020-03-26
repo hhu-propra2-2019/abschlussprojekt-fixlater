@@ -144,17 +144,18 @@
 
 
 						<div style="text-align: center"
-						     th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
+						     >
             		<input type="text" name="pseudonym" placeholder="Benjamin"
 							       th:placeholder="*{getBenutzer()}"
-							       th:field="${antwort.pseudonym}">
-							<button class="btn btn-primary" type="submit" name="sichern">
+							       th:field="${antwort.pseudonym}"
+                                   th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
+							<button class="btn btn-primary" type="submit" name="sichern"
+							        th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
 								Abschicken
 							</button>
 
-							<!-- Button to Open the Modal -->
 							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-								Allgemeine Abstimmungs Informationen
+								HILFE!
 							</button>
 
 							<!-- The Modal -->

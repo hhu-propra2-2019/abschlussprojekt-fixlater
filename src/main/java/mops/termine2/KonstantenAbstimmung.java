@@ -6,7 +6,7 @@ public class KonstantenAbstimmung {
 		= "Deine Auswahl ist nach dem Abschicken nicht anpassbar.";
 	
 	public static final String BELIEBIGES_ABSTIMMEN_BIS_FRIST
-		= "Deine Auswahl ist nach dem Abschicken nicht anpassbar.";
+		= "Deine Auswahl ist bis zur Frist anpassbar.";
 	
 	public static final String ERGEBNIS_VOR_FRIST
 		= "Das (Zwischen)Ergebnis wird nach dem Abstimmen einsehbar sein.";
