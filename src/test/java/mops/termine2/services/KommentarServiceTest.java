@@ -156,6 +156,22 @@ public class KommentarServiceTest {
 		Mockito.verify(kommentarRepository, times(anzahl)).deleteByLink(linkErwartet);
 	}
 	
+	@Test
+	public void loescheAbgelaufeneKommentareFuerDreiUmfragen() {
+		int anzahl = 3;
+		List<UmfrageDB> umfrageDBs = erstelleUmfrageDBListe(anzahl);
+		when(umfrageRepository.findByLoeschdatumBefore(any())).thenReturn(umfrageDBs);
+		String linkErwartet1 = link + 1;
+		String linkErwartet2 = link + 2;
+		String linkErwartet3 = link + 3;
+		
+		service.loescheAbgelaufeneKommentareFuerUmfragen();
+		
+		Mockito.verify(kommentarRepository, times(1)).deleteByLink(linkErwartet1);
+		Mockito.verify(kommentarRepository, times(1)).deleteByLink(linkErwartet2);
+		Mockito.verify(kommentarRepository, times(1)).deleteByLink(linkErwartet3);
+	}
+	
 	private List<KommentarDB> erstelleKommentarDBListe(int anzahl) {
 		List<KommentarDB> kommentarDBs = new ArrayList<>();
 		IntStream.range(1, anzahl + 1).forEach(kommentarDBNummer -> {
