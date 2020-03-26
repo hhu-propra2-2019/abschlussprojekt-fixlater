@@ -3,6 +3,7 @@ package mops.termine2.scheduling;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import mops.termine2.models.GruppenDTO;
 @Component
 @EnableScheduling
 public class GruppeScheduler {
+	
+	private final Logger logger = Logger.getLogger(GruppeScheduler.class.getName());
 	
 	private BenutzerGruppeRepository repository;
 	
@@ -43,10 +46,15 @@ public class GruppeScheduler {
 	
 	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
+		logger.info("Update der Gruppen");
 		ResponseEntity<GruppenDTO> result;
 		try {
 			result = template.getForEntity(url, GruppenDTO.class, statusnummer);
-		} catch (HttpClientErrorException | ResourceAccessException e) {
+		} catch (HttpClientErrorException e) {
+			logger.warning("Anfrage nicht erfolgreich: HttpClientErrorException");
+			return;
+		} catch (ResourceAccessException e) {
+			logger.warning("Anfrage nicht erfolgreich: ResourceAccessException");
 			return;
 		}
 		
@@ -56,6 +64,7 @@ public class GruppeScheduler {
 			gruppeListe = gruppen.getGroupList();
 			statusnummer = gruppen.getStatus();
 		} catch (NullPointerException e) {
+			logger.warning("Update nicht erfolgreich: NullPointerException");
 			return;
 		}
 		
@@ -88,6 +97,7 @@ public class GruppeScheduler {
 				repository.deleteAllByGruppeId(gruppeId);
 			}
 		}
+		logger.info("Update erfolgreich");
 	}
 	
 	private void benutzerHinzufuegen(List<String> neueBenutzer, String gruppe, Long gruppeId) {

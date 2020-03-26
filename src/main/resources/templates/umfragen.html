@@ -77,25 +77,24 @@
 							<a class="dropdown-item" th:href="@{/termine2/umfragen}">
 								Alle Gruppen
 							</a>
-							
-							<div th:if="*{umfragen.gruppen.size() > 0}">
-								<div class="dropdown-divider"></div>
+							<div style="max-height:400px; max-width:300px; overflow:auto;">
+								<div th:if="*{umfragen.gruppen.size() > 0}">
+									<div class="dropdown-divider"></div>
+								</div>
+								<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
+								   th:href="@{/termine2/umfragen(gruppe=${gruppe.id})}">
+									<span th:text="${gruppe.name}">
+										Gruppenname
+									</span>
+									
+									<i><span class="text-secondary"
+									         th:text="'(ID: ' + ${gruppe.id} + ')'">
+										Gruppen-ID
+									</span></i>
+								</a>
 							</div>
-							
-							<a class="dropdown-item" href="#" th:each="gruppe : ${umfragen.gruppen}"
-							   th:href="@{/termine2/umfragen(gruppe=${gruppe.id})}">
-								<span th:text="${gruppe.name}">
-									Gruppenname
-								</span>
-								
-								<i><span class="text-secondary"
-								         th:text="'(ID: ' + ${gruppe.id} + ')'">
-									Gruppen-ID
-								</span></i>
-							</a>
 						</div>
 					</div>
-					
 					<a th:href="@{/termine2/umfragen-neu}">
 						<button class="btn btn-success">Neue Umfrage</button>
 					</a>
@@ -131,13 +130,21 @@
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
 								<div class="row d-flex justify-content-between align-items-center">
-									<h3 class="h3 col-auto" th:text="${#strings.abbreviate(umfrage.titel, 50)}">
-										Titel der Umfrage
-									</h3>
+
+									<a data-toggle="tooltip" class="col" style="font-size: xx-large;"
+  										th:title="${umfrage.titel}"
+  										th:text="${#strings.abbreviate(umfrage.titel, 38)}">Title with hover
+  									</a>
+  									
+  									<script>
+										$(document).ready(function(){
+  										$('[data-toggle="tooltip"]').tooltip();   
+										});
+									</script>
 									
-									<div class="col-6" style="text-align: right"
+									<div class="col-sm-3" style="text-align: center; align:left; max-width:130px;"
 									     th:text="'vom ' + ${#temporals.format(umfrage.frist,
-									              'dd.MM.yyyy, HH:mm')}">
+									              'dd.MM.yyyy HH:mm')} + ' Uhr'">
 										vom DD.MM.YYYY, HH:MM
 									</div>
 								</div>
@@ -201,9 +208,17 @@
 						     th:each="offeneUmfrage : ${umfragen.getOffen()}">
 							<!-- Zusammenfassung -->
 							<div class="pb-2 border-bottom">
-								<h3 class="h3" th:text="${#strings.abbreviate(offeneUmfrage.titel, 40)}">
-									Titel der Umfrage
-								</h3>
+								
+								<a data-toggle="tooltip" style="font-size: x-large;"
+  										th:title="${offeneUmfrage.titel}"
+  										th:text="${#strings.abbreviate(offeneUmfrage.titel, 28)}">Title with hover
+  								</a>
+
+								<script>
+									$(document).ready(function(){
+  									$('[data-toggle="tooltip"]').tooltip();   
+									});
+								</script>
 								
 								<!-- Gruppe, falls verfügbar -->
 								<div class="mt-1 text-secondary"

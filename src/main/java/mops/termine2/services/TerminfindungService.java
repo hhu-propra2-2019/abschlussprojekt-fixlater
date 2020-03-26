@@ -1,15 +1,15 @@
 package mops.termine2.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TerminfindungService {
@@ -19,7 +19,7 @@ public class TerminfindungService {
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
 	public TerminfindungService(TerminfindungRepository terminfindungRepo,
-								TerminfindungAntwortRepository antwortRepo) {
+		TerminfindungAntwortRepository antwortRepo) {
 		this.terminfindungRepo = terminfindungRepo;
 		this.antwortRepo = antwortRepo;
 	}
@@ -43,6 +43,7 @@ public class TerminfindungService {
 			terminfindungDB.setGruppeId(terminfindung.getGruppeId());
 			terminfindungDB.setTermin(termin);
 			terminfindungDB.setErgebnis(terminfindung.getErgebnis());
+			terminfindungDB.setErgebnisVorFrist(terminfindung.getErgebnisVorFrist());
 			terminfindungDB.setEinmaligeAbstimmung(terminfindung.getEinmaligeAbstimmung());
 			
 			if (terminfindung.getGruppeId() != null) {
@@ -60,29 +61,30 @@ public class TerminfindungService {
 	 *
 	 * @param link
 	 */
+	@Transactional
 	public void loescheByLink(String link) {
-		antwortRepo.deleteByLink(link);
+		antwortRepo.deleteByTerminfindungLink(link);
 		terminfindungRepo.deleteByLink(link);
 	}
 	
 	/**
 	 * Löscht eine abgelaufene Terminfindung und zugehörige Antworten
 	 */
+	@Transactional
 	public void loescheAbgelaufene() {
 		LocalDateTime timeNow = LocalDateTime.now();
-		antwortRepo.loescheAelterAls(timeNow);
-		terminfindungRepo.loescheAelterAls(timeNow);
+		antwortRepo.deleteByTerminfindungLoeschdatumBefore(timeNow);
+		terminfindungRepo.deleteByLoeschdatumBefore(timeNow);
 	}
 	
-	
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
-		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErsteller(ersteller);
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErstellerOrderByFristAsc(ersteller);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
 	
 	public List<Terminfindung> loadByGruppeOhneTermine(Long gruppeId) {
-		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeId(gruppeId);
+		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeIdOrderByFristAsc(gruppeId);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;
 	}
@@ -108,7 +110,9 @@ public class TerminfindungService {
 			terminfindung.setLink(ersterTermin.getLink());
 			terminfindung.setErsteller(ersterTermin.getErsteller());
 			terminfindung.setErgebnis(ersterTermin.getErgebnis());
+			terminfindung.setErgebnisVorFrist(ersterTermin.getErgebnisVorFrist());
 			terminfindung.setEinmaligeAbstimmung(ersterTermin.getEinmaligeAbstimmung());
+			
 			List<LocalDateTime> terminMoeglichkeiten = new ArrayList<>();
 			for (TerminfindungDB termin : termineDB) {
 				terminMoeglichkeiten.add(termin.getTermin());
@@ -150,10 +154,10 @@ public class TerminfindungService {
 		terminfindung.setBeschreibung(db.getBeschreibung());
 		terminfindung.setOrt(db.getOrt());
 		terminfindung.setErgebnis(db.getErgebnis());
+		terminfindung.setErgebnisVorFrist(db.getErgebnisVorFrist());
 		terminfindung.setEinmaligeAbstimmung(db.getEinmaligeAbstimmung());
 		
 		return terminfindung;
 	}
-	
 	
 }
