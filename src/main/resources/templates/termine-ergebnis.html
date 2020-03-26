@@ -292,7 +292,7 @@
 					      th:object="${neuerKommentar}" method="post">
 						<!-- Inhalt -->
 						<div class="mb-3">
-							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment"></textarea>
+							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment" required></textarea>
 						</div>
 
 						<!-- Name -->
@@ -300,7 +300,7 @@
 							<label for="pseudonym">Name</label>
 
 							<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
-							       placeholder="Benjamin"/>
+							       th:placeholder="${account.getName()}">
 						</div>
 
 						<div style="text-align: center">

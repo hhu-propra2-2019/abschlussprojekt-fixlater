@@ -142,10 +142,8 @@
 							</table>
 						</div>
 
-
-						<div style="text-align: center"
-						     >
-            		<input type="text" name="pseudonym" placeholder="Benjamin"
+						<div style="text-align: center">
+            				<input type="text" name="pseudonym" placeholder="Benjamin"
 							       th:placeholder="*{getBenutzer()}"
 							       th:field="${antwort.pseudonym}"
                                    th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
@@ -238,7 +236,7 @@
 							<!-- Inhalt -->
 							<div class="mb-3">
 								<textarea class="form-control" rows="5" id="comment"
-								          th:field="*{inhalt}">
+								          th:field="*{inhalt}" required>
 									Inhalt
 								</textarea>
 							</div>
@@ -246,10 +244,10 @@
 							<!-- Name -->
 							<div class="mb-3 form-group">
 								<label>Name</label>
-								
-								<input class="form-control" id="pseudonym"
-								       type="text" th:placeholder="*{pseudonym}"
-								       th:field="*{pseudonym}"/>
+
+								<input type="text" id="pseudonym" th:placeholder="${account.getName()}"
+									   th:field="*{pseudonym}" class="form-control">
+
 							</div>
 							
 							<div style="text-align: center">

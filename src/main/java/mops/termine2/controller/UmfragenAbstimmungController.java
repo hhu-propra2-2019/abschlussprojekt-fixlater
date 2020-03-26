@@ -258,6 +258,10 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
+		if (neuerKommentar.getPseudonym().equals("")) {
+			neuerKommentar.setPseudonym(account.getName());
+		}
+		
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
