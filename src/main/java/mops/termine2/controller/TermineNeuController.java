@@ -205,23 +205,26 @@ public class TermineNeuController {
 			fehler = "Es muss mindestens einen Vorschlag geben.";
 		}
 		
-		terminfindung.setVorschlaege(gueltigeVorschlaege);
-		
-		if (terminfindung.getFrist().isAfter(minVorschlag)) {
-			if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusDays(1));
-			} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusHours(2));
-			} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusMinutes(5));
-			} else {
-				terminfindung.setFrist(minVorschlag);
+		// minVorschlag and maxVorschlag are always null together
+		if (minVorschlag != null) {
+			if (terminfindung.getFrist().isAfter(minVorschlag)) {
+				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusDays(1));
+				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusHours(2));
+				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusMinutes(5));
+				} else {
+					terminfindung.setFrist(minVorschlag);
+				}
+			}
+			
+			if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
 			}
 		}
 		
-		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-			terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-		}
+		terminfindung.setVorschlaege(gueltigeVorschlaege);
 		
 		// Terminfindung erstellen
 		terminfindung.setErsteller(account.getName());
@@ -358,20 +361,23 @@ public class TermineNeuController {
 				}
 			}
 			
-			if (terminfindung.getFrist().isAfter(minVorschlag)) {
-				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusDays(1));
-				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusHours(2));
-				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusMinutes(5));
-				} else {
-					terminfindung.setFrist(minVorschlag);
+			// minVorschlag and maxVorschlag are always null together
+			if (minVorschlag != null) {
+				if (terminfindung.getFrist().isAfter(minVorschlag)) {
+					if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusDays(1));
+					} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusHours(2));
+					} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+						terminfindung.setFrist(minVorschlag.minusMinutes(5));
+					} else {
+						terminfindung.setFrist(minVorschlag);
+					}
 				}
-			}
-			
-			if (maxVorschlag.isAfter(terminfindung.getLoeschdatum())) {
-				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
+				
+				if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+					terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
+				}
 			}
 			
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
