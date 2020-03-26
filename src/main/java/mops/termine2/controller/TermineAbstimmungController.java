@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
+import mops.termine2.controller.formular.AbstimmungsInfortmationenTermineForm;
 import mops.termine2.controller.formular.AntwortForm;
 import mops.termine2.controller.formular.ErgebnisForm;
 import mops.termine2.models.Kommentar;
@@ -142,6 +143,7 @@ public class TermineAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
+		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("antwort", antwortForm);
 		m.addAttribute("kommentare", kommentare);
@@ -199,6 +201,7 @@ public class TermineAbstimmungController {
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
+		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
 		m.addAttribute("kommentare", kommentare);

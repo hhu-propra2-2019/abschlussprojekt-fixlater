@@ -13,4 +13,5 @@ public class Konstanten {
 	public static final String GROUP_ACCESS_DENIED = "Kein Zugriff auf Gruppe";
 	
 	public static final String NOT_LOGGED_IN = "Nicht eingeloggt";
+	
 }
