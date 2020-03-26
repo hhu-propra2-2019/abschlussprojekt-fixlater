@@ -63,12 +63,12 @@ public class TerminAbstimmungControllerTest {
 	// Tests for Get termine2/{link}
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// AbstimmungAnpassbar FristInZukunft ModusLink  NochNichtTeilgenommen
+	// AbstimmungAnpassbar FristInZukunft ErgebnisVorFrist ModusLink  NochNichtTeilgenommen
 	//Erwarte redirect auf abstimmung
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails1() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -78,12 +78,12 @@ public class TerminAbstimmungControllerTest {
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}
 	
-	// AbstimmungAnpassbar FristInZukunft ModusLink BereitsTeilgenommen
+	// AbstimmungAnpassbar FristInZukunft ModusLink BereitsTeilgenommen ErgebnisVorFrist Ture
 	//Erwarte redirect auf ergebnis
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails2() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -95,6 +95,7 @@ public class TerminAbstimmungControllerTest {
 	
 	// Abstimmung gibt es nicht
 	// Erwartet 404
+	
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails3() throws Exception {
@@ -106,13 +107,13 @@ public class TerminAbstimmungControllerTest {
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
 	}
-	
 	// AbstimmungAnpassbar FristInZukunft ModusGruppe BereitsTeilgenommen Zugriff auf Gruppe
 	// Erwarte redirect auf ergebnis
+	
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails4() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -122,13 +123,13 @@ public class TerminAbstimmungControllerTest {
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
 	}
-	
 	// AbstimmungAnpassbar FristInZukunft ModusGruppe BereitsTeilgenommen  NichtInGruppe
 	// Erwarte 403
+	
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails5() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -138,7 +139,7 @@ public class TerminAbstimmungControllerTest {
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
 	}
 	
-	// tests for Get abstimmung
+	//tests for get abstimmung
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
@@ -147,7 +148,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet1() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -161,7 +162,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet2() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, false, false);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, false, false);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -180,7 +181,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet1() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, false, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -195,7 +196,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet2() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(null, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -210,7 +211,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet3() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true);
+		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
 		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -222,6 +223,21 @@ public class TerminAbstimmungControllerTest {
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is4xxClientError());
 	}
 	
+	// AbstimmungAnpassbar FristInZukunft ModusLink  Teilgenommen ErgebnisVorFrist
+	// Erwartet redirect auf ergebnis
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testTermineAbstimmungGet4() throws Exception {
+		Terminfindung terminfindung = initTerminfindung(null, false, false, true, true);
+		when(authenticationService.createAccountFromPrincipal(any())).thenReturn(accountStudentin);
+		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
+		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
+		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
+	}
+	
 	// tests post abstimmung/
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -230,7 +246,11 @@ public class TerminAbstimmungControllerTest {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Terminfindung initTerminfindung(
-		Long gruppeId, Boolean einmaligeAbstimmung, Boolean teilgenommen, Boolean fristInZukunft) {
+		Long gruppeId,
+		Boolean einmaligeAbstimmung,
+		Boolean ergebnisVorFrist,
+		Boolean teilgenommen,
+		Boolean fristInZukunft) {
 		
 		Terminfindung terminfindung = new Terminfindung();
 		terminfindung.setLink(link);
@@ -249,6 +269,8 @@ public class TerminAbstimmungControllerTest {
 		terminfindung.setEinmaligeAbstimmung(einmaligeAbstimmung);
 		
 		terminfindung.setTeilgenommen(teilgenommen);
+		
+		terminfindung.setErgebnisVorFrist(ergebnisVorFrist);
 		
 		return terminfindung;
 	}
