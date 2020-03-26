@@ -100,16 +100,16 @@ public class UmfrageAntwortService {
 		
 		List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
 		if (!antwortDBS.isEmpty()) {
-			List<String> benuternamen = new ArrayList<>();
+			List<String> benutzernamen = new ArrayList<>();
 			
 			for (UmfrageAntwortDB antwortDB : antwortDBS) {
 				String benutzer = antwortDB.getBenutzer();
-				if (!benuternamen.contains(antwortDB.getBenutzer())) {
+				if (!benutzernamen.contains(antwortDB.getBenutzer())) {
 					List<UmfrageAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
 						antwortDBS, benutzer);
 					umfrageAntworten.add(buildAntwortForBenutzer(
 						benutzer, nutzerAntworten, antwortMoeglichkeiten));
-					benuternamen.add(benutzer);
+					benutzernamen.add(benutzer);
 				}
 				
 			}

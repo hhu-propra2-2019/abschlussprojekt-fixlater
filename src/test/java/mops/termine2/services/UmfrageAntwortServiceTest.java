@@ -56,7 +56,7 @@ public class UmfrageAntwortServiceTest {
 	}
 	
 	@Test
-	public void saveAntwortFuerUmfrageMit49oeglichkeiten() {
+	public void saveAntwortFuerUmfrageMit9Moeglichkeiten() {
 		Umfrage umfrage = getBeispielUmfrage(9);
 		UmfrageAntwort toSave = new UmfrageAntwort();
 		
