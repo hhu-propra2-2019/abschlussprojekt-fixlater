@@ -208,7 +208,15 @@ public class TermineNeuController {
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
 		
 		if (terminfindung.getFrist().isAfter(minVorschlag)) {
-			terminfindung.setFrist(minVorschlag);
+			if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusDays(1));
+			} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusHours(2));
+			} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusMinutes(5));
+			} else {
+				terminfindung.setFrist(minVorschlag);
+			}
 		}
 		
 		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
@@ -350,8 +358,16 @@ public class TermineNeuController {
 				}
 			}
 			
-			if (minVorschlag.isBefore(terminfindung.getFrist())) {
-				terminfindung.setFrist(minVorschlag);
+			if (terminfindung.getFrist().isAfter(minVorschlag)) {
+				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusDays(1));
+				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusHours(2));
+				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+					terminfindung.setFrist(minVorschlag.minusMinutes(5));
+				} else {
+					terminfindung.setFrist(minVorschlag);
+				}
 			}
 			
 			if (maxVorschlag.isAfter(terminfindung.getLoeschdatum())) {
