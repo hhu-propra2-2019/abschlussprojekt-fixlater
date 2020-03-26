@@ -321,6 +321,16 @@
 									<label class="custom-file-label" for="file">
 										Datei wählen
 									</label>
+									
+									<script>
+										$('#file').on('change', function(){
+											var fileName =
+													$(this).val().replace('C:\\fakepath\\', " ");
+											
+											$(this).next('.custom-file-label').html(fileName);
+										})
+									</script>
+									
 								</div>
 								
 								<div class="input-group-append">
@@ -429,7 +439,7 @@
 										$(function () {
 											$('#loeschdatum').datetimepicker({
 												minDate: moment(),
-												format:  'DD.MM.YYYY, HH:mm',
+												format:  'DD.MM.YYYY',
 												locale:  'de'
 											});
 										});

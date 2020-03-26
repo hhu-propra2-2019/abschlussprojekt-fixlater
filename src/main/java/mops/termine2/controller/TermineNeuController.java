@@ -100,7 +100,7 @@ public class TermineNeuController {
 	@PostMapping(path = "/termine-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String neuerTermin(Principal p, Model m, Terminfindung terminfindung,
-							  Gruppe gruppeSelektiert) {
+			Gruppe gruppeSelektiert) {
 		// Account
 		Account account;
 		if (p != null) {
@@ -176,11 +176,27 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		// Vorschläge filtern; doppelte und nicht gesetzte Daten löschen
 		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+		LocalDateTime minVorschlag = null;
+		LocalDateTime maxVorschlag = null;
+		
 		for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
-				gueltigeVorschlaege.add(ldt);
+			// ungültige oder doppelte Vorschläge ignorieren
+			if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
+				continue;
+			}
+			
+			// gültige Vorschläge merken
+			gueltigeVorschlaege.add(ldt);
+			
+			// frühsten Vorschlag merken
+			if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
+				minVorschlag = ldt;
+			}
+			
+			// spätesten Vorschlag merken
+			if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
+				maxVorschlag = ldt;
 			}
 		}
 		
@@ -190,6 +206,14 @@ public class TermineNeuController {
 		}
 		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
+		
+		if (terminfindung.getFrist().isAfter(minVorschlag)) {
+			terminfindung.setFrist(minVorschlag);
+		}
+		
+		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+			terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
+		}
 		
 		// Terminfindung erstellen
 		terminfindung.setErsteller(account.getName());
@@ -302,21 +326,42 @@ public class TermineNeuController {
 			}
 			
 			// If any of the Termine lies before the Frist, then the Frist has to be updated.
-			LocalDateTime min = null;
+			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+			LocalDateTime minVorschlag = null;
+			LocalDateTime maxVorschlag = null;
 			
-			for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-				if (min == null || ldt.isBefore(min)) {
-					min = ldt;
+			for (LocalDateTime ldt : termine) {
+				// ungültige oder doppelte Vorschläge ignorieren
+				if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
+					continue;
+				}
+				
+				// gültige Vorschläge merken
+				gueltigeVorschlaege.add(ldt);
+				
+				// frühsten Vorschlag merken
+				if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
+					minVorschlag = ldt;
+				}
+				
+				// spätesten Vorschlag merken
+				if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
+					maxVorschlag = ldt;
 				}
 			}
 			
-			if (min.isBefore(terminfindung.getFrist())) {
-				terminfindung.setFrist(min);
+			if (minVorschlag.isBefore(terminfindung.getFrist())) {
+				terminfindung.setFrist(minVorschlag);
+			}
+			
+			if (maxVorschlag.isAfter(terminfindung.getLoeschdatum())) {
+				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
 			}
 			
 			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			m.addAttribute("terminfindung", terminfindung);
 		}
+		
 		return "termine-neu";
 	}
 }
