@@ -173,7 +173,8 @@ public class TerminfindunguebersichtServiceTest {
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
-			terminfindunguebersichtService.loadOffeneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+			terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(4)));
 		
@@ -221,7 +222,8 @@ public class TerminfindunguebersichtServiceTest {
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> result =
-			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+			terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(5)));
 		
