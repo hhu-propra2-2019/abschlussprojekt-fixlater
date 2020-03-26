@@ -12,7 +12,7 @@ public class KonstantenAbstimmung {
 		= "Das (Zwischen)Ergebnis wird nach dem Abstimmen einsehbar sein.";
 	
 	public static final String ERGEBNIS_NACH_FRIST
-		= "Das Ergebnis ist Nach der Frist einsehbar.";
+		= "Das Ergebnis ist nach der Frist einsehbar.";
 	
 	public static final String ATTENTION
 		= "!ACHTUNG!";
