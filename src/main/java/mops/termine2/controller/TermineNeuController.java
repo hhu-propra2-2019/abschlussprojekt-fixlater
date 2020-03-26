@@ -68,6 +68,21 @@ public class TermineNeuController {
 			// Account
 			account = authenticationService.createAccountFromPrincipal(p);
 			m.addAttribute(Konstanten.ACCOUNT, account);
+			
+			/* Gruppen */
+			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+			m.addAttribute("gruppen", gruppen);
+			Gruppe noGroup = new Gruppe();
+			noGroup.setId(-1L);
+			m.addAttribute("gruppeSelektiert", noGroup);
+			
+			Terminfindung terminfindung = new Terminfindung();
+			terminfindung.setVorschlaege(new ArrayList<>());
+			terminfindung.getVorschlaege().add(LocalDateTime.now());
+			terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
+			terminfindung.setErgebnisVorFrist(true);
+			m.addAttribute("terminfindung", terminfindung);
+			m.addAttribute("fehler", "");
 			authenticatedAccess.increment();
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);

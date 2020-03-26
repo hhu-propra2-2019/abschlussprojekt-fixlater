@@ -45,7 +45,6 @@ public class AntwortForm {
 	
 	
 	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, String nutzer, AntwortForm antwortFrm) {
-		System.out.println(antwortFrm);
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setKuerzel(nutzer);
 		terminfindungAntwort.setLink(terminf.getLink());
