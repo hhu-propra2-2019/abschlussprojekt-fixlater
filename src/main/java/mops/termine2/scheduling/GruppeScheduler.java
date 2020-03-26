@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,7 +31,8 @@ public class GruppeScheduler {
 	
 	private int statusnummer = 0;
 	
-	private final String url = "http://localhost:8082/gruppen2/api/updateGroups/{status}";
+	@Value("${termine2.gruppescheduler.url}")
+	private String urlPrefix;
 	
 	private RestTemplate template;
 	
@@ -46,7 +48,8 @@ public class GruppeScheduler {
 	
 	@Scheduled(fixedDelay = 30000)
 	public void updateGruppe() {
-		logger.info("Update der Gruppen");
+		String url = urlPrefix + "/gruppen2/api/updateGroups/{status}";
+		logger.info("Hole Gruppenupdate von " + url.replace("{status}", Integer.toString(statusnummer)));
 		ResponseEntity<GruppenDTO> result;
 		try {
 			result = template.getForEntity(url, GruppenDTO.class, statusnummer);
