@@ -66,12 +66,14 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setLink(day.toString());
 			termin.setFrist(ldt.plusDays(day));
 			termin.setEinmaligeAbstimmung(false);
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(day.toString());
 			terminDB.setFrist(ldt.plusDays(day));
 			terminDB.setEinmaligeAbstimmung(false);
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -89,9 +91,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(0)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -113,6 +113,7 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setFrist(ldt.plusDays(fristTage.get(i)));
 			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
 			termin.setEinmaligeAbstimmung(false);
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
@@ -120,6 +121,7 @@ public class TerminfindunguebersichtServiceTest {
 			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
 			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
 			terminDB.setEinmaligeAbstimmung(false);
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -133,9 +135,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(3), terminfindungen.get(1)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -158,6 +158,7 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setFrist(ldt.plusDays(days.get(i)));
 			termin.setEinmaligeAbstimmung(false);
 			termin.setGruppeId(gruppenIds.get(i));
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
@@ -166,6 +167,7 @@ public class TerminfindunguebersichtServiceTest {
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
 				terminDB.setEinmaligeAbstimmung(false);
 				terminDB.setGruppeId(gruppenIds.get(i));
+				terminDB.setErgebnisVorFrist(true);
 				terminfindungenDB.add(terminDB);
 			}
 		}
@@ -178,9 +180,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(4)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -204,7 +204,8 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setFrist(ldt.plusDays(days.get(i)));
 			termin.setEinmaligeAbstimmung(false);
 			termin.setGruppeId(gruppenIds.get(i));
-			termin.setErgebnis(LocalDateTime.now().plusDays(ergebnis.get(i)));
+			termin.setErgebnis(ldt.plusDays(ergebnis.get(i)));
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
@@ -213,7 +214,8 @@ public class TerminfindunguebersichtServiceTest {
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
 				terminDB.setEinmaligeAbstimmung(false);
 				terminDB.setGruppeId(gruppenIds.get(i));
-				terminDB.setErgebnis(LocalDateTime.now().plusDays(ergebnis.get(i)));
+				terminDB.setErgebnis(ldt.plusDays(ergebnis.get(i)));
+				terminDB.setErgebnisVorFrist(true);
 				terminfindungenDB.add(terminDB);
 			}
 		}
@@ -227,9 +229,7 @@ public class TerminfindunguebersichtServiceTest {
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(5)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(result.get(i).getLink());
-		}
+		assertThat(result).isEqualTo(erwartet);
 	}
 	
 }

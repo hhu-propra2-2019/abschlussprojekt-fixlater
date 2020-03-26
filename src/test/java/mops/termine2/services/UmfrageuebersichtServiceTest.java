@@ -64,6 +64,7 @@ public class UmfrageuebersichtServiceTest {
 			Umfrage umfrage = new Umfrage();
 			umfrage.setLink(day.toString());
 			umfrage.setFrist(ldt.plusDays(day));
+			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
 			UmfrageDB umfrageDB = new UmfrageDB();
@@ -86,9 +87,7 @@ public class UmfrageuebersichtServiceTest {
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(2), umfragen.get(0)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -109,6 +108,7 @@ public class UmfrageuebersichtServiceTest {
 			umfrage.setLink(fristTage.get(i).toString());
 			umfrage.setFrist(ldt.plusDays(fristTage.get(i)));
 			umfrage.setErgebnis(ergebnisse.get(i));
+			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
 			UmfrageDB umfrageDB = new UmfrageDB();
@@ -128,9 +128,7 @@ public class UmfrageuebersichtServiceTest {
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(1), umfragen.get(3)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -152,6 +150,7 @@ public class UmfrageuebersichtServiceTest {
 			umfrage.setLink(days.get(i).toString());
 			umfrage.setFrist(ldt.plusDays(days.get(i)));
 			umfrage.setGruppeId(gruppenIds.get(i));
+			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
 			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
@@ -170,9 +169,7 @@ public class UmfrageuebersichtServiceTest {
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(2), umfragen.get(4)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(ergebnis.get(i).getLink());
-		}
+		assertThat(ergebnis).isEqualTo(erwartet);
 	}
 	
 	@Test
@@ -196,6 +193,7 @@ public class UmfrageuebersichtServiceTest {
 			umfrage.setFrist(ldt.plusDays(days.get(i)));
 			umfrage.setGruppeId(gruppenIds.get(i));
 			umfrage.setErgebnis(ergebnisse.get(i));
+			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
 			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
@@ -216,9 +214,7 @@ public class UmfrageuebersichtServiceTest {
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(5), umfragen.get(1)));
 		
-		for (int i = 0; i < erwartet.size(); i++) {
-			assertThat(erwartet.get(i).getLink()).isEqualTo(result.get(i).getLink());
-		}
+		assertThat(result).isEqualTo(erwartet);
 	}
 	
 }
