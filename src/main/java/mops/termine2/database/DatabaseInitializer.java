@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -76,8 +77,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 					.boxed().collect(Collectors.toList());
 				
 				for (int value2 = 0; value2 < ANZAHL_BENUTZER_GRUPPE; value2++) {
-					final BenutzerGruppeDB benutzerGruppeDB = 
-						new BenutzerGruppeDB();					
+					final BenutzerGruppeDB benutzerGruppeDB =
+						new BenutzerGruppeDB();
 					int indexStudent = r.nextInt(ANZAHL_STUDENTEN - value2);
 					benutzerGruppeDB.setBenutzer("studentin" + studenten.get(indexStudent));
 					studenten.remove(indexStudent);
@@ -142,6 +143,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Boolean einmaligeAbstimmung = r.nextBoolean();
 		int antwortGrenze = r.nextInt(4);
 		
+		AtomicInteger i = new AtomicInteger();
+		i.set(1);
+		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final TerminfindungDB terminfindungdb = new TerminfindungDB();
 			terminfindungdb.setBeschreibung(beschreibung);
@@ -152,12 +156,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setLoeschdatum(loeschdatum);
 			terminfindungdb.setOrt(ort);
 			terminfindungdb.setModus(Modus.GRUPPE);
-			terminfindungdb.setTermin(frist.plusDays(r.nextInt(80)));
+			terminfindungdb.setTermin(frist.plusDays(i.get()));
 			terminfindungdb.setTitel(titel);
-			terminfindungdb.setErgebnis(ergebnis);
+			//terminfindungdb.setErgebnis(ergebnis);
 			terminfindungdb.setErgebnisVorFrist(ergebnisVorFrist);
 			terminfindungdb.setEinmaligeAbstimmung(einmaligeAbstimmung);
-			
+			i.incrementAndGet();
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -207,6 +211,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		Boolean einmaligeAbstimmung = r.nextBoolean();
 		int antwortGrenze = r.nextInt(3);
 		
+		AtomicInteger i = new AtomicInteger();
+		i.set(1);
+		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final TerminfindungDB terminfindungdb = new TerminfindungDB();
 			terminfindungdb.setBeschreibung(beschreibung);
@@ -216,12 +223,12 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			terminfindungdb.setLoeschdatum(loeschdatum);
 			terminfindungdb.setOrt(ort);
 			terminfindungdb.setModus(Modus.LINK);
-			terminfindungdb.setTermin(frist.plusDays(r.nextInt(80)));
+			terminfindungdb.setTermin(frist.plusDays(i.get()));
 			terminfindungdb.setTitel(titel);
-			terminfindungdb.setErgebnis(ergebnis);
+			//terminfindungdb.setErgebnis(ergebnis);
 			terminfindungdb.setErgebnisVorFrist(ergebnisVorFrist);
 			terminfindungdb.setEinmaligeAbstimmung(einmaligeAbstimmung);
-			
+			i.incrementAndGet();
 			
 			this.terminfindungRepository.save(terminfindungdb);
 			
@@ -264,7 +271,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
 								  double entscheidungswert) {
-
+		
 		Random r = new Random();
 		String beschreibung = faker.lorem().sentence();
 		String link = faker.name().firstName() + benutzerGruppeDB.getId();
@@ -274,6 +281,8 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = r.nextInt(4);
 		
+		AtomicInteger i = new AtomicInteger();
+		i.set(1);
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final UmfrageDB umfrageDB = new UmfrageDB();
 			umfrageDB.setBeschreibung(beschreibung);
@@ -284,9 +293,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			umfrageDB.setLoeschdatum(loeschdatum);
 			umfrageDB.setModus(Modus.GRUPPE);
 			umfrageDB.setTitel(titel);
-			umfrageDB.setAuswahlmoeglichkeit(faker.harryPotter().spell());
+			umfrageDB.setAuswahlmoeglichkeit(faker.harryPotter().spell() + i.get());
 			umfrageDB.setMaxAntwortAnzahl(maxAntwortAnzahl);
-			
+			i.incrementAndGet();
 			this.umfrageRepository.save(umfrageDB);
 			
 			fakeUmfrageAntwortenGruppe(gruppeZaehler, umfrageDB, faker, antwortGrenze);
@@ -327,6 +336,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		int antwortGrenze = r.nextInt(3);
 		
+		AtomicInteger i = new AtomicInteger();
+		i.set(1);
+		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final UmfrageDB umfrageDB = new UmfrageDB();
 			umfrageDB.setBeschreibung(beschreibung);
@@ -336,9 +348,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			umfrageDB.setLoeschdatum(loeschdatum);
 			umfrageDB.setModus(Modus.LINK);
 			umfrageDB.setTitel(titel);
-			umfrageDB.setAuswahlmoeglichkeit(faker.harryPotter().spell());
+			umfrageDB.setAuswahlmoeglichkeit(faker.harryPotter().spell() + i.get());
 			umfrageDB.setMaxAntwortAnzahl(maxAntwortAnzahl);
-			
+			i.incrementAndGet();
 			this.umfrageRepository.save(umfrageDB);
 			
 			fakeUmfrageAntwortenLink(umfrageDB, faker, antwortGrenze);

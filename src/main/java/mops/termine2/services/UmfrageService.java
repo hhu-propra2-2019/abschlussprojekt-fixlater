@@ -1,17 +1,16 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UmfrageService {
@@ -30,18 +29,30 @@ public class UmfrageService {
 	 *
 	 * @param umfrage
 	 */
+	@Transactional
 	public void save(Umfrage umfrage) {
+		String link = umfrage.getLink();
+		List<UmfrageDB> alteAuswahl = umfrageRepository.findByLink(link);
+		List<UmfrageDB> toSave = new ArrayList<>();
+		
+		List<String> vorschlaege = new ArrayList<>();
+		List<UmfrageDB> toDelete = new ArrayList<>();
+		toDelete.addAll(alteAuswahl);
+		for (UmfrageDB umfrageDB : alteAuswahl) {
+			vorschlaege.add(umfrageDB.getAuswahlmoeglichkeit());
+		}
+		
 		for (String vorschlag : umfrage.getVorschlaege()) {
 			UmfrageDB umfrageDB = new UmfrageDB();
-			umfrageDB.setAuswahlmoeglichkeit(vorschlag);
-			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
+			umfrageDB.setTitel(umfrage.getTitel());
 			umfrageDB.setErsteller(umfrage.getErsteller());
 			umfrageDB.setFrist(umfrage.getFrist());
-			umfrageDB.setGruppeId(umfrage.getGruppeId());
-			umfrageDB.setLink(umfrage.getLink());
 			umfrageDB.setLoeschdatum(umfrage.getLoeschdatum());
-			umfrageDB.setMaxAntwortAnzahl(umfrage.getMaxAntwortAnzahl());
-			umfrageDB.setTitel(umfrage.getTitel());
+			umfrageDB.setLink(umfrage.getLink());
+			umfrageDB.setBeschreibung(umfrage.getBeschreibung());
+			umfrageDB.setGruppeId(umfrage.getGruppeId());
+			umfrageDB.setAuswahlmoeglichkeit(vorschlag);
+			umfrageDB.setErgebnis(umfrage.getErgebnis());
 			
 			if (umfrage.getGruppeId() != null) {
 				umfrageDB.setModus(Modus.GRUPPE);
@@ -49,8 +60,19 @@ public class UmfrageService {
 				umfrageDB.setModus(Modus.LINK);
 			}
 			
-			umfrageRepository.save(umfrageDB);
+			if (vorschlaege.contains(umfrageDB.getAuswahlmoeglichkeit())) {
+				int index = vorschlaege.indexOf(umfrageDB.getAuswahlmoeglichkeit());
+				UmfrageDB toUpdate = alteAuswahl.get(index);
+				updateOldDB(umfrageDB, toUpdate);
+				toSave.add(toUpdate);
+				toDelete.remove(toUpdate);
+				
+			} else {
+				toSave.add(umfrageDB);
+			}
 		}
+		umfrageRepository.saveAll(toSave);
+		umfrageRepository.deleteAll(toDelete);
 	}
 	
 	/**
@@ -163,6 +185,17 @@ public class UmfrageService {
 			return umfrage;
 		}
 		return null;
+	}
+	
+	private void updateOldDB(UmfrageDB umfrage, UmfrageDB toUpdate) {
+		toUpdate.setTitel(umfrage.getTitel());
+		toUpdate.setErsteller(umfrage.getErsteller());
+		toUpdate.setFrist(umfrage.getFrist());
+		toUpdate.setLoeschdatum(umfrage.getLoeschdatum());
+		toUpdate.setLink(umfrage.getLink());
+		toUpdate.setBeschreibung(umfrage.getBeschreibung());
+		toUpdate.setGruppeId(umfrage.getGruppeId());
+		toUpdate.setErgebnis(umfrage.getErgebnis());
 	}
 	
 	private Umfrage erstelleUmfrageOhneVorschlaege(UmfrageDB umfragedb) {
