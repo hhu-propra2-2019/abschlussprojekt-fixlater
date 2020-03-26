@@ -150,7 +150,6 @@ public class ErgebnisScheduler {
 		
 		int[] ja = new int[vorschlaege.size()];
 		int[] nein = new int[vorschlaege.size()];
-		int[] vielleicht = new int[vorschlaege.size()];
 		
 		for (UmfrageAntwortDB umfrageAntwortDB : umfrageAntwortDBS) {
 			int index = vorschlaege.indexOf(umfrageAntwortDB.getUmfrage().getAuswahlmoeglichkeit());
