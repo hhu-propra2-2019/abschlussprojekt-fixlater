@@ -31,4 +31,6 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	List<UmfrageDB> findByFristBeforeAndErgebnisIsNull(LocalDateTime timeNow);
 	
+	List<UmfrageDB> findByLoeschdatumBefore(LocalDateTime timeNow);
+	
 }

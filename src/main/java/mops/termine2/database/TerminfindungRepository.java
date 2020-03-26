@@ -27,4 +27,6 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	void deleteByLoeschdatumBefore(LocalDateTime timeNow);
 	
 	List<TerminfindungDB> findByFristBeforeAndErgebnisIsNull(LocalDateTime timeNow);
+	
+	List<TerminfindungDB> findByLoeschdatumBefore(LocalDateTime timeNow);
 }
