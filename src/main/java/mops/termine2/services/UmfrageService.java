@@ -1,17 +1,16 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Umfrage;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UmfrageService {
@@ -176,6 +175,7 @@ public class UmfrageService {
 		umfrage.setMaxAntwortAnzahl(umfragedb.getMaxAntwortAnzahl());
 		umfrage.setTitel(umfragedb.getTitel());
 		umfrage.setVorschlaege(new ArrayList<String>());
+		umfrage.setErgebnis(umfragedb.getErgebnis());
 		return umfrage;
 	}
 	
