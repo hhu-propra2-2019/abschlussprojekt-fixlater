@@ -555,7 +555,12 @@ Ergebnis jede minute berechnet. Bugfixing. Refactoring
 Revamps, Fixes
 
 === Tests (Julia, Kathi)
-Tests für filehandling, Pullrequests
+Am Vortag hat Julia noch Kleinigkeiten an den Kommentaren geändert, sodass nun keine leeren Kommentare
+abgeschickt werden können und der Name des Kommentarautors direkt auf den Benutzernamen gesetzt wird,
+wenn kein Pseudonym übergeben wird. An diesem Tag wurden dann noch von Kathi und Julia fehlende Tests für
+das filehandling-Package geschrieben (für die Klassen, die das Format prüfen bzw. ändern beim Import bzw. Export).
+Außerdem wurden diverse pull requests bearbeitet, um auch die restlichen Änderungen in den master
+zu bringen. Zudem hat Julia noch Tests für den UmfragenAbstimmungsController geschrieben.
 
 === Refactoring und Debugging (Leon)
 Am Anfang hatte sich Leon darum gekümmert, dass einige Controller dünner werden, was die Logik betrifft. Dabei wurde so einiger Code aus den Controllern in verschiedene Services gelegt oder sonstige Util klassen. Der einzige Stolperstein hier war, dass dann die bestehenden Controllertests ein etwas anderes Mocking brauchten, da andere methoden verwendet wurden an einige Stellen. Dies war aber auch schnell gelöst.
