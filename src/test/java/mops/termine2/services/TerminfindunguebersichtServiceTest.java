@@ -141,13 +141,13 @@ public class TerminfindunguebersichtServiceTest {
 	@Test
 	public void testLoadOffeneTerminfindungenFuerGruppe() {
 		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3));
-		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L));
+		List<String> gruppenIds = new ArrayList<>(Arrays.asList("1", "5", "5", "7", "5"));
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId(5L);
+		gruppe.setGruppeId("5");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
@@ -187,13 +187,13 @@ public class TerminfindunguebersichtServiceTest {
 	public void testLoadAbgeschlosseneTerminfindungenFuerGruppe() {
 		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3, -7));
 		List<Integer> ergebnis = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
-		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L, 5L));
+		List<String> gruppenIds = new ArrayList<>(Arrays.asList("1", "5", "5", "7", "5", "5"));
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId(5L);
+		gruppe.setGruppeId("5");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();

@@ -15,7 +15,7 @@ public interface TerminfindungRepository extends CrudRepository<TerminfindungDB,
 	
 	List<TerminfindungDB> findByErstellerOrderByFristAsc(String ersteller);
 	
-	List<TerminfindungDB> findByGruppeIdOrderByFristAsc(Long gruppeId);
+	List<TerminfindungDB> findByGruppeIdOrderByFristAsc(String gruppeId);
 	
 	@Transactional
 	void deleteByLink(String link);

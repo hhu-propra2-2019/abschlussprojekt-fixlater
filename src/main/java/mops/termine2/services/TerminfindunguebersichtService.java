@@ -39,7 +39,7 @@ public class TerminfindunguebersichtService {
 	 * @param account, gruppe
 	 * @return eine Liste von offenen Terminabstimmungen nach Gruppe
 	 */
-	public List<Terminfindung> loadOffeneTerminfindungenFuerGruppe(Account account, Long gruppeId) {
+	public List<Terminfindung> loadOffeneTerminfindungenFuerGruppe(Account account, String gruppeId) {
 		List<Terminfindung> termine = new ArrayList<>();
 		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
 		List<Terminfindung> offeneTermine = filterOpenDatePolls(termine);
@@ -60,7 +60,7 @@ public class TerminfindunguebersichtService {
 	 * @param account, gruppe
 	 * @return eine Liste von abgeschlossenen Terminabstimmungen nach Gruppe
 	 */
-	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerGruppe(Account account, Long gruppeId) {
+	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerGruppe(Account account, String gruppeId) {
 		List<Terminfindung> termine = new ArrayList<>();
 		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
 		List<Terminfindung> abgeschlosseneTermine = filterClosedDatePolls(termine);

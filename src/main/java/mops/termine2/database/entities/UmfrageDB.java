@@ -35,7 +35,7 @@ public class UmfrageDB {
 	@Lob
 	private String beschreibung;
 	
-	private Long gruppeId;
+	private String gruppeId;
 	
 	private Long maxAntwortAnzahl;
 	

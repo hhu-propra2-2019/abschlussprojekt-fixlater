@@ -39,7 +39,7 @@ public class UmfragenuebersichtService {
 	 * @param gruppeId
 	 * @return eine Liste von offenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, Long gruppeId) {
+	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, String gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
@@ -60,7 +60,7 @@ public class UmfragenuebersichtService {
 	 * @param gruppeId
 	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
 	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, Long gruppeId) {
+	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, String gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
 		List<Umfrage> abgeschlosseneUmfragen = filterClosedSurveys(umfragen);

@@ -14,7 +14,7 @@ public class GruppeDTO {
 	
 	private String description;
 	
-	private Integer id;
+	private String id;
 	
 	private List<BenutzerDTO> members;
 	

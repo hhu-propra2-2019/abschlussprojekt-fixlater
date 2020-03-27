@@ -69,7 +69,7 @@ public class UmfragenNeuController {
 		gruppeService.sortGroupsByName(gruppen);
 		model.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
-		noGroup.setId(-1L);
+		noGroup.setId("-1");
 		model.addAttribute("gruppeSelektiert", noGroup);
 		
 		// Umfrage
@@ -174,7 +174,7 @@ public class UmfragenNeuController {
 		
 		// Umfrage erstellen
 		umfrage.setErsteller(account.getName());
-		if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
+		if (gruppeSelektiert.getId() != null && !gruppeSelektiert.getId().contentEquals("-1")) {
 			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
 			umfrage.setGruppeId(gruppe.getId());
 		}

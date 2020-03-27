@@ -59,29 +59,29 @@ public class GruppeServiceTest {
 	@Test
 	public void testLoadById() {
 		Gruppe expected = new Gruppe();
-		expected.setId(1L);
+		expected.setId("1");
 		expected.setName("Test");
 		
 		BenutzerGruppeDB user = new BenutzerGruppeDB();
 		user.setBenutzer("Hallo");
 		user.setGruppe("Test");
-		user.setGruppeId(1L);
+		user.setGruppeId("1");
 		user.setId(1L);
 		
-		when(benutzerGruppeRepository.findByGruppeId(1L))
+		when(benutzerGruppeRepository.findByGruppeId("1"))
 			.thenReturn(new ArrayList<BenutzerGruppeDB>(Arrays.asList(user)));
 		
-		Gruppe result = gruppeService.loadByGruppeId(1L);
+		Gruppe result = gruppeService.loadByGruppeId("1");
 		
 		assertThat(result).isEqualTo(expected);
 	}
 	
 	@Test
 	public void testLoadByIdNoGroup() {				
-		when(benutzerGruppeRepository.findByGruppeId(1L))
+		when(benutzerGruppeRepository.findByGruppeId("1"))
 			.thenReturn(new ArrayList<BenutzerGruppeDB>());
 		
-		Gruppe result = gruppeService.loadByGruppeId(1L);
+		Gruppe result = gruppeService.loadByGruppeId("1");
 		
 		assertThat(result).isNull();
 	}
@@ -92,13 +92,13 @@ public class GruppeServiceTest {
 		BenutzerGruppeDB user = new BenutzerGruppeDB();
 		user.setBenutzer("studentin");
 		user.setGruppe("Test");
-		user.setGruppeId(1L);
+		user.setGruppeId("1");
 		user.setId(1L);
 		
-		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", 1L))
+		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(user);
 		
-		boolean result = gruppeService.accountInGruppe(account, 1L);
+		boolean result = gruppeService.accountInGruppe(account, "1");
 		
 		assertThat(result).isEqualTo(true);
 	}
@@ -106,10 +106,10 @@ public class GruppeServiceTest {
 	@Test
 	public void testAccountNotInGruppe() {
 		Account account = new Account("studentin", "abc@def.de", null, null);		
-		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", 1L))
+		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(null);
 		
-		boolean result = gruppeService.accountInGruppe(account, 1L);
+		boolean result = gruppeService.accountInGruppe(account, "1");
 		
 		assertThat(result).isEqualTo(false);
 	}
@@ -117,10 +117,10 @@ public class GruppeServiceTest {
 	@Test
 	public void testSortedGroupnames() {
 		Gruppe g1 = new Gruppe();
-		g1.setId(1L);
+		g1.setId("1");
 		g1.setName("a");
 		Gruppe g2 = new Gruppe();
-		g2.setId(2L);
+		g2.setId("2");
 		g2.setName("b");
 		List<Gruppe> input = new ArrayList<Gruppe>(
 			Arrays.asList(
@@ -147,17 +147,17 @@ public class GruppeServiceTest {
 	@Test
 	public void testAccessDeniedMinus1() {
 		Account account = new Account("studentin", "abc@def.de", null, null);
-		boolean result = gruppeService.checkGroupAccessDenied(account, -1L);
+		boolean result = gruppeService.checkGroupAccessDenied(account, "-1");
 		assertThat(result).isEqualTo(false);
 	}
 	
 	@Test
 	public void testAccessDenied() {
 		Account account = new Account("studentin", "abc@def.de", null, null);		
-		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", 1L))
+		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(null);
 		
-		boolean result = gruppeService.checkGroupAccessDenied(account, 1L);
+		boolean result = gruppeService.checkGroupAccessDenied(account, "1");
 		
 		assertThat(result).isEqualTo(true);
 	}
@@ -168,12 +168,12 @@ public class GruppeServiceTest {
 		BenutzerGruppeDB user = new BenutzerGruppeDB();
 		user.setBenutzer("studentin");
 		user.setGruppe("Test");
-		user.setGruppeId(1L);
+		user.setGruppeId("1");
 		user.setId(1L);
-		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", 1L))
+		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(user);
 		
-		boolean result = gruppeService.checkGroupAccessDenied(account, 1L);
+		boolean result = gruppeService.checkGroupAccessDenied(account, "1");
 		
 		assertThat(result).isEqualTo(false);
 	}

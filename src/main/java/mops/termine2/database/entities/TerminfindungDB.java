@@ -37,7 +37,7 @@ public class TerminfindungDB {
 	@Lob
 	private String beschreibung;
 	
-	private Long gruppeId;
+	private String gruppeId;
 	
 	private LocalDateTime ergebnis;
 	

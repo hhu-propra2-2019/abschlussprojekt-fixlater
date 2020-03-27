@@ -90,7 +90,7 @@ public class UmfrageService {
 	 *
 	 * @param gruppeId
 	 */
-	public void deleteByGruppe(Long gruppeId) {
+	public void deleteByGruppe(String gruppeId) {
 		umfrageRepository.deleteByGruppeId(gruppeId);
 	}
 	
@@ -132,7 +132,7 @@ public class UmfrageService {
 		return getDistinctUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppeOhneUmfragen(Long gruppeId) {
+	public List<Umfrage> loadByGruppeOhneUmfragen(String gruppeId) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeIdOrderByFristAsc(gruppeId);
 		return getDistinctUmfragen(umfrageDBs);
 	}
