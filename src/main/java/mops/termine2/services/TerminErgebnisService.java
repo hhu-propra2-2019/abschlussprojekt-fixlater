@@ -7,6 +7,8 @@ import mops.termine2.util.IntegerToolkit;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -48,7 +50,14 @@ public class TerminErgebnisService {
 		
 		List<Integer> highest = IntegerToolkit.findHighestIndex(ja);
 		if (highest.size() > 1) {
-			highest = IntegerToolkit.findHighestIndex(vielleicht);
+			int tmp = highest.get(0);
+			for (Integer i : highest) {
+				if (vielleicht[tmp] < vielleicht[i]) {
+					tmp = i;
+				}
+				
+			}
+			highest = new ArrayList<>(Arrays.asList(tmp));
 		}
 		
 		return terminfindung.getVorschlaege().get(highest.get(0));
