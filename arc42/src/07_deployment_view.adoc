@@ -44,7 +44,6 @@ An dieser Stelle beschreiben Sie (als Kombination von Diagrammen mit Tabellen od
 * Zuordnung von Softwareartefakten zu Bestandteilen der Infrastruktur
 
 Für mehrere Umgebungen oder alternative Deployments kopieren Sie diesen Teil von arc42 für alle wichtigen Umgebungen/Varianten.
-****
 
 _**<Übersichtsdiagramm>**_
 
@@ -55,13 +54,15 @@ Qualitäts- und/oder Leistungsmerkmale:: _<Erläuternder Text>_
 Zuordnung von Bausteinen zu Infrastruktur:: _<Beschreibung der Zuordnung>_
 
 === Infrastruktur Ebene 2
+****
+
+
 
 [role="arc42help"]
 ****
 An dieser Stelle können Sie den inneren Aufbau (einiger) Infrastrukturelemente aus Ebene 1 beschreiben.
 
 Für jedes Infrastrukturelement kopieren Sie die Struktur aus Ebene 1.
-****
 
 ==== _<Infrastrukturelement 1>_
 
@@ -76,3 +77,6 @@ _<Diagramm + Erläuterungen>_
 ==== _<Infrastrukturelement n>_
 
 _<Diagramm + Erläuterungen>_
+
+****
+

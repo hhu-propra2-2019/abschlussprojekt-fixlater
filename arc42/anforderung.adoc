@@ -1,0 +1,7 @@
+Um einen gemeinsamen Termin mit mehreren Personen abzustimmen, kann man in diesem System ein Eintrag angelegt werden. Ein Eintrag besteht aus einem Titel, einem Ort, einer optionalen Beschreibung und Vorschlägen für Termine. Die Terminvorschläge sollen sowohl über eine einfach zu bedienende graphische Oberfläche (hier könnte doodle.com oder auch terminplaner.dfn.de als Vorbild genommen werden) eingegeben, als auch über ein Textfile importiert werden können. Es soll auch die Option geben über Fragen abzustimmen. Auch Kommentare sollen abgegeben werden können.
+
+Terminfindung und Abstimmung können mit einer Gruppe verknüpft werden. Dann können nur Gruppenmitglieder teilnehmen. Alternativ kann der Zugang per Link erfolgen. Jede Person, die den Link kennt, kann dann abstimmen.
+
+Die Abstimmung kann unter dem Klarnamen oder Pseudonym erfolgen.
+
+Für alle Terminfindungs- und Abstimmungsprozesse soll ein Datum angegeben werden, an dem die den Prozess betreffenden Daten automatisch gelöscht werden.

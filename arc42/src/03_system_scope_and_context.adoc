@@ -20,6 +20,8 @@ Verschiedene Optionen:
 * Listen von Kommunikationsbeziehungen mit deren Schnittstellen
 ****
 
+Es werden nach außen hin keine Schnittstellen angeboten. Daten, die von anderen System angefordert werden, werde als Kopie in dem System gespeichert, sodass es unabhägig von anderen System ausgeführt werden kann.
+
 === Fachlicher Kontext
 
 [role="arc42help"]
@@ -38,9 +40,11 @@ Alternativ oder ergänzend können Sie eine Tabelle verwenden.
 Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikationsbeziehung, Eingabe, Ausgabe.
 ****
 
-**<Diagramm und/oder Tabelle>**
-
-**<optional: Erläuterung der externen fachlichen Schnittstellen>**
+[cols="1,1,2" options="header"]
+|===
+|Kommunikationsbeziehung | Eingabe | Ausgabe
+| Kommunikation per API bereitgestellt von der Bruppenbildung | Anfrage nach geänderten Daten bei den Gruppen | Daten aller veränderten Gruppen im JSON Format.
+|===
 
 === Technischer Kontext
 
@@ -58,9 +62,3 @@ Insbesondere bei der Entwicklung von Infrastruktur oder Hardware sind diese tech
 .Form
 Beispielsweise UML Deployment-Diagramme mit den Kanälen zu Nachbarsystemen, begleitet von einer Tabelle, die Kanäle auf Ein-/Ausgaben abbildet.
 ****
-
-**<Diagramm oder Tabelle>**
-
-**<optional: Erläuterung der externen technischen Schnittstellen>**
-
-**<Mapping fachliche auf technische Schnittstellen>**

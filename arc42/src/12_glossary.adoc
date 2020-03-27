@@ -18,7 +18,6 @@ Sie sollten relevante Begriffe klar definieren, so dass alle Beteiligten
 .Form
 * Zweispaltige Tabelle mit <Begriff> und <Definition>
 * Eventuell weitere Spalten mit Übersetzungen, falls notwendig.
-****
 
 [cols="1,2" options="header"]
 |===
@@ -32,3 +31,6 @@ Sie sollten relevante Begriffe klar definieren, so dass alle Beteiligten
 |_<Begriff-2_
 |_<Definition-2>_
 |===
+****
+
+

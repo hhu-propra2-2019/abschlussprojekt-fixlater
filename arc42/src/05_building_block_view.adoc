@@ -45,6 +45,8 @@ Sie enthält somit die Whitebox-Beschreibungen ausgewählter Bausteine der Ebene
 *Ebene 3* zoomt in einige Bausteine der Ebene 2 hinein, usw.
 ****
 
+image::../ourimages/Architecture.png[]
+
 === Whitebox Gesamtsystem
 
 [role="arc42help"]
@@ -67,14 +69,6 @@ Im schlimmsten Fall müssen Sie Syntax, Semantik, Protokolle, Fehlerverhalten, R
 Im besten Fall kommen Sie mit Beispielen oder einfachen Signaturen zurecht.
 ****
 
-_**<Übersichtsdiagramm>**_
-
-Begründung:: _<Erläuternder Text>_
-
-Enthaltene Bausteine:: _<Beschreibung der enthaltenen Bausteine (Blackboxen)>_
-
-Wichtige Schnittstellen:: _<Beschreibung wichtiger Schnittstellen>_
-
 [role="arc42help"]
 ****
 Hier folgen jetzt Erläuterungen zu Blackboxen der Ebene 1.
@@ -92,10 +86,9 @@ Falls Sie die ausführliche Liste von Blackbox-Beschreibungen wählen, beschreib
 Dessen Überschrift ist jeweils der Namen dieser Blackbox.
 ****
 
-==== <Name Blackbox 1>
-
 [role="arc42help"]
 ****
+==== <Name Blackbox 1>
 Beschreiben Sie die <Blackbox 1> anhand des folgenden Blackbox-Templates:
 
 * Zweck/Verantwortung
@@ -107,35 +100,6 @@ Hierzu gehören eventuell auch Qualitäts- und Leistungsmerkmale dieser Schnitts
 * (Optional) Offene Punkte/Probleme/Risiken
 ****
 
-_<Zweck/Verantwortung>_
-
-_<Schnittstelle(n)>_
-
-_<(Optional) Qualitäts-/Leistungsmerkmale>_
-
-_<(Optional) Ablageort/Datei(en)>_
-
-_<(Optional) Erfüllte Anforderungen>_
-
-_<(optional) Offene Punkte/Probleme/Risiken>_
-
-==== <Name Blackbox 2>
-
-_<Blackbox-Template>_
-
-==== <Name Blackbox n>
-
-_<Blackbox-Template>_
-
-
-==== <Name Schnittstelle 1>
-
-...
-
-==== <Name Schnittstelle m>
-
-=== Ebene 2
-
 [role="arc42help"]
 ****
 Beschreiben Sie den inneren Aufbau (einiger) Bausteine aus Ebene 1 als Whitebox.
@@ -146,25 +110,12 @@ Skizzieren Sie wichtige, überraschende, riskante, komplexe oder besonders volat
 Normale, einfache oder standardisierte Teile sollten Sie weglassen.
 ****
 
-==== Whitebox _<Baustein 1>_
-
 [role="arc42help"]
 ****
+Whitebox Baustein 1
+
 ...zeigt das Innenleben von _Baustein 1_.
 ****
-
-_<Whitebox-Template>_
-
-==== Whitebox _<Baustein 2>_
-
-_<Whitebox-Template>_
-
-...
-
-==== Whitebox _<Baustein m>_
-
-_<Whitebox-Template>_
-
 === Ebene 3
 
 [role="arc42help"]
@@ -174,19 +125,10 @@ Beschreiben Sie den inneren Aufbau (einiger) Bausteine aus Ebene 2 als Whitebox.
 Bei tieferen Gliederungen der Architektur kopieren Sie diesen Teil von arc42 für die weiteren Ebenen.
 ****
 
-==== Whitebox <_Baustein x.1_>
+
 
 [role="arc42help"]
 ****
+Whitebox <_Baustein x.1_>
 ...zeigt das Innenleben von _Baustein x.1_.
 ****
-
-_<Whitebox-Template>_
-
-==== Whitebox <_Baustein x.2_>
-
-_<Whitebox-Template>_
-
-==== Whitebox <_Baustein y.1_>
-
-_<Whitebox-Template>_
