@@ -529,6 +529,17 @@ diese Datei hochgeladen werden kann.
 
 === UI Warnung (Jan)
 
+=== URL Auslagerung (Leon)
+In der Videokonferenz hatte Leon gefragt, unter welcher URL das System der Gruppenbildung zu finden ist, da dieses System von dem Gruppescheduler angesprochen wird.
+Da dies noch nicht bekannt war, hatte Christian sich gewünscht, dass man dies nicht im Code einstellt, sondern in der application.properties Datei. Dies war auch recht schnell
+umzusetzen, da Spring eine Möglichkeit dafür anbietet. Man kann in der application.properties eine beliebige Variable definieren und einem Wert zuweisen, und im Programm dann mit
+`@Value("${variable}")` eine Variable annotieren, die sich dann ihren Wert aus der application.properties holt. 
+
+Nach dem Committen und pushen schlugen die Tests auf GitHub dann fehl. Der Grund dafür war, dass die Tests sich den Wert nicht korrekt geholt haben, und somit im Log 
+stand, dass die URL "null/gruppe2..." aufgerufen wurde. Dies wurde nach einiger Zeit umgangen, indem in dem GruppeScheduler die Variable vordefiniert wird, sodass die Tests diesen Wert
+dann finden, aber in der Anwendung der Wert richtig überschrieben wird. Es wurde diese Lösung gefunden, da die möglichen Lösungen, die von den Tutoren suggeriert wurden, leider nicht funktioniert haben.
+Nach dem pushen schlugen diesmal die ControllerTests fehl. Dies lag daran, dass die URL Variable aus der application.properties nicht gefunden wurde. Das wurde schnell behoben, indem die
+URL Variable aus der application.properties in dem main Ordner in die application.properties in dem tests Ordner kopiert wurde.
 
 == Tag 20
 
