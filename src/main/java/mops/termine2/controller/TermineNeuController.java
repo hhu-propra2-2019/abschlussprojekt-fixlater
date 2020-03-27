@@ -46,6 +46,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
+import mops.termine2.util.LocalDateTimeManager;
 
 @Controller
 @SessionScope
@@ -63,10 +64,10 @@ public class TermineNeuController {
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private TerminfindungService terminfindungService;
+	private LinkService linkService;
 	
 	@Autowired
-	private LinkService linkService;
+	private TerminfindungService terminfindungService;
 	
 	public TermineNeuController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -74,144 +75,110 @@ public class TermineNeuController {
 	
 	@GetMapping("/termine-neu")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineNeu(Principal p, Model m) {
+	public String termineNeu(Principal principal, Model model) {
+		
 		// Account
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
-			authenticatedAccess.increment();
-		} else {
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
 		
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
-		m.addAttribute("gruppeSelektiert", noGroup);
+		model.addAttribute("gruppeSelektiert", noGroup);
 		
 		// Terminfindung
-		Terminfindung terminfindung = new Terminfindung();
-		terminfindung.setVorschlaege(new ArrayList<>());
-		terminfindung.getVorschlaege().add(null);
-		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
-		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
-		terminfindung.setErgebnisVorFrist(true);
+		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();		
 		
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("fehler", "");
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("fehler", "");
 		
 		return "termine-neu";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String neuerTermin(Principal p, Model m, Terminfindung terminfindung,
-			Gruppe gruppeSelektiert) {
+	public String neuerTermin(Principal principal, Model model, Terminfindung terminfindung,
+		Gruppe gruppeSelektiert) {
+		
 		// Account
-		Account account;
-		if (p != null) {
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
-		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
 		
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("fehler", "");
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("fehler", "");
 		
 		return "termine-neu";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminLoeschen(Principal p, Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert,
-			final HttpServletRequest request) {
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
+	public String terminLoeschen(Principal principal, Model model, 
+		Terminfindung terminfindung, Gruppe gruppeSelektiert,
+		final HttpServletRequest request) {
+		
+		//Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppeService.sortGroupsByName(gruppen);
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
-		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		
 		// Terminvorschlag löschen
 		terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
 		
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("fehler", "");
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("fehler", "");
 		
 		return "termine-neu";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminfindungErstellen(Principal p, Model m, Terminfindung terminfindung,
-			Gruppe gruppeSelektiert, RedirectAttributes ra) {
+	public String terminfindungErstellen(Principal principal, Model model, Terminfindung terminfindung,
+		Gruppe gruppeSelektiert, RedirectAttributes redirectAttributes) {
 		String fehler = "";
 		
 		// Account
-		Account account;
-		if (p != null) {
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
-		LocalDateTime minVorschlag = null;
-		LocalDateTime maxVorschlag = null;
-		
-		for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-			// ungültige oder doppelte Vorschläge ignorieren
-			if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
-				continue;
-			}
-			
-			// gültige Vorschläge merken
-			gueltigeVorschlaege.add(ldt);
-			
-			// frühsten Vorschlag merken
-			if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
-				minVorschlag = ldt;
-			}
-			
-			// spätesten Vorschlag merken
-			if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
-				maxVorschlag = ldt;
-			}
-		}
+		ArrayList<LocalDateTime> gueltigeVorschlaege = 
+			LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
+		LocalDateTime minVorschlag = LocalDateTimeManager.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager.bekommeSpaetestesDatum(gueltigeVorschlaege);
 		
 		if (gueltigeVorschlaege.isEmpty()) {
 			gueltigeVorschlaege.add(null);
@@ -220,21 +187,12 @@ public class TermineNeuController {
 		
 		// minVorschlag and maxVorschlag are always null together
 		if (minVorschlag != null) {
-			if (terminfindung.getFrist().isAfter(minVorschlag)) {
-				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusDays(1));
-				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusHours(2));
-				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusMinutes(5));
-				} else {
-					terminfindung.setFrist(minVorschlag);
-				}
-			}
-			
-			if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-			}
+			terminfindungService.setzeFrist(terminfindung, minVorschlag);			
+			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
+		}
+		
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(15))) {
+			fehler = "Der früheste Termin ist zu kurzfristig.";
 		}
 		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
@@ -260,10 +218,10 @@ public class TermineNeuController {
 		}
 		
 		if (!fehler.equals("")) {
-			m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			m.addAttribute("terminfindung", terminfindung);
-			m.addAttribute("fehler", fehler);
+			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+			model.addAttribute("terminfindung", terminfindung);
+			model.addAttribute("fehler", fehler);
 			
 			return "termine-neu";
 		}
@@ -272,164 +230,135 @@ public class TermineNeuController {
 		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit link '"
 			+ terminfindung.getLink() + "' erstellt");
 		
-		ra.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
+		redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
 	}
 	
 	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal p,
-			Model m, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
-		if (p != null) {
-			authenticatedAccess.increment();
-			
-			// Account
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
-			// Gruppen
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			m.addAttribute("gruppen", gruppen);
-			
-			// Terminvorschlag hinzufügen
-			List<LocalDateTime> termine = terminfindung.getVorschlaege();
-			
-			if (file.isEmpty()) {
-				m.addAttribute("message", "Bitte eine CSV-Datei zum Upload auswählen.");
-				m.addAttribute("error", true);
-			} else {
-				try (CSVReader csvReader = new CSVReader(
-					new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-					
-					List<String[]> termineEingelesen = csvReader.readAll();
-					if ("DATUM".equals(termineEingelesen.get(0)[0])) {
-						termineEingelesen.remove(0);
-					}
-					
-					TerminFormatierung terminFormatierung =
-						new TerminFormatierung(termineEingelesen);
-					
-					if (!terminFormatierung.pruefeObGueltigesFormat(
-						termineEingelesen, terminFormatierung.getDateTimeFormatter())) {
-						m.addAttribute("message",
-							"Alle Termine müssen im Format "
-								+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
-								+ "sollten existente Daten sein.");
-						m.addAttribute("error", true);
-					} else if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
-							terminFormatierung.getDateTimeFormatter())) {
-						m.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
-						m.addAttribute("error", true);
-					} else if (!terminFormatierung.pruefeObGueltigesDatum(termineEingelesen)) {
-						m.addAttribute("message",
-							"Die Termine sollten existieren.");
-						m.addAttribute("error", true);
-					} else {
-						// entferne ggf. überflüssige Datumsbox
-						if (termine.get(0) == null) {
-							terminfindung.getVorschlaege().remove(0);
-						}
-						
-						// füge Termine ins Model ein
-						for (String[] terminEingelesen : termineEingelesen) {
-							LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
-									+ ", " + terminEingelesen[1], terminFormatierung
-									.getDateTimeFormatter());
-							termine.add(termin);
-						}
-						m.addAttribute("message", "Upload erfolgreich!");
-						m.addAttribute("erfolg", true);
-					}
-					
-				} catch (RuntimeException ex) {
-					throw ex;
-				} catch (Exception ex) {
-					m.addAttribute("message",
-						"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. ");
-					m.addAttribute("error", true);
-				}
-			}
-			
-			// If any of the Termine lies before the Frist, then the Frist has to be updated.
-			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
-			LocalDateTime minVorschlag = null;
-			LocalDateTime maxVorschlag = null;
-			
-			for (LocalDateTime ldt : termine) {
-				// ungültige oder doppelte Vorschläge ignorieren
-				if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
-					continue;
-				}
-				
-				// gültige Vorschläge merken
-				gueltigeVorschlaege.add(ldt);
-				
-				// frühsten Vorschlag merken
-				if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
-					minVorschlag = ldt;
-				}
-				
-				// spätesten Vorschlag merken
-				if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
-					maxVorschlag = ldt;
-				}
-			}
-			
-			// minVorschlag and maxVorschlag are always null together
-			if (minVorschlag != null) {
-				if (terminfindung.getFrist().isAfter(minVorschlag)) {
-					if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusDays(1));
-					} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusHours(2));
-					} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusMinutes(5));
-					} else {
-						terminfindung.setFrist(minVorschlag);
-					}
-				}
-				
-				if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-					terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-				}
-			}
-			
-			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			m.addAttribute("terminfindung", terminfindung);
+	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal principal,
+		Model model, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		
+		// Gruppen
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		model.addAttribute("gruppen", gruppen);
+		
+		// Terminvorschlag hinzufügen
+		List<LocalDateTime> termine = terminfindung.getVorschlaege();
+		
+		if (file.isEmpty()) {
+			model.addAttribute("message", "Bitte eine CSV-Datei zum Upload auswählen.");
+			model.addAttribute("error", true);
+		} else {
+			try (CSVReader csvReader = new CSVReader(
+				new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+				
+				List<String[]> termineEingelesen = csvReader.readAll();
+				if ("DATUM".equals(termineEingelesen.get(0)[0])) {
+					termineEingelesen.remove(0);
+				}
+				
+				TerminFormatierung terminFormatierung = new TerminFormatierung(termineEingelesen);
+				
+				if (!terminFormatierung.pruefeObGueltigesFormat(
+					termineEingelesen, terminFormatierung.getDateTimeFormatter())) {
+					model.addAttribute("message",
+						"Alle Termine müssen im Format "
+							+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
+							+ "sollten existente Daten sein.");
+					model.addAttribute("error", true);
+				} else if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
+					terminFormatierung.getDateTimeFormatter())) {
+					model.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
+					model.addAttribute("error", true);
+				} else if (!terminFormatierung.pruefeObGueltigesDatum(termineEingelesen)) {
+					model.addAttribute("message",
+						"Die Termine sollten existieren.");
+					model.addAttribute("error", true);
+				} else {
+					// entferne ggf. überflüssige Datumsbox
+					if (termine.get(0) == null) {
+						terminfindung.getVorschlaege().remove(0);
+					}
+					
+					// füge Termine ins Model ein
+					for (String[] terminEingelesen : termineEingelesen) {
+						LocalDateTime termin = LocalDateTime.parse(terminEingelesen[0]
+							+ ", " + terminEingelesen[1],
+							terminFormatierung
+								.getDateTimeFormatter());
+						termine.add(termin);
+					}
+					model.addAttribute("message", "Upload erfolgreich!");
+					model.addAttribute("erfolg", true);
+				}
+				
+			} catch (RuntimeException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				model.addAttribute("message",
+					"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. ");
+				model.addAttribute("error", true);
+			}
+		}
+			
+		// If any of the Termine lies before the Frist, then the Frist has to be
+		// updated.
+		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
+			.filterUngueltigeDaten(terminfindung.getVorschlaege());
+		LocalDateTime minVorschlag = LocalDateTimeManager
+			.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager
+			.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		
+		// minVorschlag and maxVorschlag are always null together
+		if (minVorschlag != null) {
+			terminfindungService.setzeFrist(terminfindung, minVorschlag);
+			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
+		}		
+		
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("terminfindung", terminfindung);
 		
 		return "termine-neu";
 	}
 	
 	@RequestMapping(path = "/termine-neu", params = "download")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public void termineRunterladen(Principal p, Terminfindung terminfindung,
-								   Model m, HttpServletResponse response)
-			throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
-		if (p != null) {
-			authenticatedAccess.increment();
-			
-			// Account
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
-			String filename = "termine.csv";
-			List<LocalDateTime> termine = terminfindung.getVorschlaege();
-			ExportCSV exportCSV = new ExportCSV(termine);
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + filename + "\"");
-			response.setContentType("text/csv");
-			
-			if (termine.get(0) != null) {
-				StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
-						response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-						.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-						.withOrderedResults(false)
-						.build();
-				writer.write(exportCSV.localDateTimeZuExportFormat());
-			}
+	public void termineRunterladen(Principal principal, Terminfindung terminfindung,
+		Model model, HttpServletResponse response)
+		throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		
+		String filename = "termine.csv";
+		List<LocalDateTime> termine = terminfindung.getVorschlaege();
+		ExportCSV exportCSV = new ExportCSV(termine);
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename + "\"");
+		response.setContentType("text/csv");
+		
+		if (termine.get(0) != null) {
+			StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
+				response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+					.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+					.withOrderedResults(false)
+					.build();
+			writer.write(exportCSV.localDateTimeZuExportFormat());
+		}
+		
 	}
 	
 }
-

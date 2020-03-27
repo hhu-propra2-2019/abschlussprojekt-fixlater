@@ -9,6 +9,7 @@ import mops.termine2.database.entities.UmfrageAntwortDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.enums.Antwort;
 import mops.termine2.enums.Modus;
+import mops.termine2.scheduling.ErgebnisScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	@Autowired
 	private transient UmfrageRepository umfrageRepository;
+	
+	@Autowired
+	private transient ErgebnisScheduler scheduler;
 	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -128,6 +132,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 				}
 				benutzerZaehler++;
 			}
+			scheduler.ergebnis();
 		}
 	}
 	

@@ -18,6 +18,7 @@ import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminErgebnisService;
 import mops.termine2.services.TerminfindungService;
+import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -46,12 +47,6 @@ public class TermineAbstimmungController {
 	private final transient Counter authenticatedAccess;
 	
 	@Autowired
-	private TerminfindungService terminfindungService;
-	
-	@Autowired
-	private TerminAntwortService terminAntwortService;
-	
-	@Autowired
 	private AuthenticationService authenticationService;
 	
 	@Autowired
@@ -59,6 +54,12 @@ public class TermineAbstimmungController {
 	
 	@Autowired
 	private KommentarService kommentarService;
+	
+	@Autowired
+	private TerminAntwortService terminAntwortService;
+	
+	@Autowired
+	private TerminfindungService terminfindungService;
 	
 	@Autowired
 	private TerminErgebnisService ergebnisService;
@@ -71,41 +72,33 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineDetails(Principal p, Model m, @PathVariable("link") String link) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
+	public String termineDetails(Principal principal, Model model, @PathVariable("link") String link) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-			
+
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
-		}
+		}		
 		
-		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			
+
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/ergebnis";
-		}
-		
-		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
-		// muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
-		
-		
+		}		
+
 		if (terminfindung.getTeilgenommen()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
@@ -113,35 +106,32 @@ public class TermineAbstimmungController {
 		}
 		
 	}
-	
+
 	@GetMapping("/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
-		Account account;
-		Terminfindung terminfindung;
-		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		model.addAttribute(Konstanten.ACCOUNT, account);
+
+		Terminfindung terminfindung = 
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 			
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -152,74 +142,60 @@ public class TermineAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
-		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("antwort", antwortForm);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
-		
-		authenticatedAccess.increment();
+		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("antwort", antwortForm);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		return "termine-abstimmung";
 	}
 	
 	@GetMapping("/{link}/ergebnis")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+	public String termineErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
-		Account account;
-		List<TerminfindungAntwort> antworten;
-		Terminfindung terminfindung;
-		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-			
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		Terminfindung terminfindung = 
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-			
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
-		// muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
-		
-		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
+		if (!bereitsTeilgenommen && LocalDateTimeManager.istZukuenftig(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
-		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
+		if (!terminfindung.getErgebnisVorFrist() 
+			&& LocalDateTimeManager.istZukuenftig(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		antworten = terminAntwortService.loadAllByLink(link);
+		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten, terminfindung, nutzerAntwort);
-		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("ergebnis", ergebnis);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
-		
-		authenticatedAccess.increment();
-		
+		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("ergebnis", ergebnis);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
+    
 		return "termine-ergebnis";
 	}
 	
@@ -227,18 +203,17 @@ public class TermineAbstimmungController {
 	@Transactional
 	@PostMapping(path = "/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveAbstimmung(Principal p,
-								 Model m,
+	public String saveAbstimmung(Principal principal,
+								 Model model,
 								 @PathVariable("link") String link,
 								 @ModelAttribute AntwortForm antwortForm) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-			
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -247,8 +222,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -257,8 +231,7 @@ public class TermineAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -271,7 +244,6 @@ public class TermineAbstimmungController {
 			antwortForm);
 		
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;
 	}
@@ -279,14 +251,15 @@ public class TermineAbstimmungController {
 	
 	@PostMapping(path = "/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
+	public String saveKommentar(Principal principal, Model model, 
+		@PathVariable("link") String link, Kommentar neuerKommentar) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -296,10 +269,8 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-			
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {
@@ -309,9 +280,8 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
-		m.addAttribute("neuerKommentar", neuerKommentar);
+		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;
 	}
