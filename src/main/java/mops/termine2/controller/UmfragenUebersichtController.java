@@ -55,6 +55,9 @@ public class UmfragenUebersichtController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		if (gruppeService.checkGroupAccessDenied(account, gruppe)) {

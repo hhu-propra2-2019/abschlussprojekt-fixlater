@@ -12,6 +12,7 @@ import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.UmfrageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,9 @@ public class UmfragenNeuController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
@@ -87,6 +91,9 @@ public class UmfragenNeuController {
 
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
@@ -115,6 +122,9 @@ public class UmfragenNeuController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
@@ -144,6 +154,9 @@ public class UmfragenNeuController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Vorschläge filtern. Doppelte und nicht gesetzte Daten löschen

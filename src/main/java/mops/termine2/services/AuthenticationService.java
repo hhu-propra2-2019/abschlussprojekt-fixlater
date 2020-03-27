@@ -1,6 +1,5 @@
 package mops.termine2.services;
 
-import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -33,8 +32,7 @@ public class AuthenticationService {
 			Account account = createAccountFromPrincipal(principal);
 			authenticatedAccess.increment();
 			return account;
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}		
+		}
+		return null;
 	}
 }

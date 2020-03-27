@@ -70,6 +70,9 @@ public class UmfragenAbstimmungController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
@@ -100,6 +103,9 @@ public class UmfragenAbstimmungController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
@@ -140,6 +146,9 @@ public class UmfragenAbstimmungController {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
@@ -182,6 +191,9 @@ public class UmfragenAbstimmungController {
 								 @ModelAttribute AntwortFormUmfragen antwortForm) {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage =
@@ -220,6 +232,9 @@ public class UmfragenAbstimmungController {
 
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		if (account == null) {
+			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
