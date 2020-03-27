@@ -1,5 +1,0 @@
-# Datenbank
-
-Er-Modell
-
-image::img/erModell.png[]

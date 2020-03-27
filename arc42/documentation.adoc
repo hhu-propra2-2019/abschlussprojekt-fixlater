@@ -48,6 +48,9 @@ Daraufhin haben wir über eine alternative Modellierung nachgedacht und die Änd
 === Web-Userinterface (Ingrid, Anton, Jan)
 Da die Views einen uniformen visuellen Stil haben müssen, haben wir diese (6 Stück) so aufgeteilt, dass eine Person die Übesichtsviews, eine Person die Detailviews und eine Person die Formularviews übernimmt.
 Wir haben angefangen die Sichten zu bauen, obwohl die Datenbank noch nicht fertig ist, weil wir schon abgesprochen haben welche Daten die Datenbank vom Interface bekommen soll und welche Inputfelder darin enthalten sein sollten.
+Außerdem wurde ein Konzept für Terminabstimmungen entwickelt.
+
+image::concept2.jpg[]
 
 === Klassen (Thomas, Jan)
 Nachdem das Datenbankenteam auf die Problematik der Beziehung hingewiesen wurde und Jens uns den Tipp gab lieber mit der Geschäftslogik anzufangen, begannen wir uns zu überlegen welche Klassen benötigt werden, um das gewünschte Verhalten zu ermöglichen.
@@ -497,9 +500,6 @@ Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum h
 Wenn kein Link angegeben wird, wird automatisch ein eindeutiger Link erstellt.
 Eingegebene Links werden auf Eindeutigkeit geprüft und dürfen nur aus Buchstaben und Zahlen bestehen.
 
-
-== Tag 19
-
 === Löschscheduler (Leon, Marcel)
 Nach der Videokonferenz direkt zu Anfang des Tages haben wir uns damit befasst, wie wir in unseren Repositories die delete Methoden umschreiben können, damit wir auf @Query verzichten können, und somit
 keine eigene Logik in den Löschscheduler einbringen, sodass es nicht nötig ist, Tests zu schreiben, da man nur eigene Logik testen sollte.
@@ -511,6 +511,8 @@ Die ersten drei Stellen sagen, dass der Scheduler an Sekunde 0, Minute 0 und Stu
 Anschließend haben wir im Code von Thomas geschaut, wie man den Logger einbindet, damit wir keine einfachen System.out-Konsolenausgaben verwenden.
 Den Logger haben wir direkt auch in den Gruppescheduler eingebaut.
 Anschließend haben wir die Mergekonflikte behoben und in den Repositories einige Methoden so umgeschrieben, dass dort auch keine @Query Annotation mehr verwendet wird.
+
+== Tag 19
 
 === UI Update (Anton)
 Da es lange Titel geben kann, die abgekürzt werden müssen, habe ich für alle Titel in beiden Übersichten einen hover eingebaut der den ganzen Titel anzeig wenn man mit der Maus drüber geht.
@@ -527,7 +529,36 @@ diese Datei hochgeladen werden kann.
 
 === UI Warnung (Jan)
 
+=== URL Auslagerung (Leon)
+In der Videokonferenz hatte Leon gefragt, unter welcher URL das System der Gruppenbildung zu finden ist, da dieses System von dem Gruppescheduler angesprochen wird.
+Da dies noch nicht bekannt war, hatte Christian sich gewünscht, dass man dies nicht im Code einstellt, sondern in der application.properties Datei. Dies war auch recht schnell
+umzusetzen, da Spring eine Möglichkeit dafür anbietet. Man kann in der application.properties eine beliebige Variable definieren und einem Wert zuweisen, und im Programm dann mit
+`@Value("${variable}")` eine Variable annotieren, die sich dann ihren Wert aus der application.properties holt. 
+
+Nach dem Committen und pushen schlugen die Tests auf GitHub dann fehl. Der Grund dafür war, dass die Tests sich den Wert nicht korrekt geholt haben, und somit im Log 
+stand, dass die URL "null/gruppe2..." aufgerufen wurde. Dies wurde nach einiger Zeit umgangen, indem in dem GruppeScheduler die Variable vordefiniert wird, sodass die Tests diesen Wert
+dann finden, aber in der Anwendung der Wert richtig überschrieben wird. Es wurde diese Lösung gefunden, da die möglichen Lösungen, die von den Tutoren suggeriert wurden, leider nicht funktioniert haben.
+Nach dem pushen schlugen diesmal die ControllerTests fehl. Dies lag daran, dass die URL Variable aus der application.properties nicht gefunden wurde. Das wurde schnell behoben, indem die
+URL Variable aus der application.properties in dem main Ordner in die application.properties in dem tests Ordner kopiert wurde.
 
 == Tag 20
 
-=== steht an: letzte merges, docker-compose.yml für production, dockerfile
+=== Dockerfile, docker-compose, application-properties (Marcel, Anton)
+Haben Dockerfile, docker-compose, application-properties für production geschrieben, so dass der Port für die Datenbank nicht nach außen freigegeben wird.
+Dafür wird dieser Befehl benutzt: "docker-compose -f docker-compose-prod.yml up --build"
+
+=== Ergebnisscheduler (Thomas, Jan)
+Ergebnis jede minute berechnet. Bugfixing. Refactoring
+
+=== UI (Jan, Ingrid)
+Revamps, Fixes
+
+=== Tests (Julia, Kathi)
+Tests für filehandling, Pullrequests
+
+=== Refactoring von Controllern (Leon)
+Code ausControllern rausgenommen der nicht rein sollte
+Debugging (NPE, Fehler)
+Tests
+
+

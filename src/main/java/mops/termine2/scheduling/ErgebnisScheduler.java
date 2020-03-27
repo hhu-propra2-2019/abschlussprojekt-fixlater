@@ -1,8 +1,6 @@
 package mops.termine2.scheduling;
 
-import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
-import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
@@ -34,16 +32,10 @@ public class ErgebnisScheduler {
 	private TerminfindungService terminfindungService;
 	
 	@Autowired
-	private TerminfindungAntwortRepository terminfindungAntwortRepository;
-	
-	@Autowired
 	private UmfrageRepository umfrageRepository;
 	
 	@Autowired
 	private UmfrageService umfrageService;
-	
-	@Autowired
-	private UmfrageAntwortRepository umfrageAntwortRepository;
 	
 	@Autowired
 	private TerminErgebnisService terminErgebnisService;

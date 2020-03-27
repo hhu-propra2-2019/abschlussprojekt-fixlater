@@ -17,12 +17,8 @@ public class LocalDateTimeManager {
 		int dayOfMonth = time.getDayOfMonth();
 		int month = time.getMonth().getValue();
 		int year = time.getYear();
-		
 		String weekday;
 		switch (dayOfWeek) {
-		case 0:
-			weekday = "So.";
-			break;
 		case 1:
 			weekday = "Mo.";
 			break;
@@ -38,10 +34,12 @@ public class LocalDateTimeManager {
 		case 5:
 			weekday = "Fr.";
 			break;
-		default:
+		case 6:
 			weekday = "Sa.";
-			
-			
+			break;
+		default:
+			weekday = "So.";
+			break;			
 		}
 		
 		//um führende NKullen anzuzeigen
@@ -65,6 +63,50 @@ public class LocalDateTimeManager {
 			result.add(toString(time));
 		}
 		return result;
+	}
+	
+	public static boolean istVergangen(LocalDateTime ldt) {
+		return ldt.isBefore(LocalDateTime.now());
+	}
+	
+	public static boolean istZukuenftig(LocalDateTime ldt) {
+		return ldt.isAfter(LocalDateTime.now());
+	}
+	
+	public static ArrayList<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
+		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
+		for (LocalDateTime ldt : daten) {
+			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
+				gueltigeVorschlaege.add(ldt);
+			}
+		}
+		return gueltigeVorschlaege;
+	}
+	
+	public static LocalDateTime bekommeFruehestesDatum(List<LocalDateTime> daten) {
+		if (daten != null && !daten.isEmpty()) {
+			LocalDateTime fruehestes = daten.get(0);
+			for (LocalDateTime ldt : daten) {
+				if (ldt != null && ldt.isBefore(fruehestes)) {
+					fruehestes = ldt;
+				}
+			}
+			return fruehestes;
+		}
+		return null;
+	}
+	
+	public static LocalDateTime bekommeSpaetestesDatum(List<LocalDateTime> daten) {
+		if (daten != null && !daten.isEmpty()) {
+			LocalDateTime spaetestes = daten.get(0);
+			for (LocalDateTime ldt : daten) {
+				if (ldt != null && ldt.isAfter(spaetestes)) {
+					spaetestes = ldt;
+				}
+			}
+			return spaetestes;
+		}
+		return null;
 	}
 	
 	
