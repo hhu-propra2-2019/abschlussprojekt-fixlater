@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -73,10 +72,8 @@ public class UmfragenNeuController {
 		noGroup.setId(-1L);
 		model.addAttribute("gruppeSelektiert", noGroup);
 		
-		Umfrage umfrage = new Umfrage();
-		umfrage.setVorschlaege(new ArrayList<String>());
-		umfrage.getVorschlaege().add("");
-		umfrage.setFrist(LocalDateTime.now().plusWeeks(1));
+		// Umfrage
+		Umfrage umfrage = umfrageService.createDefaultUmfrage();
 		
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("fehler", "");
@@ -88,7 +85,7 @@ public class UmfragenNeuController {
 	@PostMapping(path = "/umfragen-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String neuerVorschlag(Principal principal, Model model, Umfrage umfrage, Gruppe gruppeSelektiert) {
-
+		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
@@ -147,9 +144,9 @@ public class UmfragenNeuController {
 	
 	@PostMapping(path = "/umfragen-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfrageErstellen(Principal principal, Model model, 
-		Umfrage umfrage, Gruppe gruppeSelektiert, 
-		RedirectAttributes redirectAttributes) {
+	public String umfrageErstellen(Principal principal, Model model,
+								   Umfrage umfrage, Gruppe gruppeSelektiert,
+								   RedirectAttributes redirectAttributes) {
 		String fehler = "";
 		
 		// Account

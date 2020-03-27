@@ -187,6 +187,20 @@ public class UmfrageService {
 		return null;
 	}
 	
+	/**
+	 * Erstellt eine leere Umfrage mit Standard Parametern
+	 *
+	 * @return
+	 */
+	public Umfrage createDefaultUmfrage() {
+		Umfrage umfrage = new Umfrage();
+		umfrage.setVorschlaege(new ArrayList<>());
+		umfrage.getVorschlaege().add("");
+		umfrage.setFrist(LocalDateTime.now().plusWeeks(1));
+		umfrage.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
+		return umfrage;
+	}
+	
 	private void updateOldDB(UmfrageDB umfrage, UmfrageDB toUpdate) {
 		toUpdate.setTitel(umfrage.getTitel());
 		toUpdate.setErsteller(umfrage.getErsteller());
