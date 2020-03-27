@@ -526,6 +526,7 @@ CSV-Datei exportiert werden. Das Format entspricht dem für den Upload, sodass b
 diese Datei hochgeladen werden kann.
 
 === Controller Tests, Scheduler (Thomas, Marcel)
+Bisher wurden die Ergebnisse der Abstimmungen nicht berechnet, sondern nur durch den Database Initializer erstellt. Deshalb wurde jetzt ein Scheduler hinzugefügt, der zu jeder vollen Minute alle noch ausstehenden Ergebnisse von Abstimmungen, bei denen die Frist abgelaufen ist, berechnet. Es werden zuerst alle Vorschläge gesucht, die die meisten "Ja" Stimmen haben. Falls es zwei oder mehr Vorschläge mit der selben Anzahl an "Ja" Stimmen gibt, werden die "Vielleicht" Stimmen herangezogen.
 
 === UI Warnung (Jan)
 

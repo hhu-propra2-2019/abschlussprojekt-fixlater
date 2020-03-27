@@ -56,3 +56,12 @@ Insbesondere wenn Sie die Qualität Ihrer Architektur mit Methoden wie ATAM übe
 .Form
 Entweder tabellarisch oder als Freitext.
 ****
+
+[cols="1,1" options="header"]
+|===
+|Szenario | Qualitätziel
+| Nutzer ruft die Startseite auf. | Die Startseite muss mit allen für den Benutzer verfügbaren Terminfindungen in unter einer Sekunde angezeigt werden.
+| Benutzer ruft die Startseite mit einem Gruppenfilter auf. | Die Startseite muss mit allen Terminfindungen für die ausgewählte Gruppe in unter einer Sekunde angezeigt werden.
+| Benutzer ruft die Startseite mit einer Gruppe auf, in der er kein Mitglied ist | Es muss eine Fehlermeldung "Access Denied" angezeigt werden.
+| Benutzer versucht eine Terminfindung ohne Terminvorschläge zu erstellen | Das Erstellen der Terminfindung muss fehlschlagen und der Benutzer auf seinen Fehler aufmerksam gemacht werden. Er soll die Möglichkeit haben seinen Fehler zu beheben und das Formluar mit den vorher eingetragenen Werten erneut abzuschicken.
+|===
