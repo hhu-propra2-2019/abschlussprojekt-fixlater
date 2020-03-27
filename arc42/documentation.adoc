@@ -500,9 +500,6 @@ Beim Hinzufügen neuer Termine wurden Felder für den Link und das Löschdatum h
 Wenn kein Link angegeben wird, wird automatisch ein eindeutiger Link erstellt.
 Eingegebene Links werden auf Eindeutigkeit geprüft und dürfen nur aus Buchstaben und Zahlen bestehen.
 
-
-== Tag 19
-
 === Löschscheduler (Leon, Marcel)
 Nach der Videokonferenz direkt zu Anfang des Tages haben wir uns damit befasst, wie wir in unseren Repositories die delete Methoden umschreiben können, damit wir auf @Query verzichten können, und somit
 keine eigene Logik in den Löschscheduler einbringen, sodass es nicht nötig ist, Tests zu schreiben, da man nur eigene Logik testen sollte.
@@ -514,6 +511,8 @@ Die ersten drei Stellen sagen, dass der Scheduler an Sekunde 0, Minute 0 und Stu
 Anschließend haben wir im Code von Thomas geschaut, wie man den Logger einbindet, damit wir keine einfachen System.out-Konsolenausgaben verwenden.
 Den Logger haben wir direkt auch in den Gruppescheduler eingebaut.
 Anschließend haben wir die Mergekonflikte behoben und in den Repositories einige Methoden so umgeschrieben, dass dort auch keine @Query Annotation mehr verwendet wird.
+
+== Tag 19
 
 === UI Update (Anton)
 Da es lange Titel geben kann, die abgekürzt werden müssen, habe ich für alle Titel in beiden Übersichten einen hover eingebaut der den ganzen Titel anzeig wenn man mit der Maus drüber geht.
