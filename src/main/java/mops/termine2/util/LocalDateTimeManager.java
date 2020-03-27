@@ -75,7 +75,7 @@ public class LocalDateTimeManager {
 		return ldt.isAfter(LocalDateTime.now());
 	}
 	
-	public List<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
+	public static List<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
 		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
 		for (LocalDateTime ldt : daten) {
 			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
@@ -85,7 +85,7 @@ public class LocalDateTimeManager {
 		return gueltigeVorschlaege;
 	}
 	
-	public LocalDateTime bekommeFruehestesDatum(List<LocalDateTime> daten) {
+	public static LocalDateTime bekommeFruehestesDatum(List<LocalDateTime> daten) {
 		if (daten != null && !daten.isEmpty()) {
 			LocalDateTime fruehestes = daten.get(0);
 			for (LocalDateTime ldt : daten) {
@@ -98,7 +98,7 @@ public class LocalDateTimeManager {
 		return null;
 	}
 	
-	public LocalDateTime bekommeSpaetestesDatum(List<LocalDateTime> daten) {
+	public static LocalDateTime bekommeSpaetestesDatum(List<LocalDateTime> daten) {
 		if (daten != null && !daten.isEmpty()) {
 			LocalDateTime spaetestes = daten.get(0);
 			for (LocalDateTime ldt : daten) {
