@@ -135,6 +135,7 @@ public class UmfrageErgebnisService {
 		toReturn.setNeinAntwortPseudo(neinAntwortPseudo);
 		toReturn.setFristNichtAbgelaufen(fristNichtAbgelaufen);
 		toReturn.setErgebnis(berechneErgebnisUmfrage(umfrage));
+		toReturn.setVorschlaege(vorschlaege);
 		
 		return toReturn;
 	}

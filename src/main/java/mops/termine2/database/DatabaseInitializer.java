@@ -44,7 +44,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final boolean EINGESCHALTET = false;
+	private static final boolean EINGESCHALTET = true;
 	
 	private final Logger logger = Logger.getLogger(DatabaseInitializer.class.getName());
 	
