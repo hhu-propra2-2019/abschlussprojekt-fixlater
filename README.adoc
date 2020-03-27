@@ -33,3 +33,7 @@ Die Farben sind so gewählt, dass sich Menschen mit Sehschwäche beser damit zur
 == Hinweise:
 === Arc42 und Dokumentation
 Beide liegen im Ordner "arc42" im Hauptverzeichnis.
+
+Die Produktions-Version muss mit
+==== docker-compose -f docker-compose-prod.yml up --build
+gestartet werden
