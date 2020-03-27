@@ -557,9 +557,14 @@ Revamps, Fixes
 === Tests (Julia, Kathi)
 Tests für filehandling, Pullrequests
 
-=== Refactoring von Controllern (Leon)
-Code ausControllern rausgenommen der nicht rein sollte
-Debugging (NPE, Fehler)
-Tests
+=== Refactoring und Debugging (Leon)
+Am Anfang hatte sich Leon darum gekümmert, dass einige Controller dünner werden, was die Logik betrifft. Dabei wurde so einiger Code aus den Controllern in verschiedene Services gelegt oder sonstige Util klassen. Der einzige Stolperstein hier war, dass dann die bestehenden Controllertests ein etwas anderes Mocking brauchten, da andere methoden verwendet wurden an einige Stellen. Dies war aber auch schnell gelöst.
+
+Anschließend ist aufgefallen, dass, da bei der Erstellung der Datenbank nicht mehr die Ergebnisse reingeschrieben werden, eine Nullpointer Exception geworfen wird, wenn man die Übersichtsseite aufruft, bevor der Ergebnisscheduler aufgerufen wird. Dies wurde auch behoben, indem man den Ergebnisscheduler in den DatabaseInitializer injectet hat und am Ende des Initializers den ErgebnisScheduler einmal aufgerufen hat, damit die Ergebnisse berechnet werden, bevor die Webseite erreichbar ist.
+Dazu gehörte auch, dass ein Termin in der Terminfindung nicht zu kurzfristig sein darf, da sonst die Frist auf diesen Termin gesetzt wird, was dafür sorgt, dass, wenn der Termin die aktuelle Zeit ist, die Frist auf den jetzigen Zeitpunkt gesetzt wird (da diese vor dem ersten Termin gesetzt werden soll). Beim Abschicken der Terminfindung ist also im programm die Terminfindung bereits abgeschlossen, aber noch kein Ergebnis berechnet, was ebenfalls eine NPE wirft. Dies wurde so behoben, dass der früheste Termin mindestens 15 Minuten in der Zukunft liegen muss, sonst wird die Terminfindung nicht gespeichert.
+
+Danach ist aufgefallen, dass womöglich beim Refactoring ein Fehler passiert ist, da man nun einen Fehler erhielt, wenn man versucht eine CSV Datei zu importieren, wenn man keine Datei ausgewählt hat. Dies hat daran gelegen, dass ein paar benötigte ModelAttributes nicht gesetzt wurden, wenn man keine Datei hochlädt. Das ist entstanden, da beim Refactoring eine Klammer falsch gesetzt wurde, also war dies auch schnell behoben. Ebenfalls beim Refactoring wurde eine Kleinigkeit übersehen, sodass eine Methode, die keinen Fehler wirft, mit `throws` deklariert wurde. Dies wurde auch entfernt.
+
+Den Rest des Tages wurden Tests für den LocalDateTimeManager und GruppeService geschrieben, wobei auffiel, dass der LocalDateTimeManager falsche Wochentage berechnet hat. Dies wurde auch behoben.
 
 
