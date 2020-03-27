@@ -543,4 +543,22 @@ URL Variable aus der application.properties in dem main Ordner in die applicatio
 
 == Tag 20
 
-=== steht an: letzte merges, docker-compose.yml für production, dockerfile
+=== Dockerfile, docker-compose, application-properties (Marcel, Anton)
+Haben Dockerfile, docker-compose, application-properties für production geschrieben, so dass der Port für die Datenbank nicht nach außen freigegeben wird.
+Dafür wird dieser Befehl benutzt: "docker-compose -f docker-compose-prod.yml up --build"
+
+=== Ergebnisscheduler (Thomas, Jan)
+Ergebnis jede minute berechnet. Bugfixing. Refactoring
+
+=== UI (Jan, Ingrid)
+Revamps, Fixes
+
+=== Tests (Julia, Kathi)
+Tests für filehandling, Pullrequests
+
+=== Refactoring von Controllern (Leon)
+Code ausControllern rausgenommen der nicht rein sollte
+Debugging (NPE, Fehler)
+Tests
+
+
