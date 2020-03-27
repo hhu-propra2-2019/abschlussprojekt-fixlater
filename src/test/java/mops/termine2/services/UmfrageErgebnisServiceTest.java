@@ -30,7 +30,7 @@ public class UmfrageErgebnisServiceTest {
 	}
 	
 	@Test
-	public void test() {
+	public void mehrheitJaAntwort1() {
 		Umfrage t = new Umfrage();
 		t.setVorschlaege(new ArrayList<>(Arrays.asList("M1", "M2")));
 		when(antwortRepo.findAllByUmfrageLink(any())).thenReturn(beispielAntworten1());
@@ -42,7 +42,7 @@ public class UmfrageErgebnisServiceTest {
 	}
 	
 	@Test
-	public void test2() {
+	public void mehrheitJaAntwort2() {
 		Umfrage t = new Umfrage();
 		t.setVorschlaege(new ArrayList<>(Arrays.asList("M1", "M2")));
 		when(antwortRepo.findAllByUmfrageLink(any())).thenReturn(beispielAntworten2());
@@ -53,17 +53,6 @@ public class UmfrageErgebnisServiceTest {
 		assertThat(ergebnis).isEqualTo(expected);
 	}
 	
-	@Test
-	public void test3() {
-		Umfrage t = new Umfrage();
-		t.setVorschlaege(new ArrayList<>(Arrays.asList("M1", "M2")));
-		when(antwortRepo.findAllByUmfrageLink(any())).thenReturn(beispielAntworten3());
-		
-		String expected = "M1";
-		String ergebnis = ergebnisService.berechneErgebnisUmfrage(t);
-		
-		assertThat(ergebnis).isEqualTo(expected);
-	}
 	
 	private List<UmfrageAntwortDB> beispielAntworten1() {
 		List<UmfrageAntwortDB> result = new ArrayList<>();
@@ -85,23 +74,8 @@ public class UmfrageErgebnisServiceTest {
 		String benutzer3 = "3";
 		
 		result.addAll(antwortForBenutzer(benutzer1, Antwort.JA, Antwort.NEIN));
-		result.addAll(antwortForBenutzer(benutzer2, Antwort.VIELLEICHT, Antwort.JA));
-		result.addAll(antwortForBenutzer(benutzer3, Antwort.VIELLEICHT, Antwort.JA));
-		
-		return result;
-	}
-	
-	private List<UmfrageAntwortDB> beispielAntworten3() {
-		List<UmfrageAntwortDB> result = new ArrayList<>();
-		String benutzer1 = "1";
-		String benutzer2 = "2";
-		String benutzer3 = "3";
-		String benutzer4 = "4";
-		
-		result.addAll(antwortForBenutzer(benutzer1, Antwort.JA, Antwort.NEIN));
-		result.addAll(antwortForBenutzer(benutzer2, Antwort.JA, Antwort.JA));
-		result.addAll(antwortForBenutzer(benutzer3, Antwort.VIELLEICHT, Antwort.VIELLEICHT));
-		result.addAll(antwortForBenutzer(benutzer4, Antwort.VIELLEICHT, Antwort.JA));
+		result.addAll(antwortForBenutzer(benutzer2, Antwort.NEIN, Antwort.JA));
+		result.addAll(antwortForBenutzer(benutzer3, Antwort.NEIN, Antwort.JA));
 		
 		return result;
 	}

@@ -31,7 +31,7 @@ public class TerminErgebnisServiceTest {
 	}
 	
 	@Test
-	public void test() {
+	public void mehrheitAntwort1() {
 		Terminfindung t = new Terminfindung();
 		t.setVorschlaege(new ArrayList<>(Arrays.asList(
 			LocalDateTime.of(1, 1, 1, 1, 1),
@@ -46,7 +46,7 @@ public class TerminErgebnisServiceTest {
 	}
 	
 	@Test
-	public void test2() {
+	public void mehrheitAntwort2() {
 		Terminfindung t = new Terminfindung();
 		t.setVorschlaege(new ArrayList<>(Arrays.asList(
 			LocalDateTime.of(1, 1, 1, 1, 1),
@@ -61,7 +61,7 @@ public class TerminErgebnisServiceTest {
 	}
 	
 	@Test
-	public void test3() {
+	public void mehrheitDurchVielleicht() {
 		Terminfindung t = new Terminfindung();
 		t.setVorschlaege(new ArrayList<>(Arrays.asList(
 			LocalDateTime.of(1, 1, 1, 1, 1),
