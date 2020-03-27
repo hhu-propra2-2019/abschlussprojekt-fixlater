@@ -307,26 +307,25 @@ public class TermineNeuController {
 					"Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten. ");
 				model.addAttribute("error", true);
 			}
-			
-			// If any of the Termine lies before the Frist, then the Frist has to be
-			// updated.
-			ArrayList<LocalDateTime> gueltigeVorschlaege = 
-				LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
-			LocalDateTime minVorschlag = LocalDateTimeManager
-				.bekommeFruehestesDatum(gueltigeVorschlaege);
-			LocalDateTime maxVorschlag = LocalDateTimeManager
-				.bekommeSpaetestesDatum(gueltigeVorschlaege);
-			
-			
-			// minVorschlag and maxVorschlag are always null together
-			if (minVorschlag != null) {
-				terminfindungService.setzeFrist(terminfindung, minVorschlag);
-				terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
-			}
-			
-			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			model.addAttribute("terminfindung", terminfindung);
 		}
+			
+		// If any of the Termine lies before the Frist, then the Frist has to be
+		// updated.
+		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
+			.filterUngueltigeDaten(terminfindung.getVorschlaege());
+		LocalDateTime minVorschlag = LocalDateTimeManager
+			.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager
+			.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		
+		// minVorschlag and maxVorschlag are always null together
+		if (minVorschlag != null) {
+			terminfindungService.setzeFrist(terminfindung, minVorschlag);
+			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
+		}		
+		
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("terminfindung", terminfindung);
 		
 		return "termine-neu";
 	}
