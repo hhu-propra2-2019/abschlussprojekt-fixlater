@@ -46,6 +46,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
+import mops.termine2.util.LocalDateTimeManager;
 
 @Controller
 @SessionScope
@@ -93,12 +94,7 @@ public class TermineNeuController {
 		model.addAttribute("gruppeSelektiert", noGroup);
 		
 		// Terminfindung
-		Terminfindung terminfindung = new Terminfindung();
-		terminfindung.setVorschlaege(new ArrayList<>());
-		terminfindung.getVorschlaege().add(null);
-		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
-		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
-		terminfindung.setErgebnisVorFrist(true);
+		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();		
 		
 		model.addAttribute("terminfindung", terminfindung);
 		model.addAttribute("fehler", "");
@@ -179,29 +175,10 @@ public class TermineNeuController {
 		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
-		LocalDateTime minVorschlag = null;
-		LocalDateTime maxVorschlag = null;
-		
-		for (LocalDateTime ldt : terminfindung.getVorschlaege()) {
-			// ungültige oder doppelte Vorschläge ignorieren
-			if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
-				continue;
-			}
-			
-			// gültige Vorschläge merken
-			gueltigeVorschlaege.add(ldt);
-			
-			// frühsten Vorschlag merken
-			if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
-				minVorschlag = ldt;
-			}
-			
-			// spätesten Vorschlag merken
-			if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
-				maxVorschlag = ldt;
-			}
-		}
+		ArrayList<LocalDateTime> gueltigeVorschlaege = 
+			LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
+		LocalDateTime minVorschlag = LocalDateTimeManager.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager.bekommeSpaetestesDatum(gueltigeVorschlaege);
 		
 		if (gueltigeVorschlaege.isEmpty()) {
 			gueltigeVorschlaege.add(null);
@@ -342,29 +319,13 @@ public class TermineNeuController {
 			
 			// If any of the Termine lies before the Frist, then the Frist has to be
 			// updated.
-			ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
-			LocalDateTime minVorschlag = null;
-			LocalDateTime maxVorschlag = null;
+			ArrayList<LocalDateTime> gueltigeVorschlaege = 
+				LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
+			LocalDateTime minVorschlag = LocalDateTimeManager
+				.bekommeFruehestesDatum(gueltigeVorschlaege);
+			LocalDateTime maxVorschlag = LocalDateTimeManager
+				.bekommeSpaetestesDatum(gueltigeVorschlaege);
 			
-			for (LocalDateTime ldt : termine) {
-				// ungültige oder doppelte Vorschläge ignorieren
-				if (ldt == null || gueltigeVorschlaege.contains(ldt)) {
-					continue;
-				}
-				
-				// gültige Vorschläge merken
-				gueltigeVorschlaege.add(ldt);
-				
-				// frühsten Vorschlag merken
-				if (minVorschlag == null || ldt.isBefore(minVorschlag)) {
-					minVorschlag = ldt;
-				}
-				
-				// spätesten Vorschlag merken
-				if (maxVorschlag == null || ldt.isAfter(maxVorschlag)) {
-					maxVorschlag = ldt;
-				}
-			}
 			
 			// minVorschlag and maxVorschlag are always null together
 			if (minVorschlag != null) {
