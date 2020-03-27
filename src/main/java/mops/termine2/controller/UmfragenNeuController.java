@@ -12,7 +12,6 @@ import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.UmfrageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +44,10 @@ public class UmfragenNeuController {
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private UmfrageService umfrageService;
+	private LinkService linkService;
 	
 	@Autowired
-	private LinkService linkService;
+	private UmfrageService umfrageService;
 	
 	public UmfragenNeuController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -56,33 +55,27 @@ public class UmfragenNeuController {
 	
 	@GetMapping("/umfragen-neu")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String neueUmfrage(Principal p, Model m) {
+	public String neueUmfrage(Principal principal, Model model) {
+		
 		// Account
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppeService.sortGroupsByName(gruppen);
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
 		noGroup.setId(-1L);
-		m.addAttribute("gruppeSelektiert", noGroup);
+		model.addAttribute("gruppeSelektiert", noGroup);
 		
 		Umfrage umfrage = new Umfrage();
 		umfrage.setVorschlaege(new ArrayList<String>());
 		umfrage.getVorschlaege().add("");
 		umfrage.setFrist(LocalDateTime.now().plusWeeks(1));
 		
-		m.addAttribute("umfrage", umfrage);
-		m.addAttribute("fehler", "");
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("fehler", "");
 		
 		return "umfragen-neu";
 	}
@@ -90,31 +83,26 @@ public class UmfragenNeuController {
 	//neuen Vorschlag hinzufügen
 	@PostMapping(path = "/umfragen-neu", params = "add")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String neuerVorschlag(Principal p, Model m, Umfrage umfrage, Gruppe gruppeSelektiert) {
+	public String neuerVorschlag(Principal principal, Model model, Umfrage umfrage, Gruppe gruppeSelektiert) {
+
 		// Account
-		Account account;
-		if (p != null) {
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppeService.sortGroupsByName(gruppen);
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
-		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		
 		// Vorschlag hinzufügen
 		List<String> vorschlaege = umfrage.getVorschlaege();
 		vorschlaege.add("");
 		
-		m.addAttribute("umfrage", umfrage);
-		m.addAttribute("fehler", "");
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("fehler", "");
 		
 		return "umfragen-neu";
 	}
@@ -122,31 +110,26 @@ public class UmfragenNeuController {
 	//Vorschlag löschen
 	@PostMapping(path = "/umfragen-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String voorschlagLoeschen(Principal p, Model m, Umfrage umfrage, Gruppe gruppeSelektiert,
+	public String voorschlagLoeschen(Principal principal, Model model, Umfrage umfrage, Gruppe gruppeSelektiert,
 									 final HttpServletRequest request) {
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppeService.sortGroupsByName(gruppen);
-		m.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppen", gruppen);
 		
 		// Selektierte Gruppe
-		m.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		
 		// Vorschlag löschen
 		umfrage.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
 		
-		m.addAttribute("umfrage", umfrage);
-		m.addAttribute("fehler", "");
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("fehler", "");
 		
 		
 		return "umfragen-neu";
@@ -154,20 +137,14 @@ public class UmfragenNeuController {
 	
 	@PostMapping(path = "/umfragen-neu", params = "create")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfrageErstellen(Principal p, Model m, Umfrage umfrage,
-								   Gruppe gruppeSelektiert, RedirectAttributes ra) {
+	public String umfrageErstellen(Principal principal, Model model, 
+		Umfrage umfrage, Gruppe gruppeSelektiert, 
+		RedirectAttributes redirectAttributes) {
 		String fehler = "";
 		
 		// Account
-		Account account;
-		if (p != null) {
-			// Account
-			account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		// Vorschläge filtern. Doppelte und nicht gesetzte Daten löschen
 		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
@@ -205,10 +182,10 @@ public class UmfragenNeuController {
 		}
 		
 		if (!fehler.equals("")) {
-			m.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-			m.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			m.addAttribute("umfrage", umfrage);
-			m.addAttribute("fehler", fehler);
+			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+			model.addAttribute("umfrage", umfrage);
+			model.addAttribute("fehler", fehler);
 			return "umfragen-neu";
 		}
 		
@@ -216,7 +193,7 @@ public class UmfragenNeuController {
 		logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit link '"
 			+ umfrage.getLink() + "' erstellt");
 		
-		ra.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
+		redirectAttributes.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
 		return "redirect:/termine2/umfragen";
 	}
 }

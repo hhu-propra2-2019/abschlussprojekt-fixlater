@@ -1,6 +1,5 @@
 package mops.termine2.controller;
 
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
@@ -39,10 +38,10 @@ public class UmfragenUebersichtController {
 	private AuthenticationService authenticationService;
 	
 	@Autowired
-	private UmfragenuebersichtService umfragenuebersichtService;
+	private GruppeService gruppeService;
 	
 	@Autowired
-	private GruppeService gruppeService;
+	private UmfragenuebersichtService umfragenuebersichtService;
 	
 	public UmfragenUebersichtController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -50,67 +49,64 @@ public class UmfragenUebersichtController {
 	
 	@GetMapping("/umfragen")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String index(Principal p, Model m,
-						@RequestParam(name = "gruppe",
-							defaultValue = "-1") Long gruppe) {
-		if (p != null) {
-			Account account = authenticationService.createAccountFromPrincipal(p);
-			m.addAttribute(Konstanten.ACCOUNT, account);
-			
-			authenticatedAccess.increment();
-			
-			List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-			gruppen = gruppen.stream()
-				.sorted(Comparator.comparing(Gruppe::getName))
-				.collect(Collectors.toList());
-			
-			HashMap<Long, String> groups = new HashMap<>();
-			for (Gruppe group : gruppen) {
-				groups.put(group.getId(), group.getName());
-			}
-			
-			Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
-			
-			if (selGruppe == null) {
-				selGruppe = new Gruppe();
-				selGruppe.setId(-1L);
-				selGruppe.setName("Alle Gruppen");
-			}
-			
-			List<Umfrage> umfrageOffen;
-			List<Umfrage> umfrageAbgeschlossen;
-			if (gruppe == -1L) {
-				umfrageOffen =
-					umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
-				umfrageAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerBenutzer(account);
-			} else {
-				umfrageOffen = umfragenuebersichtService
-					.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
-				umfrageAbgeschlossen = umfragenuebersichtService
-					.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
-			}
-			for (Umfrage umfrage : umfrageOffen) {
-				umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
-			}
-			for (Umfrage umfrage : umfrageAbgeschlossen) {
-				umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
-			}
-			Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
-				umfrageOffen, gruppen, selGruppe);
-			m.addAttribute("umfragen", umfrage);
+	public String index(Principal principal, Model model,
+		@RequestParam(name = "gruppe", defaultValue = "-1") Long gruppe) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
+		gruppen = gruppen.stream()
+			.sorted(Comparator.comparing(Gruppe::getName))
+			.collect(Collectors.toList());
+		
+		HashMap<Long, String> groups = new HashMap<>();
+		for (Gruppe group : gruppen) {
+			groups.put(group.getId(), group.getName());
 		}
+		
+		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+		
+		if (selGruppe == null) {
+			selGruppe = new Gruppe();
+			selGruppe.setId(-1L);
+			selGruppe.setName("Alle Gruppen");
+		}
+		
+		List<Umfrage> umfrageOffen;
+		List<Umfrage> umfrageAbgeschlossen;
+		if (gruppe == -1L) {
+			umfrageOffen = umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
+			umfrageAbgeschlossen = umfragenuebersichtService
+				.loadAbgeschlosseneUmfragenFuerBenutzer(account);
+		} else {
+			umfrageOffen = umfragenuebersichtService
+				.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
+			umfrageAbgeschlossen = umfragenuebersichtService
+				.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
+		}
+		for (Umfrage umfrage : umfrageOffen) {
+			umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
+		}
+		for (Umfrage umfrage : umfrageAbgeschlossen) {
+			umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
+		}
+		Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
+			umfrageOffen, gruppen, selGruppe);
+		model.addAttribute("umfragen", umfrage);
+		
 		return "umfragen";
 	}
 	
 	@PostMapping(path = "umfragen", params = "details")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String details(Principal p, Model m, final HttpServletRequest req) {
+	public String details(Principal principal, Model model, final HttpServletRequest request) {
 		String link = "";
-		if (p != null) {
-			link = req.getParameter("details");
+		if (principal != null) {
+			link = request.getParameter("details");
 		}
 		return "redirect:/termine2/umfragen/" + link;
 	}
+	
 }
-

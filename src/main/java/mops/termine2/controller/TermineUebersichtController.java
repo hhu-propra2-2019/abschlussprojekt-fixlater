@@ -30,16 +30,16 @@ import java.util.List;
 @RequestMapping("/termine2")
 public class TermineUebersichtController {
 	
-	private final transient Counter authenticatedAccess;
+	public final transient Counter authenticatedAccess;
 	
 	@Autowired
-	private TerminfindunguebersichtService terminfindunguebersichtService;
+	private AuthenticationService authenticationService;
 	
 	@Autowired
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private AuthenticationService authenticationService;
+	private TerminfindunguebersichtService terminfindunguebersichtService;
 	
 	public TermineUebersichtController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
@@ -47,17 +47,13 @@ public class TermineUebersichtController {
 	
 	@GetMapping("")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String index(Principal p, Model m,
+	public String index(Principal principal, Model model,
 						@RequestParam(name = "gruppe",
 							defaultValue = "-1") Long gruppe) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-			authenticatedAccess.increment();
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
@@ -100,7 +96,7 @@ public class TermineUebersichtController {
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 			terminfindungenOffen, gruppen, selGruppe);
 		
-		m.addAttribute("termine", termine);
+		model.addAttribute("termine", termine);
 		
 		return "termine";
 	}

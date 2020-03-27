@@ -45,12 +45,6 @@ public class TermineAbstimmungController {
 	private final transient Counter authenticatedAccess;
 	
 	@Autowired
-	private TerminfindungService terminfindungService;
-	
-	@Autowired
-	private TerminAntwortService terminAntwortService;
-	
-	@Autowired
 	private AuthenticationService authenticationService;
 	
 	@Autowired
@@ -58,6 +52,12 @@ public class TermineAbstimmungController {
 	
 	@Autowired
 	private KommentarService kommentarService;
+	
+	@Autowired
+	private TerminAntwortService terminAntwortService;
+	
+	@Autowired
+	private TerminfindungService terminfindungService;
 	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
@@ -67,14 +67,11 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineDetails(Principal p, Model m, @PathVariable("link") String link) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+	public String termineDetails(Principal principal, Model model, @PathVariable("link") String link) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -112,18 +109,14 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
-		Account account;
-		Terminfindung terminfindung;
-		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
+
+		Terminfindung terminfindung = 
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
@@ -148,11 +141,11 @@ public class TermineAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
-		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("antwort", antwortForm);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("antwort", antwortForm);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -161,21 +154,14 @@ public class TermineAbstimmungController {
 	
 	@GetMapping("/{link}/ergebnis")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String termineErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+	public String termineErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
-		Account account;
-		List<TerminfindungAntwort> antworten;
-		Terminfindung terminfindung;
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-
-		}
-		
-		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
+		Terminfindung terminfindung = 
+			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
@@ -187,10 +173,6 @@ public class TermineAbstimmungController {
 
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
-		
-		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
-		// muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
 		
 		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
@@ -204,15 +186,15 @@ public class TermineAbstimmungController {
 		
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		antworten = terminAntwortService.loadAllByLink(link);
+		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
-		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		m.addAttribute("terminfindung", terminfindung);
-		m.addAttribute("ergebnis", ergebnis);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("ergebnis", ergebnis);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -223,18 +205,14 @@ public class TermineAbstimmungController {
 	@Transactional
 	@PostMapping(path = "/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveAbstimmung(Principal p,
-								 Model m,
+	public String saveAbstimmung(Principal principal,
+								 Model model,
 								 @PathVariable("link") String link,
 								 @ModelAttribute AntwortForm antwortForm) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-
-		}
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -275,14 +253,12 @@ public class TermineAbstimmungController {
 	
 	@PostMapping(path = "/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+	public String saveKommentar(Principal principal, Model model, 
+		@PathVariable("link") String link, Kommentar neuerKommentar) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Terminfindung terminfindung =
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -305,7 +281,7 @@ public class TermineAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
-		m.addAttribute("neuerKommentar", neuerKommentar);
+		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		

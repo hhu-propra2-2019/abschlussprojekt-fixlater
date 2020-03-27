@@ -46,16 +46,16 @@ public class UmfragenAbstimmungController {
 	private AuthenticationService authenticationService;
 	
 	@Autowired
-	private UmfrageService umfrageService;
+	private GruppeService gruppeService;
+	
+	@Autowired
+	private KommentarService kommentarService;
 	
 	@Autowired
 	private UmfrageAntwortService umfrageAntwortService;
 	
 	@Autowired
-	private GruppeService gruppeService;
-	
-	@Autowired
-	private KommentarService kommentarService;
+	private UmfrageService umfrageService;
 	
 	private HashMap<LinkWrapper, Umfrage> letzteUmfrage = new HashMap<>();
 	
@@ -65,14 +65,11 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfrageDetails(Principal p, Model m, @PathVariable("link") String link) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+	public String umfrageDetails(Principal principal, Model model, @PathVariable("link") String link) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
@@ -100,17 +97,13 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfrageAbstimmung(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
-		Account account;
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
-		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
@@ -134,10 +127,10 @@ public class UmfragenAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
-		m.addAttribute("umfrage", umfrage);
-		m.addAttribute("antwort", antwortForm);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("antwort", antwortForm);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -146,18 +139,13 @@ public class UmfragenAbstimmungController {
 	
 	@GetMapping("/umfragen/{link}/ergebnis")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String umfrageErgebnis(Principal p, Model m, @PathVariable("link") String link) {
+	public String umfrageErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
+		
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
-		Account account;
-		List<UmfrageAntwort> antworten;
-		
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
@@ -175,15 +163,15 @@ public class UmfragenAbstimmungController {
 			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 		}
 		
-		antworten = umfrageAntwortService.loadAllByLink(link);
+		List<UmfrageAntwort> antworten = umfrageAntwortService.loadAllByLink(link);
 		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = new ErgebnisFormUmfragen(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		m.addAttribute("umfrage", umfrage);
-		m.addAttribute("ergebnis", ergebnis);
-		m.addAttribute("kommentare", kommentare);
-		m.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("ergebnis", ergebnis);
+		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		authenticatedAccess.increment();
 		
@@ -193,17 +181,13 @@ public class UmfragenAbstimmungController {
 	
 	@PostMapping(path = "/umfragen/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveAbstimmung(Principal p,
-								 Model m,
+	public String saveAbstimmung(Principal principal,
+								 Model model,
 								 @PathVariable("link") String link,
 								 @ModelAttribute AntwortFormUmfragen antwortForm) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage =
 			umfrageService.loadByLinkMitVorschlaegen(link);
@@ -238,14 +222,12 @@ public class UmfragenAbstimmungController {
 	
 	@PostMapping(path = "/umfragen/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal p, Model m, @PathVariable("link") String link, Kommentar neuerKommentar) {
-		Account account;
-		if (p != null) {
-			m.addAttribute(Konstanten.ACCOUNT, authenticationService.createAccountFromPrincipal(p));
-			account = authenticationService.createAccountFromPrincipal(p);
-		} else {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
+	public String saveKommentar(Principal principal, Model model, 
+		@PathVariable("link") String link, Kommentar neuerKommentar) {
+
+		// Account
+		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
@@ -265,7 +247,7 @@ public class UmfragenAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
-		m.addAttribute("neuerKommentar", neuerKommentar);
+		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
 		authenticatedAccess.increment();
 		
