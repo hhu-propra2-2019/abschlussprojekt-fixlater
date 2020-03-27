@@ -187,21 +187,8 @@ public class TermineNeuController {
 		
 		// minVorschlag and maxVorschlag are always null together
 		if (minVorschlag != null) {
-			if (terminfindung.getFrist().isAfter(minVorschlag)) {
-				if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusDays(1));
-				} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusHours(2));
-				} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-					terminfindung.setFrist(minVorschlag.minusMinutes(5));
-				} else {
-					terminfindung.setFrist(minVorschlag);
-				}
-			}
-			
-			if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-				terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-			}
+			terminfindungService.setzeFrist(terminfindung, minVorschlag);			
+			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
 		}
 		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
@@ -329,21 +316,8 @@ public class TermineNeuController {
 			
 			// minVorschlag and maxVorschlag are always null together
 			if (minVorschlag != null) {
-				if (terminfindung.getFrist().isAfter(minVorschlag)) {
-					if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusDays(1));
-					} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusHours(2));
-					} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-						terminfindung.setFrist(minVorschlag.minusMinutes(5));
-					} else {
-						terminfindung.setFrist(minVorschlag);
-					}
-				}
-				
-				if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-					terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-				}
+				terminfindungService.setzeFrist(terminfindung, minVorschlag);
+				terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
 			}
 			
 			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
