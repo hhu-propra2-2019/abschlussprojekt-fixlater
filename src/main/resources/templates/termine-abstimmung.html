@@ -97,16 +97,9 @@
 					
 					<!-- Wahl -->
 					<div class="mb-3 border-bottom">
-						<div class="d-flex justify-content-between align-items-center">
-							<h2 class="h2 mb-0">Zeiten</h2>
-							
-							<a th:href="@{/termine2/{path}/abstimmung(
-							            path=${terminfindung.getLink()})}">
-								<button class="btn btn-outline-warning">
-									Zurücksetzen
-								</button>
-							</a>
-						</div>
+						<h2 class="h2 mb-0">
+							Zeiten
+						</h2>
 						
 						<form class="my-3"
 						      th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
