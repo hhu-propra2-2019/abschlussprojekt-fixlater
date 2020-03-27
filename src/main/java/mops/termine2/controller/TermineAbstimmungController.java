@@ -16,6 +16,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
+import mops.termine2.services.TerminErgebnisService;
 import mops.termine2.services.TerminfindungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,6 +60,9 @@ public class TermineAbstimmungController {
 	@Autowired
 	private KommentarService kommentarService;
 	
+	@Autowired
+	private TerminErgebnisService ergebnisService;
+	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
 	public TermineAbstimmungController(MeterRegistry registry) {
@@ -80,7 +84,7 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-
+			
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
@@ -88,7 +92,7 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-
+			
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -101,7 +105,7 @@ public class TermineAbstimmungController {
 		// muss dies hier noch abgefragt werden und evtl auf die
 		//Abstimmungsseite umgeleitet werden;
 		
-
+		
 		if (terminfindung.getTeilgenommen()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		} else {
@@ -133,7 +137,7 @@ public class TermineAbstimmungController {
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-
+			
 		}
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -172,7 +176,7 @@ public class TermineAbstimmungController {
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-
+			
 		}
 		
 		terminfindung = terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
@@ -184,7 +188,7 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-
+			
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -207,7 +211,7 @@ public class TermineAbstimmungController {
 		antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
-		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
+		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		m.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
 		m.addAttribute("terminfindung", terminfindung);
 		m.addAttribute("ergebnis", ergebnis);
@@ -233,7 +237,7 @@ public class TermineAbstimmungController {
 			account = authenticationService.createAccountFromPrincipal(p);
 		} else {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-
+			
 		}
 		
 		Terminfindung terminfindung =
@@ -295,7 +299,7 @@ public class TermineAbstimmungController {
 		if (terminfindung.getGruppeId() != null
 			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-
+			
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {

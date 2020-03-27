@@ -15,6 +15,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.UmfrageAntwortService;
+import mops.termine2.services.UmfrageErgebnisService;
 import mops.termine2.services.UmfrageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,9 @@ public class UmfragenAbstimmungController {
 	
 	@Autowired
 	private KommentarService kommentarService;
+	
+	@Autowired
+	private UmfrageErgebnisService ergebnisService;
 	
 	private HashMap<LinkWrapper, Umfrage> letzteUmfrage = new HashMap<>();
 	
@@ -178,7 +182,7 @@ public class UmfragenAbstimmungController {
 		antworten = umfrageAntwortService.loadAllByLink(link);
 		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
-		ErgebnisFormUmfragen ergebnis = new ErgebnisFormUmfragen(antworten, umfrage, nutzerAntwort);
+		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		m.addAttribute("umfrage", umfrage);
 		m.addAttribute("ergebnis", ergebnis);
