@@ -236,16 +236,16 @@
 
 									<!-- Modal Header -->
 									<div class="modal-header">
-										<h4 class="modal-title" th:text="${info.getAchtung()}">Modal Heading</h4>
+										<h4 class="modal-title">!ACHTUNG!</h4>
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 									</div>
 
 									<!-- Modal body -->
 									<div class="modal-body text-left">
 										<ul>
-											<li th:text="${info.getErgebnisVorFrist()}">Coffee</li>
-											<li th:text="${info.getEinmaligesAbstimmen()}">Coffee</li>
-											<li th:text="${info.getAbstimmungsBerechtigungNutzer()}">Coffee</li>
+											<li th:text="${info.getZwischenergebnis()}">Coffee</li>
+											<li th:text="${info.getEinmaligeAbstimmung()}">Coffee</li>
+											<li th:text="${info.getTeilnahmeMoeglich()}">Coffee</li>
 										</ul>
 									</div>
 
