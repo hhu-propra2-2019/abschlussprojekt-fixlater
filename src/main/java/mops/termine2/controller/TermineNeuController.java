@@ -191,6 +191,10 @@ public class TermineNeuController {
 			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
 		}
 		
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(15))) {
+			fehler = "Der früheste Termin ist zu kurzfristig.";
+		}
+		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);
 		
 		// Terminfindung erstellen
