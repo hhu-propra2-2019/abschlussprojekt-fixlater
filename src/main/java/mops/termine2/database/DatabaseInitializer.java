@@ -47,7 +47,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final boolean EINGESCHALTET = true;
 	
-	private final Logger logger = Logger.getLogger(DatabaseInitializer.class.getName());	
+	private final Logger logger = Logger.getLogger(DatabaseInitializer.class.getName());
 	
 	@Autowired
 	private transient BenutzerGruppeRepository benutzerGruppeRepository;
@@ -149,7 +149,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		LocalDateTime loeschdatum = frist.plusDays(90);
 		Boolean ergebnisVorFrist = r.nextBoolean();
 		Boolean einmaligeAbstimmung = r.nextBoolean();
-		int antwortGrenze = r.nextInt(4);		
+		int antwortGrenze = r.nextInt(4);
 		
 		IntStream.range(0, ANZAHL_OPTIONEN).forEach(value -> {
 			final TerminfindungDB terminfindungdb = new TerminfindungDB();
@@ -199,7 +199,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	}
 	
 	public void fakeTerminfindungLink(Faker faker, String benutzer) {
-		Random r = new Random();		
+		Random r = new Random();
 		AtomicInteger i = new AtomicInteger(1);
 		
 		String beschreibung = faker.lorem().sentence();
@@ -268,7 +268,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	public void fakeUmfrageGruppe(Faker faker, BenutzerGruppeDB benutzerGruppeDB, int gruppeZaehler,
 								  double entscheidungswert) {
-
+		
 		Random r = new Random();
 		AtomicInteger i = new AtomicInteger(1);
 		

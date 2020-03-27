@@ -191,7 +191,7 @@
 									     th:if="*{vorschlaege.size() > 1}">
 										<button class="btn btn-outline-danger" name="delete"
 										        th:value="${iter.index}" type="submit">
-											Löschen
+											<i class="fa fa-trash"></i>
 										</button>
 									</div>
 								</div>
@@ -202,20 +202,6 @@
 									Hinzufügen
 								</button>
 							</div>
-						</div>
-						
-						<div class="mb-3 form-group">
-							<label for="maxAntwortAnzahl">
-								Höchstanzahl an Stimmen je Nutzer
-							</label>
-							
-							<input class="form-control"
-							       id="maxAntwortAnzahl" name="maxAntwortAnzahl"
-							       type="number" required
-							       min="1" th:attr="max=*{vorschlaege.size()}"
-							       placeholder="Wie viele Stimmen darf ein Nutzer höchstens vergeben?"
-							       th:value="*{maxAntwortAnzahl == null || maxAntwortAnzahl < 1 ?
-							                 1 : maxAntwortAnzahl}"/>
 						</div>
 					</div>
 					
@@ -265,14 +251,6 @@
 									+]*/
 								</script>
 							</div>
-							
-							<!-- Empfehlung für die Wahl der Frist -->
-							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-								<p class="mb-1">
-									<b>Empfehlung:</b> Die Frist sollte am besten ein oder zwei Tage
-									vor dem frühsten Termin liegen.
-								</p>
-							</div>
 						</div>
 						
 						<!-- Löschdatum -->
@@ -314,14 +292,6 @@
 										});
 									+]*/
 								</script>
-							</div>
-							
-							<!-- Empfehlung für die Wahl des Löschdatums -->
-							<div class="mt-2 mx-4 text-secondary" style="font-size: small">
-								<p class="mb-1">
-									<b>Empfehlung:</b> Das Löschdatum muss hinter dem spätesten
-									Termin liegen.
-								</p>
 							</div>
 						</div>
 					</div>

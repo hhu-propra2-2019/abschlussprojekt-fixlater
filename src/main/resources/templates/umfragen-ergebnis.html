@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"
-      th:replace="~{mopslayout :: html(name='Terminfindung', title='Terminabstimmung',
+      th:replace="~{mopslayout :: html(name='Terminfindung', title='Umfrageergebnisse',
                   headcontent=~{:: headcontent}, navigation=~{:: navigation},
                   bodycontent=~{:: bodycontent})}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
-	<title>Umfrage</title>
+	<title>Umfrageergebnisse</title>
 	<th:block th:fragment="headcontent">
 		<!-- Links, Skripts, Styles hier einfügen! -->
 	</th:block>
@@ -64,16 +64,30 @@
 
 				<!-- Wahl -->
 				<div class="mb-3 border-bottom">
-					<div class="d-flex justify-content-between align-items-center">
-						<h2 class="h2">Zeiten</h2>
-
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h2 class="h2 mb-0">Vorschläge</h2>
+						
 						<a th:if="${ergebnis.isFristNichtAbgelaufen()}"
 						   th:href="@{/termine2/umfragen/{path}/abstimmung(path=${umfrage.link})}">
 							<button class="btn btn-success">Abstimmung ändern</button>
 						</a>
 					</div>
-
-
+					
+					<div class="mb-3">
+						Das
+						
+						<span th:if="${ergebnis.isFristNichtAbgelaufen()}">
+							vorläufige
+						</span>
+						
+						Ergebnis ist
+						
+						<span class="text-primary" th:text="${ergebnis.getErgebnis()}">
+							ein Vorschlag
+						</span>.
+					</div>
+					
+					
 					<div class="table-responsive">
 						<table class="table table-sm" style="text-align: center">
 							<thead>
@@ -188,15 +202,21 @@
 						</details>
 
 					</div>
-					<div class="d-flex justify-content-between align-items-center">
+					
+					<div class="d-flex justify-content-between align-items-center mb-3">
 						<span class="text-black-50">m.A. = meine Antwort</span>
 					</div>
+					
+					<div class="alert alert-warning" role="alert">
+						Die Abstimmung läuft bis zum
+						
+						<b><span th:text="${#temporals.format(umfrage.frist, 'dd.MM.yyyy, HH:mm')}">
+							Datum
+						</span></b>.
+					</div>
 				</div>
-				<br>
-				<br>
-				<br>
+				
 				<!-- Kommentare -->
-				<div>
 					<!-- Kommentare -->
 				<h2 class="h2">Kommentare</h2>
 
@@ -206,8 +226,17 @@
 						<div class="my-3 p-3 bg-light rounded">
 							<!-- Sendedaten -->
 							<div class="pb-2 border-bottom">
-								<div class="h4" > <span th:text="${kommentar.pseudonym}"> Benjamin </span></div>
-								<div> am <span th:text="${#temporals.format(kommentar.erstellungsdatum, 'dd.MM.yyyy, HH:mm')}"> </span></div>
+								<div class="h4" th:text="${kommentar.pseudonym}">
+									Benjamin
+								</div>
+								
+								<div>
+									am
+									
+									<span th:text="${#temporals.format(
+									               kommentar.erstellungsdatum,
+									               'dd.MM.yyyy, HH:mm')}">
+									</div>
 							</div>
 
 							<!-- Inhalt -->
@@ -226,14 +255,16 @@
 						  th:object="${neuerKommentar}"  method="post">
 						<!-- Inhalt -->
 						<div class="mb-3">
-							<textarea th:field="*{inhalt}" class="form-control" rows="5" id="comment" required></textarea>
+							<textarea th:field="*{inhalt}" class="form-control" rows="5"
+							          id="comment" maxlength="1024" required></textarea>
 						</div>
 
 						<!-- Name -->
 						<div class="mb-3 form-group">
 							<label for="pseudonym">Name</label>
 
-							<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
+							<input th:field="*{pseudonym}" class="form-control" id="pseudonym"
+							       type="text" maxlength="64"
 								   th:placeholder="${account.getName()}">
 						</div>
 
@@ -241,7 +272,6 @@
 							<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
 						</div>
 					</form>
-				</div>
 				</div>
 			</div>
 		</div>

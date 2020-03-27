@@ -1,19 +1,16 @@
 package mops.termine2.controller.formular;
 
 import lombok.Getter;
-import mops.termine2.KonstantenAbstimmung;
 import mops.termine2.models.Terminfindung;
 
 @Getter
 public class AbstimmungsInfortmationenTermineForm {
 	
-	String achtung = KonstantenAbstimmung.ATTENTION;
+	Boolean einmaligeAbstimmung;
 	
-	String einmaligesAbstimmen;
+	Boolean zwischenergebnis;
 	
-	String ergebnisVorFrist;
-	
-	String abstimmungsBerechtigungNutzer;
+	Boolean teilnahmeMoeglich;
 	
 	public AbstimmungsInfortmationenTermineForm(Terminfindung terminfindung) {
 		setAbstimmungsBerechtigungNutzer(terminfindung);
@@ -22,28 +19,16 @@ public class AbstimmungsInfortmationenTermineForm {
 	}
 	
 	private void setEinmaligesAbstimmen(Terminfindung terminfindung) {
-		if (terminfindung.getEinmaligeAbstimmung()) {
-			einmaligesAbstimmen = KonstantenAbstimmung.EINMALIGES_ABSTIMMEN_BIS_FRIST;
-		} else {
-			einmaligesAbstimmen = KonstantenAbstimmung.BELIEBIGES_ABSTIMMEN_BIS_FRIST;
-		}
+		einmaligeAbstimmung = terminfindung.getEinmaligeAbstimmung();
 	}
 	
 	private void setErgebnisVorFrist(Terminfindung terminfindung) {
-		if (terminfindung.getErgebnisVorFrist()) {
-			ergebnisVorFrist = KonstantenAbstimmung.ERGEBNIS_VOR_FRIST;
-		} else {
-			ergebnisVorFrist = KonstantenAbstimmung.ERGEBNIS_NACH_FRIST;
-		}
+		zwischenergebnis = terminfindung.getErgebnisVorFrist();
 	}
 	
 	private void setAbstimmungsBerechtigungNutzer(Terminfindung terminfindung) {
-		if (terminfindung.getTeilgenommen() && terminfindung.getEinmaligeAbstimmung()) {
-			abstimmungsBerechtigungNutzer = KonstantenAbstimmung.NUTZER_DARF_NICHTMEHR_ABSTIMMEN;
-		} else {
-			abstimmungsBerechtigungNutzer = KonstantenAbstimmung.NUTZER_DARF_NOCH_ABSTIMMEN;
-		}
+		teilnahmeMoeglich = !(terminfindung.getTeilgenommen() && terminfindung.getEinmaligeAbstimmung());
 	}
 	
-	
 }
+

@@ -16,6 +16,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
+import mops.termine2.services.TerminErgebnisService;
 import mops.termine2.services.TerminfindungService;
 import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,9 @@ public class TermineAbstimmungController {
 	@Autowired
 	private TerminfindungService terminfindungService;
 	
+	@Autowired
+	private TerminErgebnisService ergebnisService;
+	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
 	public TermineAbstimmungController(MeterRegistry registry) {
@@ -81,10 +85,12 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
+
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}		
 		
+
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
@@ -122,7 +128,7 @@ public class TermineAbstimmungController {
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-
+			
 		}
 		
 		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
@@ -183,13 +189,13 @@ public class TermineAbstimmungController {
 		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
 			account.getName(), link);
-		ErgebnisForm ergebnis = new ErgebnisForm(antworten, terminfindung, nutzerAntwort);
+		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten, terminfindung, nutzerAntwort);
 		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
 		model.addAttribute("terminfindung", terminfindung);
 		model.addAttribute("ergebnis", ergebnis);
 		model.addAttribute("kommentare", kommentare);
 		model.addAttribute("neuerKommentar", new Kommentar());
-		
+    
 		return "termine-ergebnis";
 	}
 	
