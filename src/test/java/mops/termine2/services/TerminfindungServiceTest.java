@@ -1,11 +1,5 @@
 package mops.termine2.services;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
@@ -14,6 +8,13 @@ import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,7 +72,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
@@ -79,7 +80,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 5;
 		Terminfindung termine = erstelleBeispielTerminfindung(3, terminAnzahl);
 		service.save(termine);
-		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
@@ -87,7 +88,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 10;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
@@ -95,7 +96,7 @@ public class TerminfindungServiceTest {
 		int terminAnzahl = 1000;
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
-		Mockito.verify(terminRepository, times(terminAnzahl)).save(any());
+		Mockito.verify(terminRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
@@ -230,6 +231,14 @@ public class TerminfindungServiceTest {
 		List<Terminfindung> ergebnis = service.loadAllBenutzerHatAbgestimmtOhneTermine(benutzer);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	@Test
+	public void loescheAbgelaufene() {
+		service.loescheAbgelaufeneTermine();
+		
+		Mockito.verify(antwortRepository, times(1)).deleteByTerminfindungLoeschdatumBefore(any());
+		Mockito.verify(terminRepository, times(1)).deleteByLoeschdatumBefore(any());
 	}
 	
 	private Terminfindung erstelleBeispielTerminfindung(int dummie, int anzahlTermine) {

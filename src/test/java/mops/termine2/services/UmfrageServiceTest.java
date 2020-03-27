@@ -58,7 +58,7 @@ public class UmfrageServiceTest {
 		int anzahl = 3;
 		Umfrage umfrage = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		service.save(umfrage);
-		Mockito.verify(umfrageRepository, times(anzahl)).save(any());
+		Mockito.verify(umfrageRepository, times(1)).saveAll(any());
 	}
 	
 	@Test
@@ -180,6 +180,14 @@ public class UmfrageServiceTest {
 		List<Umfrage> ergebnis = service.loadAllBenutzerHatAbgestimmtOhneVorschlaege(benutzer);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	@Test
+	public void loescheAbgelaufene() {
+		service.loescheAbgelaufeneUmfragen();
+		
+		Mockito.verify(umfrageAntwortRepository, times(1)).deleteByUmfrageLoeschdatumBefore(any());
+		Mockito.verify(umfrageRepository, times(1)).deleteByLoeschdatumBefore(any());
 	}
 	
 	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(

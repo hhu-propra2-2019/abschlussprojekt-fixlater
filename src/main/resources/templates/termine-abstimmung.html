@@ -345,7 +345,7 @@
 								<!-- Inhalt -->
 								<div class="mb-3">
 									<textarea class="form-control" rows="5" id="comment"
-									          th:field="*{inhalt}">
+									          th:field="*{inhalt}" required>
 										Inhalt
 									</textarea>
 								</div>
@@ -358,7 +358,7 @@
 											<input class="form-control"
 											       id="pseudonym" name="pseudonym"
 											       type="text"
-											       th:placeholder="${antwort.getBenutzer()}"
+											       th:placeholder="${account.getName()}"
 											       th:field="*{pseudonym}"/>
 										</div>
 										

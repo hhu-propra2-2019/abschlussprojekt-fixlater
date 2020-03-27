@@ -1,9 +1,5 @@
 package mops.termine2.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.TerminfindungAntwortRepository;
@@ -14,6 +10,11 @@ import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -64,15 +65,15 @@ public class TerminfindunguebersichtServiceTest {
 			Terminfindung termin = new Terminfindung();
 			termin.setLink(day.toString());
 			termin.setFrist(ldt.plusDays(day));
-			termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(day.toString());
 			terminDB.setFrist(ldt.plusDays(day));
-			terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -111,16 +112,16 @@ public class TerminfindunguebersichtServiceTest {
 			termin.setLink(fristTage.get(i).toString());
 			termin.setFrist(ldt.plusDays(fristTage.get(i)));
 			termin.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-			termin.setErgebnisVorFrist(true);
 			termin.setEinmaligeAbstimmung(false);
+			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
 			TerminfindungDB terminDB = new TerminfindungDB();
 			terminDB.setLink(fristTage.get(i).toString());
 			terminDB.setFrist(ldt.plusDays(fristTage.get(i)));
 			terminDB.setErgebnis(ldt.plusDays(ergebnisTage.get(i)));
-			terminDB.setErgebnisVorFrist(true);
 			terminDB.setEinmaligeAbstimmung(false);
+			terminDB.setErgebnisVorFrist(true);
 			terminfindungenDB.add(terminDB);
 		}
 		
@@ -135,6 +136,100 @@ public class TerminfindunguebersichtServiceTest {
 			new ArrayList<>(Arrays.asList(terminfindungen.get(3), terminfindungen.get(1)));
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	@Test
+	public void testLoadOffeneTerminfindungenFuerGruppe() {
+		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3));
+		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L));
+		Account account = new Account("studentin", null, null, null);
+		LocalDateTime ldt = LocalDateTime.now();
+		
+		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
+		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId(5L);
+		
+		List<Terminfindung> terminfindungen = new ArrayList<>();
+		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
+		
+		for (int i = 0; i < days.size(); i++) {
+			Terminfindung termin = new Terminfindung();
+			termin.setLink(days.get(i).toString());
+			termin.setFrist(ldt.plusDays(days.get(i)));
+			termin.setEinmaligeAbstimmung(false);
+			termin.setGruppeId(gruppenIds.get(i));
+			termin.setErgebnisVorFrist(true);
+			terminfindungen.add(termin);
+			
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+				TerminfindungDB terminDB = new TerminfindungDB();
+				terminDB.setLink(days.get(i).toString());
+				terminDB.setFrist(ldt.plusDays(days.get(i)));
+				terminDB.setEinmaligeAbstimmung(false);
+				terminDB.setGruppeId(gruppenIds.get(i));
+				terminDB.setErgebnisVorFrist(true);
+				terminfindungenDB.add(terminDB);
+			}
+		}
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+			.thenReturn(terminfindungenDB);
+		
+		List<Terminfindung> ergebnis =
+			terminfindunguebersichtService
+				.loadOffeneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+		List<Terminfindung> erwartet =
+			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(4)));
+		
+		assertThat(ergebnis).isEqualTo(erwartet);
+	}
+	
+	@Test
+	public void testLoadAbgeschlosseneTerminfindungenFuerGruppe() {
+		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3, -7));
+		List<Integer> ergebnis = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L, 5L));
+		Account account = new Account("studentin", null, null, null);
+		LocalDateTime ldt = LocalDateTime.now();
+		
+		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
+		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId(5L);
+		
+		List<Terminfindung> terminfindungen = new ArrayList<>();
+		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
+		
+		for (int i = 0; i < days.size(); i++) {
+			Terminfindung termin = new Terminfindung();
+			termin.setLink(days.get(i).toString());
+			termin.setFrist(ldt.plusDays(days.get(i)));
+			termin.setEinmaligeAbstimmung(false);
+			termin.setGruppeId(gruppenIds.get(i));
+			termin.setErgebnis(ldt.plusDays(ergebnis.get(i)));
+			termin.setErgebnisVorFrist(true);
+			terminfindungen.add(termin);
+			
+			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+				TerminfindungDB terminDB = new TerminfindungDB();
+				terminDB.setLink(days.get(i).toString());
+				terminDB.setFrist(ldt.plusDays(days.get(i)));
+				terminDB.setEinmaligeAbstimmung(false);
+				terminDB.setGruppeId(gruppenIds.get(i));
+				terminDB.setErgebnis(ldt.plusDays(ergebnis.get(i)));
+				terminDB.setErgebnisVorFrist(true);
+				terminfindungenDB.add(terminDB);
+			}
+		}
+		
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+			.thenReturn(terminfindungenDB);
+		
+		List<Terminfindung> result =
+			terminfindunguebersichtService
+				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+		List<Terminfindung> erwartet =
+			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(5)));
+		
+		assertThat(result).isEqualTo(erwartet);
 	}
 	
 }
