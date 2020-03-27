@@ -17,12 +17,8 @@ public class LocalDateTimeManager {
 		int dayOfMonth = time.getDayOfMonth();
 		int month = time.getMonth().getValue();
 		int year = time.getYear();
-		
 		String weekday;
 		switch (dayOfWeek) {
-		case 0:
-			weekday = "So.";
-			break;
 		case 1:
 			weekday = "Mo.";
 			break;
@@ -38,10 +34,12 @@ public class LocalDateTimeManager {
 		case 5:
 			weekday = "Fr.";
 			break;
-		default:
+		case 6:
 			weekday = "Sa.";
-			
-			
+			break;
+		default:
+			weekday = "So.";
+			break;			
 		}
 		
 		//um führende NKullen anzuzeigen
