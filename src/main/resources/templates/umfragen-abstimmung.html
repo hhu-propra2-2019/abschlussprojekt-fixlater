@@ -8,7 +8,30 @@
 	<meta charset="utf-8">
 	<title>Umfragenabstimmung</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
+		<!-- Links, Scripts, Styles -->
+		
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		        crossorigin="anonymous"></script>
+		
+		<!-- PopperJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"
+		        integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
+		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+		      crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		        crossorigin="anonymous"></script>
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
 	</th:block>
 </head>
 
@@ -49,78 +72,175 @@
 					<div class="mb-3 border-bottom">
 						<div class="mb-3 p-3 bg-light rounded">
 							<!-- Zusammenfassung -->
-							<div class="pb-2 border-bottom">
+							<div class="pb-2"
+							     th:classappend="${(umfrage.getBeschreibung() == null
+							                     || umfrage.getBeschreibung().equals(''))
+							                     ? '' : 'border-bottom'}">
 								<div class="h3" th:text="${umfrage.getTitel()}">
-									Essen bei der Praktikums-Abschluss-Party
+									Titel
 								</div>
 							</div>
 							
 							<!-- Beschreibung -->
-							<div class="mt-2" style="font-size: small" th:text="${umfrage.getBeschreibung()}">
-								Floppy macaroni are assumed to be dissatisfying. Few can name a
-								springtime flower that doesn't profit from rainstorms. In modern
-								times, clothes were lost without the long thin bands that were
-								their linen.
+							<div class="mt-2" style="font-size: small"
+							     th:if="not ${umfrage.getBeschreibung() == null} or
+							            not ${umfrage.getBeschreibung().equals('')}"
+							     th:text="${umfrage.getBeschreibung()}">
+								Beschreibung
 							</div>
 						</div>
 					</div>
 					
 					<!-- Wahl -->
 					<div class="mb-3 border-bottom">
-						<div class="d-flex justify-content-between align-items-center">
-							<h2 class="h2">Vorschläge</h2>
-						</div>
+						<h2 class="h2">
+							Vorschläge
+						</h2>
 						
-						<form class="my-3" th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
-											th:object="${antwort}" method="post">
-							<!-- falls es eine Stimmbegrenzung gibt -->
-							<div class="mb-2">
-								Wähle <span class="text-primary" th:text="${umfrage.maxAntwortAnzahl}">[Anzahl]</span> aus:
+						<form class="my-3"
+						      th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
+						      th:object="${antwort}" method="post">
+							<!-- verfügbare Stimmen -->
+							<div class="mb-2"
+							     th:if="${umfrage.maxAntwortAnzahl != null
+							            && umfrage.maxAntwortAnzahl != umfrage.vorschlaege.size()}">
+								Wähle
+								
+								<span class="text-primary" th:text="${umfrage.maxAntwortAnzahl}">
+									Anzahl
+								</span>
+								
+								aus:
 							</div>
-
+							
 							<div class="table-responsive">
 								<table class="table table-sm" style="text-align: center">
 									<thead>
 										<tr>
-											
-											<th class="col-7 bg-secondary">Vorschlag</th>
-											<th class="col-2 bg-primary">  Ja</th>
-											<th class="col-2 bg-danger">   Nein</th>
+											<th class="col bg-secondary" style="width: 68%">
+												Vorschlag</th>
+											<th class="col bg-primary"   style="width: 16%">
+												Ja</th>
+											<th class="col bg-danger"    style="width: 16%">
+												Nein</th>
 										</tr>
 									</thead>
 									
-									<tbody th:remove="all-but-first" th:each="vorschlag,vorschlagStat: *{vorschlaege}">
-										<tr>
-											<th class="col-7 bg-white"
-											th:text="${vorschlag}">
-											Generischer Vorschlag</th>
-											<th class="col-2 table-primary">
+									<tbody>
+										<tr th:each="vorschlag, iter: *{vorschlaege}">
+											<th class="col text-secondary" style="width: 68%"
+											    th:classappend="${iter.count % 2 == 1}
+											                    ? 'bg-white' : 'bg-light'"
+											    th:text="${vorschlag}">
+												Vorschlag
+											</th>
+											
+											<th class="col table-primary" style="width: 16%">
 												<input type="radio"
-												       name="abstimmung1"
 												       th:name="${vorschlag}"
-												       th:field="${antwort.antworten[__${vorschlagStat.index}__]}"
+												       th:field="
+												            ${antwort.antworten[__${iter.index}__]}"
 												       value="JA"/>
 											</th>
-											<th class="col-2 table-danger">
+											
+											<th class="col table-danger" style="width: 16%">
 												<input type="radio"
-												       name="abstimmung1"
 												       th:name="${vorschlag}"
-												       th:field="${antwort.antworten[__${vorschlagStat.index}__]}"
+												       th:field="
+												            ${antwort.antworten[__${iter.index}__]}"
 												       value="NEIN"/>
 											</th>
 										</tr>
-									
 									</tbody>
 								</table>
 							</div>
-
-							<div style="text-align: center">
-							<input type="text" name="pseudonym" placeholder="Benjamin"
-							       th:placeholder="*{getBenutzer()}"
-							       th:field="${antwort.pseudonym}"
-							>
-							<button class="btn btn-primary" type="submit" name="sichern">Abschicken</button>
-						</div>
+							
+							<!-- Hinweise zur Abstimmung -->
+							<div class="container">
+								<ul>
+									<li>
+										Das Ergebnis ist
+										
+										<!--<span th:if="${info.getZwischenergebnis()}">-->
+											<span class="text-info">
+												während
+											</span>
+											der Abstimmung
+										<!--</span>-->
+										
+										<!--<span th:if="not ${info.getZwischenergebnis()}">
+											<span class="text-info">
+												erst nach
+											</span>
+											
+											der Frist
+										</span>-->
+										
+										einsehbar.
+									</li>
+									
+									<li>
+										Die Auswahl kann
+										
+										<!--<span class="text-danger"
+										      th:if="${info.getEinmaligeAbstimmung()}">
+											nicht mehr
+										</span>-->
+										
+										<!--<span th:if="not ${info.getEinmaligeAbstimmung()}">-->
+											bis zur Frist
+											
+											<span class="text-info">
+												beliebig oft
+											</span>
+										<!--</span>-->
+										
+										geändert werden.
+									</li>
+									
+									<li>
+										Teilnahme an dieser Abstimmung ist
+										
+										<span class="test-info">
+										<!--<span class="text-info"
+										      th:text="${info.getTeilnahmeMoeglich()
+										               ? 'noch' : 'nicht mehr'}">-->
+											noch <!--oder nicht mehr-->
+										</span>
+										
+										möglich.
+									</li>
+								</ul>
+								
+								<div class="alert alert-warning" role="alert">
+									Die Abstimmung läuft bis zum
+									
+									<b><span th:text="${#temporals.format(
+									                  umfrage.frist, 'dd.MM.yyyy, HH:mm')}">
+										Datum
+									</span></b>.
+								</div>
+							</div>
+							
+							<!-- Absendezeile -->
+							<div class="container"
+							     th:if="not ${umfrage.teilgenommen}">
+								<div class="form-group row justify-content-center">
+									<!-- Name -->
+									<div class="col-xs-4 mx-1">
+										<input class="form-control" id="pseudonym" name="pseudonym"
+										       type="text" th:placeholder="*{getBenutzer()}"
+										       th:field="${antwort.pseudonym}"/>
+									</div>
+									
+									<div class="col-xs mx-1">
+										<button class="btn btn-primary"
+										        type="submit" name="sichern">
+											Abschicken
+										</button>
+									</div>
+								</div>
+							</div>
 						</form>
 					</div>
 					
@@ -138,7 +258,8 @@
 									<div>
 										am
 										
-										<span th:text="${#temporals.format(kommentar.erstellungsdatum,
+										<span th:text="${#temporals.format(
+										               kommentar.erstellungsdatum,
 										               'dd.MM.yyyy, HH:mm')}">
 											Datum
 										</span>
@@ -156,26 +277,36 @@
 						<div class="container mb-3">
 							<h3 class="h3 mb-3">Verfassen</h3>
 							
-							<form th:action="@{/termine2/umfragen/{path}(path=${umfrage.getLink()})}"
+							<form th:action="@{/termine2/umfragen/{path}(
+							                 path=${umfrage.getLink()})}"
 							      th:object="${neuerKommentar}" method="post">
 								<!-- Inhalt -->
 								<div class="mb-3">
 									<textarea class="form-control" rows="5" id="comment"
-									          th:field="*{inhalt}" required>
+									          th:field="*{inhalt}" maxlength="1024" required>
 										Inhalt
 									</textarea>
 								</div>
 								
-								<!-- Name -->
-								<div class="mb-3 form-group">
-									<label>Name</label>
-
-									<input th:field="*{pseudonym}" class="form-control" id="pseudonym" type="text"
-										   th:placeholder="${account.getName()}">
-								</div>
-								
-								<div style="text-align: center">
-									<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
+								<!-- Absendezeile -->
+								<div class="container">
+									<div class="form-group row justify-content-center">
+										<!-- Name -->
+										<div class="col-xs-4 mx-1">
+											<input class="form-control"
+											       id="pseudonym" name="pseudonym"
+											       type="text" maxlength="64"
+											       th:placeholder="${account.getName()}"
+											       th:field="*{pseudonym}"/>
+										</div>
+										
+										<div class="col-xs mx-1">
+											<button class="btn btn-success"
+												        type="submit" name="kommentarSichern">
+												Veröffentlichen
+											</button>
+										</div>
+									</div>
 								</div>
 							</form>
 						</div>

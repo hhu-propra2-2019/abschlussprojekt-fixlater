@@ -8,257 +8,378 @@
 	<meta charset="utf-8">
 	<title>Terminabstimmung</title>
 	<th:block th:fragment="headcontent">
-		<!-- Links, Skripts, Styles hier einfügen! -->
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-
+		<!-- Links, Scripts, Styles -->
+		
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		        crossorigin="anonymous"></script>
+		
+		<!-- PopperJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/popper.min.js"
+		        integrity="sha256-O17BxFKtTt1tzzlkcYwgONw4K59H+r1iI8mSQXvSf5k="
+		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+		      crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		        crossorigin="anonymous"></script>
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
 	</th:block>
 </head>
 
 <body>
-<header>
-	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-		<ul>
-			<li>
-				<a th:href="@{/termine2}">
-					<img src="../static/img/resized/calendar_small.jpg"
-					     th:src="@{/img/resized/calendar_small.jpg}">
-					Termine
-				</a>
-			</li>
-			
-			<li>
-				<a th:href="@{/termine2/umfragen}">
-					<img src="../static/img/resized/survey_small.jpg"
-					     th:src="@{/img/resized/survey_small.jpg}">
-					Umfragen
-				</a>
-			</li>
-		</ul>
-	</nav>
-</header>
-
-<main th:fragment="bodycontent">
-	<div class="container">
-		<!-- Header -->
-		<div class="row my-3 border-bottom">
-			<h1 class="h1">Terminabstimmung</h1>
-		</div>
-		
-		<div class="row">
-			<div class="col">
-				<!-- Termin -->
-				<div class="mb-3 border-bottom">
-					<div class="mb-3 p-3 bg-light rounded">
-						<!-- Zusammenfassung -->
-						<div class="pb-2 border-bottom">
-							<div class="h3" th:text="${terminfindung.getTitel()}">
-								Titel
-							</div>
-							
-							<div th:text="${terminfindung.getOrt()}">
-								Ort
-							</div>
-						</div>
-						
-						<!-- Beschreibung -->
-						<div class="mt-2" style="font-size: small"
-						     th:text="${terminfindung.getBeschreibung()}">
-							Floppy macaroni are assumed to be dissatisfying. Few can name a
-							springtime flower that doesn't profit from rainstorms. In modern
-							times, clothes were lost without the long thin bands that were
-							their linen.
-						</div>
-					</div>
-				</div>
+	<header>
+		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
 				
-				<!-- Wahl -->
-				<div class="mb-3 border-bottom">
-					<div class="d-flex justify-content-between align-items-center">
-						<h2 class="h2">Zeiten</h2>
-
-
-					</div>
-					
-					<form class="my-3" th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
-					      th:object="${antwort}" method="post">
-						<div class="table-responsive">
-							<table class="table table-sm" style="text-align: center">
-								<thead>
-								<tr>
-									<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
-										 chen: Blau und Gelb lassen sich besser unterschei-
-										 den als Grün und Gelb. -->
-									<th class="col bg-secondary" style="width: 10%"></th>
-									<th class="col bg-secondary" style="width: 30%">Termin</th>
-									<th class="col bg-secondary" style="width: 10%"></th>
-									<th class="col bg-primary" style="width: 16%"> Ja</th>
-									<th class="col bg-warning" style="width: 18%"> Vielleicht</th>
-									<th class="col bg-danger" style="width: 16%"> Nein</th>
-								</tr>
-								</thead>
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main th:fragment="bodycontent">
+		<div class="container">
+			<!-- Header -->
+			<div class="row my-3 border-bottom">
+				<h1 class="h1">Terminabstimmung</h1>
+			</div>
+			
+			<div class="row">
+				<div class="col">
+					<!-- Termin -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
+							<div class="pb-2"
+							     th:classappend="${(terminfindung.getBeschreibung() == null
+							                     || terminfindung.getBeschreibung().equals(''))
+							                     ? '' : 'border-bottom'}">
+								<div class="h3" th:text="${terminfindung.getTitel()}">
+									Titel
+								</div>
 								
-								<tbody th:remove="all-but-first" th:each="termin,terminStat: *{termine}" }>
-								<tr>
-									<!-- abwechselnd bg-white / bg-light -->
-									<th class="col bg-white" style="width: 10%"></th>
-									<th class="col bg-white font-weight-bold text-black-50"
-									    th:text="${antwort.getTermineString()[__${terminStat.index}__]}"
-									    style="width: 30px">25.02.2084, 12:15
-									</th>
-									<th class="col bg-white " style="width: 10%"></th>
-									<th class="col table-primary" style="width: 16%">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="JA"/>
-										
-									</th>
-									<th class="col table-warning font-weight-bold text-black-50"
-									    style="width: 18%">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="VIELLEICHT"/>
-									</th>
-									<th class="col table-danger" style="width: 16%">
-										<input type="radio"
-										       name="abstimmung1"
-										       th:name="${termin}"
-										       th:field="${antwort.antworten[__${terminStat.index}__]}"
-										       value="NEIN"/>
-									</th>
-								</tr>
-								</tbody>
-							</table>
-						</div>
-
-						<div style="text-align: center">
-            				<input type="text" name="pseudonym" placeholder="Benjamin"
-							       th:placeholder="*{getBenutzer()}"
-							       th:field="${antwort.pseudonym}"
-                                   th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
-							<button class="btn btn-primary" type="submit" name="sichern"
-							        th:if="not ${terminfindung.getEinmaligeAbstimmung()} or not ${terminfindung.teilgenommen}">
-								Abschicken
-							</button>
-
-							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-								HILFE!
-							</button>
-
-							<!-- The Modal -->
-							<div class="modal fade" id="myModal">
-								<div class="modal-dialog modal-dialog-centered">
-									<div class="modal-content">
-
-										<!-- Modal Header -->
-										<div class="modal-header">
-											<h4 class="modal-title" th:text="${info.getAchtung()}">Modal Heading</h4>
-											<button type="button" class="close" data-dismiss="modal">&times;</button>
-										</div>
-
-										<!-- Modal body -->
-										<div class="modal-body text-left">
-											<ul>
-												<li th:text="${info.getErgebnisVorFrist()}">Coffee</li>
-												<li th:text="${info.getEinmaligesAbstimmen()}">Coffee</li>
-												<li th:text="${info.getAbstimmungsBerechtigungNutzer()}">Coffee</li>
-											</ul>
-											<div class="text-center">
-												!!!DIESE INFORMATIONEN KÖNNEN UNTER HILFE NACHGELESEN WERDEN!!!
-											</div>
-										</div>
-
-										<!-- Modal footer -->
-										<div class="modal-footer">
-											<button type="button" class="btn btn-danger" data-dismiss="modal">Gelesen</button>
-										</div>
-
-									</div>
+								<div th:text="${terminfindung.getOrt()}">
+									Ort
 								</div>
 							</div>
-							<script th:inline="javascript" >
-                                /*<![CDATA[*/
-                                $(window).on('load',function(){
-                                    if( [[not ${terminfindung.teilgenommen}]] )
-                                        $('#myModal').modal('show');
-                                });
-                                /*]]>*/
-							</script>
+							
+							<!-- Beschreibung -->
+							<div class="mt-2" style="font-size: small"
+							     th:if="${!(terminfindung.getBeschreibung() == null)
+							            && !(terminfindung.getBeschreibung().equals(''))}"
+							     th:text="${terminfindung.getBeschreibung()}">
+								Beschreibung
+							</div>
 						</div>
-					</form>
-				</div>
-				
-				<!-- Kommentare -->
-				<div>
-					<h2 class="h2">Kommentare</h2>
+					</div>
 					
-					<!-- Vorhandene Kommentare -->
-					<div class="mb-3" th:each="kommentar : *{kommentare}">
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<h4 class="h4" th:text="${kommentar.pseudonym}">Pseudonym</h4>
-								
-								<div>
-									am
+					<!-- Wahl -->
+					<div class="mb-3 border-bottom">
+						<h2 class="h2 mb-0">
+							Zeiten
+						</h2>
+						
+						<form class="my-3"
+						      th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
+						      th:object="${antwort}" method="post">
+							<div class="table-responsive">
+								<table class="table table-sm" style="text-align: center">
+									<thead>
+										<tr>
+											<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
+												 chen: Blau und Gelb lassen sich besser unterschei-
+												 den als Grün und Gelb. -->
+											<th class="col bg-secondary" style="width: 52%">
+												Termin</th>
+											<th class="col bg-primary"   style="width: 16%">
+												Ja</th>
+											<th class="col bg-warning"   style="width: 16%">
+												Vielleicht</th>
+											<th class="col bg-danger"    style="width: 16%">
+												Nein</th>
+										</tr>
+									</thead>
 									
-									<span th:text="${#temporals.format(kommentar.erstellungsdatum,
+									<tbody>
+										<tr th:each="termin, iter: *{termine}">
+											<th class="col text-secondary" style="width: 52%"
+											    th:classappend="${iter.count % 2 == 1}
+											                    ? 'bg-white' : 'bg-light'"
+											    th:text="
+											      ${antwort.getTermineString()[__${iter.index}__]}">
+												Termin
+											</th>
+											
+											<th class="col table-primary" style="width: 16%">
+												<input type="radio"
+												       th:name="${termin}"
+												       th:field="
+												            ${antwort.antworten[__${iter.index}__]}"
+												       value="JA"/>
+											</th>
+											
+											<th class="col table-warning" style="width: 16%">
+												<input type="radio"
+												       th:name="${termin}"
+												       th:field="
+												            ${antwort.antworten[__${iter.index}__]}"
+												       value="VIELLEICHT"/>
+											</th>
+											
+											<th class="col table-danger" style="width: 16%">
+												<input type="radio"
+												       th:name="${termin}"
+												       th:field="
+												            ${antwort.antworten[__${iter.index}__]}"
+												       value="NEIN"/>
+											</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<!-- Hinweise zur Abstimmung -->
+							<div class="container">
+								<ul>
+									<li>
+										Das Ergebnis ist
+										
+										<span th:if="${info.getZwischenergebnis()}">
+											<span class="text-info">
+												während
+											</span>
+											der Abstimmung
+										</span>
+										
+										<span th:if="not ${info.getZwischenergebnis()}">
+											<span class="text-info">
+												erst nach
+											</span>
+											
+											der Frist
+										</span>
+										
+										einsehbar.
+									</li>
+									
+									<li>
+										Die Auswahl kann
+										
+										<span class="text-danger"
+										      th:if="${info.getEinmaligeAbstimmung()}">
+											nicht mehr
+										</span>
+										
+										<span th:if="not ${info.getEinmaligeAbstimmung()}">
+											bis zur Frist
+											
+											<span class="text-info">
+												beliebig oft
+											</span>
+										</span>
+										
+										geändert werden.
+									</li>
+									
+									<li>
+										Teilnahme an dieser Abstimmung ist
+										
+										<span class="text-info"
+										      th:text="${info.getTeilnahmeMoeglich()
+										               ? 'noch' : 'nicht mehr'}">
+											noch oder nicht mehr
+										</span>
+										
+										möglich.
+									</li>
+								</ul>
+								
+								<div class="alert alert-warning" role="alert">
+									Die Abstimmung läuft bis zum
+									
+									<b><span th:text="${#temporals.format(
+									               terminfindung.frist,
 									               'dd.MM.yyyy, HH:mm')}">
 										Datum
-									</span>
+									</span></b>.
 								</div>
 							</div>
 							
-							<!-- Inhalt -->
-							<div class="mt-2" th:text="${kommentar.inhalt}">
-								Inhalt
-							</div>
-						</div>
-					</div>
-					
-					<!-- Kommentarbox -->
-					<div class="container mb-3">
-						<h3 class="h3 mb-3">Verfassen</h3>
-						
-						<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
-						      th:object="${neuerKommentar}" method="post">
-							<!-- Inhalt -->
-							<div class="mb-3">
-								<textarea class="form-control" rows="5" id="comment"
-								          th:field="*{inhalt}" required>
-									Inhalt
-								</textarea>
-							</div>
-							
-							<!-- Name -->
-							<div class="mb-3 form-group">
-								<label>Name</label>
-
-								<input type="text" id="pseudonym" th:placeholder="${account.getName()}"
-									   th:field="*{pseudonym}" class="form-control">
-
-							</div>
-							
-							<div style="text-align: center">
-								<button name="kommentarSichern" class="btn btn-success">Veröffentlichen</button>
+							<!-- Absendezeile -->
+							<div class="container"
+							     th:if="not ${terminfindung.getEinmaligeAbstimmung()} or
+							            not ${terminfindung.teilgenommen}">
+								<div class="form-group row justify-content-center">
+									<!-- Name -->
+									<div class="col-xs-4 mx-1">
+										<input class="form-control" id="pseudonym" name="pseudonym"
+										       type="text" th:placeholder="*{getBenutzer()}"
+										       th:field="${antwort.pseudonym}"/>
+									</div>
+									
+									<div class="col-xs mx-1">
+										<button class="btn btn-primary"
+										        type="submit" name="sichern">
+											Abschicken
+										</button>
+									</div>
+									
+									<!-- I couldn't get the confirmation modal to work, but I really
+									     really really want to. -->
+									<!--<div class="col-xs mx-1"
+									     th:if="not ${info.getEinmaligeAbstimmung()}">
+										<button class="btn btn-primary"
+										        type="submit" name="sichern">
+											Abschicken
+										</button>
+									</div>
+									
+									<div class="col-xs mx-1"
+									     th:if="${info.getEinmaligeAbstimmung()}">
+										<button class="btn btn-primary"
+										        data-toggle="modal" data-target="#bestätigung">
+											Abschicken
+										</button>
+									</div>-->
+									
+									<!-- Modal -->
+									<!--<div class="modal fade" id="bestätigung">
+										<div class="modal-dialog modal-dialog-centered">
+											<div class="modal-content">-->
+												<!-- Header -->
+												<!--<div class="modal-header">
+													<h4 class="mb-0 modal-titel">
+														Vorsicht
+													</h4>
+												</div>-->
+												
+												<!-- Body -->
+												<!--<div class="modal-body text-left">
+													Die Auswahl kann nach Abschicken
+													
+													<span class="text-danger">
+														nicht
+													</span>
+													
+													mehr geändert werden. Soll die Auswahl so
+													abgeschickt werden?
+												</div>-->
+												
+												<!-- Footer -->
+												<!--<div class="justify-content-center">
+													<div class="modal-footer">
+														<button class="btn btn-outline-secondary
+														               mx-1"
+														        type="button" data-dismiss="modal">
+															Abbrechen
+														</button>
+														
+														<button class="btn btn-primary"
+														        type="submit" name="sichern">
+															Abschicken
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>-->
+								</div>
 							</div>
 						</form>
+					</div>
+					
+					<!-- Kommentare -->
+					<div>
+						<h2 class="h2">Kommentare</h2>
+						
+						<!-- Vorhandene Kommentare -->
+						<div class="mb-3" th:each="kommentar : *{kommentare}">
+							<div class="my-3 p-3 bg-light rounded">
+								<!-- Sendedaten -->
+								<div class="pb-2 border-bottom">
+									<h4 class="h4" th:text="${kommentar.pseudonym}">Pseudonym</h4>
+									
+									<div>
+										am
+										
+										<span th:text="${#temporals.format(
+										               kommentar.erstellungsdatum,
+										               'dd.MM.yyyy, HH:mm')}">
+											Datum
+										</span>
+									</div>
+								</div>
+								
+								<!-- Inhalt -->
+								<div class="mt-2" th:text="${kommentar.inhalt}">
+									Inhalt
+								</div>
+							</div>
+						</div>
+						
+						<!-- Kommentarbox -->
+						<div class="container mb-3">
+							<h3 class="h3 mb-3">Verfassen</h3>
+							
+							<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
+							      th:object="${neuerKommentar}" method="post">
+								<!-- Inhalt -->
+								<div class="mb-3">
+									<textarea class="form-control" rows="5" id="comment"
+									          th:field="*{inhalt}" maxlength="1024" required>
+										Inhalt
+									</textarea>
+								</div>
+								
+								<!-- Absendezeile -->
+								<div class="container">
+									<div class="form-group row justify-content-center">
+										<!-- Name -->
+										<div class="col-xs-4 mx-1">
+											<input class="form-control"
+											       id="pseudonym" name="pseudonym"
+											       type="text" maxlength="64"
+											       th:placeholder="${account.getName()}"
+											       th:field="*{pseudonym}"/>
+										</div>
+										
+										<div class="col-xs mx-1">
+											<button class="btn btn-success"
+												        type="submit" name="kommentarSichern">
+												Veröffentlichen
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-
-
-</main>
+	</main>
 </body>
 </html>
+
