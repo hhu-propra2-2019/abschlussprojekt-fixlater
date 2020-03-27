@@ -41,9 +41,7 @@ public class ExportCSVTest {
 		assertThat(terminVorschlaegeExportFormat).isEqualTo(exportFormat);
 	}
 	
-	
-	
-	public List<LocalDateTime> erstelleGueltigeTerminListe(int anzahl) {
+	private List<LocalDateTime> erstelleGueltigeTerminListe(int anzahl) {
 		List<LocalDateTime> terminVorschlaege = new ArrayList<>();
 		for (int i = 0; i < anzahl; i++) {
 			terminVorschlaege.add(festerTermin.plusDays(i));
@@ -51,7 +49,7 @@ public class ExportCSVTest {
 		return terminVorschlaege;
 	}
 	
-	public List<ExportFormat> erstelleTermineImExportFormat(int anzahl) {
+	private List<ExportFormat> erstelleTermineImExportFormat(int anzahl) {
 		List<ExportFormat> terminVorschlaegeExportFormat = new ArrayList<>();
 		for (int i = 13; i < 13 + anzahl; i++) {
 			terminVorschlaegeExportFormat.add(new ExportFormat(i + ".03.2020", "13:13"));
@@ -59,6 +57,3 @@ public class ExportCSVTest {
 		return terminVorschlaegeExportFormat;
 	}
 }
-
-
-
