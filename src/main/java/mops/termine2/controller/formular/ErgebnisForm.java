@@ -50,6 +50,8 @@ public class ErgebnisForm {
 	
 	boolean fristNichtAbgelaufen = false;
 	
+	String ergebnis = "eine Zeit";
+	
 	public ErgebnisForm(List<TerminfindungAntwort> antworten, Terminfindung terminfindung,
 						TerminfindungAntwort nutzerAbstimmung) {
 		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();

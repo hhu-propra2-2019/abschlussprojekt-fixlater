@@ -39,6 +39,8 @@ public class ErgebnisFormUmfragen {
 	
 	boolean fristNichtAbgelaufen = false;
 	
+	String ergebnis = "ein Vorschlag";
+	
 	public ErgebnisFormUmfragen(List<UmfrageAntwort> antworten, Umfrage umfrage,
 								UmfrageAntwort nutzerAbstimmung) {
 		HashMap<String, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();

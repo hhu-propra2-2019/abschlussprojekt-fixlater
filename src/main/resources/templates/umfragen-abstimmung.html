@@ -155,6 +155,73 @@
 								</table>
 							</div>
 							
+							<!-- Hinweise zur Abstimmung -->
+							<div class="container">
+								<ul>
+									<li>
+										Das Ergebnis ist
+										
+										<!--<span th:if="${info.getZwischenergebnis()}">-->
+											<span class="text-info">
+												während
+											</span>
+											der Abstimmung
+										<!--</span>-->
+										
+										<!--<span th:if="not ${info.getZwischenergebnis()}">
+											<span class="text-info">
+												erst nach
+											</span>
+											
+											der Frist
+										</span>-->
+										
+										einsehbar.
+									</li>
+									
+									<li>
+										Die Auswahl kann
+										
+										<!--<span class="text-danger"
+										      th:if="${info.getEinmaligeAbstimmung()}">
+											nicht mehr
+										</span>-->
+										
+										<!--<span th:if="not ${info.getEinmaligeAbstimmung()}">-->
+											bis zur Frist
+											
+											<span class="text-info">
+												beliebig oft
+											</span>
+										<!--</span>-->
+										
+										geändert werden.
+									</li>
+									
+									<li>
+										Teilnahme an dieser Abstimmung ist
+										
+										<span class="test-info">
+										<!--<span class="text-info"
+										      th:text="${info.getTeilnahmeMoeglich()
+										               ? 'noch' : 'nicht mehr'}">-->
+											noch <!--oder nicht mehr-->
+										</span>
+										
+										möglich.
+									</li>
+								</ul>
+								
+								<div class="alert alert-warning" role="alert">
+									Die Abstimmung läuft bis zum
+									
+									<b><span th:text="${#temporals.format(
+									                  umfrage.frist, 'dd.MM.yyyy, HH:mm')}">
+										Datum
+									</span></b>.
+								</div>
+							</div>
+							
 							<!-- Absendezeile -->
 							<div class="container"
 							     th:if="not ${umfrage.teilgenommen}">
@@ -216,7 +283,7 @@
 								<!-- Inhalt -->
 								<div class="mb-3">
 									<textarea class="form-control" rows="5" id="comment"
-									          th:field="*{inhalt}" required>
+									          th:field="*{inhalt}" maxlength="1024" required>
 										Inhalt
 									</textarea>
 								</div>
@@ -228,7 +295,7 @@
 										<div class="col-xs-4 mx-1">
 											<input class="form-control"
 											       id="pseudonym" name="pseudonym"
-											       type="text"
+											       type="text" maxlength="64"
 											       th:placeholder="${account.getName()}"
 											       th:field="*{pseudonym}"/>
 										</div>
