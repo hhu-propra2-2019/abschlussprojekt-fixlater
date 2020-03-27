@@ -195,6 +195,16 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
+	public Terminfindung createDefaultTerminfindung() {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setVorschlaege(new ArrayList<>());
+		terminfindung.getVorschlaege().add(null);
+		terminfindung.setFrist(LocalDateTime.now().plusWeeks(1));
+		terminfindung.setLoeschdatum(LocalDateTime.now().plusWeeks(4));
+		terminfindung.setErgebnisVorFrist(true);
+		return terminfindung;
+	}
+	
 	private void updateOldDB(TerminfindungDB terminfindung, TerminfindungDB toUpdate) {
 		toUpdate.setTitel(terminfindung.getTitel());
 		toUpdate.setOrt(terminfindung.getOrt());
