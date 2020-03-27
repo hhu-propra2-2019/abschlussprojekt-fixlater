@@ -75,7 +75,7 @@ public class LocalDateTimeManager {
 		return ldt.isAfter(LocalDateTime.now());
 	}
 	
-	public static List<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
+	public static ArrayList<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
 		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
 		for (LocalDateTime ldt : daten) {
 			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
