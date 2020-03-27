@@ -135,8 +135,6 @@ public class UmfragenAbstimmungController {
 		model.addAttribute("kommentare", kommentare);
 		model.addAttribute("neuerKommentar", new Kommentar());
 		
-		authenticatedAccess.increment();
-		
 		return "umfragen-abstimmung";
 	}
 	
@@ -176,8 +174,6 @@ public class UmfragenAbstimmungController {
 		model.addAttribute("ergebnis", ergebnis);
 		model.addAttribute("kommentare", kommentare);
 		model.addAttribute("neuerKommentar", new Kommentar());
-		
-		authenticatedAccess.increment();
 		
 		return "umfragen-ergebnis";
 	}
@@ -220,7 +216,6 @@ public class UmfragenAbstimmungController {
 			antwortForm);
 		
 		umfrageAntwortService.abstimmen(umfrageAntwort, umfrage);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/umfragen/" + link;
 	}
@@ -256,7 +251,6 @@ public class UmfragenAbstimmungController {
 		neuerKommentar.setErstellungsdatum(now);
 		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/umfragen/" + link;
 	}

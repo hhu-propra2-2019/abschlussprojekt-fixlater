@@ -142,8 +142,6 @@ public class TermineAbstimmungController {
 		model.addAttribute("kommentare", kommentare);
 		model.addAttribute("neuerKommentar", new Kommentar());
 		
-		authenticatedAccess.increment();
-		
 		return "termine-abstimmung";
 	}
 	
@@ -191,8 +189,6 @@ public class TermineAbstimmungController {
 		model.addAttribute("ergebnis", ergebnis);
 		model.addAttribute("kommentare", kommentare);
 		model.addAttribute("neuerKommentar", new Kommentar());
-		
-		authenticatedAccess.increment();
 		
 		return "termine-ergebnis";
 	}
@@ -242,7 +238,6 @@ public class TermineAbstimmungController {
 			antwortForm);
 		
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;
 	}
@@ -281,7 +276,6 @@ public class TermineAbstimmungController {
 		neuerKommentar.setErstellungsdatum(now);
 		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
-		authenticatedAccess.increment();
 		
 		return "redirect:/termine2/" + link;
 	}
