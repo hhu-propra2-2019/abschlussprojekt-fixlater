@@ -17,6 +17,7 @@ import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminfindungService;
+import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -77,27 +78,17 @@ public class TermineAbstimmungController {
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
-
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
-		}
+		}		
 		
-		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/ergebnis";
-		}
-		
-		//Wenn ergebnis Erst nach Frist angezeigt werden soll,
-		// muss dies hier noch abgefragt werden und evtl auf die
-		//Abstimmungsseite umgeleitet werden;
-		
+		}		
 
 		if (terminfindung.getTeilgenommen()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
@@ -106,7 +97,7 @@ public class TermineAbstimmungController {
 		}
 		
 	}
-	
+
 	@GetMapping("/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
@@ -123,14 +114,12 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
 		
@@ -168,19 +157,17 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
-
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (!bereitsTeilgenommen && terminfindung.getFrist().isAfter(now)) {
+		if (!bereitsTeilgenommen && LocalDateTimeManager.istZukuenftig(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
-		if (!terminfindung.getErgebnisVorFrist() && terminfindung.getFrist().isAfter(now)) {
+		if (!terminfindung.getErgebnisVorFrist() 
+			&& LocalDateTimeManager.istZukuenftig(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -221,8 +208,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -231,8 +217,7 @@ public class TermineAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (terminfindung.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
@@ -268,10 +253,8 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (terminfindung.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, terminfindung.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {

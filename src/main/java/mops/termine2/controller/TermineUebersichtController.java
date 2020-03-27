@@ -55,7 +55,7 @@ public class TermineUebersichtController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		if (gruppe != -1 && !gruppeService.accountInGruppe(account, gruppe)) {
+		if (gruppeService.checkGroupAccessDenied(account, gruppe)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		

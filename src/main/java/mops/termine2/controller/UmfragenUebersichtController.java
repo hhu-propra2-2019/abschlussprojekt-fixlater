@@ -11,6 +11,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.UmfragenuebersichtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +56,10 @@ public class UmfragenUebersichtController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		model.addAttribute(Konstanten.ACCOUNT, account);
+		
+		if (gruppeService.checkGroupAccessDenied(account, gruppe)) {
+			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+		}
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		gruppen = gruppen.stream()

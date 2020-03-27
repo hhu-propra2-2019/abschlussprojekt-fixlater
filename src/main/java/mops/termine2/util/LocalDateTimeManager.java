@@ -67,6 +67,14 @@ public class LocalDateTimeManager {
 		return result;
 	}
 	
+	public static boolean istVergangen(LocalDateTime ldt) {
+		return ldt.isBefore(LocalDateTime.now());
+	}
+	
+	public static boolean istZukuenftig(LocalDateTime ldt) {
+		return ldt.isAfter(LocalDateTime.now());
+	}
+	
 	
 }
 

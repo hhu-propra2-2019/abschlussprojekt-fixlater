@@ -16,6 +16,7 @@ import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
 import mops.termine2.services.UmfrageAntwortService;
 import mops.termine2.services.UmfrageService;
+import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -77,13 +78,11 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (umfrage.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (umfrage.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -110,13 +109,11 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (umfrage.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (umfrage.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
@@ -152,14 +149,12 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (umfrage.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (!bereitsTeilgenommen && umfrage.getFrist().isAfter(now)) {
+		if (!bereitsTeilgenommen && LocalDateTimeManager.istZukuenftig(umfrage.getFrist())) {
 			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 		}
 		
@@ -196,13 +191,11 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (umfrage.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		LocalDateTime now = LocalDateTime.now();
-		if (umfrage.getFrist().isBefore(now)) {
+		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
 			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 		}
 		
@@ -235,8 +228,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
 		}
 		
-		if (umfrage.getGruppeId() != null
-			&& !gruppeService.accountInGruppe(account, umfrage.getGruppeId())) {
+		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		

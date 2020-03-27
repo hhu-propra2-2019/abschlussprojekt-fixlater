@@ -69,4 +69,8 @@ public class GruppeService {
 			.sorted(Comparator.comparing(Gruppe::getName))
 			.collect(Collectors.toList());
 	}
+
+	public boolean checkGroupAccessDenied(Account account, Long id) {
+		return id != null && id != -1 && !accountInGruppe(account, id);		
+	}
 }
