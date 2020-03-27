@@ -238,6 +238,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(link);
 		umfrage.setTitel("titel");
+		umfrage.setBeschreibung("beschreibung");
 		
 		List<String> vorschlaege = new ArrayList(Arrays.asList("vorschlag1", "vorschlag2"));
 		umfrage.setVorschlaege(vorschlaege);
