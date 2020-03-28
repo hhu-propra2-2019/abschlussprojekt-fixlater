@@ -27,13 +27,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public class GruppeSchedulerTest {
 	
-	private static String groupNew1 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
+	private static String groupNew1 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", \"members\": "
 		+ "[ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": "
 		+ "\"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
 		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"string\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
-	private static String groupNew2 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
+	private static String groupNew2 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", \"members\": "
 		+ "[ { \"email\":"
 		+ "\"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": \"string1\""
 		+ "}, { \"email\":\"string3\", \"familyname\": \"string3\", \"givenname\": \"string3\", \"user_id\":"
@@ -41,13 +41,13 @@ public class GruppeSchedulerTest {
 		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"string\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
-	private static String groupNew3 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
+	private static String groupNew3 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", \"members\": "
 		+ "[ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": "
 		+ "\"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
 		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"stringNeu\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
-	private static String groupDelete = "{ \"groupList\": [ { \"description\": \"null\", \"id\": 0, \"members\": "
+	private static String groupDelete = "{ \"groupList\": [ { \"description\": \"null\", \"id\": \"0\", \"members\": "
 		+ "[], \"parent\": 0, \"roles\": {}, "
 		+ "\"title\": \"null\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
