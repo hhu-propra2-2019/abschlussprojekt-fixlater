@@ -57,6 +57,7 @@ public class TerminfindunguebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
@@ -103,6 +104,7 @@ public class TerminfindunguebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
