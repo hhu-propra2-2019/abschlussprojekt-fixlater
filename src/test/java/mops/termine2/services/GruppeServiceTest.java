@@ -38,10 +38,12 @@ public class GruppeServiceTest {
 		for (String name : groupNames) {
 			BenutzerGruppeDB gruppeDB = new BenutzerGruppeDB();
 			gruppeDB.setGruppe(name);
+			gruppeDB.setGruppeId("1");
 			gruppenDB.add(gruppeDB);
 			
 			Gruppe gruppe = new Gruppe();
 			gruppe.setName(name);
+			gruppe.setId("1");
 			gruppen.add(gruppe);
 		}
 		
@@ -49,11 +51,7 @@ public class GruppeServiceTest {
 		
 		List<Gruppe> ergebnis = gruppeService.loadByBenutzer(account);
 		
-		for (int i = 0; i < gruppen.size(); i++) {
-			assertThat(gruppen.get(i).getId()).isEqualTo(ergebnis.get(i).getId());
-			assertThat(gruppen.get(i).getName()).isEqualTo(ergebnis.get(i).getName());
-		}
-		
+		assertThat(ergebnis).isEqualTo(gruppen);
 	}
 	
 	@Test
