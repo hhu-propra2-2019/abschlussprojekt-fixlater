@@ -35,5 +35,28 @@ Die Farben sind so gewählt, dass sich Menschen mit Sehschwäche beser damit zur
 Beide liegen im Ordner "arc42" im Hauptverzeichnis.
 
 Die Produktions-Version muss mit
-==== docker-compose -f docker-compose-prod.yml up --build
-gestartet werden
+
+`docker-compose -f docker-compose-prod.yml up --build`
+
+gestartet werden.
+
+=== Pfade
+==== Termine
+[cols="1,1" options="header"]
+|===
+| Beschreibung | Pfad
+| Übersicht über alle verfügbaren Termine | /termine2
+| Neue Terminfindung erstellen | /termine2/termine-neu
+| Abstimmen | /termine2/{linkId}/abstimmung
+| Ergebnis | /termine2/{linkId}/ergebnis
+|===
+
+==== Umfragen
+[cols="1,1" options="header"]
+|===
+| Beschreibung | Pfad
+| Übersicht über alle verfügbaren Umfragen | /termine2/umfragen
+| Neue Umfrage erstellen | /termine2/umfragen-neu
+| Abstimmen | /termine2/umfragen/{linkId}/abstimmung
+| Ergebnis | /termine2/umfragen/{linkId}/ergebnis
+|===
