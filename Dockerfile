@@ -9,6 +9,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /code
 COPY --from=BUILD /home/gradle/src/build/libs/*.jar app.jar
 EXPOSE 8080
+ENV TZ="Europe/Berlin"
 COPY wait-for-it.sh wait-for-it.sh
 RUN ["chmod", "+x", "wait-for-it.sh"]
 
