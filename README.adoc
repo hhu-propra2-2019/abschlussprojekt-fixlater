@@ -38,7 +38,7 @@ Die Produktions-Version muss mit
 
 `docker-compose -f docker-compose-prod.yml up --build`
 
-gestartet werden
+gestartet werden.
 
 === Pfade
 ==== Termine
@@ -55,8 +55,8 @@ gestartet werden
 [cols="1,1" options="header"]
 |===
 | Beschreibung | Pfad
-| Übersicht über alle verfügbaren Termine | /termine2/umfragen
-| Neue Terminfindung erstellen | /termine2/umfragen-neu
+| Übersicht über alle verfügbaren Umfragen | /termine2/umfragen
+| Neue Umfrage erstellen | /termine2/umfragen-neu
 | Abstimmen | /termine2/umfragen/{linkId}}/abstimmung
 | Ergebnis | /termine2/umfragen/{linkId}}/ergebnis
 |===
