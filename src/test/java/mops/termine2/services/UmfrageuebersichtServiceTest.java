@@ -56,6 +56,7 @@ public class UmfrageuebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();
@@ -99,6 +100,7 @@ public class UmfrageuebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();
