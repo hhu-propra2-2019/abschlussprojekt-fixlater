@@ -57,6 +57,6 @@ gestartet werden.
 | Beschreibung | Pfad
 | Übersicht über alle verfügbaren Umfragen | /termine2/umfragen
 | Neue Umfrage erstellen | /termine2/umfragen-neu
-| Abstimmen | /termine2/umfragen/{linkId}}/abstimmung
-| Ergebnis | /termine2/umfragen/{linkId}}/ergebnis
+| Abstimmen | /termine2/umfragen/{linkId}/abstimmung
+| Ergebnis | /termine2/umfragen/{linkId}/ergebnis
 |===
