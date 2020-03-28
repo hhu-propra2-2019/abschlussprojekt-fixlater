@@ -115,7 +115,7 @@ public class UmfragenAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testUmfrageDetails4() throws Exception {
-		Umfrage umfrage = initUmfrage(1L, true, true);
+		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
@@ -132,7 +132,7 @@ public class UmfragenAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testUmfrageDetails5() throws Exception {
-		Umfrage umfrage = initUmfrage(1L, true, true);
+		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
@@ -204,7 +204,7 @@ public class UmfragenAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testUmfrageErgebnisGet2() throws Exception {
-		Umfrage umfrage = initUmfrage(1L, true, true);
+		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
@@ -234,7 +234,7 @@ public class UmfragenAbstimmungControllerTest {
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/abstimmung"));
 	}
 	
-	private Umfrage initUmfrage(Long gruppeId, Boolean teilgenommen, Boolean fristInZukunft) {
+	private Umfrage initUmfrage(String gruppeId, Boolean teilgenommen, Boolean fristInZukunft) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(link);
 		umfrage.setTitel("titel");

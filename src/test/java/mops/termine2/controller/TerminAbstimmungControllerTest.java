@@ -113,7 +113,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails4() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
+		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -129,7 +129,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails5() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
+		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -211,7 +211,7 @@ public class TerminAbstimmungControllerTest {
 	@Test
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet3() throws Exception {
-		Terminfindung terminfindung = initTerminfindung(1L, false, true, true, true);
+		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
@@ -246,7 +246,7 @@ public class TerminAbstimmungControllerTest {
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Terminfindung initTerminfindung(
-		Long gruppeId,
+		String gruppeId,
 		Boolean einmaligeAbstimmung,
 		Boolean ergebnisVorFrist,
 		Boolean teilgenommen,

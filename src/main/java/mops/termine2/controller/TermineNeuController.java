@@ -90,7 +90,7 @@ public class TermineNeuController {
 		
 		model.addAttribute("gruppen", gruppen);
 		Gruppe noGroup = new Gruppe();
-		noGroup.setId(-1L);
+		noGroup.setId("-1");
 		model.addAttribute("gruppeSelektiert", noGroup);
 		
 		// Terminfindung
@@ -200,7 +200,7 @@ public class TermineNeuController {
 		// Terminfindung erstellen
 		terminfindung.setErsteller(account.getName());
 		
-		if (gruppeSelektiert.getId() != null && gruppeSelektiert.getId() != -1) {
+		if (gruppeSelektiert.getId() != null && !gruppeSelektiert.getId().equals("-1")) {
 			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
 			terminfindung.setGruppeId(gruppe.getId());
 		}

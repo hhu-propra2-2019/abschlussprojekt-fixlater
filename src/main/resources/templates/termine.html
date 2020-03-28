@@ -66,7 +66,7 @@
 							</span>
 							
 							<i><span class="text-secondary"
-							         th:if="${termine.selektierteGruppe.id > 0}"
+							         th:if="${termine.selektierteGruppe.id != '-1'}"
 							         th:text="'(ID: ' + ${termine.selektierteGruppe.id} + ')'">
 								Gruppen-ID
 							</span></i>

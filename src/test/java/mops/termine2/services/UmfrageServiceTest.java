@@ -30,7 +30,7 @@ public class UmfrageServiceTest {
 	
 	private static final String[] LINK = {"BruderJakob", "AlleMeineEntchen", "BieneMaya"};
 	
-	private static final Long[] GRUPPE = {1L, 2L, 3L};
+	private static final String[] GRUPPE = {"1", "2", "3"};
 	
 	private static final LocalDateTime FRIST = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
 	

@@ -45,7 +45,7 @@ public class KommentarServiceTest {
 	
 	private transient LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1);
 	
-	private transient Long gruppeId = 1L;
+	private transient String gruppeId = "1";
 	
 	private transient String inhalt = "kommentar";
 	

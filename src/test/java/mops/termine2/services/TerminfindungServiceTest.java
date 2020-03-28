@@ -30,8 +30,8 @@ public class TerminfindungServiceTest {
 	private transient List<String> erstellerListe = new ArrayList<>(
 		Arrays.asList("Leon", "Loen", "Thomas", "Anthon"));
 	
-	private transient List<Long> gruppenListe = new ArrayList<>(
-		Arrays.asList(1L, 2L, 3L, null));
+	private transient List<String> gruppenListe = new ArrayList<>(
+		Arrays.asList("1", "2", "3", null));
 	
 	private transient List<String> titelListe = new ArrayList<>(
 		Arrays.asList("Titel1", "Titel2", "Titel3", "Titel4"));

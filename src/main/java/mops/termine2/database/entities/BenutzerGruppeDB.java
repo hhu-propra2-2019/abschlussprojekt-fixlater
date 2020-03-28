@@ -15,7 +15,7 @@ public class BenutzerGruppeDB {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private Long gruppeId;
+	private String gruppeId;
 	
 	private String benutzer;
 	

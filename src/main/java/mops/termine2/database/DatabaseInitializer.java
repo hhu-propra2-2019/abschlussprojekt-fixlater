@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -78,7 +79,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			Random r = new Random();
 			for (int value1 = 0; value1 < ANZAHL_GRUPPEN; value1++) {
 				String gruppeName = faker.book().title();
-				Long gruppeId = ThreadLocalRandom.current().nextLong(10000);
+				String gruppeId = UUID.randomUUID().toString();
 				List<Integer> studenten = IntStream.rangeClosed(1, ANZAHL_STUDENTEN)
 					.boxed().collect(Collectors.toList());
 				
@@ -103,7 +104,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 			}
 			
 			IntStream.range(1, 3).forEach(gruppeNummer -> {
-				long gruppeId = ThreadLocalRandom.current().nextLong(10000);
+				String gruppeId = UUID.randomUUID().toString();
 				
 				IntStream.range(1, ANZAHL_BENUTZER_GRUPPE - 1).forEach(studentNummer -> {
 					final BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();

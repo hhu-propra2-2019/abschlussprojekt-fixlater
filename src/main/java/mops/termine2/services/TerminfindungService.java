@@ -107,7 +107,7 @@ public class TerminfindungService {
 		return terminfindungen;
 	}
 	
-	public List<Terminfindung> loadByGruppeOhneTermine(Long gruppeId) {
+	public List<Terminfindung> loadByGruppeOhneTermine(String gruppeId) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeIdOrderByFristAsc(gruppeId);
 		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
 		return terminfindungen;

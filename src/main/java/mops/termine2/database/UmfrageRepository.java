@@ -15,13 +15,13 @@ public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
 	
 	List<UmfrageDB> findByErstellerOrderByFristAsc(String ersteller);
 	
-	List<UmfrageDB> findByGruppeIdOrderByFristAsc(Long gruppeId);
+	List<UmfrageDB> findByGruppeIdOrderByFristAsc(String gruppeId);
 	
 	@Transactional
 	void deleteByLink(String link);
 	
 	@Transactional
-	void deleteByGruppeId(Long gruppeId);
+	void deleteByGruppeId(String gruppeId);
 	
 	@Transactional
 	void deleteByLoeschdatumBefore(LocalDateTime timeNow);
