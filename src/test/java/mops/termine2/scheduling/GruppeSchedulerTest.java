@@ -27,28 +27,29 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public class GruppeSchedulerTest {
 	
-	private static String groupNew1 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
-		+ "[ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": "
-		+ "\"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
+	private static String groupNew1 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", "
+		+ "\"members\": [ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": "
+		+ "\"string1\", \"user_id\": \"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": "
+		+ "\"string\", \"additionalProp2\": \"string\", \"additionalProp3\": \"string\" }, "
+		+ "\"title\": \"string\", \"type\": \"SIMPLE\", \"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
+	
+	private static String groupNew2 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", "
+		+ "\"members\": [ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": "
+		+ "\"string1\", \"user_id\": \"string1\"}, { \"email\":\"string3\", \"familyname\": "
+		+ "\"string3\", \"givenname\": \"string3\", \"user_id\": \"string3\"} ], \"parent\": 0, "
+		+ "\"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
 		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"string\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
-	private static String groupNew2 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
-		+ "[ { \"email\":"
-		+ "\"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": \"string1\""
-		+ "}, { \"email\":\"string3\", \"familyname\": \"string3\", \"givenname\": \"string3\", \"user_id\":"
-		+ " \"string3\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
-		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"string\", \"type\": \"SIMPLE\","
+	private static String groupNew3 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": \"0\", "
+		+ "\"members\": [ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": "
+		+ "\"string1\", \"user_id\": \"string1\"} ], \"parent\": 0, \"roles\": "
+		+ "{ \"additionalProp1\": \"string\", \"additionalProp2\": \"string\", "
+		+ "\"additionalProp3\": \"string\" }, \"title\": \"stringNeu\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
-	private static String groupNew3 = "{ \"groupList\": [ { \"description\": \"string\", \"id\": 0, \"members\": "
-		+ "[ { \"email\": \"string1\", \"familyname\": \"string1\", \"givenname\": \"string1\", \"user_id\": "
-		+ "\"string1\"} ], \"parent\": 0, \"roles\": { \"additionalProp1\": \"string\", \"additionalProp2\":"
-		+ "\"string\", \"additionalProp3\": \"string\" }, \"title\": \"stringNeu\", \"type\": \"SIMPLE\","
-		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
-	
-	private static String groupDelete = "{ \"groupList\": [ { \"description\": \"null\", \"id\": 0, \"members\": "
-		+ "[], \"parent\": 0, \"roles\": {}, "
+	private static String groupDelete = "{ \"groupList\": [ { \"description\": \"null\", \"id\": \"0\", "
+		+ "\"members\": [], \"parent\": 0, \"roles\": {}, "
 		+ "\"title\": \"null\", \"type\": \"SIMPLE\","
 		+ "\"visibility\": \"PUBLIC\" } ], \"status\": 1 }";
 	
@@ -72,7 +73,7 @@ public class GruppeSchedulerTest {
 	
 	@Test
 	public void testStatus0() {
-		when(bgrepo.findBenutzerByGruppeId(0L)).thenReturn(new ArrayList<String>());
+		when(bgrepo.findBenutzerByGruppeId("0")).thenReturn(new ArrayList<String>());
 		
 		server.expect(ExpectedCount.once(),
 			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
@@ -85,11 +86,11 @@ public class GruppeSchedulerTest {
 	
 	@Test
 	public void fuegeNutzerHinzu() {
-		when(bgrepo.findBenutzerByGruppeId(0L)).thenReturn(new ArrayList<String>());
+		when(bgrepo.findBenutzerByGruppeId("0")).thenReturn(new ArrayList<String>());
 		BenutzerGruppeDB erwartet = new BenutzerGruppeDB();
 		erwartet.setBenutzer("string1");
 		erwartet.setGruppe("string");
-		erwartet.setGruppeId(0L);
+		erwartet.setGruppeId("0");
 		
 		server.expect(ExpectedCount.once(),
 			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
@@ -103,12 +104,12 @@ public class GruppeSchedulerTest {
 	
 	@Test
 	public void loescheNutzer() {
-		when(bgrepo.findBenutzerByGruppeId(0L))
+		when(bgrepo.findBenutzerByGruppeId("0"))
 			.thenReturn(new ArrayList<String>(Arrays.asList("string1", "string2")));
 		BenutzerGruppeDB erwartet = new BenutzerGruppeDB();
 		erwartet.setBenutzer("string2");
 		erwartet.setGruppe("string");
-		erwartet.setGruppeId(0L);
+		erwartet.setGruppeId("0");
 		
 		server.expect(ExpectedCount.once(),
 			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
@@ -117,7 +118,7 @@ public class GruppeSchedulerTest {
 		
 		scheduler.updateGruppe();
 		
-		verify(bgrepo, times(1)).deleteByBenutzerAndGruppeId("string2", 0L);
+		verify(bgrepo, times(1)).deleteByBenutzerAndGruppeId("string2", "0");
 		verify(bgrepo, never()).save(any());
 	}
 	
@@ -130,17 +131,17 @@ public class GruppeSchedulerTest {
 		
 		scheduler.updateGruppe();
 		
-		verify(bgrepo, times(1)).deleteAllByGruppeId(0L);
+		verify(bgrepo, times(1)).deleteAllByGruppeId("0");
 	}
 	
 	@Test
 	public void loescheUndFuegeNutzerHinzu() {
-		when(bgrepo.findBenutzerByGruppeId(0L))
+		when(bgrepo.findBenutzerByGruppeId("0"))
 			.thenReturn(new ArrayList<String>(Arrays.asList("string1", "string2")));
 		BenutzerGruppeDB erwartetNeu = new BenutzerGruppeDB();
 		erwartetNeu.setBenutzer("string3");
 		erwartetNeu.setGruppe("string");
-		erwartetNeu.setGruppeId(0L);
+		erwartetNeu.setGruppeId("0");
 		
 		server.expect(ExpectedCount.once(),
 			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
@@ -149,20 +150,20 @@ public class GruppeSchedulerTest {
 		
 		scheduler.updateGruppe();
 		
-		verify(bgrepo, times(1)).deleteByBenutzerAndGruppeId("string2", 0L);
+		verify(bgrepo, times(1)).deleteByBenutzerAndGruppeId("string2", "0");
 		verify(bgrepo, times(1)).save(erwartetNeu);
 	}
 	
 	@Test
 	public void aendereGruppenname() {
-		when(bgrepo.findBenutzerByGruppeId(0L))
+		when(bgrepo.findBenutzerByGruppeId("0"))
 			.thenReturn(new ArrayList<String>());
-		when(bgrepo.findGruppeByGruppeId(0L))
+		when(bgrepo.findGruppeByGruppeId("0"))
 			.thenReturn(Optional.of("string"));
 		BenutzerGruppeDB erwartetNeu = new BenutzerGruppeDB();
 		erwartetNeu.setBenutzer("string1");
 		erwartetNeu.setGruppe("stringNeu");
-		erwartetNeu.setGruppeId(0L);
+		erwartetNeu.setGruppeId("0");
 		
 		server.expect(ExpectedCount.once(),
 			requestTo("http://localhost:8082/gruppen2/api/updateGroups/0"))
@@ -171,7 +172,7 @@ public class GruppeSchedulerTest {
 		
 		scheduler.updateGruppe();
 		
-		verify(bgrepo, times(1)).deleteAllByGruppeId(0L);
+		verify(bgrepo, times(1)).deleteAllByGruppeId("0");
 		verify(bgrepo, times(1)).save(erwartetNeu);
 	}
 	

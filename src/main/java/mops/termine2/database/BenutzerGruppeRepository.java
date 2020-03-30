@@ -15,20 +15,20 @@ public interface BenutzerGruppeRepository extends CrudRepository<BenutzerGruppeD
 	
 	List<BenutzerGruppeDB> findByBenutzer(String benutzer);
 	
-	List<BenutzerGruppeDB> findByGruppeId(Long gruppeId);
+	List<BenutzerGruppeDB> findByGruppeId(String gruppeId);
 	
-	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, Long gruppeId);
-	
-	@Transactional
-	void deleteAllByGruppeId(Long gruppeId);
-	
-	@Query("select db.benutzer from BenutzerGruppeDB db where db.gruppeId = :gruppeId")
-	List<String> findBenutzerByGruppeId(@Param("gruppeId") Long gruppeId);
+	BenutzerGruppeDB findByBenutzerAndGruppeId(String benutzer, String gruppeId);
 	
 	@Transactional
-	void deleteByBenutzerAndGruppeId(String benutzer, Long gruppeId);
+	void deleteAllByGruppeId(String gruppeId);
 	
-	@Query("select distinct db.gruppe from BenutzerGruppeDB db where db.gruppeId = :gruppeId")
-	Optional<String> findGruppeByGruppeId(@Param("gruppeId") Long gruppeId);
+	@Query("select db.benutzer from BenutzerGruppeDB db where db.gruppeId like :gruppeId")
+	List<String> findBenutzerByGruppeId(@Param("gruppeId") String gruppeId);
+	
+	@Transactional
+	void deleteByBenutzerAndGruppeId(String benutzer, String gruppeId);
+	
+	@Query("select distinct db.gruppe from BenutzerGruppeDB db where db.gruppeId like :gruppeId")
+	Optional<String> findGruppeByGruppeId(@Param("gruppeId") String gruppeId);
 	
 }

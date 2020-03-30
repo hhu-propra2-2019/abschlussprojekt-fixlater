@@ -51,7 +51,7 @@ public class UmfragenUebersichtController {
 	@GetMapping("/umfragen")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal principal, Model model,
-		@RequestParam(name = "gruppe", defaultValue = "-1") Long gruppe) {
+		@RequestParam(name = "gruppe", defaultValue = "-1") String gruppeId) {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
@@ -60,7 +60,7 @@ public class UmfragenUebersichtController {
 		}
 		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		if (gruppeService.checkGroupAccessDenied(account, gruppe)) {
+		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
@@ -69,22 +69,22 @@ public class UmfragenUebersichtController {
 			.sorted(Comparator.comparing(Gruppe::getName))
 			.collect(Collectors.toList());
 		
-		HashMap<Long, String> groups = new HashMap<>();
+		HashMap<String, String> groups = new HashMap<>();
 		for (Gruppe group : gruppen) {
 			groups.put(group.getId(), group.getName());
 		}
 		
-		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppe);
+		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppeId);
 		
 		if (selGruppe == null) {
 			selGruppe = new Gruppe();
-			selGruppe.setId(-1L);
+			selGruppe.setId("-1");
 			selGruppe.setName("Alle Gruppen");
 		}
 		
 		List<Umfrage> umfrageOffen;
 		List<Umfrage> umfrageAbgeschlossen;
-		if (gruppe == -1L) {
+		if (gruppeId.contentEquals("-1")) {
 			umfrageOffen = umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
 			umfrageAbgeschlossen = umfragenuebersichtService
 				.loadAbgeschlosseneUmfragenFuerBenutzer(account);

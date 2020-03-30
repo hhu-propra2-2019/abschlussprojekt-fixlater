@@ -56,6 +56,7 @@ public class UmfrageuebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();
@@ -99,6 +100,7 @@ public class UmfrageuebersichtServiceTest {
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
+		gruppe.setGruppeId("1");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();
@@ -134,13 +136,13 @@ public class UmfrageuebersichtServiceTest {
 	@Test
 	public void testLoadOffeneUmfragenFuerGruppe() {
 		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3));
-		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L));
+		List<String> gruppenIds = new ArrayList<>(Arrays.asList("1", "5", "5", "7", "5"));
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId(5L);
+		gruppe.setGruppeId("5");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> unfragenDB = new ArrayList<>();
@@ -176,13 +178,13 @@ public class UmfrageuebersichtServiceTest {
 	public void testLoadAbgeschlosseneUmfragenFuerGruppe() {
 		List<Integer> days = new ArrayList<>(Arrays.asList(5, -5, 1, -2, 3, -7));
 		List<String> ergebnisse = new ArrayList<String>(Arrays.asList("1", "-2", "-1", "2", "3", "6"));
-		List<Long> gruppenIds = new ArrayList<>(Arrays.asList(1L, 5L, 5L, 7L, 5L, 5L));
+		List<String> gruppenIds = new ArrayList<>(Arrays.asList("1", "5", "5", "7", "5", "5"));
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
 		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
 		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId(5L);
+		gruppe.setGruppeId("5");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();

@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class GruppeBenutzer {
 	
-	private Long id;
+	private String id;
 	
 	private List<String> benutzer;
 	

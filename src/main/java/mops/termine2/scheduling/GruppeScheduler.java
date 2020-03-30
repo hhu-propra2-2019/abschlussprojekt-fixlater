@@ -73,7 +73,7 @@ public class GruppeScheduler {
 		
 		for (GruppeDTO gruppeDTO : gruppeListe) {
 			String gruppe = gruppeDTO.getTitle();
-			Long gruppeId = Integer.toUnsignedLong(gruppeDTO.getId());
+			String gruppeId = gruppeDTO.getId();
 			if (!gruppe.equals("null")) {
 				Optional<String> aktuellerGruppentitel = repository.findGruppeByGruppeId(gruppeId);
 				if (aktuellerGruppentitel.isPresent() && !aktuellerGruppentitel.get().equals(gruppe)) {
@@ -103,7 +103,7 @@ public class GruppeScheduler {
 		logger.info("Update erfolgreich");
 	}
 	
-	private void benutzerHinzufuegen(List<String> neueBenutzer, String gruppe, Long gruppeId) {
+	private void benutzerHinzufuegen(List<String> neueBenutzer, String gruppe, String gruppeId) {
 		for (String benutzer : neueBenutzer) {
 			BenutzerGruppeDB benutzerGruppeDB = new BenutzerGruppeDB();
 			benutzerGruppeDB.setBenutzer(benutzer);
@@ -113,7 +113,7 @@ public class GruppeScheduler {
 		}
 	}
 	
-	private void benutzerLoeschen(List<String> benutzerliste, Long gruppeId) {
+	private void benutzerLoeschen(List<String> benutzerliste, String gruppeId) {
 		for (String benutzer : benutzerliste) {
 			repository.deleteByBenutzerAndGruppeId(benutzer, gruppeId);
 		}

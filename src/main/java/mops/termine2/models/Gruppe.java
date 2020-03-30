@@ -9,7 +9,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Gruppe {
 	
-	private Long id;
+	private String id;
 	
 	private String name;
 	

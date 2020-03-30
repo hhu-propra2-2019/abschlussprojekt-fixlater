@@ -5,6 +5,7 @@ services:
     environment:
       - "MYSQL_ROOT_PASSWORD=geheim"
       - "MYSQL_DATABASE=termine2"
+      - TZ=Europe/Berlin
   termine2:
     build: ./
     ports:

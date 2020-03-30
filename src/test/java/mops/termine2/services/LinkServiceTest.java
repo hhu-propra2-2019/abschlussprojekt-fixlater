@@ -29,7 +29,7 @@ public class LinkServiceTest {
 	
 	private transient String beschreibung = "SchokoBons";
 	
-	private transient Long gruppeId = 1L;
+	private transient String gruppeId = "1";
 	
 	private transient String ort = "hoersaal5b";
 	

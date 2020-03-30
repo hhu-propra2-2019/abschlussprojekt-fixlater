@@ -46,7 +46,7 @@ public class GruppeService {
 	 * @param id
 	 * @return
 	 */
-	public Gruppe loadByGruppeId(Long id) {
+	public Gruppe loadByGruppeId(String id) {
 		List<BenutzerGruppeDB> gruppeDB = benutzerGruppeRepository.findByGruppeId(id);
 		
 		if (gruppeDB.size() > 0) {
@@ -59,7 +59,7 @@ public class GruppeService {
 		return null;
 	}
 	
-	public boolean accountInGruppe(Account account, Long gruppeId) {
+	public boolean accountInGruppe(Account account, String gruppeId) {
 		String benutzer = account.getName();
 		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
 	}
@@ -70,7 +70,7 @@ public class GruppeService {
 			.collect(Collectors.toList());
 	}
 
-	public boolean checkGroupAccessDenied(Account account, Long id) {
-		return id != null && id != -1 && !accountInGruppe(account, id);		
+	public boolean checkGroupAccessDenied(Account account, String id) {
+		return id != null && !id.contentEquals("-1") && !accountInGruppe(account, id);
 	}
 }
