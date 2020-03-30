@@ -46,6 +46,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
+import mops.termine2.util.IntegerToolkit;
 import mops.termine2.util.LocalDateTimeManager;
 
 @Controller
@@ -81,21 +82,15 @@ public class TermineNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+		}		
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppen = gruppeService.sortGroupsByName(gruppen);
-		
-		model.addAttribute("gruppen", gruppen);
-		Gruppe noGroup = new Gruppe();
-		noGroup.setId("-1");
-		model.addAttribute("gruppeSelektiert", noGroup);
-		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
 		// Terminfindung
-		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();		
+		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppeSelektiert", gruppeService.createDefaultGruppe());		
 		model.addAttribute("terminfindung", terminfindung);
 		model.addAttribute("fehler", "");
 		
@@ -111,21 +106,16 @@ public class TermineNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+		}		
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppen = gruppeService.sortGroupsByName(gruppen);
-		model.addAttribute("gruppen", gruppen);
-		
-		// Selektierte Gruppe
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
-		
+
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);		
 		model.addAttribute("terminfindung", terminfindung);
 		model.addAttribute("fehler", "");
 		
@@ -143,19 +133,15 @@ public class TermineNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppen = gruppeService.sortGroupsByName(gruppen);
-		model.addAttribute("gruppen", gruppen);
-		
-		// Selektierte Gruppe
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
 		// Terminvorschlag löschen
-		terminfindung.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
+		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
+		terminfindungService.loescheTermin(terminfindung, indexToDelete);	
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppen);
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		model.addAttribute("terminfindung", terminfindung);
 		model.addAttribute("fehler", "");
 		
@@ -166,62 +152,24 @@ public class TermineNeuController {
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String terminfindungErstellen(Principal principal, Model model, Terminfindung terminfindung,
 		Gruppe gruppeSelektiert, RedirectAttributes redirectAttributes) {
-		String fehler = "";
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		ArrayList<LocalDateTime> gueltigeVorschlaege = 
-			LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
-		LocalDateTime minVorschlag = LocalDateTimeManager.bekommeFruehestesDatum(gueltigeVorschlaege);
-		LocalDateTime maxVorschlag = LocalDateTimeManager.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		List<String> fehler = terminfindungService.erstelleTerminfindung(account, 
+			terminfindung);
+		fehler.addAll(linkService.setzeLink(terminfindung));
+		gruppeService.setzeGruppeId(terminfindung, gruppeSelektiert);		
 		
-		if (gueltigeVorschlaege.isEmpty()) {
-			gueltigeVorschlaege.add(null);
-			fehler = "Es muss mindestens einen Vorschlag geben.";
-		}
-		
-		// minVorschlag and maxVorschlag are always null together
-		if (minVorschlag != null) {
-			terminfindungService.setzeFrist(terminfindung, minVorschlag);			
-			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
-		}
-		
-		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(5))) {
-			fehler = "Die Frist ist zu kurzfristig.";
-		}
-		
-		terminfindung.setVorschlaege(gueltigeVorschlaege);
-		
-		// Terminfindung erstellen
-		terminfindung.setErsteller(account.getName());
-		
-		if (gruppeSelektiert.getId() != null && !gruppeSelektiert.getId().equals("-1")) {
-			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
-			terminfindung.setGruppeId(gruppe.getId());
-		}
-		
-		if (terminfindung.getLink().isEmpty()) {
-			String link = linkService.generiereEindeutigenLink();
-			terminfindung.setLink(link);
-		} else {
-			if (!linkService.pruefeEindeutigkeitLink(terminfindung.getLink())) {
-				fehler = "Der eingegebene Link existiert bereits.";
-			}
-			if (!linkService.isLinkValid(terminfindung.getLink())) {
-				fehler = "Der eingegebene Link enthält ungültige Zeichen";
-			}
-		}
-		
-		if (!fehler.equals("")) {
+		if (!fehler.isEmpty()) {
+			model.addAttribute(Konstanten.ACCOUNT, account);
 			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
 			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			model.addAttribute("terminfindung", terminfindung);
-			model.addAttribute("fehler", fehler);
+			model.addAttribute("fehler", fehler.get(fehler.size() - 1));
 			
 			return "termine-neu";
 		}
@@ -230,10 +178,12 @@ public class TermineNeuController {
 		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit link '"
 			+ terminfindung.getLink() + "' erstellt");
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
 	}
 	
+	//TODO: CSV Methoden refactoren
 	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal principal,
@@ -267,18 +217,16 @@ public class TermineNeuController {
 				
 				TerminFormatierung terminFormatierung = new TerminFormatierung(termineEingelesen);
 				
-				if (!terminFormatierung.pruefeObGueltigesFormat(
-					termineEingelesen, terminFormatierung.getDateTimeFormatter())) {
+				if (!terminFormatierung.pruefeObGueltigesFormat()) {
 					model.addAttribute("message",
 						"Alle Termine müssen im Format "
 							+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
 							+ "sollten existente Daten sein.");
 					model.addAttribute("error", true);
-				} else if (!terminFormatierung.pruefeObInZukunft(termineEingelesen,
-					terminFormatierung.getDateTimeFormatter())) {
+				} else if (!terminFormatierung.pruefeObInZukunft()) {
 					model.addAttribute("message", "Die Termine sollten in der Zukunft liegen.");
 					model.addAttribute("error", true);
-				} else if (!terminFormatierung.pruefeObGueltigesDatum(termineEingelesen)) {
+				} else if (!terminFormatierung.pruefeObGueltigesDatum()) {
 					model.addAttribute("message",
 						"Die Termine sollten existieren.");
 					model.addAttribute("error", true);
@@ -341,22 +289,19 @@ public class TermineNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		String filename = "termine.csv";
-		List<LocalDateTime> termine = terminfindung.getVorschlaege();
-		ExportCSV exportCSV = new ExportCSV(termine);
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename + "\"");
+			"attachment; filename=\"termine.csv\"");
 		response.setContentType("text/csv");
-		
+
+		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		if (termine.get(0) != null) {
 			StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(
 				response.getWriter()).withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
 					.withSeparator(CSVWriter.DEFAULT_SEPARATOR)
 					.withOrderedResults(false)
 					.build();
-			writer.write(exportCSV.localDateTimeZuExportFormat());
+			writer.write(new ExportCSV(termine).localDateTimeZuExportFormat());
 		}
 		
 	}
