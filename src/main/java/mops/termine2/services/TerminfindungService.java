@@ -1,10 +1,12 @@
 package mops.termine2.services;
 
+import mops.termine2.authentication.Account;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
+import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -231,6 +233,34 @@ public class TerminfindungService {
 		} catch (NullPointerException | IndexOutOfBoundsException e) {
 			return;
 		}
+	}
+	
+	public List<String> erstelleTerminfindung(Account account, Terminfindung terminfindung) {
+		
+		List<String> fehler = new ArrayList<String>();
+		
+		ArrayList<LocalDateTime> gueltigeVorschlaege = 
+			LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
+		LocalDateTime minVorschlag = LocalDateTimeManager.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		
+		if (gueltigeVorschlaege.isEmpty()) {
+			gueltigeVorschlaege.add(null);
+			fehler.add("Es muss mindestens einen Vorschlag geben.");
+		} else {
+			setzeFrist(terminfindung, minVorschlag);			
+			setzeLoeschdatum(terminfindung, maxVorschlag);			
+		}
+		
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(5))) {
+			fehler.add("Die Frist ist zu kurzfristig.");
+		}
+		
+		terminfindung.setVorschlaege(gueltigeVorschlaege);
+		
+		// Terminfindung erstellen
+		terminfindung.setErsteller(account.getName());		
+		return fehler;
 	}
 	
 	private void updateOldDB(TerminfindungDB terminfindung, TerminfindungDB toUpdate) {
