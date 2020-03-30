@@ -225,6 +225,14 @@ public class TerminfindungService {
 		}
 	}
 	
+	public void loescheTermin(Terminfindung terminfindung, int indexToDelete) {
+		try {
+			terminfindung.getVorschlaege().remove(indexToDelete);
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
+			return;
+		}
+	}
+	
 	private void updateOldDB(TerminfindungDB terminfindung, TerminfindungDB toUpdate) {
 		toUpdate.setTitel(terminfindung.getTitel());
 		toUpdate.setOrt(terminfindung.getOrt());
