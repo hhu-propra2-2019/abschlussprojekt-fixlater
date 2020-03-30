@@ -69,8 +69,21 @@ public class GruppeService {
 			.sorted(Comparator.comparing(Gruppe::getName))
 			.collect(Collectors.toList());
 	}
+	
+	public List<Gruppe> loadByBenutzerSorted(Account account) {
+		List<Gruppe> gruppen = loadByBenutzer(account);
+		return sortGroupsByName(gruppen);
+	}
 
 	public boolean checkGroupAccessDenied(Account account, String id) {
 		return id != null && !id.contentEquals("-1") && !accountInGruppe(account, id);
 	}
+	
+	public Gruppe createDefaultGruppe() {
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("-1");
+		gruppe.setName("");
+		return gruppe;
+	}
+	
 }
