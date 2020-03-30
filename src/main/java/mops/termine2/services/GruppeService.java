@@ -4,6 +4,7 @@ import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -84,6 +85,16 @@ public class GruppeService {
 		gruppe.setId("-1");
 		gruppe.setName("");
 		return gruppe;
+	}
+
+	public void setzeGruppeId(Terminfindung terminfindung, Gruppe gruppeSelektiert) {
+		if (gruppeSelektiert.getId() != null) {
+			Gruppe gruppe = loadByGruppeId(gruppeSelektiert.getId());
+			if (gruppe != null) {
+				terminfindung.setGruppeId(gruppe.getId());				
+			}
+		}
+		
 	}
 	
 }
