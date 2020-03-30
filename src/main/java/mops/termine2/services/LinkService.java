@@ -5,8 +5,9 @@ import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
+import mops.termine2.models.Terminfindung;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +49,23 @@ public class LinkService {
 	
 	public Boolean isLinkValid(String link) {
 		return link.matches("[a-zA-Z0-9-]*");
+	}
+
+	public List<String> setzeLink(Terminfindung terminfindung) {
+		List<String> fehler = new ArrayList<String>();
+		if (terminfindung.getLink().isEmpty()) {
+			String link = generiereEindeutigenLink();
+			terminfindung.setLink(link);
+		} else {
+			if (!pruefeEindeutigkeitLink(terminfindung.getLink())) {
+				fehler.add("Der eingegebene Link existiert bereits.");
+			}
+			if (!isLinkValid(terminfindung.getLink())) {
+				fehler.add("Der eingegebene Link enthält ungültige Zeichen");
+			}
+		}
+		return fehler;
+		
 	}
 	
 }
