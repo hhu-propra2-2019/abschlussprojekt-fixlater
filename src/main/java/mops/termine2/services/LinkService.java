@@ -6,6 +6,7 @@ import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Umfrage;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,23 @@ public class LinkService {
 				fehler.add("Der eingegebene Link existiert bereits.");
 			}
 			if (!isLinkValid(terminfindung.getLink())) {
+				fehler.add("Der eingegebene Link enthält ungültige Zeichen");
+			}
+		}
+		return fehler;
+		
+	}
+
+	public List<String> setzeLink(Umfrage umfrage) {
+		List<String> fehler = new ArrayList<String>();
+		if (umfrage.getLink().isEmpty()) {
+			String link = generiereEindeutigenLink();
+			umfrage.setLink(link);
+		} else {
+			if (!pruefeEindeutigkeitLink(umfrage.getLink())) {
+				fehler.add("Der eingegebene Link existiert bereits.");
+			}
+			if (!isLinkValid(umfrage.getLink())) {
 				fehler.add("Der eingegebene Link enthält ungültige Zeichen");
 			}
 		}
