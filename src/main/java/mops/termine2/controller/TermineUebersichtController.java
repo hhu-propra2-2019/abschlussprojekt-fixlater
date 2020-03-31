@@ -56,8 +56,7 @@ public class TermineUebersichtController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+				
 		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
@@ -99,6 +98,7 @@ public class TermineUebersichtController {
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 			terminfindungenOffen, gruppen, selGruppe);
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		model.addAttribute("termine", termine);
 		
 		return "termine";
