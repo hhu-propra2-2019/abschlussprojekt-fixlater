@@ -164,22 +164,22 @@ public class TermineNeuController {
 		fehler.addAll(linkService.setzeLink(terminfindung));
 		gruppeService.setzeGruppeId(terminfindung, gruppeSelektiert);		
 		
-		if (!fehler.isEmpty()) {
-			model.addAttribute(Konstanten.ACCOUNT, account);
-			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			model.addAttribute("terminfindung", terminfindung);
-			model.addAttribute("fehler", fehler.get(fehler.size() - 1));
+		if (fehler.isEmpty()) {
+			terminfindungService.save(terminfindung);
+			logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit Link '"
+				+ terminfindung.getLink() + "' erstellt");
 			
-			return "termine-neu";
+			redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
+			return "redirect:/termine2";
 		}
 		
-		terminfindungService.save(terminfindung);
-		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit Link '"
-			+ terminfindung.getLink() + "' erstellt");
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute("fehler", fehler.get(fehler.size() - 1));
 		
-		redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
-		return "redirect:/termine2";
+		return "termine-neu";
 	}
 	
 	//TODO: CSV Methoden refactoren

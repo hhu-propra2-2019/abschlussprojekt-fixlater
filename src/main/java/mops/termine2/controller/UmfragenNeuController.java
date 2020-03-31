@@ -138,21 +138,22 @@ public class UmfragenNeuController {
 		fehler.addAll(linkService.setzeLink(umfrage));
 		gruppeService.setzeGruppeId(umfrage, gruppeSelektiert);
 		
-		if (!fehler.isEmpty()) {
-			model.addAttribute(Konstanten.ACCOUNT, account);
-			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-			model.addAttribute("umfrage", umfrage);
-			model.addAttribute("fehler", fehler.get(fehler.size() - 1));
-			return "umfragen-neu";
+		if (fehler.isEmpty()) {
+			umfrageService.save(umfrage);
+			logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit Link '"
+				+ umfrage.getLink() + "' erstellt");
+			
+			redirectAttributes.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
+			return "redirect:/termine2/umfragen";
 		}
 		
-		umfrageService.save(umfrage);
-		logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit Link '"
-			+ umfrage.getLink() + "' erstellt");
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("fehler", fehler.get(fehler.size() - 1));
 		
-		redirectAttributes.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
-		return "redirect:/termine2/umfragen";
+		return "umfragen-neu";
 	}
 }
 
