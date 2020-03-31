@@ -77,7 +77,6 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
@@ -89,16 +88,13 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
+		Boolean bereitsTeilgenommen = 
+			umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
+		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())
+			|| bereitsTeilgenommen) {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
-		
-		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (bereitsTeilgenommen) {
-			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
-		} else {
-			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
-		}
+		return "redirect:/termine2/umfragen/" + link + "/abstimmung";		
 	}
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
@@ -110,8 +106,7 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+				
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
@@ -134,10 +129,10 @@ public class UmfragenAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("antwort", antwortForm);
 		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		return "umfragen-abstimmung";
 	}
@@ -151,8 +146,7 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+				
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
@@ -174,10 +168,11 @@ public class UmfragenAbstimmungController {
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
+		
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("ergebnis", ergebnis);
 		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		return "umfragen-ergebnis";
 	}
@@ -194,7 +189,6 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage =
 			umfrageService.loadByLinkMitVorschlaegen(link);
@@ -234,7 +228,6 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
@@ -253,7 +246,6 @@ public class UmfragenAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
-		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
 		
 		return "redirect:/termine2/umfragen/" + link;
