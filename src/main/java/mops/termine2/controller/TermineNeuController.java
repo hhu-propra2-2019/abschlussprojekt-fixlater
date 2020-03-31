@@ -175,7 +175,7 @@ public class TermineNeuController {
 		}
 		
 		terminfindungService.save(terminfindung);
-		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit link '"
+		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit Link '"
 			+ terminfindung.getLink() + "' erstellt");
 		
 		redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");

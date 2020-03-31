@@ -11,6 +11,7 @@ import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.LinkService;
 import mops.termine2.services.UmfrageService;
+import mops.termine2.util.IntegerToolkit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -62,20 +62,11 @@ public class UmfragenNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
+		
 		model.addAttribute(Konstanten.ACCOUNT, account);
-		
-		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
-		model.addAttribute("gruppen", gruppen);
-		Gruppe noGroup = new Gruppe();
-		noGroup.setId("-1");
-		model.addAttribute("gruppeSelektiert", noGroup);
-		
-		// Umfrage
-		Umfrage umfrage = umfrageService.createDefaultUmfrage();
-		
-		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute("gruppeSelektiert", gruppeService.createDefaultGruppe());
+		model.addAttribute("umfrage", umfrageService.createDefaultUmfrage());
 		model.addAttribute("fehler", "");
 		
 		return "umfragen-neu";
@@ -90,21 +81,15 @@ public class UmfragenNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
-		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
-		model.addAttribute("gruppen", gruppen);
-		
-		// Selektierte Gruppe
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		}		
 		
 		// Vorschlag hinzufügen
 		List<String> vorschlaege = umfrage.getVorschlaege();
 		vorschlaege.add("");
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);		
+		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));	
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("fehler", "");
 		
@@ -121,23 +106,17 @@ public class UmfragenNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
-		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppeService.sortGroupsByName(gruppen);
-		model.addAttribute("gruppen", gruppen);
-		
-		// Selektierte Gruppe
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
+		}		
 		
 		// Vorschlag löschen
-		umfrage.getVorschlaege().remove(Integer.parseInt(request.getParameter("delete")));
+		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
+		umfrageService.loescheVorschlag(umfrage, indexToDelete);
 		
+		model.addAttribute(Konstanten.ACCOUNT, account);
+		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("fehler", "");
-		
+		model.addAttribute("fehler", "");		
 		
 		return "umfragen-neu";
 	}
@@ -147,60 +126,29 @@ public class UmfragenNeuController {
 	public String umfrageErstellen(Principal principal, Model model,
 								   Umfrage umfrage, Gruppe gruppeSelektiert,
 								   RedirectAttributes redirectAttributes) {
-		String fehler = "";
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
+				
+		List<String> fehler = umfrageService.erstelleUmfrage(account, 
+			umfrage);
+		fehler.addAll(linkService.setzeLink(umfrage));
+		gruppeService.setzeGruppeId(umfrage, gruppeSelektiert);
 		
-		// Vorschläge filtern. Doppelte und nicht gesetzte Daten löschen
-		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
-		for (String vorschlag : umfrage.getVorschlaege()) {
-			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
-				gueltigeVorschlaege.add(vorschlag);
-			}
-		}
-		
-		if (gueltigeVorschlaege.isEmpty()) {
-			gueltigeVorschlaege.add("");
-			fehler = "Es muss mindestens einen Vorschlag geben.";
-		}
-		
-		umfrage.setVorschlaege(gueltigeVorschlaege);
-		umfrage.setMaxAntwortAnzahl((long) gueltigeVorschlaege.size());
-		
-		// Umfrage erstellen
-		umfrage.setErsteller(account.getName());
-		if (gruppeSelektiert.getId() != null && !gruppeSelektiert.getId().contentEquals("-1")) {
-			Gruppe gruppe = gruppeService.loadByGruppeId(gruppeSelektiert.getId());
-			umfrage.setGruppeId(gruppe.getId());
-		}
-		
-		if (umfrage.getLink().isEmpty()) {
-			String link = linkService.generiereEindeutigenLink();
-			umfrage.setLink(link);
-		} else {
-			if (!linkService.pruefeEindeutigkeitLink(umfrage.getLink())) {
-				fehler = "Der eingegebene Link existiert bereits.";
-			}
-			if (!linkService.isLinkValid(umfrage.getLink())) {
-				fehler = "Der eingegebene Link enthält ungültige Zeichen.";
-			}
-		}
-		
-		if (!fehler.equals("")) {
+		if (!fehler.isEmpty()) {
+			model.addAttribute(Konstanten.ACCOUNT, account);
 			model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
 			model.addAttribute("gruppeSelektiert", gruppeSelektiert);
 			model.addAttribute("umfrage", umfrage);
-			model.addAttribute("fehler", fehler);
+			model.addAttribute("fehler", fehler.get(fehler.size() - 1));
 			return "umfragen-neu";
 		}
 		
 		umfrageService.save(umfrage);
-		logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit link '"
+		logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit Link '"
 			+ umfrage.getLink() + "' erstellt");
 		
 		redirectAttributes.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
