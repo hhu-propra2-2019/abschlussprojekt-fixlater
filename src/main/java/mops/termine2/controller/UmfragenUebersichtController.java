@@ -58,8 +58,7 @@ public class UmfragenUebersichtController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+				
 		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
@@ -102,6 +101,8 @@ public class UmfragenUebersichtController {
 		}
 		Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 			umfrageOffen, gruppen, selGruppe);
+		
+		model.addAttribute(Konstanten.ACCOUNT, account);
 		model.addAttribute("umfragen", umfrage);
 		
 		return "umfragen";
