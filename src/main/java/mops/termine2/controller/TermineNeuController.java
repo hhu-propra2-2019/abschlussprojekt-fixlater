@@ -178,7 +178,6 @@ public class TermineNeuController {
 		logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit link '"
 			+ terminfindung.getLink() + "' erstellt");
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
 		return "redirect:/termine2";
 	}
