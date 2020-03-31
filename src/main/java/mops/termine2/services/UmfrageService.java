@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.authentication.Account;
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
@@ -251,6 +252,28 @@ public class UmfrageService {
 		}
 		
 		return umfragen;
+	}
+
+	public List<String> erstelleUmfrage(Account account, Umfrage umfrage) {
+		List<String> fehler = new ArrayList<String>();
+		
+		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
+		for (String vorschlag : umfrage.getVorschlaege()) {
+			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
+				gueltigeVorschlaege.add(vorschlag);
+			}
+		}
+		
+		if (gueltigeVorschlaege.isEmpty()) {
+			gueltigeVorschlaege.add("");
+			fehler.add("Es muss mindestens einen Vorschlag geben.");
+		}
+		
+		umfrage.setVorschlaege(gueltigeVorschlaege);
+		umfrage.setMaxAntwortAnzahl((long) gueltigeVorschlaege.size());
+		umfrage.setErsteller(account.getName());
+		
+		return fehler;
 	}
 	
 }
