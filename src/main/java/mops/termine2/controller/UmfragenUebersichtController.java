@@ -102,8 +102,8 @@ public class UmfragenUebersichtController {
 		Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 			umfrageOffen, gruppen, selGruppe);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("umfragen", umfrage);
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_UMFRAGEN, umfrage);
 		
 		return "umfragen";
 	}

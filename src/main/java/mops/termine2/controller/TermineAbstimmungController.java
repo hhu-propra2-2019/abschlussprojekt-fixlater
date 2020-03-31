@@ -134,12 +134,12 @@ public class TermineAbstimmungController {
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("antwort", antwortForm);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
 		
 		return "termine-abstimmung";
 	}
@@ -183,12 +183,12 @@ public class TermineAbstimmungController {
 		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten,
 			terminfindung, nutzerAntwort);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("info", new AbstimmungsInfortmationenTermineForm(terminfindung));
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("ergebnis", ergebnis);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
     
 		return "termine-ergebnis";
 	}

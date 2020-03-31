@@ -63,11 +63,11 @@ public class UmfragenNeuController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));
-		model.addAttribute("gruppeSelektiert", gruppeService.createDefaultGruppe());
-		model.addAttribute("umfrage", umfrageService.createDefaultUmfrage());
-		model.addAttribute("fehler", "");
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrageService.createDefaultUmfrage());
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
 		return "umfragen-neu";
 	}
@@ -87,11 +87,11 @@ public class UmfragenNeuController {
 		List<String> vorschlaege = umfrage.getVorschlaege();
 		vorschlaege.add("");
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);		
-		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));	
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("fehler", "");
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);		
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));	
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
 		return "umfragen-neu";
 	}
@@ -112,11 +112,11 @@ public class UmfragenNeuController {
 		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
 		umfrageService.loescheVorschlag(umfrage, indexToDelete);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppeService.loadByBenutzerSorted(account));
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("fehler", "");		
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");		
 		
 		return "umfragen-neu";
 	}
@@ -147,11 +147,11 @@ public class UmfragenNeuController {
 			return "redirect:/termine2/umfragen";
 		}
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("fehler", fehler.get(fehler.size() - 1));
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzer(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_FEHLER, fehler.get(fehler.size() - 1));
 		
 		return "umfragen-neu";
 	}

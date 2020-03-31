@@ -88,11 +88,11 @@ public class TermineNeuController {
 		// Terminfindung
 		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppen);
-		model.addAttribute("gruppeSelektiert", gruppeService.createDefaultGruppe());		
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("fehler", "");
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());		
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
 		return "termine-neu";
 	}
@@ -113,11 +113,11 @@ public class TermineNeuController {
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
 
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppen);
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);		
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("fehler", "");
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);		
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
 		return "termine-neu";
 	}
@@ -139,11 +139,11 @@ public class TermineNeuController {
 		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
 		terminfindungService.loescheTermin(terminfindung, indexToDelete);	
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppen);
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("fehler", "");
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
 		return "termine-neu";
 	}
@@ -173,11 +173,11 @@ public class TermineNeuController {
 			return "redirect:/termine2";
 		}
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("gruppen", gruppeService.loadByBenutzer(account));
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("terminfindung", terminfindung);
-		model.addAttribute("fehler", fehler.get(fehler.size() - 1));
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzer(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
+		model.addAttribute(Konstanten.MODEL_FEHLER, fehler.get(fehler.size() - 1));
 		
 		return "termine-neu";
 	}
@@ -193,11 +193,9 @@ public class TermineNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		
+				
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		model.addAttribute("gruppen", gruppen);
 		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
@@ -270,9 +268,10 @@ public class TermineNeuController {
 			terminfindungService.setzeFrist(terminfindung, minVorschlag);
 			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
 		}		
-		
-		model.addAttribute("gruppeSelektiert", gruppeSelektiert);
-		model.addAttribute("terminfindung", terminfindung);
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
+		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		
 		return "termine-neu";
 	}

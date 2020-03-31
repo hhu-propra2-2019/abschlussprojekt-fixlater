@@ -98,8 +98,8 @@ public class TermineUebersichtController {
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 			terminfindungenOffen, gruppen, selGruppe);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("termine", termine);
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_TERMINE, termine);
 		
 		return "termine";
 	}

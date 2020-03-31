@@ -129,11 +129,11 @@ public class UmfragenAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("antwort", antwortForm);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
 		return "umfragen-abstimmung";
 	}
 	
@@ -169,11 +169,11 @@ public class UmfragenAbstimmungController {
 		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		
-		model.addAttribute(Konstanten.ACCOUNT, account);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("ergebnis", ergebnis);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
 		
 		return "umfragen-ergebnis";
 	}
