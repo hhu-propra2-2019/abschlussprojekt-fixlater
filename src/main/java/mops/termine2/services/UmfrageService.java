@@ -201,6 +201,14 @@ public class UmfrageService {
 		return umfrage;
 	}
 	
+	public void loescheVorschlag(Umfrage umfrage, int indexToDelete) {
+		try {
+			umfrage.getVorschlaege().remove(indexToDelete);
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
+			return;
+		}
+	}
+	
 	private void updateOldDB(UmfrageDB umfrage, UmfrageDB toUpdate) {
 		toUpdate.setTitel(umfrage.getTitel());
 		toUpdate.setErsteller(umfrage.getErsteller());
