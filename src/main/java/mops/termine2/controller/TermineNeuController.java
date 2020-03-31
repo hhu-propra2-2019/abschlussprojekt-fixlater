@@ -1,5 +1,15 @@
 package mops.termine2.controller;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -13,28 +23,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.filehandling.ExportCSV;
@@ -48,6 +36,19 @@ import mops.termine2.services.LinkService;
 import mops.termine2.services.TerminfindungService;
 import mops.termine2.util.IntegerToolkit;
 import mops.termine2.util.LocalDateTimeManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionScope
@@ -82,7 +83,7 @@ public class TermineNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}		
+		}
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
 		// Terminfindung
@@ -90,7 +91,7 @@ public class TermineNeuController {
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
-		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());		
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
@@ -106,16 +107,16 @@ public class TermineNeuController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}		
+		}
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
-
+		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
-		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);		
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
@@ -124,11 +125,11 @@ public class TermineNeuController {
 	
 	@PostMapping(path = "/termine-neu", params = "delete")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String terminLoeschen(Principal principal, Model model, 
+	public String terminLoeschen(Principal principal, Model model,
 		Terminfindung terminfindung, Gruppe gruppeSelektiert,
 		final HttpServletRequest request) {
 		
-		//Account
+		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
@@ -137,7 +138,7 @@ public class TermineNeuController {
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
 		// Terminvorschlag löschen
 		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
-		terminfindungService.loescheTermin(terminfindung, indexToDelete);	
+		terminfindungService.loescheTermin(terminfindung, indexToDelete);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
@@ -159,10 +160,10 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		List<String> fehler = terminfindungService.erstelleTerminfindung(account, 
+		List<String> fehler = terminfindungService.erstelleTerminfindung(account,
 			terminfindung);
 		fehler.addAll(linkService.setzeLink(terminfindung));
-		gruppeService.setzeGruppeId(terminfindung, gruppeSelektiert);		
+		gruppeService.setzeGruppeId(terminfindung, gruppeSelektiert);
 		
 		if (fehler.isEmpty()) {
 			terminfindungService.save(terminfindung);
@@ -182,7 +183,7 @@ public class TermineNeuController {
 		return "termine-neu";
 	}
 	
-	//TODO: CSV Methoden refactoren
+	// TODO: CSV Methoden refactoren
 	@PostMapping(path = "/termine-neu", params = "upload", consumes = "multipart/form-data")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String uploadTermineCSV(@RequestParam("file") MultipartFile file, Principal principal,
@@ -193,7 +194,7 @@ public class TermineNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-				
+		
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		
@@ -253,7 +254,7 @@ public class TermineNeuController {
 				model.addAttribute("error", true);
 			}
 		}
-			
+		
 		// If any of the Termine lies before the Frist, then the Frist has to be
 		// updated.
 		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
@@ -267,7 +268,7 @@ public class TermineNeuController {
 		if (minVorschlag != null) {
 			terminfindungService.setzeFrist(terminfindung, minVorschlag);
 			terminfindungService.setzeLoeschdatum(terminfindung, maxVorschlag);
-		}		
+		}
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
@@ -291,7 +292,7 @@ public class TermineNeuController {
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
 			"attachment; filename=\"termine.csv\"");
 		response.setContentType("text/csv");
-
+		
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		if (termine.get(0) != null) {
 			StatefulBeanToCsv<ExportFormat> writer = new StatefulBeanToCsvBuilder<ExportFormat>(

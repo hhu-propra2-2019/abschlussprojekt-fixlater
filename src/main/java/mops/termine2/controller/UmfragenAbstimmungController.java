@@ -1,8 +1,15 @@
 package mops.termine2.controller;
 
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortFormUmfragen;
@@ -18,6 +25,7 @@ import mops.termine2.services.UmfrageAntwortService;
 import mops.termine2.services.UmfrageErgebnisService;
 import mops.termine2.services.UmfrageService;
 import mops.termine2.util.LocalDateTimeManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,12 +38,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.annotation.security.RolesAllowed;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @SessionScope
@@ -88,13 +90,12 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		Boolean bereitsTeilgenommen = 
-			umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
+		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
 		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())
 			|| bereitsTeilgenommen) {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
-		return "redirect:/termine2/umfragen/" + link + "/abstimmung";		
+		return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 	}
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
@@ -106,7 +107,7 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-				
+		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
@@ -129,11 +130,13 @@ public class UmfragenAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
+		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
 		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
 		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
+		
 		return "umfragen-abstimmung";
 	}
 	
@@ -146,7 +149,7 @@ public class UmfragenAbstimmungController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-				
+		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
@@ -178,21 +181,19 @@ public class UmfragenAbstimmungController {
 		return "umfragen-ergebnis";
 	}
 	
-	
 	@PostMapping(path = "/umfragen/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal principal,
-								 Model model,
-								 @PathVariable("link") String link,
-								 @ModelAttribute AntwortFormUmfragen antwortForm) {
+		Model model,
+		@PathVariable("link") String link,
+		@ModelAttribute AntwortFormUmfragen antwortForm) {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage =
-			umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
@@ -221,9 +222,9 @@ public class UmfragenAbstimmungController {
 	
 	@PostMapping(path = "/umfragen/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal principal, Model model, 
+	public String saveKommentar(Principal principal, Model model,
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
-
+		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
@@ -251,4 +252,5 @@ public class UmfragenAbstimmungController {
 		
 		return "redirect:/termine2/umfragen/" + link;
 	}
+	
 }

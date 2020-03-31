@@ -2,6 +2,16 @@ package mops.termine2.controller;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.Principal;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.models.Gruppe;
@@ -10,6 +20,7 @@ import mops.termine2.models.Umfrageuebersicht;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.UmfragenuebersichtService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
@@ -19,14 +30,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
-
-import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionScope
@@ -58,7 +61,7 @@ public class UmfragenUebersichtController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-				
+		
 		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}

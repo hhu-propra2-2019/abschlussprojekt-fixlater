@@ -1,8 +1,15 @@
 package mops.termine2.controller;
 
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AbstimmungsInfortmationenTermineForm;
@@ -19,6 +26,7 @@ import mops.termine2.services.TerminAntwortService;
 import mops.termine2.services.TerminErgebnisService;
 import mops.termine2.services.TerminfindungService;
 import mops.termine2.util.LocalDateTimeManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,12 +40,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.annotation.security.RolesAllowed;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @SessionScope
@@ -78,16 +80,16 @@ public class TermineAbstimmungController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}		
+		}
 		
-		Terminfindung terminfindung =
+		Terminfindung terminfindung = 
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
-		}		
-
+		}
+		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
@@ -96,9 +98,9 @@ public class TermineAbstimmungController {
 			|| terminfindung.getTeilgenommen()) {
 			return "redirect:/termine2/" + link + "/ergebnis";
 		}
-		return "redirect:/termine2/" + link + "/abstimmung";		
+		return "redirect:/termine2/" + link + "/abstimmung";
 	}
-
+	
 	@GetMapping("/{link}/abstimmung")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
@@ -107,8 +109,8 @@ public class TermineAbstimmungController {
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
-		}		
-
+		}
+		
 		Terminfindung terminfindung = 
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
@@ -171,10 +173,10 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link + "/abstimmung";
 		}
 		
-		if (!terminfindung.getErgebnisVorFrist() 
+		if (!terminfindung.getErgebnisVorFrist()
 			&& LocalDateTimeManager.istZukuenftig(terminfindung.getFrist())) {
 			return "redirect:/termine2/" + link + "/abstimmung";
-		}		
+		}
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
@@ -189,18 +191,17 @@ public class TermineAbstimmungController {
 		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
 		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
-    
+		
 		return "termine-ergebnis";
 	}
-	
 	
 	@Transactional
 	@PostMapping(path = "/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal principal,
-								 Model model,
-								 @PathVariable("link") String link,
-								 @ModelAttribute AntwortForm antwortForm) {
+		Model model,
+		@PathVariable("link") String link,
+		@ModelAttribute AntwortForm antwortForm) {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
@@ -208,7 +209,7 @@ public class TermineAbstimmungController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		Terminfindung terminfindung =
+		Terminfindung terminfindung = 
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
@@ -241,10 +242,9 @@ public class TermineAbstimmungController {
 		return "redirect:/termine2/" + link;
 	}
 	
-	
 	@PostMapping(path = "/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal principal, Model model, 
+	public String saveKommentar(Principal principal, Model model,
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
 		
 		// Account
@@ -253,7 +253,7 @@ public class TermineAbstimmungController {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
 		
-		Terminfindung terminfindung =
+		Terminfindung terminfindung = 
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		
 		if (terminfindung == null) {
@@ -276,4 +276,5 @@ public class TermineAbstimmungController {
 		
 		return "redirect:/termine2/" + link;
 	}
+	
 }
