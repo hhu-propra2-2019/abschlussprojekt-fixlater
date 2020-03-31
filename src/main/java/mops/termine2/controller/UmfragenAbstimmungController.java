@@ -133,7 +133,7 @@ public class UmfragenAbstimmungController {
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("antwort", antwortForm);
 		model.addAttribute("kommentare", kommentare);
-		
+		model.addAttribute("neuerKommentar", new Kommentar());
 		return "umfragen-abstimmung";
 	}
 	
@@ -173,6 +173,7 @@ public class UmfragenAbstimmungController {
 		model.addAttribute("umfrage", umfrage);
 		model.addAttribute("ergebnis", ergebnis);
 		model.addAttribute("kommentare", kommentare);
+		model.addAttribute("neuerKommentar", new Kommentar());
 		
 		return "umfragen-ergebnis";
 	}
