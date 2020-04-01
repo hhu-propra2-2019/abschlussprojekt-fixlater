@@ -182,18 +182,18 @@ public class TermineNeuController {
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
 		}
-				
+		
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		
-		List<String> fehler = CSVHelper.readCSV(file, terminfindung, termine);		
+		List<String> fehler = CSVHelper.readCSV(file, terminfindung, termine);
 		
 		// If any of the Termine lies before the Frist, then the Frist has to be
 		// updated.
 		terminfindungService.updateFristUndLoeschdatum(terminfindung, termine);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzer(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		

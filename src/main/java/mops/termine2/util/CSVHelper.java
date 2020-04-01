@@ -39,8 +39,7 @@ public class CSVHelper {
 				TerminFormatierung terminFormatierung = new TerminFormatierung(termineEingelesen);
 				
 				if (!terminFormatierung.pruefeObGueltigesFormat()) {
-					fehler.add(
-						"Alle Termine müssen im Format "
+					fehler.add("Alle Termine müssen im Format "
 							+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
 							+ "sollten existente Daten sein.");
 				} else if (!terminFormatierung.pruefeObInZukunft()) {
