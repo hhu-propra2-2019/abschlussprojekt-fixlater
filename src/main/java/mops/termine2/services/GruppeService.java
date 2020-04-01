@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,14 @@ public class GruppeService {
 		return null;
 	}
 	
+	public Gruppe loadByGruppeIdOrDefault(String id) {
+		Gruppe gruppe = loadByGruppeId(id);
+		if (gruppe == null) {
+			return createDefaultGruppe();
+		}		
+		return gruppe;
+	}
+	
 	public boolean accountInGruppe(Account account, String gruppeId) {
 		String benutzer = account.getName();
 		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
@@ -84,7 +93,7 @@ public class GruppeService {
 	public Gruppe createDefaultGruppe() {
 		Gruppe gruppe = new Gruppe();
 		gruppe.setId("-1");
-		gruppe.setName("");
+		gruppe.setName("Alle Gruppen");
 		return gruppe;
 	}
 
@@ -105,6 +114,14 @@ public class GruppeService {
 				umfrage.setGruppeId(gruppe.getId());				
 			}
 		}		
+	}
+	
+	public HashMap<String, String> extractIdAndName(List<Gruppe> gruppen) {
+		HashMap<String, String> groups = new HashMap<>();
+		for (Gruppe group : gruppen) {
+			groups.put(group.getId(), group.getName());
+		}
+		return groups;
 	}
 	
 }
