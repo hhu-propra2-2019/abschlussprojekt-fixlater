@@ -4,10 +4,8 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
 import java.security.Principal;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +17,7 @@ import mops.termine2.models.Umfrage;
 import mops.termine2.models.Umfrageuebersicht;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
+import mops.termine2.services.UmfrageService;
 import mops.termine2.services.UmfragenuebersichtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +46,9 @@ public class UmfragenUebersichtController {
 	@Autowired
 	private UmfragenuebersichtService umfragenuebersichtService;
 	
+	@Autowired
+	private UmfrageService umfrageService;
+	
 	public UmfragenUebersichtController(MeterRegistry registry) {
 		authenticatedAccess = registry.counter("access.authenticated");
 	}
@@ -66,42 +68,19 @@ public class UmfragenUebersichtController {
 			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
 		}
 		
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppen = gruppen.stream()
-			.sorted(Comparator.comparing(Gruppe::getName))
-			.collect(Collectors.toList());
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
 		
-		HashMap<String, String> groups = new HashMap<>();
-		for (Gruppe group : gruppen) {
-			groups.put(group.getId(), group.getName());
-		}
+		Gruppe selGruppe = gruppeService.loadByGruppeIdOrDefault(gruppeId);
 		
-		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppeId);
+		List<Umfrage> umfrageOffen = 
+			umfragenuebersichtService.loadOffeneUmfragen(account, selGruppe);
+		List<Umfrage> umfrageAbgeschlossen = 
+			umfragenuebersichtService.loadAbgeschlosseneUmfragen(account, selGruppe);
 		
-		if (selGruppe == null) {
-			selGruppe = new Gruppe();
-			selGruppe.setId("-1");
-			selGruppe.setName("Alle Gruppen");
-		}
+		HashMap<String, String> groups = gruppeService.extractIdAndName(gruppen);
+		umfrageService.setzeGruppenName(umfrageOffen, groups);
+		umfrageService.setzeGruppenName(umfrageAbgeschlossen, groups);
 		
-		List<Umfrage> umfrageOffen;
-		List<Umfrage> umfrageAbgeschlossen;
-		if (gruppeId.contentEquals("-1")) {
-			umfrageOffen = umfragenuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
-			umfrageAbgeschlossen = umfragenuebersichtService
-				.loadAbgeschlosseneUmfragenFuerBenutzer(account);
-		} else {
-			umfrageOffen = umfragenuebersichtService
-				.loadOffeneUmfragenFuerGruppe(account, selGruppe.getId());
-			umfrageAbgeschlossen = umfragenuebersichtService
-				.loadAbgeschlosseneUmfragenFuerGruppe(account, selGruppe.getId());
-		}
-		for (Umfrage umfrage : umfrageOffen) {
-			umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
-		}
-		for (Umfrage umfrage : umfrageAbgeschlossen) {
-			umfrage.setGruppeName(groups.get(umfrage.getGruppeId()));
-		}
 		Umfrageuebersicht umfrage = new Umfrageuebersicht(umfrageAbgeschlossen,
 			umfrageOffen, gruppen, selGruppe);
 		
