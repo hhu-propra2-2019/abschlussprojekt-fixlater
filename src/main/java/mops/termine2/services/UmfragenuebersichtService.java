@@ -105,6 +105,20 @@ public class UmfragenuebersichtService {
 		return abgeschlosseneUmfragen;
 	}
 	
+	public List<Umfrage> loadOffeneUmfragen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadOffeneUmfragenFuerBenutzer(account);
+		}
+		return loadOffeneUmfragenFuerGruppe(account, gruppe.getId());
+	}
+	
+	public List<Umfrage> loadAbgeschlosseneUmfragen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadAbgeschlosseneUmfragenFuerBenutzer(account);
+		}
+		return loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe.getId());
+	}
+	
 	private List<Umfrage> getUmfragenVonBenutzer(Account account) {
 		List<Umfrage> umfragen = new ArrayList<>();
 		umfragen.addAll(umfrageService.loadByErstellerOhneUmfragen(account.getName()));
