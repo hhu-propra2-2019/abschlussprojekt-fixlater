@@ -22,8 +22,8 @@ import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
-import mops.termine2.services.TerminAntwortService;
-import mops.termine2.services.TerminErgebnisService;
+import mops.termine2.services.TerminfindungAntwortService;
+import mops.termine2.services.TerminfindungErgebnisService;
 import mops.termine2.services.TerminfindungService;
 import mops.termine2.util.LocalDateTimeManager;
 
@@ -58,13 +58,13 @@ public class TermineAbstimmungController {
 	private KommentarService kommentarService;
 	
 	@Autowired
-	private TerminAntwortService terminAntwortService;
+	private TerminfindungAntwortService terminAntwortService;
 	
 	@Autowired
 	private TerminfindungService terminfindungService;
 	
 	@Autowired
-	private TerminErgebnisService ergebnisService;
+	private TerminfindungErgebnisService ergebnisService;
 	
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	

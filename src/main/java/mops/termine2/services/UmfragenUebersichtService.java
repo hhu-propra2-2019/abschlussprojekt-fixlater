@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UmfragenuebersichtService {
+public class UmfragenUebersichtService {
 	
 	@Autowired
 	private UmfrageService umfrageService;
@@ -24,7 +24,7 @@ public class UmfragenuebersichtService {
 	@Autowired
 	private UmfrageAntwortService umfrageAntwortService;
 	
-	public UmfragenuebersichtService(UmfrageService umfrageService,
+	public UmfragenUebersichtService(UmfrageService umfrageService,
 									 GruppeService gruppeService,
 									 UmfrageAntwortService umfrageAntwortService) {
 		this.umfrageService = umfrageService;

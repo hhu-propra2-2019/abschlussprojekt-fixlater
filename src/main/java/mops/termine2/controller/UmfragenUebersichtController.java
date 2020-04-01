@@ -18,7 +18,7 @@ import mops.termine2.models.Umfrageuebersicht;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.UmfrageService;
-import mops.termine2.services.UmfragenuebersichtService;
+import mops.termine2.services.UmfragenUebersichtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -44,7 +44,7 @@ public class UmfragenUebersichtController {
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private UmfragenuebersichtService umfragenuebersichtService;
+	private UmfragenUebersichtService umfragenuebersichtService;
 	
 	@Autowired
 	private UmfrageService umfrageService;

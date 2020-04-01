@@ -9,7 +9,7 @@ import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
-import mops.termine2.services.TerminAntwortService;
+import mops.termine2.services.TerminfindungAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class TerminAbstimmungControllerTest {
 	TerminfindungService terminService;
 	
 	@MockBean
-	TerminAntwortService antwortService;
+	TerminfindungAntwortService antwortService;
 	
 	@MockBean
 	GruppeService gruppeService;

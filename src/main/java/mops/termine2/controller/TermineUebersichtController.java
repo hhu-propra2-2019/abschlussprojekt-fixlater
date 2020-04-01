@@ -17,7 +17,7 @@ import mops.termine2.models.Terminuebersicht;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.TerminfindungService;
-import mops.termine2.services.TerminfindunguebersichtService;
+import mops.termine2.services.TerminfindungUebersichtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -42,7 +42,7 @@ public class TermineUebersichtController {
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private TerminfindunguebersichtService terminfindunguebersichtService;
+	private TerminfindungUebersichtService terminfindunguebersichtService;
 	
 	@Autowired
 	private TerminfindungService terminfindungService;
