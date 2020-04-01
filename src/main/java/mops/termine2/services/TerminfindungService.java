@@ -270,6 +270,20 @@ public class TerminfindungService {
 		}
 	}
 	
+	public void updateFristUndLoeschdatum(Terminfindung terminfindung, List<LocalDateTime> neueTermine) {
+		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
+			.filterUngueltigeDaten(neueTermine);
+		LocalDateTime minVorschlag = LocalDateTimeManager
+			.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager
+			.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		
+		if (minVorschlag != null) {
+			setzeFrist(terminfindung, minVorschlag);
+			setzeLoeschdatum(terminfindung, maxVorschlag);
+		}
+	}
+	
 	private void updateOldDB(TerminfindungDB terminfindung, TerminfindungDB toUpdate) {
 		toUpdate.setTitel(terminfindung.getTitel());
 		toUpdate.setOrt(terminfindung.getOrt());
