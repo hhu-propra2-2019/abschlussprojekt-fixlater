@@ -71,7 +71,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		
@@ -87,7 +87,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -103,7 +103,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = null;
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -118,7 +118,6 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
@@ -135,7 +134,6 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
@@ -154,9 +152,8 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
-		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/abstimmung", link)).andExpect(status().isOk());
@@ -170,9 +167,8 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, false);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
-		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
@@ -190,7 +186,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -207,7 +203,6 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -225,7 +220,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -240,7 +235,7 @@ public class UmfragenAbstimmungControllerTest {
 		umfrage.setTitel("titel");
 		umfrage.setBeschreibung("beschreibung");
 		
-		List<String> vorschlaege = new ArrayList(Arrays.asList("vorschlag1", "vorschlag2"));
+		List<String> vorschlaege = new ArrayList<String>(Arrays.asList("vorschlag1", "vorschlag2"));
 		umfrage.setVorschlaege(vorschlaege);
 		
 		if (fristInZukunft) {
