@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -261,6 +262,12 @@ public class TerminfindungService {
 		// Terminfindung erstellen
 		terminfindung.setErsteller(account.getName());		
 		return fehler;
+	}
+	
+	public void setzeGruppenName(List<Terminfindung> terminfindungen, HashMap<String, String> gruppen) {
+		for (Terminfindung terminfindung : terminfindungen) {
+			terminfindung.setGruppeName(gruppen.get(terminfindung.getGruppeId()));
+		}
 	}
 	
 	private void updateOldDB(TerminfindungDB terminfindung, TerminfindungDB toUpdate) {
