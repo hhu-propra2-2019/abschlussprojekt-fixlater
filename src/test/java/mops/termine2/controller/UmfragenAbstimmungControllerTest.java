@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -263,7 +263,7 @@ public class UmfragenAbstimmungControllerTest {
 	
 	private UmfrageAntwort initAntwort() {
 		UmfrageAntwort antwort = new UmfrageAntwort();
-		HashMap<String, Antwort> antwortHashMap = new HashMap<>();
+		LinkedHashMap<String, Antwort> antwortHashMap = new LinkedHashMap<>();
 		antwortHashMap.put("vorschlag", Antwort.JA);
 		antwort.setAntworten(antwortHashMap);
 		antwort.setPseudonym("pseudonym");

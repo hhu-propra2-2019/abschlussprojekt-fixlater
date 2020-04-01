@@ -8,7 +8,7 @@ import mops.termine2.models.Umfrage;
 import mops.termine2.models.UmfrageAntwort;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Data
@@ -41,7 +41,7 @@ public class AntwortFormUmfragen {
 			return null;
 		}
 		
-		HashMap<String, Antwort> antwortenMap = new HashMap<>();
+		LinkedHashMap<String, Antwort> antwortenMap = new LinkedHashMap<>();
 		for (int i = 0; i < vorschlaege.size(); i++) {
 			antwortenMap.put(vorschlaege.get(i), antworten.get(i));
 		}
@@ -51,7 +51,7 @@ public class AntwortFormUmfragen {
 	}
 	
 	public void init(UmfrageAntwort umfrageAntwort) {
-		HashMap<String, Antwort> antwortenMap = umfrageAntwort.getAntworten();
+		LinkedHashMap<String, Antwort> antwortenMap = umfrageAntwort.getAntworten();
 		pseudonym = umfrageAntwort.getPseudonym();
 		benutzer = umfrageAntwort.getBenutzer();
 		

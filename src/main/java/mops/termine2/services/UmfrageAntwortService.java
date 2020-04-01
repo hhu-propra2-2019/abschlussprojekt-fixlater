@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -133,12 +133,12 @@ public class UmfrageAntwortService {
 			antwort.setPseudonym(benutzer);
 		}
 		
-		HashMap<String, Antwort> alteAntwortenMap = new HashMap<>();
+		LinkedHashMap<String, Antwort> alteAntwortenMap = new LinkedHashMap<>();
 		for (UmfrageAntwortDB alteAntwort : alteAntworten) {
 			alteAntwortenMap.put(alteAntwort.getUmfrage().getAuswahlmoeglichkeit(),
 				alteAntwort.getAntwort());
 		}
-		HashMap<String, Antwort> antwortenMap = new HashMap<>();
+		LinkedHashMap<String, Antwort> antwortenMap = new LinkedHashMap<>();
 		
 		for (UmfrageDB antwortMoglichkeit : antwortMoglichkeiten) {
 			String vorschalg = antwortMoglichkeit.getAuswahlmoeglichkeit();

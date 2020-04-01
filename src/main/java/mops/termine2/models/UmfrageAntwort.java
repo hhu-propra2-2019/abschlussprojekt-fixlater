@@ -1,6 +1,6 @@
 package mops.termine2.models;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class UmfrageAntwort {
 	
 	private String benutzer;
 	
-	private HashMap<String, Antwort> antworten;
+	private LinkedHashMap<String, Antwort> antworten;
 	
 	private String pseudonym;
 	
