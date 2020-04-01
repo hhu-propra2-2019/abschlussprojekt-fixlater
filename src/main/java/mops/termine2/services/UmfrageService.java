@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -210,6 +211,34 @@ public class UmfrageService {
 		}
 	}
 	
+	public List<String> erstelleUmfrage(Account account, Umfrage umfrage) {
+		List<String> fehler = new ArrayList<String>();
+		
+		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
+		for (String vorschlag : umfrage.getVorschlaege()) {
+			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
+				gueltigeVorschlaege.add(vorschlag);
+			}
+		}
+		
+		if (gueltigeVorschlaege.isEmpty()) {
+			gueltigeVorschlaege.add("");
+			fehler.add("Es muss mindestens einen Vorschlag geben.");
+		}
+		
+		umfrage.setVorschlaege(gueltigeVorschlaege);
+		umfrage.setMaxAntwortAnzahl((long) gueltigeVorschlaege.size());
+		umfrage.setErsteller(account.getName());
+		
+		return fehler;
+	}
+	
+	public void setzeGruppenName(List<Umfrage> umfragen, HashMap<String, String> gruppen) {
+		for (Umfrage umfrage : umfragen) {
+			umfrage.setGruppeName(gruppen.get(umfrage.getGruppeId()));
+		}
+	}
+	
 	private void updateOldDB(UmfrageDB umfrage, UmfrageDB toUpdate) {
 		toUpdate.setTitel(umfrage.getTitel());
 		toUpdate.setErsteller(umfrage.getErsteller());
@@ -252,28 +281,6 @@ public class UmfrageService {
 		}
 		
 		return umfragen;
-	}
-
-	public List<String> erstelleUmfrage(Account account, Umfrage umfrage) {
-		List<String> fehler = new ArrayList<String>();
-		
-		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
-		for (String vorschlag : umfrage.getVorschlaege()) {
-			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
-				gueltigeVorschlaege.add(vorschlag);
-			}
-		}
-		
-		if (gueltigeVorschlaege.isEmpty()) {
-			gueltigeVorschlaege.add("");
-			fehler.add("Es muss mindestens einen Vorschlag geben.");
-		}
-		
-		umfrage.setVorschlaege(gueltigeVorschlaege);
-		umfrage.setMaxAntwortAnzahl((long) gueltigeVorschlaege.size());
-		umfrage.setErsteller(account.getName());
-		
-		return fehler;
-	}
+	}	
 	
 }
