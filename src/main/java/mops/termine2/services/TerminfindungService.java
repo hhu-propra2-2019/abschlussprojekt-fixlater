@@ -208,26 +208,6 @@ public class TerminfindungService {
 		return terminfindung;
 	}
 	
-	public void setzeFrist(Terminfindung terminfindung, LocalDateTime minVorschlag) {
-		if (terminfindung.getFrist().isAfter(minVorschlag)) {
-			if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusDays(1));
-			} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusHours(2));
-			} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
-				terminfindung.setFrist(minVorschlag.minusMinutes(5));
-			} else {
-				terminfindung.setFrist(minVorschlag);
-			}
-		}
-	}
-	
-	public void setzeLoeschdatum(Terminfindung terminfindung, LocalDateTime maxVorschlag) {
-		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
-			terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
-		}
-	}
-	
 	public void loescheTermin(Terminfindung terminfindung, int indexToDelete) {
 		try {
 			terminfindung.getVorschlaege().remove(indexToDelete);
@@ -240,17 +220,12 @@ public class TerminfindungService {
 		
 		List<String> fehler = new ArrayList<String>();
 		
-		ArrayList<LocalDateTime> gueltigeVorschlaege = 
-			LocalDateTimeManager.filterUngueltigeDaten(terminfindung.getVorschlaege());
-		LocalDateTime minVorschlag = LocalDateTimeManager.bekommeFruehestesDatum(gueltigeVorschlaege);
-		LocalDateTime maxVorschlag = LocalDateTimeManager.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		List<LocalDateTime> gueltigeVorschlaege = 
+			updateFristUndLoeschdatum(terminfindung, terminfindung.getVorschlaege());
 		
 		if (gueltigeVorschlaege.isEmpty()) {
 			gueltigeVorschlaege.add(null);
 			fehler.add("Es muss mindestens einen Vorschlag geben.");
-		} else {
-			setzeFrist(terminfindung, minVorschlag);			
-			setzeLoeschdatum(terminfindung, maxVorschlag);			
 		}
 		
 		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(5))) {
@@ -270,7 +245,8 @@ public class TerminfindungService {
 		}
 	}
 	
-	public void updateFristUndLoeschdatum(Terminfindung terminfindung, List<LocalDateTime> neueTermine) {
+	public List<LocalDateTime> updateFristUndLoeschdatum(Terminfindung terminfindung, 
+		List<LocalDateTime> neueTermine) {
 		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
 			.filterUngueltigeDaten(neueTermine);
 		LocalDateTime minVorschlag = LocalDateTimeManager
@@ -281,6 +257,27 @@ public class TerminfindungService {
 		if (minVorschlag != null) {
 			setzeFrist(terminfindung, minVorschlag);
 			setzeLoeschdatum(terminfindung, maxVorschlag);
+		}
+		return gueltigeVorschlaege;
+	}
+	
+	private void setzeFrist(Terminfindung terminfindung, LocalDateTime minVorschlag) {
+		if (terminfindung.getFrist().isAfter(minVorschlag)) {
+			if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusDays(1));
+			} else if (minVorschlag.minusHours(2).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusHours(2));
+			} else if (minVorschlag.minusMinutes(5).isAfter(LocalDateTime.now())) {
+				terminfindung.setFrist(minVorschlag.minusMinutes(5));
+			} else {
+				terminfindung.setFrist(minVorschlag);
+			}
+		}
+	}
+	
+	private void setzeLoeschdatum(Terminfindung terminfindung, LocalDateTime maxVorschlag) {
+		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
+			terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
 		}
 	}
 	
