@@ -46,7 +46,9 @@ public class DatabaseInitializer implements ServletContextInitializer {
 	
 	private static final int MAX_ANZAHL_KOMMENTARE = 3;
 	
-	private static final String LINK_REGEX = "[a-zA-Z0-9]{2,3}[a-zA-Z0-9-]{1,4}[a-zA-Z0-9]{2,3}";
+	private static final String LINK_REGEX = "[a-zA-Z0-9]{2,3}[a-zA-Z0-9-]{1,4}[a-zA-Z0-9]{2,3}--";
+	
+	private static final AtomicInteger COUNTER = new AtomicInteger(0);
 	
 	private static final boolean EINGESCHALTET = false;
 	
@@ -145,7 +147,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AtomicInteger i = new AtomicInteger(1);
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.regexify(LINK_REGEX);
+		String link = faker.regexify(LINK_REGEX) + COUNTER.getAndIncrement();
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
@@ -206,7 +208,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AtomicInteger i = new AtomicInteger(1);
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.regexify(LINK_REGEX);
+		String link = faker.regexify(LINK_REGEX) + COUNTER.getAndIncrement();
 		String ort = faker.address().cityName();
 		String titel = faker.friends().quote();
 		LocalDateTime frist = LocalDateTime.now().plusDays(r.nextInt(90))
@@ -276,7 +278,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AtomicInteger i = new AtomicInteger(1);
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.regexify(LINK_REGEX);
+		String link = faker.regexify(LINK_REGEX) + COUNTER.getAndIncrement();
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = setzeDatumZukunftOderVergangenheit(entscheidungswert);
@@ -329,7 +331,7 @@ public class DatabaseInitializer implements ServletContextInitializer {
 		AtomicInteger i = new AtomicInteger(1);
 		
 		String beschreibung = faker.lorem().sentence();
-		String link = faker.regexify(LINK_REGEX);
+		String link = faker.regexify(LINK_REGEX) + COUNTER.getAndIncrement();
 		String titel = faker.friends().quote();
 		Long maxAntwortAnzahl = ThreadLocalRandom.current().nextLong(1, ANZAHL_OPTIONEN);
 		LocalDateTime frist = LocalDateTime.now().plusDays(r.nextInt(90))
