@@ -1,8 +1,14 @@
 package mops.termine2.controller;
 
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.models.Gruppe;
@@ -10,7 +16,9 @@ import mops.termine2.models.Terminfindung;
 import mops.termine2.models.Terminuebersicht;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
-import mops.termine2.services.TerminfindunguebersichtService;
+import mops.termine2.services.TerminfindungService;
+import mops.termine2.services.TerminfindungUebersichtService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
@@ -19,11 +27,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
-
-import javax.annotation.security.RolesAllowed;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @SessionScope
@@ -39,68 +42,50 @@ public class TermineUebersichtController {
 	private GruppeService gruppeService;
 	
 	@Autowired
-	private TerminfindunguebersichtService terminfindunguebersichtService;
+	private TerminfindungUebersichtService terminfindunguebersichtService;
+	
+	@Autowired
+	private TerminfindungService terminfindungService;
 	
 	public TermineUebersichtController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String index(Principal principal, Model model,
-						@RequestParam(name = "gruppe",
-							defaultValue = "-1") String gruppeId) {
+		@RequestParam(name = "gruppe", defaultValue = "-1") String gruppeId) {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
-		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
-		gruppen = gruppeService.sortGroupsByName(gruppen);
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
 		
-		HashMap<String, String> groups = new HashMap<>();
-		for (Gruppe group : gruppen) {
-			groups.put(group.getId(), group.getName());
-		}
+		Gruppe selGruppe = gruppeService.loadByGruppeIdOrDefault(gruppeId);
 		
-		Gruppe selGruppe = gruppeService.loadByGruppeId(gruppeId);
-		if (selGruppe == null) {
-			selGruppe = new Gruppe();
-			selGruppe.setId("-1");
-			selGruppe.setName("Alle Gruppen");
-		}
+		List<Terminfindung> terminfindungenOffen =
+			terminfindunguebersichtService.loadOffeneTerminfindungen(account, selGruppe);
+		List<Terminfindung> terminfindungenAbgeschlossen =
+			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungen(account, selGruppe);
 		
-		List<Terminfindung> terminfindungenOffen;
-		List<Terminfindung> terminfindungenAbgeschlossen;
-		if (gruppeId.contentEquals("-1")) {
-			terminfindungenOffen = terminfindunguebersichtService
-				.loadOffeneTerminfindungenFuerBenutzer(account);
-			terminfindungenAbgeschlossen = terminfindunguebersichtService
-				.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
-		} else {
-			terminfindungenOffen = terminfindunguebersichtService
-				.loadOffeneTerminfindungenFuerGruppe(account, selGruppe.getId());
-			terminfindungenAbgeschlossen = terminfindunguebersichtService
-				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, selGruppe.getId());
-		}
-		for (Terminfindung terminfindung : terminfindungenOffen) {
-			terminfindung.setGruppeName(groups.get(terminfindung.getGruppeId()));
-		}
-		for (Terminfindung terminfindung : terminfindungenAbgeschlossen) {
-			terminfindung.setGruppeName(groups.get(terminfindung.getGruppeId()));
-		}
+		HashMap<String, String> groups = gruppeService.extractIdAndName(gruppen);
+		terminfindungService.setzeGruppenName(terminfindungenOffen, groups);
+		terminfindungService.setzeGruppenName(terminfindungenAbgeschlossen, groups);
+		
 		Terminuebersicht termine = new Terminuebersicht(terminfindungenAbgeschlossen,
 			terminfindungenOffen, gruppen, selGruppe);
 		
-		model.addAttribute("termine", termine);
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_TERMINE, termine);
 		
 		return "termine";
 	}
+	
 }

@@ -1,12 +1,15 @@
 package mops.termine2.services;
 
 import lombok.AllArgsConstructor;
+import mops.termine2.Konstanten;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Umfrage;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,6 +51,40 @@ public class LinkService {
 	
 	public Boolean isLinkValid(String link) {
 		return link.matches("[a-zA-Z0-9-]*");
+	}
+
+	public List<String> setzeLink(Terminfindung terminfindung) {
+		List<String> fehler = new ArrayList<String>();
+		if (terminfindung.getLink().isEmpty()) {
+			String link = generiereEindeutigenLink();
+			terminfindung.setLink(link);
+		} else {
+			if (!pruefeEindeutigkeitLink(terminfindung.getLink())) {
+				fehler.add(Konstanten.MESSAGE_LINK_EXISTENT);
+			}
+			if (!isLinkValid(terminfindung.getLink())) {
+				fehler.add(Konstanten.MESSAGE_LINK_UNGUELTIG);
+			}
+		}
+		return fehler;
+		
+	}
+
+	public List<String> setzeLink(Umfrage umfrage) {
+		List<String> fehler = new ArrayList<String>();
+		if (umfrage.getLink().isEmpty()) {
+			String link = generiereEindeutigenLink();
+			umfrage.setLink(link);
+		} else {
+			if (!pruefeEindeutigkeitLink(umfrage.getLink())) {
+				fehler.add(Konstanten.MESSAGE_LINK_EXISTENT);
+			}
+			if (!isLinkValid(umfrage.getLink())) {
+				fehler.add(Konstanten.MESSAGE_LINK_UNGUELTIG);
+			}
+		}
+		return fehler;
+		
 	}
 	
 }

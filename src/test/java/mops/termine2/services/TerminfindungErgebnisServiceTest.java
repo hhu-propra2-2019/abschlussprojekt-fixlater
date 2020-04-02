@@ -18,16 +18,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TerminErgebnisServiceTest {
+public class TerminfindungErgebnisServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
-	private transient TerminErgebnisService ergebnisService;
+	private transient TerminfindungErgebnisService ergebnisService;
 	
 	@BeforeEach
 	private void setUp() {
 		antwortRepo = mock(TerminfindungAntwortRepository.class);
-		ergebnisService = new TerminErgebnisService(antwortRepo);
+		ergebnisService = new TerminfindungErgebnisService(antwortRepo);
 	}
 	
 	@Test

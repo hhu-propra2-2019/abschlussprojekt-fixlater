@@ -6,7 +6,7 @@ import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.database.entities.UmfrageDB;
 import mops.termine2.models.Terminfindung;
 import mops.termine2.models.Umfrage;
-import mops.termine2.services.TerminErgebnisService;
+import mops.termine2.services.TerminfindungErgebnisService;
 import mops.termine2.services.TerminfindungService;
 import mops.termine2.services.UmfrageErgebnisService;
 import mops.termine2.services.UmfrageService;
@@ -38,7 +38,7 @@ public class ErgebnisScheduler {
 	private UmfrageService umfrageService;
 	
 	@Autowired
-	private TerminErgebnisService terminErgebnisService;
+	private TerminfindungErgebnisService terminErgebnisService;
 	
 	@Autowired
 	private UmfrageErgebnisService umfrageErgebnisService;

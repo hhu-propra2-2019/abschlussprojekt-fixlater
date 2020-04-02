@@ -25,4 +25,12 @@ public class IntegerToolkit {
 		
 		return highest;
 	}
+	
+	public static int getInt(String toParse) {
+		try {
+			return Integer.parseInt(toParse);
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
 }

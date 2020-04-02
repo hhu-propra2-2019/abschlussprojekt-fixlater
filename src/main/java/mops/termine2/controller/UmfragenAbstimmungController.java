@@ -1,8 +1,15 @@
 package mops.termine2.controller;
 
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.controller.formular.AntwortFormUmfragen;
@@ -18,6 +25,7 @@ import mops.termine2.services.UmfrageAntwortService;
 import mops.termine2.services.UmfrageErgebnisService;
 import mops.termine2.services.UmfrageService;
 import mops.termine2.util.LocalDateTimeManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,12 +38,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.annotation.security.RolesAllowed;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @SessionScope
@@ -65,7 +67,7 @@ public class UmfragenAbstimmungController {
 	private HashMap<LinkWrapper, Umfrage> letzteUmfrage = new HashMap<>();
 	
 	public UmfragenAbstimmungController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/umfragen/{link}")
@@ -75,30 +77,25 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
-		}
-		
-		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
-			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
-		if (bereitsTeilgenommen) {
+		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())
+			|| bereitsTeilgenommen) {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
-		} else {
-			return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 		}
+		return "redirect:/termine2/umfragen/" + link + "/abstimmung";
 	}
 	
 	@GetMapping("/umfragen/{link}/abstimmung")
@@ -108,19 +105,18 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
@@ -134,10 +130,12 @@ public class UmfragenAbstimmungController {
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteUmfrage.put(setLink, umfrage);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("antwort", antwortForm);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
 		
 		return "umfragen-abstimmung";
 	}
@@ -149,19 +147,18 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
@@ -174,37 +171,36 @@ public class UmfragenAbstimmungController {
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("ergebnis", ergebnis);
-		model.addAttribute("kommentare", kommentare);
-		model.addAttribute("neuerKommentar", new Kommentar());
+		
+		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
+		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
+		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
+		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
+		model.addAttribute(Konstanten.MODEL_NEUER_KOMMENTAR, new Kommentar());
 		
 		return "umfragen-ergebnis";
 	}
 	
-	
 	@PostMapping(path = "/umfragen/{link}", params = "sichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
 	public String saveAbstimmung(Principal principal,
-								 Model model,
-								 @PathVariable("link") String link,
-								 @ModelAttribute AntwortFormUmfragen antwortForm) {
+		Model model,
+		@PathVariable("link") String link,
+		@ModelAttribute AntwortFormUmfragen antwortForm) {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
-		Umfrage umfrage =
-			umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
@@ -226,24 +222,23 @@ public class UmfragenAbstimmungController {
 	
 	@PostMapping(path = "/umfragen/{link}", params = "kommentarSichern")
 	@RolesAllowed({Konstanten.ROLE_ORGA, Konstanten.ROLE_STUDENTIN})
-	public String saveKommentar(Principal principal, Model model, 
+	public String saveKommentar(Principal principal, Model model,
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
-
+		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
-		model.addAttribute(Konstanten.ACCOUNT, account);
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {
@@ -253,9 +248,9 @@ public class UmfragenAbstimmungController {
 		LocalDateTime now = LocalDateTime.now();
 		neuerKommentar.setLink(link);
 		neuerKommentar.setErstellungsdatum(now);
-		model.addAttribute("neuerKommentar", neuerKommentar);
 		kommentarService.save(neuerKommentar);
 		
 		return "redirect:/termine2/umfragen/" + link;
 	}
+	
 }
