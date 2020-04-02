@@ -1,15 +1,19 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
 import mops.termine2.enums.Modus;
 import mops.termine2.models.Terminfindung;
+import mops.termine2.util.LocalDateTimeManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -205,7 +209,60 @@ public class TerminfindungService {
 		return terminfindung;
 	}
 	
-	public void setzeFrist(Terminfindung terminfindung, LocalDateTime minVorschlag) {
+	public void loescheTermin(Terminfindung terminfindung, int indexToDelete) {
+		try {
+			terminfindung.getVorschlaege().remove(indexToDelete);
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
+			return;
+		}
+	}
+	
+	public List<String> erstelleTerminfindung(Account account, Terminfindung terminfindung) {
+		
+		List<String> fehler = new ArrayList<String>();
+		
+		List<LocalDateTime> gueltigeVorschlaege = 
+			updateFristUndLoeschdatum(terminfindung, terminfindung.getVorschlaege());
+		
+		if (gueltigeVorschlaege.isEmpty()) {
+			gueltigeVorschlaege.add(null);
+			fehler.add(Konstanten.MESSAGE_KEIN_VORSCHLAG);
+		}
+		
+		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(5))) {
+			fehler.add(Konstanten.MESSAGE_TERMIN_FRIST_KURZFRISTIG);
+		}
+		
+		terminfindung.setVorschlaege(gueltigeVorschlaege);
+		
+		// Terminfindung erstellen
+		terminfindung.setErsteller(account.getName());		
+		return fehler;
+	}
+	
+	public void setzeGruppenName(List<Terminfindung> terminfindungen, HashMap<String, String> gruppen) {
+		for (Terminfindung terminfindung : terminfindungen) {
+			terminfindung.setGruppeName(gruppen.get(terminfindung.getGruppeId()));
+		}
+	}
+	
+	public List<LocalDateTime> updateFristUndLoeschdatum(Terminfindung terminfindung, 
+		List<LocalDateTime> neueTermine) {
+		ArrayList<LocalDateTime> gueltigeVorschlaege = LocalDateTimeManager
+			.filterUngueltigeDaten(neueTermine);
+		LocalDateTime minVorschlag = LocalDateTimeManager
+			.bekommeFruehestesDatum(gueltigeVorschlaege);
+		LocalDateTime maxVorschlag = LocalDateTimeManager
+			.bekommeSpaetestesDatum(gueltigeVorschlaege);
+		
+		if (minVorschlag != null) {
+			setzeFrist(terminfindung, minVorschlag);
+			setzeLoeschdatum(terminfindung, maxVorschlag);
+		}
+		return gueltigeVorschlaege;
+	}
+	
+	private void setzeFrist(Terminfindung terminfindung, LocalDateTime minVorschlag) {
 		if (terminfindung.getFrist().isAfter(minVorschlag)) {
 			if (minVorschlag.minusDays(1).isAfter(LocalDateTime.now())) {
 				terminfindung.setFrist(minVorschlag.minusDays(1));
@@ -219,7 +276,7 @@ public class TerminfindungService {
 		}
 	}
 	
-	public void setzeLoeschdatum(Terminfindung terminfindung, LocalDateTime maxVorschlag) {
+	private void setzeLoeschdatum(Terminfindung terminfindung, LocalDateTime maxVorschlag) {
 		if (terminfindung.getLoeschdatum().isBefore(maxVorschlag)) {
 			terminfindung.setLoeschdatum(maxVorschlag.plusWeeks(4));
 		}

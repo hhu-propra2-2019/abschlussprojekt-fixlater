@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TerminfindunguebersichtServiceTest {
+public class TerminfindungUebersichtServiceTest {
 	
-	private transient TerminfindunguebersichtService terminfindunguebersichtService;
+	private transient TerminfindungUebersichtService terminfindunguebersichtService;
 	
 	private transient TerminfindungService terminfindungService;
 	
@@ -34,7 +34,7 @@ public class TerminfindunguebersichtServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
-	private transient TerminAntwortService terminAntwortService;
+	private transient TerminfindungAntwortService terminAntwortService;
 	
 	@BeforeEach
 	public void setUp() {
@@ -43,9 +43,9 @@ public class TerminfindunguebersichtServiceTest {
 		benutzerGruppeRepository = mock(BenutzerGruppeRepository.class);
 		
 		terminfindungService = new TerminfindungService(terminfindungRepository, antwortRepo);
-		terminAntwortService = new TerminAntwortService(antwortRepo, terminfindungRepository);
+		terminAntwortService = new TerminfindungAntwortService(antwortRepo, terminfindungRepository);
 		gruppeService = new GruppeService(benutzerGruppeRepository);
-		terminfindunguebersichtService = new TerminfindunguebersichtService(
+		terminfindunguebersichtService = new TerminfindungUebersichtService(
 			terminfindungService, gruppeService, terminAntwortService);
 	}
 	

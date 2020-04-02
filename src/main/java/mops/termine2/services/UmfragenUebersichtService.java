@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UmfragenuebersichtService {
+public class UmfragenUebersichtService {
 	
 	@Autowired
 	private UmfrageService umfrageService;
@@ -24,7 +24,7 @@ public class UmfragenuebersichtService {
 	@Autowired
 	private UmfrageAntwortService umfrageAntwortService;
 	
-	public UmfragenuebersichtService(UmfrageService umfrageService,
+	public UmfragenUebersichtService(UmfrageService umfrageService,
 									 GruppeService gruppeService,
 									 UmfrageAntwortService umfrageAntwortService) {
 		this.umfrageService = umfrageService;
@@ -103,6 +103,20 @@ public class UmfragenuebersichtService {
 		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
 		
 		return abgeschlosseneUmfragen;
+	}
+	
+	public List<Umfrage> loadOffeneUmfragen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadOffeneUmfragenFuerBenutzer(account);
+		}
+		return loadOffeneUmfragenFuerGruppe(account, gruppe.getId());
+	}
+	
+	public List<Umfrage> loadAbgeschlosseneUmfragen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadAbgeschlosseneUmfragenFuerBenutzer(account);
+		}
+		return loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe.getId());
 	}
 	
 	private List<Umfrage> getUmfragenVonBenutzer(Account account) {

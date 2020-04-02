@@ -9,7 +9,7 @@ import mops.termine2.models.TerminfindungAntwort;
 import mops.termine2.services.AuthenticationService;
 import mops.termine2.services.GruppeService;
 import mops.termine2.services.KommentarService;
-import mops.termine2.services.TerminAntwortService;
+import mops.termine2.services.TerminfindungAntwortService;
 import mops.termine2.services.TerminfindungService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class TerminAbstimmungControllerTest {
 	TerminfindungService terminService;
 	
 	@MockBean
-	TerminAntwortService antwortService;
+	TerminfindungAntwortService antwortService;
 	
 	@MockBean
 	GruppeService gruppeService;
@@ -70,9 +70,8 @@ public class TerminAbstimmungControllerTest {
 	void testTermineDetails1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
@@ -85,9 +84,8 @@ public class TerminAbstimmungControllerTest {
 	void testTermineDetails2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
@@ -101,9 +99,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineDetails3() throws Exception {
 		Terminfindung terminfindung = null;
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
 	}
@@ -115,9 +111,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineDetails4() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
@@ -131,9 +125,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineDetails5() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
@@ -150,9 +142,8 @@ public class TerminAbstimmungControllerTest {
 	void testTermineAbstimmungGet1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().isOk());
 	}
@@ -164,9 +155,8 @@ public class TerminAbstimmungControllerTest {
 	void testTermineAbstimmungGet2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, false);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
@@ -183,7 +173,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineErgebnisGet1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -198,7 +188,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineErgebnisGet2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -213,7 +203,6 @@ public class TerminAbstimmungControllerTest {
 	void testTermineErgebnisGet3() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -230,7 +219,7 @@ public class TerminAbstimmungControllerTest {
 	void testTermineAbstimmungGet4() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, false, true, true);
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.loadByBenutzer(accountStudentin)).thenReturn(null);
+		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());

@@ -23,8 +23,7 @@ public class TerminFormatierungTest {
 	public void testMitDatumGueltigesFormat() {
 		// Arrange in setUp()
 		
-		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat(
-			terminFormatierung.getTermineEingelesen(), terminFormatierung.getDateTimeFormatter());
+		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat();
 		
 		assertThat(gueltigesFormat).isEqualTo(true);
 	}
@@ -34,8 +33,7 @@ public class TerminFormatierungTest {
 		String[] ungueltigesFormat = new String[] {"12-12-2020", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(2, ungueltigesFormat);
 		
-		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat(
-			terminFormatierung.getTermineEingelesen(), terminFormatierung.getDateTimeFormatter());
+		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat();
 		
 		assertThat(gueltigesFormat).isEqualTo(false);
 	}
@@ -45,8 +43,7 @@ public class TerminFormatierungTest {
 		String[] ungueltigesFormat = new String[] {"datum", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(3, ungueltigesFormat);
 		
-		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat(
-			terminFormatierung.getTermineEingelesen(), terminFormatierung.getDateTimeFormatter());
+		Boolean gueltigesFormat = terminFormatierung.pruefeObGueltigesFormat();
 		
 		assertThat(gueltigesFormat).isEqualTo(false);
 	}
@@ -55,8 +52,7 @@ public class TerminFormatierungTest {
 	public void testMitDatumExistent() {
 		// Arrange in setUp()
 		
-		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum(
-			terminFormatierung.getTermineEingelesen());
+		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum();
 		
 		assertThat(gueltigesDatum).isEqualTo(true);
 	}
@@ -66,8 +62,7 @@ public class TerminFormatierungTest {
 		String[] ungueltigesDatumSchaltjahr = new String[] {"29.02.2024", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(0, ungueltigesDatumSchaltjahr);
 		
-		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum(
-			terminFormatierung.getTermineEingelesen());
+		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum();
 		
 		assertThat(gueltigesDatum).isEqualTo(true);
 	}
@@ -77,8 +72,7 @@ public class TerminFormatierungTest {
 		String[] ungueltigesDatum = new String[] {"29.02.2021", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(0, ungueltigesDatum);
 		
-		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum(
-			terminFormatierung.getTermineEingelesen());
+		Boolean gueltigesDatum = terminFormatierung.pruefeObGueltigesDatum();
 		
 		assertThat(gueltigesDatum).isEqualTo(false);
 	}
@@ -88,8 +82,7 @@ public class TerminFormatierungTest {
 		String[] datumZukunft = new String[] {"30.12.2022", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(0, datumZukunft);
 		
-		Boolean datumInZukunft = terminFormatierung.pruefeObInZukunft(
-			terminFormatierung.getTermineEingelesen(), terminFormatierung.getDateTimeFormatter());
+		Boolean datumInZukunft = terminFormatierung.pruefeObInZukunft();
 		
 		assertThat(datumInZukunft).isEqualTo(true);
 	}
@@ -99,8 +92,7 @@ public class TerminFormatierungTest {
 		String[] datumVergangen = new String[] {"02.03.2020", "12:00"};
 		terminFormatierung.getTermineEingelesen().set(1, datumVergangen);
 		
-		Boolean datumInZukunft = terminFormatierung.pruefeObInZukunft(
-			terminFormatierung.getTermineEingelesen(), terminFormatierung.getDateTimeFormatter());
+		Boolean datumInZukunft = terminFormatierung.pruefeObInZukunft();
 		
 		assertThat(datumInZukunft).isEqualTo(false);
 	}

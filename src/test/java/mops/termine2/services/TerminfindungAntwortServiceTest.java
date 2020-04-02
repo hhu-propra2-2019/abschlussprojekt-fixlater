@@ -30,7 +30,7 @@ public class TerminfindungAntwortServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
-	private transient TerminAntwortService antwortService;
+	private transient TerminfindungAntwortService antwortService;
 	
 	private transient TerminfindungRepository terminRepo;
 	
@@ -38,7 +38,7 @@ public class TerminfindungAntwortServiceTest {
 	private void setUp() {
 		antwortRepo = mock(TerminfindungAntwortRepository.class);
 		terminRepo = mock(TerminfindungRepository.class);
-		antwortService = new TerminAntwortService(antwortRepo, terminRepo);
+		antwortService = new TerminfindungAntwortService(antwortRepo, terminRepo);
 	}
 	
 	@Test

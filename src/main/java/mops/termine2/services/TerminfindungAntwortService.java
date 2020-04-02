@@ -17,13 +17,13 @@ import java.util.Objects;
 
 @Service
 
-public class TerminAntwortService {
+public class TerminfindungAntwortService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
 	
 	private TerminfindungRepository terminRepo;
 	
-	public TerminAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository,
+	public TerminfindungAntwortService(TerminfindungAntwortRepository terminfindungAntwortRepository,
 								TerminfindungRepository terminfindungRepository) {
 		antwortRepo = terminfindungAntwortRepository;
 		terminRepo = terminfindungRepository;

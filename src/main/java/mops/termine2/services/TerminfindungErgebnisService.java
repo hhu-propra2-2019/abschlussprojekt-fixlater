@@ -17,11 +17,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
-public class TerminErgebnisService {
+public class TerminfindungErgebnisService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
 	
-	public TerminErgebnisService(TerminfindungAntwortRepository antwortRepo) {
+	public TerminfindungErgebnisService(TerminfindungAntwortRepository antwortRepo) {
 		this.antwortRepo = antwortRepo;
 	}
 	

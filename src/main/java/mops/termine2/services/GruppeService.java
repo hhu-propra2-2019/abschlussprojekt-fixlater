@@ -4,10 +4,13 @@ import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Umfrage;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +62,14 @@ public class GruppeService {
 		return null;
 	}
 	
+	public Gruppe loadByGruppeIdOrDefault(String id) {
+		Gruppe gruppe = loadByGruppeId(id);
+		if (gruppe == null) {
+			return createDefaultGruppe();
+		}		
+		return gruppe;
+	}
+	
 	public boolean accountInGruppe(Account account, String gruppeId) {
 		String benutzer = account.getName();
 		return benutzerGruppeRepository.findByBenutzerAndGruppeId(benutzer, gruppeId) != null;
@@ -69,8 +80,48 @@ public class GruppeService {
 			.sorted(Comparator.comparing(Gruppe::getName))
 			.collect(Collectors.toList());
 	}
+	
+	public List<Gruppe> loadByBenutzerSorted(Account account) {
+		List<Gruppe> gruppen = loadByBenutzer(account);
+		return sortGroupsByName(gruppen);
+	}
 
 	public boolean checkGroupAccessDenied(Account account, String id) {
 		return id != null && !id.contentEquals("-1") && !accountInGruppe(account, id);
 	}
+	
+	public Gruppe createDefaultGruppe() {
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("-1");
+		gruppe.setName("Alle Gruppen");
+		return gruppe;
+	}
+
+	public void setzeGruppeId(Terminfindung terminfindung, Gruppe gruppeSelektiert) {
+		if (gruppeSelektiert.getId() != null) {
+			Gruppe gruppe = loadByGruppeId(gruppeSelektiert.getId());
+			if (gruppe != null) {
+				terminfindung.setGruppeId(gruppe.getId());				
+			}
+		}
+		
+	}
+
+	public void setzeGruppeId(Umfrage umfrage, Gruppe gruppeSelektiert) {
+		if (gruppeSelektiert.getId() != null) {
+			Gruppe gruppe = loadByGruppeId(gruppeSelektiert.getId());
+			if (gruppe != null) {
+				umfrage.setGruppeId(gruppe.getId());				
+			}
+		}		
+	}
+	
+	public HashMap<String, String> extractIdAndName(List<Gruppe> gruppen) {
+		HashMap<String, String> groups = new HashMap<>();
+		for (Gruppe group : gruppen) {
+			groups.put(group.getId(), group.getName());
+		}
+		return groups;
+	}
+	
 }
