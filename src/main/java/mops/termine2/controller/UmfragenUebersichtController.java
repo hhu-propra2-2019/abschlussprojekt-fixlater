@@ -50,7 +50,7 @@ public class UmfragenUebersichtController {
 	private UmfrageService umfrageService;
 	
 	public UmfragenUebersichtController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/umfragen")
@@ -61,11 +61,11 @@ public class UmfragenUebersichtController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		

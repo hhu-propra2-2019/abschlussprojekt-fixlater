@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import mops.termine2.Konstanten;
 import mops.termine2.filehandling.ExportCSV;
 import mops.termine2.filehandling.ExportFormat;
 import mops.termine2.filehandling.TerminFormatierung;
@@ -26,7 +27,7 @@ public class CSVHelper {
 		Terminfindung terminfindung, List<LocalDateTime> termine) {
 		List<String> fehler = new ArrayList<String>();
 		if (file.isEmpty()) {
-			fehler.add("Bitte eine CSV-Datei zum Upload auswählen.");
+			fehler.add(Konstanten.MESSAGE_CSV_NICHT_VORHANDEN);
 		} else {
 			try (CSVReader csvReader = new CSVReader(
 				new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -39,14 +40,11 @@ public class CSVHelper {
 				TerminFormatierung terminFormatierung = new TerminFormatierung(termineEingelesen);
 				
 				if (!terminFormatierung.pruefeObGueltigesFormat()) {
-					fehler.add("Alle Termine müssen im Format "
-							+ "'TT.MM.JJJJ,HH:MM' übergeben werden und "
-							+ "sollten existente Daten sein.");
+					fehler.add(Konstanten.MESSAGE_CSV_UNGUELTIGES_FORMAT);
 				} else if (!terminFormatierung.pruefeObInZukunft()) {
-					fehler.add("Die Termine sollten in der Zukunft liegen.");
-					
+					fehler.add(Konstanten.MESSAGE_CSV_NICHT_ZUKUENFTIG);
 				} else if (!terminFormatierung.pruefeObGueltigesDatum()) {
-					fehler.add("Die Termine sollten existieren.");					
+					fehler.add(Konstanten.MESSAGE_CSV_TERMINE_NICHT_EXISTENT);
 				} else {
 					// entferne ggf. überflüssige Datumsbox
 					if (termine.get(0) == null) {
@@ -66,7 +64,7 @@ public class CSVHelper {
 			} catch (RuntimeException ex) {
 				throw ex;
 			} catch (Exception ex) {
-				fehler.add("Ein Fehler ist beim Verarbeiten der CSV-Datei aufgetreten.");
+				fehler.add(Konstanten.MESSAGE_CSV_FEHLER);
 			}
 		}
 		return fehler;

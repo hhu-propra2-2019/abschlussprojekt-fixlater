@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
@@ -223,7 +224,7 @@ public class UmfrageService {
 		
 		if (gueltigeVorschlaege.isEmpty()) {
 			gueltigeVorschlaege.add("");
-			fehler.add("Es muss mindestens einen Vorschlag geben.");
+			fehler.add(Konstanten.MESSAGE_KEIN_VORSCHLAG);
 		}
 		
 		umfrage.setVorschlaege(gueltigeVorschlaege);

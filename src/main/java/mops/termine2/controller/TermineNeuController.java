@@ -61,7 +61,7 @@ public class TermineNeuController {
 	private TerminfindungService terminfindungService;
 	
 	public TermineNeuController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/termine-neu")
@@ -71,7 +71,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
@@ -95,7 +95,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
@@ -121,7 +121,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
 		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
@@ -146,7 +146,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		List<String> fehler = terminfindungService.erstelleTerminfindung(account,
@@ -159,7 +159,8 @@ public class TermineNeuController {
 			logger.info("Benutzer '" + account.getName() + "' hat eine neue Terminabstimmung mit Link '"
 				+ terminfindung.getLink() + "' erstellt");
 			
-			redirectAttributes.addFlashAttribute("erfolg", "Der Termin wurde gespeichert.");
+			redirectAttributes.addFlashAttribute(Konstanten.MODEL_ERFOLG, 
+				Konstanten.MESSAGE_TERMIN_GESPEICHERT);
 			return "redirect:/termine2";
 		}
 		
@@ -180,7 +181,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		// Terminvorschlag hinzufügen
@@ -198,11 +199,11 @@ public class TermineNeuController {
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		
 		if (fehler.isEmpty()) {
-			model.addAttribute("message", "Upload erfolgreich!");
-			model.addAttribute("erfolg", true);
+			model.addAttribute(Konstanten.MODEL_MESSAGE, Konstanten.MESSAGE_CSV_ERFOLG);
+			model.addAttribute(Konstanten.MODEL_ERFOLG, true);
 		} else {
-			model.addAttribute("message", fehler.get(fehler.size() - 1));
-			model.addAttribute("error", true);
+			model.addAttribute(Konstanten.MODEL_MESSAGE, fehler.get(fehler.size() - 1));
+			model.addAttribute(Konstanten.MODEL_ERROR, true);
 		}
 		
 		return "termine-neu";
@@ -217,7 +218,7 @@ public class TermineNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}		
 		CSVHelper.exportCSV(terminfindung, response);				
 	}

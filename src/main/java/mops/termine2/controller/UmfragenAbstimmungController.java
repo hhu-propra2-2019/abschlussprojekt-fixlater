@@ -67,7 +67,7 @@ public class UmfragenAbstimmungController {
 	private HashMap<LinkWrapper, Umfrage> letzteUmfrage = new HashMap<>();
 	
 	public UmfragenAbstimmungController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/umfragen/{link}")
@@ -77,17 +77,17 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
@@ -105,18 +105,18 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
@@ -147,18 +147,18 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		Boolean bereitsTeilgenommen = umfrageAntwortService.hatNutzerAbgestimmt(account.getName(), link);
@@ -190,17 +190,17 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(umfrage.getFrist())) {
@@ -228,17 +228,17 @@ public class UmfragenAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {

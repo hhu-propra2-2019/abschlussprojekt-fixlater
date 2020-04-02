@@ -1,6 +1,7 @@
 package mops.termine2.services;
 
 import lombok.AllArgsConstructor;
+import mops.termine2.Konstanten;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.TerminfindungDB;
@@ -59,10 +60,10 @@ public class LinkService {
 			terminfindung.setLink(link);
 		} else {
 			if (!pruefeEindeutigkeitLink(terminfindung.getLink())) {
-				fehler.add("Der eingegebene Link existiert bereits.");
+				fehler.add(Konstanten.MESSAGE_LINK_EXISTENT);
 			}
 			if (!isLinkValid(terminfindung.getLink())) {
-				fehler.add("Der eingegebene Link enthält ungültige Zeichen");
+				fehler.add(Konstanten.MESSAGE_LINK_UNGUELTIG);
 			}
 		}
 		return fehler;
@@ -76,10 +77,10 @@ public class LinkService {
 			umfrage.setLink(link);
 		} else {
 			if (!pruefeEindeutigkeitLink(umfrage.getLink())) {
-				fehler.add("Der eingegebene Link existiert bereits.");
+				fehler.add(Konstanten.MESSAGE_LINK_EXISTENT);
 			}
 			if (!isLinkValid(umfrage.getLink())) {
-				fehler.add("Der eingegebene Link enthält ungültige Zeichen");
+				fehler.add(Konstanten.MESSAGE_LINK_UNGUELTIG);
 			}
 		}
 		return fehler;

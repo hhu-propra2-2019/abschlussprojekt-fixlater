@@ -52,7 +52,7 @@ public class UmfragenNeuController {
 	private UmfrageService umfrageService;
 	
 	public UmfragenNeuController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/umfragen-neu")
@@ -62,7 +62,7 @@ public class UmfragenNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
@@ -82,7 +82,7 @@ public class UmfragenNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		// Vorschlag hinzufügen
@@ -107,7 +107,7 @@ public class UmfragenNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		// Vorschlag löschen
@@ -132,7 +132,7 @@ public class UmfragenNeuController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		List<String> fehler = umfrageService.erstelleUmfrage(account,
@@ -145,7 +145,8 @@ public class UmfragenNeuController {
 			logger.info("Benutzer '" + account.getName() + "' hat eine neue Umfrage mit Link '"
 				+ umfrage.getLink() + "' erstellt");
 			
-			redirectAttributes.addFlashAttribute("erfolg", "Die Umfrage wurde gespeichert.");
+			redirectAttributes.addFlashAttribute(Konstanten.MODEL_ERFOLG, 
+				Konstanten.MESSAGE_UMFRAGE_GESPEICHERT);
 			return "redirect:/termine2/umfragen";
 		}
 		

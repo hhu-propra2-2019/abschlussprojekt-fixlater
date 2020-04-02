@@ -1,5 +1,6 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
@@ -225,11 +226,11 @@ public class TerminfindungService {
 		
 		if (gueltigeVorschlaege.isEmpty()) {
 			gueltigeVorschlaege.add(null);
-			fehler.add("Es muss mindestens einen Vorschlag geben.");
+			fehler.add(Konstanten.MESSAGE_KEIN_VORSCHLAG);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist().minusMinutes(5))) {
-			fehler.add("Die Frist ist zu kurzfristig.");
+			fehler.add(Konstanten.MESSAGE_TERMIN_FRIST_KURZFRISTIG);
 		}
 		
 		terminfindung.setVorschlaege(gueltigeVorschlaege);

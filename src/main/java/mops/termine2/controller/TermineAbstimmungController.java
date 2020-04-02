@@ -69,7 +69,7 @@ public class TermineAbstimmungController {
 	private HashMap<LinkWrapper, Terminfindung> letzteTerminfindung = new HashMap<>();
 	
 	public TermineAbstimmungController(MeterRegistry registry) {
-		authenticatedAccess = registry.counter("access.authenticated");
+		authenticatedAccess = registry.counter(Konstanten.ACCESS_AUTHENTICATED);
 	}
 	
 	@GetMapping("/{link}")
@@ -79,7 +79,7 @@ public class TermineAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung = 
@@ -87,11 +87,11 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())
@@ -108,7 +108,7 @@ public class TermineAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung = 
@@ -116,11 +116,11 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 			
 		}
 		
@@ -153,7 +153,7 @@ public class TermineAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung = 
@@ -161,11 +161,11 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		Boolean bereitsTeilgenommen = terminAntwortService.hatNutzerAbgestimmt(account.getName(), link);
@@ -206,23 +206,23 @@ public class TermineAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung = 
 			terminfindungService.loadByLinkMitTerminenForBenutzer(link, account.getName());
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (terminfindung.getEinmaligeAbstimmung()
 			&& terminAntwortService.hatNutzerAbgestimmt(account.getName(), link)) {
-			throw new AccessDeniedException(Konstanten.ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_ACCESS_DENIED);
 		}
 		
 		if (LocalDateTimeManager.istVergangen(terminfindung.getFrist())) {
@@ -250,7 +250,7 @@ public class TermineAbstimmungController {
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
 		if (account == null) {
-			throw new AccessDeniedException(Konstanten.NOT_LOGGED_IN);
+			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		Terminfindung terminfindung = 
@@ -258,11 +258,11 @@ public class TermineAbstimmungController {
 		
 		if (terminfindung == null) {
 			throw new ResponseStatusException(
-				HttpStatus.NOT_FOUND, Konstanten.PAGE_NOT_FOUND);
+				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
 		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
-			throw new AccessDeniedException(Konstanten.GROUP_ACCESS_DENIED);
+			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
 		if (neuerKommentar.getPseudonym().equals("")) {
