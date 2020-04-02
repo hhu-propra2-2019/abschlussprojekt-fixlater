@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -284,7 +284,7 @@ public class TerminAbstimmungControllerTest {
 	
 	private TerminfindungAntwort initAntwort() {
 		TerminfindungAntwort antwort = new TerminfindungAntwort();
-		HashMap<LocalDateTime, Antwort> antwortHashMap = new HashMap<>();
+		LinkedHashMap<LocalDateTime, Antwort> antwortHashMap = new LinkedHashMap<>();
 		antwortHashMap.put(LocalDateTime.of(1, 1, 1, 1, 1), Antwort.VIELLEICHT);
 		antwort.setAntworten(antwortHashMap);
 		antwort.setPseudonym("aha");

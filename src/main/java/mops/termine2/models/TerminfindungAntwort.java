@@ -7,7 +7,7 @@ import lombok.ToString;
 import mops.termine2.enums.Antwort;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class TerminfindungAntwort {
 	
 	private String kuerzel;
 	
-	private HashMap<LocalDateTime, Antwort> antworten;
+	private LinkedHashMap<LocalDateTime, Antwort> antworten;
 	
 	private String pseudonym;
 	
