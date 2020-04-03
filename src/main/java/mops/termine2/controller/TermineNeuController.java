@@ -151,7 +151,7 @@ public class TermineNeuController {
 		
 		List<String> fehler = terminfindungService.erstelleTerminfindung(account,
 			terminfindung);
-		fehler.addAll(linkService.setzeLink(terminfindung));
+		fehler.addAll(linkService.setzeOderPruefeLink(terminfindung));
 		gruppeService.setzeGruppeId(terminfindung, gruppeSelektiert);
 		
 		if (fehler.isEmpty()) {

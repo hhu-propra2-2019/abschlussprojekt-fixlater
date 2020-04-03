@@ -137,7 +137,7 @@ public class UmfragenNeuController {
 		
 		List<String> fehler = umfrageService.erstelleUmfrage(account,
 			umfrage);
-		fehler.addAll(linkService.setzeLink(umfrage));
+		fehler.addAll(linkService.setzeOderPruefeLink(umfrage));
 		gruppeService.setzeGruppeId(umfrage, gruppeSelektiert);
 		
 		if (fehler.isEmpty()) {

@@ -96,19 +96,19 @@ public class LinkServiceTest {
 	
 	@Test
 	public void testValidLink() {
-		Boolean bool = linkService.isLinkValid("baum");
+		Boolean bool = linkService.istLinkGueltig("baum");
 		assertThat(bool).isTrue();
 	}
 	
 	@Test
 	public void testValidLinkWithDash() {
-		Boolean bool = linkService.isLinkValid("-b-a-u-m-123");
+		Boolean bool = linkService.istLinkGueltig("-b-a-u-m-123");
 		assertThat(bool).isTrue();
 	}
 	
 	@Test
 	public void testInvalidLink() {
-		Boolean bool = linkService.isLinkValid("bähh");
+		Boolean bool = linkService.istLinkGueltig("bähh");
 		assertThat(bool).isFalse();
 	}
 	
