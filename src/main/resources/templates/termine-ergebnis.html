@@ -84,7 +84,8 @@
 							</a>
 						</div>
 						
-						<div class="mb-3">
+						<!-- Informationen zur Frist -->
+						<div class="mb-3" th:if="${ergebnis.getAnzahlAntworten() != 0}">
 							Das
 							
 							<span th:if="${ergebnis.isFristNichtAbgelaufen()}">
@@ -95,6 +96,10 @@
 							<span class="text-primary" th:text="${ergebnis.getErgebnis()}">
 								eine Zeit</span>.
 						</div>
+						
+						<div class="mb-3 text-warning"
+						     th:if="${ergebnis.getAnzahlAntworten() == 0}">
+							Niemand hat an dieser Abstimmung teilgenommen.</div>
 						
 						<div class="table-responsive">
 							<table class="table table-sm" style="text-align: center">
@@ -302,13 +307,21 @@
 								m.A. = meine Antwort</span>
 						</div>
 						
-						<div class="alert alert-warning" role="alert">
-							Die Abstimmung läuft bis zum
+						<!-- Abstimmungsstatus -->
+						<div class="alert" role="alert"
+						     th:classappend="${ergebnis.isFristNichtAbgelaufen()
+						                     ? 'alert-warning' : 'alert-primary'}">
+							Die Abstimmung
 							
-							<b>
-								<span th:text="${#temporals.format(
-								               terminfindung.frist, 'dd.MM.yyyy, HH:mm')}">
-									Datum</span></b>.
+							<span th:text="${ergebnis.isFristNichtAbgelaufen()
+							               ? 'läuft bis zum' : 'ist am'}">
+								läuft bis zum / ist am</span>
+							
+							<b th:text="${#temporals.format(
+							            terminfindung.frist, 'dd.MM.yyyy, HH:mm')}">
+								Datum</b><span th:if="${! ergebnis.isFristNichtAbgelaufen()}">
+								
+								abgelaufen</span>.
 						</div>
 					</div>
 					
