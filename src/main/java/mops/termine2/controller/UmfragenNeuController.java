@@ -66,8 +66,8 @@ public class UmfragenNeuController {
 		}
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
-		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.erstelleStandardGruppe());
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrageService.createDefaultUmfrage());
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
@@ -90,7 +90,7 @@ public class UmfragenNeuController {
 		vorschlaege.add("");
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
@@ -115,7 +115,7 @@ public class UmfragenNeuController {
 		umfrageService.loescheVorschlag(umfrage, indexToDelete);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");

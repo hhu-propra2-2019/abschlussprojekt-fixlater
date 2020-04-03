@@ -71,7 +71,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		
@@ -87,7 +87,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -103,7 +103,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = null;
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -120,7 +120,7 @@ public class UmfragenAbstimmungControllerTest {
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/umfragen/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/ergebnis"));
@@ -136,7 +136,7 @@ public class UmfragenAbstimmungControllerTest {
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/umfragen/{link}", link)).andExpect(status().is4xxClientError());
 	}
@@ -152,7 +152,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		
@@ -167,7 +167,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, false);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		
@@ -186,7 +186,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
@@ -207,7 +207,7 @@ public class UmfragenAbstimmungControllerTest {
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
 		when(umfrageAntwortService.loadAllByLink(any())).thenReturn(initAntworten());
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/umfragen/{link}/ergebnis", link)).andExpect(status().is4xxClientError());
 	}
@@ -220,7 +220,7 @@ public class UmfragenAbstimmungControllerTest {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());

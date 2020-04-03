@@ -64,20 +64,20 @@ public class UmfragenUebersichtController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSortiert(account);		
 		
-		Gruppe selGruppe = gruppeService.loadByGruppeIdOrDefault(gruppeId);
+		Gruppe selGruppe = gruppeService.loadByGruppeIdOderStandard(gruppeId);
 		
 		List<Umfrage> umfrageOffen = 
 			umfragenuebersichtService.loadOffeneUmfragen(account, selGruppe);
 		List<Umfrage> umfrageAbgeschlossen = 
 			umfragenuebersichtService.loadAbgeschlosseneUmfragen(account, selGruppe);
 		
-		HashMap<String, String> groups = gruppeService.extractIdAndName(gruppen);
+		HashMap<String, String> groups = gruppeService.extrahiereIdAndNameAusGruppen(gruppen);
 		umfrageService.setzeGruppenName(umfrageOffen, groups);
 		umfrageService.setzeGruppenName(umfrageAbgeschlossen, groups);
 		

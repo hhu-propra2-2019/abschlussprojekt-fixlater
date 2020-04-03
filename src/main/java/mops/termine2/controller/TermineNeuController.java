@@ -74,13 +74,13 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSortiert(account);
 		// Terminfindung
 		Terminfindung terminfindung = terminfindungService.createDefaultTerminfindung();
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppen);
-		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.erstelleStandardGruppe());
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
@@ -98,7 +98,7 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSortiert(account);
 		// Terminvorschlag hinzufügen
 		List<LocalDateTime> termine = terminfindung.getVorschlaege();
 		termine.add(null);
@@ -124,7 +124,7 @@ public class TermineNeuController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		// Gruppen
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSortiert(account);
 		// Terminvorschlag löschen
 		int indexToDelete = IntegerToolkit.getInt(request.getParameter("delete"));
 		terminfindungService.loescheTermin(terminfindung, indexToDelete);
@@ -194,7 +194,7 @@ public class TermineNeuController {
 		terminfindungService.updateFristUndLoeschdatum(terminfindung, termine);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		

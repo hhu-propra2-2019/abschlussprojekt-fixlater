@@ -90,7 +90,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -119,7 +119,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 			
 		}
@@ -164,7 +164,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -216,7 +216,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -261,7 +261,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		

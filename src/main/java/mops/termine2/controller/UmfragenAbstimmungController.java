@@ -86,7 +86,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -115,7 +115,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -157,7 +157,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -199,7 +199,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -237,7 +237,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
