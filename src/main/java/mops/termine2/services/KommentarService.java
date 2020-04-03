@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bietet Methoden zur Speicherung und Löschung von Kommentaren an und
+ * bildet die dementsprechende Schnittstelle zwischen Controllern und Datenbank
+ */
 @Service
 @AllArgsConstructor
 public class KommentarService {
@@ -27,9 +31,9 @@ public class KommentarService {
 	
 	/**
 	 * Speichert einen Kommentar mit zugehörigen Link, Inhalt, Pseudonym und
-	 * ErstellungsDatum in einer KommentarDB
+	 * Erstellungsdatum in der Datenbank
 	 * 
-	 * @param kommentar bekommt einen Kommentar übergeben
+	 * @param kommentar Das zu speichernde Kommentar Objekt
 	 */
 	public void save(Kommentar kommentar) {
 		KommentarDB kommentarDB = new KommentarDB();
@@ -40,6 +44,13 @@ public class KommentarService {
 		kommentarRepo.save(kommentarDB);
 	}
 	
+	/**
+	 * Holt alle Kommentare zum übergebenen {@code link} aus der Datenbank
+	 * 
+	 * @param link Der Link dessen Kommentare geholt werden sollen
+	 * 
+	 * @return Liste mit allen Kommentaren zu diesem Link
+	 */
 	public List<Kommentar> loadByLink(String link) {
 		List<KommentarDB> kommentarDBs = kommentarRepo.findByLinkOrderByErstellungsdatumAsc(link);
 		List<Kommentar> kommentare = new ArrayList<>();
@@ -49,15 +60,10 @@ public class KommentarService {
 		return kommentare;
 	}
 	
-	private Kommentar erstelleKommentar(KommentarDB kommentarDB) {
-		Kommentar kommentar = new Kommentar();
-		kommentar.setLink(kommentarDB.getLink());
-		kommentar.setInhalt(kommentarDB.getInhalt());
-		kommentar.setPseudonym(kommentarDB.getPseudonym());
-		kommentar.setErstellungsdatum(kommentarDB.getErstellungsdatum());
-		return kommentar;
-	}
-	
+	/**
+	 * Löscht alle Kommentare, die zu einer Terminfindung gehören, deren
+	 * Löschdatum überschritten wurde
+	 */
 	@Transactional
 	public void loescheAbgelaufeneKommentareFuerTermine() {
 		LocalDateTime timeNow = LocalDateTime.now();
@@ -73,6 +79,10 @@ public class KommentarService {
 		}
 	}
 	
+	/**
+	 * Löscht alle Kommentare, die zu einer Umfrage gehören, deren
+	 * Löschdatum überschritten wurde
+	 */
 	@Transactional
 	public void loescheAbgelaufeneKommentareFuerUmfragen() {
 		LocalDateTime timeNow = LocalDateTime.now();
@@ -86,5 +96,14 @@ public class KommentarService {
 		for (String link : links) {
 			kommentarRepo.deleteByLink(link);
 		}
+	}
+	
+	private Kommentar erstelleKommentar(KommentarDB kommentarDB) {
+		Kommentar kommentar = new Kommentar();
+		kommentar.setLink(kommentarDB.getLink());
+		kommentar.setInhalt(kommentarDB.getInhalt());
+		kommentar.setPseudonym(kommentarDB.getPseudonym());
+		kommentar.setErstellungsdatum(kommentarDB.getErstellungsdatum());
+		return kommentar;
 	}
 }
