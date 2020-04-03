@@ -13,383 +13,376 @@
 </head>
 
 <body>
-<header>
-	<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-		<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
-		<ul>
-			<li>
-				<a th:href="@{/termine2}">
-					<img src="../static/img/resized/calendar_small.jpg"
-					     th:src="@{/img/resized/calendar_small.jpg}">
-					Termine
-				</a>
-			</li>
+	<header>
+		<nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+			<!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+			<ul>
+				<li>
+					<a th:href="@{/termine2}">
+						<img src="../static/img/resized/calendar_small.jpg"
+						     th:src="@{/img/resized/calendar_small.jpg}">
+						Termine
+					</a>
+				</li>
+				
+				<li>
+					<a th:href="@{/termine2/umfragen}">
+						<img src="../static/img/resized/survey_small.jpg"
+						     th:src="@{/img/resized/survey_small.jpg}">
+						Umfragen
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main th:fragment="bodycontent">
+		<div class="container">
+			<!-- Header -->
+			<div class="row mt-2 border-bottom mb-3">
+				<h1 class="h1 mb-2 text-break">
+					Terminergebnisse</h1>
+			</div>
 			
-			<li>
-				<a th:href="@{/termine2/umfragen}">
-					<img src="../static/img/resized/survey_small.jpg"
-					     th:src="@{/img/resized/survey_small.jpg}">
-					Umfragen
-				</a>
-			</li>
-		</ul>
-	</nav>
-</header>
-
-<main th:fragment="bodycontent">
-	<div class="container">
-		<!-- Header -->
-		<div class="row my-3 border-bottom">
-			<h1 class="h1">Terminabstimmung</h1>
-		</div>
-		
-		<div class="row">
-			<div class="col">
-				<!-- Termin -->
-				<div class="mb-3 border-bottom">
-					<div class="mb-3 p-3 bg-light rounded">
-						<!-- Zusammenfassung -->
-						<div class="pb-2 border-bottom">
-							<div class="h3" th:text="${terminfindung.getTitel()}">
-								Wir basteln uns eine Terminplanung
+			<div class="row">
+				<div class="col">
+					<!-- Termin -->
+					<div class="mb-3 border-bottom">
+						<div class="mb-3 p-3 bg-light rounded">
+							<!-- Zusammenfassung -->
+							<div th:class="${terminfindung.getBeschreibung() != ''
+							               ? 'pb-2 border-bottom' : ''}">
+								<h3 class="h3 mb-0 text-break"
+								     th:text="${terminfindung.getTitel()}">
+									Titel</h3>
+								
+								<div class="mt-2 text-break" th:text="${terminfindung.getOrt()}">
+									Ort</div>
 							</div>
 							
-							<div th:text="${terminfindung.getOrt()}">25.13.U1.24</div>
-						</div>
-						
-						<!-- Beschreibung -->
-						<div class="mt-2" style="font-size: small"
-						     th:text="${terminfindung.getBeschreibung()}">
-							Beschreibung
+							<!-- Beschreibung -->
+							<div class="mt-2 text-break" style="font-size: small"
+							     th:if="${terminfindung.getBeschreibung() != ''}"
+							     th:text="${terminfindung.getBeschreibung()}">
+								Beschreibung</div>
 						</div>
 					</div>
-				</div>
-				
-				<!-- Wahl -->
-				<div class="mb-3 border-bottom">
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<h2 class="h2 mb-0">
-							Zeiten
-						</h2>
-						
-						<a th:if="${ergebnis.isFristNichtAbgelaufen()} and (
-						                            not ${terminfindung.getEinmaligeAbstimmung()} or
-						                            not ${terminfindung.teilgenommen})"
-						   th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
-							<button class="btn btn-success">
-								zur Abstimmung
-							</button>
-						</a>
-					</div>
 					
-					<div class="mb-3">
-						Das
+					<!-- Wahl -->
+					<div class="mb-3 border-bottom">
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<h2 class="h2 mb-0 text-break">
+								Zeiten</h2>
+							
+							<a th:if="${ergebnis.isFristNichtAbgelaufen()} and (
+							              not ${terminfindung.getEinmaligeAbstimmung()} or
+							              not ${terminfindung.teilgenommen})"
+							   th:href="@{/termine2/{path}/abstimmung(path=${terminfindung.link})}">
+								<button class="btn btn-success">
+									zur Abstimmung
+								</button>
+							</a>
+						</div>
 						
-						<span th:if="${ergebnis.isFristNichtAbgelaufen()}">
-							vorläufige
-						</span>
+						<div class="mb-3">
+							Das
+							
+							<span th:if="${ergebnis.isFristNichtAbgelaufen()}">
+								vorläufige</span>
+							
+							Ergebnis ist
+							
+							<span class="text-primary" th:text="${ergebnis.getErgebnis()}">
+								eine Zeit</span>.
+						</div>
 						
-						Ergebnis ist
-						
-						<span class="text-primary" th:text="${ergebnis.getErgebnis()}">
-							eine Zeit
-						</span>.
-					</div>
-					
-					<div class="table-responsive">
-						<table class="table table-sm" style="text-align: center">
-							<thead>
-							<tr>
-								<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
-									 chen: Blau und Gelb lassen sich besser unterschei-
-									 den als Grün und Gelb. -->
-								<th class="col bg-secondary text-white" style="width: 5%;"
-								    data-toggle="tooltip" title="meine Antworten">m.An</a>
-								</th>
-								
-								<th class="col bg-secondary" style="width: 8%;"></th>
-								
-								<th class="col bg-secondary" style="width: 15%;">
-									Termin
-								</th>
-								
-								<th class="col bg-secondary" style="width: 18%;"></th>
-								
-								<th class="col bg-secondary" style="width: 6%;">
-									Ja
-								</th>
-								
-								<th class="col bg-secondary" style="width: 6%;">
-									<div class="progress" style="height: 20px; width: 20px;">
-										<div class="progress-bar bg-primary"
-										     role="progressbar"
-										     style="width: 100%;"
-										     aria-valuenow="100"
-										></div>
+						<div class="table-responsive">
+							<table class="table table-sm" style="text-align: center">
+								<thead>
+									<tr>
+										<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
+										     chen: Blau und Gelb lassen sich besser unterschei-
+										     den als Grün und Gelb. -->
+										<th class="col bg-secondary text-white" style="width: 5%"
+										    data-toggle="tooltip" title="meine Antworten">
+											m.An</th>
+										
+										<th class="col bg-secondary" style="width: 8%"></th>
+										
+										<th class="col bg-secondary" style="width: 15%">
+											Termin</th>
+										
+										<th class="col bg-secondary" style="width: 18%"></th>
+										
+										<th class="col bg-secondary" style="width: 6%">
+											Ja</th>
+										
+										<th class="col bg-secondary" style="width: 6%">
+											<div class="progress" style="height: 20px; width: 20px">
+												<div class="progress-bar bg-primary"
+												     style="width: 100%"
+												     role="progressbar" aria-valuenow="100">
+												</div>
+											</div>
+										</th>
+										
+										<th class="col bg-secondary text-white" style="width: 10%"
+										    data-toggle="tooltip" title="Vielleicht">
+											Vlt.</th>
+										
+										<th class="col bg-secondary" style="width: 6%">
+											<div class="progress" style="height: 20px; width: 20px">
+												<div class="progress-bar bg-warning"
+												     style="width: 100%"
+												     role="progressbar" aria-valuenow="100">
+												</div>
+											</div>
+										</th>
+										
+										<th class="col bg-secondary" style="width: 6%">
+											Nein</th>
+										
+										<th class="col bg-secondary" style="width: 6%">
+											<div class="progress" style="height: 20px; width: 20px">
+												<div class="progress-bar bg-danger"
+												     style="width: 100%"
+												     role="progressbar" aria-valuenow="100">
+												</div>
+											</div>
+										</th>
+										
+										<th class="col bg-secondary" style="width: 14%"></th>
+									</tr>
+								</thead>
+							</table>
+							
+							<details th:each="termin, iter: ${ergebnis.termineString}">
+								<summary>
+									<span class="font-weight-light text-black-50">
+										Für Details klicken</span>
+									
+									<div class="table-responsive">
+										<table class="table table-sm" style="text-align: center">
+											<tbody>
+												<tr>
+													<td class="col font-weight-bold"
+													    style="width: 2%"
+													    th:classappend="${ergebnis
+													                          .getIsNutzerAntwortJa(
+													                           )[__${iter.index}__]}
+													                    ? 'bg-primary text-white'
+													                    : (${ergebnis
+													                  .getIsNutzerAntwortVielleicht(
+													                           )[__${iter.index}__]}
+													                    ? 'bg-warning text-black-50'
+													                    : 'bg-danger text-white')"
+													    th:text="${ergebnis.getIsNutzerAntwortJa(
+													                           )[__${iter.index}__]}
+													             ? 'J'
+													             : (${ergebnis
+													                  .getIsNutzerAntwortVielleicht(
+													                           )[__${iter.index}__]}
+													             ? 'V' : 'N')"></td>
+													
+													<td class="col bg-light font-weight-bold
+													           text-black-50"
+													    style="width: 38%" th:text="${termin}">
+														25.02.2084, 12:15</td>
+													
+													<td class="col bg-light" style="width: 48%">
+														<div class="progress" style="height: 100%">
+															<div class="progress-bar bg-primary
+															            font-weight-bold"
+															     role="progressbar"
+															     th:style="'width: ' + ${ergebnis
+															                    .getAnteilStimmenJa(
+															                   )[__${iter.index}__]}
+															               + '%'"
+															     style="width: 34%"
+															     th:attr="aria-valuenow=${ergebnis
+															                    .getAnzahlStimmenJa(
+															                  )[__${iter.index}__]}"
+															     aria-valuenow="34"
+															     th:text="${ergebnis
+															                    .getAnzahlStimmenJa(
+															                 )[__${iter.index}__]}">
+															</div>
+															
+															<div class="progress-bar bg-warning
+															            font-weight-bold
+															            text-black-50"
+															     role="progressbar"
+															     th:style="'width: ' + ${ergebnis
+															            .getAnteilStimmenVielleicht(
+															                   )[__${iter.index}__]}
+															               + '%'"
+															     style="width: 34%"
+															     th:attr="aria-valuenow=${ergebnis
+															            .getAnzahlStimmenVielleicht(
+															                  )[__${iter.index}__]}"
+															     aria-valuenow="34"
+															     th:text="${ergebnis
+															            .getAnzahlStimmenVielleicht(
+															                 )[__${iter.index}__]}">
+															</div>
+															
+															<div class="progress-bar bg-danger
+															            font-weight-bold"
+															     role="progressbar"
+															     th:style="'width: ' + ${ergebnis
+															                  .getAnteilStimmenNein(
+															                   )[__${iter.index}__]}
+															               + '%'"
+															     style="width: 34%"
+															     th:attr="aria-valuenow=${ergebnis
+															                  .getAnzahlStimmenNein(
+															                  )[__${iter.index}__]}"
+															     aria-valuenow="34"
+															     th:text="${ergebnis
+															                  .getAnzahlStimmenNein(
+															                 )[__${iter.index}__]}">
+															</div>
+														</div>
+													</td>
+													
+													<td class="col bg-light" style="width: 12%">
+													</td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
-								</th>
-								
-								<th class="col bg-secondary text-white" style="width: 10%;"
-								    data-toggle="tooltip" title="Vielleicht">
-									Vlt.
-								</th>
-								
-								<th class="col bg-secondary" style="width: 6%;">
-									<div class="progress" style="height: 20px; width: 20px;">
-										<div class="progress-bar bg-warning"
-										     role="progressbar"
-										     style="width: 100%;"
-										     aria-valuenow="100">
-										</div>
-									</div>
-								</th>
-								
-								<th class="col bg-secondary" style="width: 6%;">
-									Nein
-								</th>
-								
-								<th class="col bg-secondary" style="width: 6%;">
-									<div class="progress" style="height: 20px;width: 20px;">
-										<div class="progress-bar bg-danger "
-										     role="progressbar"
-										     style="width: 100%;"
-										     aria-valuenow="100"
-										></div>
-									</div>
-								</th>
-								
-								<th class="col bg-secondary" style="width: 14%;"></th>
-							</tr>
-							</thead>
-						</table>
-						
-						<details th:each="termin, terminStat: ${ergebnis.termineString}">
-							<summary>
-								<span class="font-weight-light text-black-50">
-									Für Details klicken
-								</span>
+								</summary>
 								
 								<div class="table-responsive">
 									<table class="table table-sm" style="text-align: center">
+										<thead class="bg-light">
+											<tr>
+												<th class="col text-black-50 font-weight-bold"
+												    style="width: 33%">
+													Zugestimmt</th>
+												
+												<th class="col text-black-50 font-weight-bold"
+												    style="width: 33%">
+													Vielleicht</th>
+												
+												<th class="col text-black-50 font-weight-bold"
+												    style="width: 33%">
+													Abgesagt</th>
+											</tr>
+										</thead>
+										
 										<tbody>
-										<tr>
-											<th class="col font-weight-bold" style="width: 2%;"
-											    th:classappend="${ergebnis.getIsNutzerAntwortJa(
-											                             )[__${terminStat.index}__]}
-											                    ? 'bg-primary text-white'
-											             : (${ergebnis.getIsNutzerAntwortVielleicht(
-											                             )[__${terminStat.index}__]}
-											                    ? 'bg-warning text-black-50'
-											                    : 'bg-danger text-white')"
-											    th:text="${ergebnis.getIsNutzerAntwortJa(
-											                           )[__${terminStat.index}__]}
-											                    ? 'J'
-											             : (${ergebnis.getIsNutzerAntwortVielleicht(
-											                             )[__${terminStat.index}__]}
-											                    ? 'V' : 'N')">
-											</th>
-											
-											<th class="col bg-light font-weight-bold text-black-50"
-											    style="width: 38%;" th:text="${termin}" >
-												25.02.2084, 12:15
-											</th>
-											
-											<th class="col bg-light" style="width: 48%;">
-												<div class="progress" style="height: 100%">
-													<div class="progress-bar bg-primary
-													            font-weight-bold"
-													     role="progressbar"
-													     th:style="'width: '
-													               + ${ergebnis.getAnteilStimmenJa(
-													                     )[__${terminStat.index}__]}
-													               + '%;'"
-													     style="width: 34%;"
-													     th:attr="aria-valuenow=
-													              ${ergebnis.getAnzahlStimmenJa(
-													                    )[__${terminStat.index}__]}"
-													     aria-valuenow="34"
-													     th:text="${ergebnis.getAnzahlStimmenJa(
-													                   )[__${terminStat.index}__]}">
-													</div>
-													
-													<div class="progress-bar bg-warning
-													            font-weight-bold text-black-50"
-													     role="progressbar"
-													     th:style="'width: '
-													        + ${ergebnis.getAnteilStimmenVielleicht(
-													                     )[__${terminStat.index}__]}
-													               + '%;'"
-													     style="width: 34%;"
-													     th:attr="aria-valuenow=
-													          ${ergebnis.getAnzahlStimmenVielleicht(
-													                    )[__${terminStat.index}__]}"
-													     aria-valuenow="34"
-													     th:text="
-													          ${ergebnis.getAnzahlStimmenVielleicht(
-													                   )[__${terminStat.index}__]}">
-													</div>
-													
-													<div class="progress-bar bg-danger
-													            font-weight-bold"
-													     role="progressbar"
-													     th:style="'width: '
-													              + ${ergebnis.getAnteilStimmenNein(
-													                     )[__${terminStat.index}__]}
-													               + '%;'"
-													     style="width: 34%;"
-													     th:attr="aria-valuenow=
-													                ${ergebnis.getAnzahlStimmenNein(
-													                    )[__${terminStat.index}__]}"
-													     aria-valuenow="34"
-													     th:text="${ergebnis.getAnzahlStimmenNein(
-													                   )[__${terminStat.index}__]}">
-													</div>
-												</div>
-											</th>
-											<th class="col bg-light" style="width: 12%;">
-											</th>
-										</tr>
+											<tr>
+												<td class="col text-black-50 bg-light"
+												    style="width: 33%"
+												    th:text="${ergebnis.getJaAntwortPseud(
+												                             )[__${iter.index}__]}">
+												</td>
+												
+												<td class="col text-black-50 bg-white"
+												    style="width: 33%"
+												    th:text="${ergebnis.getVielleichtAntwortPseudo(
+												                             )[__${iter.index}__]}">
+												</td>
+												
+												<td class="col text-black-50 bg-light"
+												    style="width: 33%"
+												    th:text="${ergebnis.getNeinAntwortPseudo(
+												                             )[__${iter.index}__]}">
+												</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
-							</summary>
-							
-							<div class="table-responsive">
-								<table class="table table-sm" style="text-align: center">
-									<thead class="bg-light">
-									<tr>
-										<th class="col text-black-50 font-weight-bold"
-										    style="width: 33%">
-											Zugestimmt
-										</th>
-										
-										<th class="col text-black-50 font-weight-bold"
-										    style="width: 33%">
-											Vielleicht
-										</th>
-										
-										<th class="col text-black-50 font-weight-bold"
-										    style="width: 33%">
-											Abgesagt
-										</th>
-									</tr>
-									</thead>
-									
-									<tbody>
-									<tr>
-										<th class="col text-black-50 bg-light" style="width: 33%"
-										    th:text="${ergebnis.getJaAntwortPseud(
-										                               )[__${terminStat.index}__]}">
-										</th>
-										
-										<th class="col text-black-50 bg-white" style="width: 33%"
-										    th:text="${ergebnis.getVielleichtAntwortPseudo(
-										                               )[__${terminStat.index}__]}">
-										</th>
-										
-										<th class="col text-black-50 bg-light" style="width: 33%"
-										    th:text="${ergebnis.getNeinAntwortPseudo(
-										                               )[__${terminStat.index}__]}">
-										</th>
-									</tr>
-									</tbody>
-								</table>
-							</div>
-						</details>
-					</div>
-					
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<span class="text-black-50">m.A. = meine Antwort</span>
-					</div>
-					
-					<div class="alert alert-warning" role="alert">
-						Die Abstimmung läuft bis zum
+							</details>
+						</div>
 						
-						<b>
-							<span th:text="${#temporals.format(
-							                 terminfindung.frist, 'dd.MM.yyyy, HH:mm')}">
-								Datum
-							</span>
-						</b>.
-					</div>
-				</div>
-				
-				<!-- Kommentare -->
-				<h2 class="h2">
-					Kommentare
-				</h2>
-				
-				<!-- Vorhandene Kommentare -->
-				<div th:each="kommentar: *{kommentare}">
-					<div class="mb-3">
-						<div class="my-3 p-3 bg-light rounded">
-							<!-- Sendedaten -->
-							<div class="pb-2 border-bottom">
-								<div class="h4" th:text="${kommentar.pseudonym}">
-									Benjamin
-								</div>
-								
-								<div>
-									am
-									
-									<span th:text="${#temporals.format(
-									               kommentar.erstellungsdatum,
-									               'dd.MM.yyyy, HH:mm')}">
-										Datum
-									</span>
-								</div>
-							</div>
+						<div class="d-flex justify-content-between align-items-center mb-3">
+							<span class="text-black-50">
+								m.A. = meine Antwort</span>
+						</div>
+						
+						<div class="alert alert-warning" role="alert">
+							Die Abstimmung läuft bis zum
 							
-							<!-- Inhalt -->
-							<div class="mt-2">
-								<span th:text="${kommentar.inhalt}">
-									Inhalt
-								</span>
-							</div>
+							<b>
+								<span th:text="${#temporals.format(
+								               terminfindung.frist, 'dd.MM.yyyy, HH:mm')}">
+									Datum</span></b>.
 						</div>
 					</div>
-				</div>
-				
-				<!-- Kommentarbox -->
-				<div class="container mb-3">
-					<h3 class="h3 mb-3">Verfassen</h3>
 					
-					<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
-					      th:object="${neuerKommentar}" method="post">
-						<!-- Inhalt -->
+					<!-- Kommentare -->
+					<h2 class="h2">
+						Kommentare</h2>
+					
+					<!-- Vorhandene Kommentare -->
+					<div th:each="kommentar: *{kommentare}">
 						<div class="mb-3">
-							<textarea class="form-control" rows="5" id="comment" 
-							          th:field="*{inhalt}" maxlength="1024" required>
-								Inhalt
-							</textarea>
-						</div>
-						
-						<!-- Absendezeile -->
-						<div class="container">
-							<div class="form-group row justify-content-center">
-								<!-- Name -->
-								<div class="col-xs-4 mx-1">
-									<input class="form-control"
-									       id="pseudonym" name="pseudonym"
-									       type="text" maxlength="64"
-									       th:placeholder="${account.getName()}"
-									       th:field="*{pseudonym}"/>
+							<div class="my-3 p-3 bg-light rounded">
+								<!-- Sendedaten -->
+								<div class="pb-2 border-bottom">
+									<div class="h4 text-break" th:text="${kommentar.pseudonym}">
+										Benjamin</div>
+									
+									<div>
+										am
+										
+										<span th:text="${#temporals.format(
+										               kommentar.erstellungsdatum,
+										               'dd.MM.yyyy, HH:mm')}">
+											Datum</span>
+									</div>
 								</div>
 								
-								<div class="col-xs mx-1">
-									<button class="btn btn-success"
-									        type="submit" name="kommentarSichern">
-										Veröffentlichen
-									</button>
+								<!-- Inhalt -->
+								<div class="mt-2 text-break">
+									<span th:text="${kommentar.inhalt}">
+										Inhalt</span>
 								</div>
 							</div>
 						</div>
-					</form>
+					</div>
+					
+					<!-- Kommentarbox -->
+					<div class="container mb-3">
+						<h3 class="h3 mb-3">
+							Verfassen</h3>
+						
+						<form th:action="@{/termine2/{path}(path=${terminfindung.getLink()})}"
+						      th:object="${neuerKommentar}" method="post">
+							<!-- Inhalt -->
+							<div class="mb-2">
+								<textarea class="form-control" rows="5" id="comment" 
+								          th:field="*{inhalt}" maxlength="1024" required>
+									Inhalt</textarea>
+							</div>
+							
+							<!-- Absendezeile -->
+							<div class="container">
+								<div class="form-group row justify-content-center">
+									<!-- Name -->
+									<div class="col-xs-4 mx-1 mt-2">
+										<input class="form-control"
+										       id="pseudonym" name="pseudonym"
+										       type="text" maxlength="64"
+										       th:placeholder="${account.getName()}"
+										       th:field="*{pseudonym}"/>
+									</div>
+									
+									<div class="col-xs mx-1 mt-2">
+										<button class="btn btn-success"
+										        type="submit" name="kommentarSichern">
+											Veröffentlichen</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</main>
+	</main>
 </body>
 </html>
 
