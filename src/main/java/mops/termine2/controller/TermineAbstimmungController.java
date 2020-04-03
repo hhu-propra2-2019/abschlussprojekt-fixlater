@@ -129,7 +129,7 @@ public class TermineAbstimmungController {
 		}
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
+		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerUndLink(account.getName(), link);
 		AntwortForm antwortForm = new AntwortForm();
 		antwortForm.init(antwort);
 		
@@ -180,7 +180,7 @@ public class TermineAbstimmungController {
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
-		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
+		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerUndLink(
 			account.getName(), link);
 		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten,
 			terminfindung, nutzerAntwort);

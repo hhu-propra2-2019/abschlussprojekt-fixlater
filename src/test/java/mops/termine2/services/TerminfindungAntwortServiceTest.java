@@ -79,7 +79,7 @@ public class TerminfindungAntwortServiceTest {
 			.thenReturn(terminfindungAntwortDBs);
 		when(terminRepo.findByLink(LINK))
 			.thenReturn(terminfindungDBs);
-		TerminfindungAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
+		TerminfindungAntwort ergebnis = antwortService.loadByBenutzerUndLink(BENUTZER1, LINK);
 		TerminfindungAntwort erwartet = getBeispielTerminAntwort(anzahl, BENUTZER1);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);

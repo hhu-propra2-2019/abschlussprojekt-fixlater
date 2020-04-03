@@ -144,7 +144,7 @@ public class TerminAbstimmungControllerTest {
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().isOk());
 	}
 	
@@ -157,7 +157,7 @@ public class TerminAbstimmungControllerTest {
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
 	}
@@ -176,7 +176,7 @@ public class TerminAbstimmungControllerTest {
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}
@@ -191,7 +191,7 @@ public class TerminAbstimmungControllerTest {
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().isOk());
 	}
@@ -205,7 +205,7 @@ public class TerminAbstimmungControllerTest {
 		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
@@ -222,7 +222,7 @@ public class TerminAbstimmungControllerTest {
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}

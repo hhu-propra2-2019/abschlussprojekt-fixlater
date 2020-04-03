@@ -15,8 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Der TerminfindungAntwortService bietet Methoden zur Abstimmung in einer Terminfindung
+ * und bildet die dementsprechende Schnittstelle zwischen Datenbank und Controller
+ */
 @Service
-
 public class TerminfindungAntwortService {
 	
 	private TerminfindungAntwortRepository antwortRepo;
@@ -30,21 +33,22 @@ public class TerminfindungAntwortService {
 	}
 	
 	/**
-	 * Speichert Antworten zu einer Terminabstimmung
+	 * Speichert Antworten zu einer Terminabstimmung in der Datenbank
 	 *
-	 * @param antwort
-	 * @param terminVorschlag
+	 * @param antwort Die Antwort des Benutzers für die Abstimmung
+	 * 
+	 * @param terminfindung Die Terminfindung, bei der abgestimmt wurde
 	 */
-	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminVorschlag) {
+	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminfindung) {
 		
 		List<TerminfindungAntwortDB> antwortenToDelete =
 			antwortRepo.findByBenutzerAndTerminfindungLink(antwort.getKuerzel(),
-				terminVorschlag.getLink());
+				terminfindung.getLink());
 		
 		antwortRepo.deleteAll(antwortenToDelete);
-		for (LocalDateTime termin : terminVorschlag.getVorschlaege()) {
+		for (LocalDateTime termin : terminfindung.getVorschlaege()) {
 			TerminfindungAntwortDB db = new TerminfindungAntwortDB();
-			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminVorschlag.getLink(),
+			TerminfindungDB terminfindungDB = terminRepo.findByLinkAndTermin(terminfindung.getLink(),
 				termin);
 			
 			db.setAntwort(antwort.getAntworten().get(termin));
@@ -57,6 +61,15 @@ public class TerminfindungAntwortService {
 		}
 	}
 	
+	/**
+	 * Prüft, ob der Benutzer bei der entsprechenden Terminfindung abgestimmt hat
+	 * 
+	 * @param benutzer Der Benutzer, dessen Abstimmungsstatus abgefragt werden soll
+	 * @param link Der Link zu der Terminfindung
+	 * 
+	 * @return {@code true}, falls der Benutzer bereits bei der Terminfindung abgestimmt hat, 
+	 * ansonsten {@code false}
+	 */
 	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
 		List<TerminfindungAntwortDB> antworten =
 			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
@@ -65,48 +78,49 @@ public class TerminfindungAntwortService {
 	}
 	
 	/**
-	 * Löscht alle Antworten nach Link
+	 * Löscht alle Antworten der Terminfindung mit Link {@code link}
 	 *
-	 * @param link
+	 * @param link Der Link zu der Terminfindung
 	 */
 	public void deleteAllByLink(String link) {
 		antwortRepo.deleteByTerminfindungLink(link);
 	}
 	
 	/**
-	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 * Lädt die Antwort eines Benutzers {@code benutzer} zu einer Terminfindung
+	 * mit Link {@code link}
 	 *
-	 * @param benutzer der Benutzer dessen Antwort gesucht wir
-	 * @param link     der Link der Terminumfrage
-	 * @return gibt eine Antwort zu einer Terminfindung
-	 */
-	
-	public TerminfindungAntwort loadByBenutzerAndLink(String benutzer, String link) {
+	 * @param benutzer der Benutzer, dessen Antwort gesucht wird
+	 * @param link der Link der Terminfindung
+	 * 
+	 * @return die Antwort des benutzers für die Terminfindung
+	 */	
+	public TerminfindungAntwort loadByBenutzerUndLink(String benutzer, String link) {
 		
 		List<TerminfindungAntwortDB> alteAntwort =
 			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
 		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
 		
-		return buildAntwortForBenutzer(benutzer, alteAntwort,
+		return baueAntwortFuerBenutzer(benutzer, alteAntwort,
 			antwortMoeglichkeiten);
 	}
 	
 	/**
-	 * Lädt alle Antworten die zu einem Link gehören
+	 * Lädt alle Antworten, die zu der Terminfindung mit Link {@code link} gehören
 	 *
-	 * @param link der Link der Terminumfrage
-	 * @return eine Liste von Antworten
+	 * @param link der Link der Terminfindung
+	 * @return Liste von Antworten zu der Terminfindung
 	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBList =
 			antwortRepo.findAllByTerminfindungLink(link);
 		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
 		
-		return buildAntworten(terminfindungAntwortDBList,
+		return baueAntworten(terminfindungAntwortDBList,
 			antwortMoeglichkeiten);
 	}
 	
-	private List<TerminfindungAntwort> buildAntworten(
+	private List<TerminfindungAntwort> baueAntworten(
 		List<TerminfindungAntwortDB> antwortDBS, List<TerminfindungDB> antwortMoeglichkeiten) {
 		
 		List<TerminfindungAntwort> terminAntworten = new ArrayList<>();
@@ -116,9 +130,9 @@ public class TerminfindungAntwortService {
 			for (TerminfindungAntwortDB antwortDB : antwortDBS) {
 				String benutzer = antwortDB.getBenutzer();
 				if (!benuternamen.contains(antwortDB.getBenutzer())) {
-					List<TerminfindungAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
+					List<TerminfindungAntwortDB> nutzerAntworten = filtereAntwortenNachBenutzer(
 						antwortDBS, benutzer);
-					terminAntworten.add(buildAntwortForBenutzer(
+					terminAntworten.add(baueAntwortFuerBenutzer(
 						benutzer, nutzerAntworten, antwortMoeglichkeiten));
 					benuternamen.add(benutzer);
 				}
@@ -129,7 +143,7 @@ public class TerminfindungAntwortService {
 		
 	}
 	
-	private TerminfindungAntwort buildAntwortForBenutzer(
+	private TerminfindungAntwort baueAntwortFuerBenutzer(
 		String benutzer, List<TerminfindungAntwortDB> alteAntworten,
 		List<TerminfindungDB> antwortMoglichkeiten) {
 		
@@ -159,7 +173,7 @@ public class TerminfindungAntwortService {
 	}
 	
 	
-	private List<TerminfindungAntwortDB> filterAntwortenDbBenutzer(
+	private List<TerminfindungAntwortDB> filtereAntwortenNachBenutzer(
 		List<TerminfindungAntwortDB> antwortDBS, String benutzer) {
 		List<TerminfindungAntwortDB> nutzerAntwortenDB = new ArrayList<>();
 		for (TerminfindungAntwortDB terminAntwortDB : antwortDBS) {
