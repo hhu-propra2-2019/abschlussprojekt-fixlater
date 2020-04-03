@@ -80,8 +80,6 @@ public class UmfrageErgebnisService {
 		
 		boolean fristNichtAbgelaufen = false;
 		
-		String ergebnis = "ein Vorschlag";
-		
 		HashMap<String, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
 		vorschlaege = umfrage.getVorschlaege();
 		anzahlAntworten = antworten.size();

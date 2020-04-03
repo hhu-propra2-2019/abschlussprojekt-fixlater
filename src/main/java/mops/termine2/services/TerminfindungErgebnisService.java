@@ -107,8 +107,6 @@ public class TerminfindungErgebnisService {
 		
 		boolean fristNichtAbgelaufen = false;
 		
-		String ergebnis = "eine Zeit";
-		
 		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
 		termine = terminfindung.getVorschlaege();
 		LocalDateTimeManager.sortTermine(termine);
