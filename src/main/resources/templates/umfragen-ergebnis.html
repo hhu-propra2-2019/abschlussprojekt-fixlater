@@ -142,7 +142,8 @@
 									<tr>
 										<!-- eigene Antwort -->
 										<th class="col bg-secondary font-weight-bold"
-										    style="width: 1px">
+										    style="width: 1px"
+										    th:if="${ergebnis.getNutzerAntworten().size() != 0}">
 											<a data-toggle="tooltip" data-placement="bottom"
 											   title="Meine Wahl">
 												MW</a></th>
@@ -153,7 +154,8 @@
 											Vorschlag</th>
 										
 										<!-- Stimmmöglichkeiten -->
-										<th class="col bg-secondary" style="width: 16%">
+										<th class="col bg-secondary" style="width: 16%"
+										    th:if="${ergebnis.getAnzahlAntworten() != 0}">
 											<div class="progress m-1" style="height: 16px">
 												<div class="progress-bar font-weight-bold"
 												     style="width: 100%">
@@ -162,7 +164,8 @@
 											</div>
 										</th>
 										
-										<th class="col bg-secondary" style="width: 16%">
+										<th class="col bg-secondary" style="width: 16%"
+										    th:if="${ergebnis.getAnzahlAntworten() != 0}">
 											<div class="progress m-1" style="height: 16px">
 												<div class="progress-bar font-weight-bold bg-danger"
 												     style="width: 100%">
@@ -172,7 +175,8 @@
 										</th>
 										
 										<!-- Details-Knopf -->
-										<th class="col bg-secondary" style="width: 1px"></th>
+										<th class="col bg-secondary" style="width: 1px"
+										    th:if="${ergebnis.getAnzahlAntworten() != 0}"></th>
 									</tr>
 								</thead>
 								
@@ -182,6 +186,7 @@
 										<td class="col text-white font-weight-bold"
 										    style="vertical-align: middle; width: 1px"
 										    rowspan="2"
+										    th:if="${ergebnis.getNutzerAntworten().size() != 0}"
 										    th:classappend="${ergebnis.getIsNutzerAntwortJa(
 										                                        )[__${iter.index}__]
 										                    ? 'bg-primary' : 'bg-danger'}">
@@ -205,7 +210,8 @@
 										<!-- Gesamtergebnis -->
 										<td class="col" colspan="2"
 										    th:classappend="${iter.count % 2 == 1}
-										                    ? 'bg-white' : 'bg-light'">
+										                    ? 'bg-white' : 'bg-light'"
+										    th:if="${ergebnis.getAnzahlAntworten() != 0}">
 											<div class="progress m-1" style="height: 16px">
 												<div class="progress-bar bg-primary
 												            font-weight-bold"
@@ -243,7 +249,8 @@
 										<!-- Details-Knopf -->
 										<td class="col" style="width: 1px"
 										    th:classappend="${iter.count % 2 == 1}
-										                    ? 'bg-white' : 'bg-light'">
+										                    ? 'bg-white' : 'bg-light'"
+										    th:if="${ergebnis.getAnzahlAntworten() != 0}">
 											<div data-toggle="tooltip" data-placement="left"
 											     title="Details">
 												<button class="btn btn-sm btn-info
@@ -257,7 +264,8 @@
 										</td>
 									</tr>
 									
-									<tr style="font-size: small">
+									<tr style="font-size: small"
+									    th:if="${ergebnis.getAnzahlAntworten() != 0}">
 										<td class="col p-0"
 										    th:classappend="${iter.count % 2 == 1}
 										                    ? 'bg-white' : 'bg-light'"
