@@ -185,7 +185,7 @@ public class GruppeService {
 	 * 
 	 * @return Eine HashMap mit den Gruppenids als Schlüssel und den Namen als Werte
 	 */
-	public HashMap<String, String> extrahiereIdAndNameAusGruppen(List<Gruppe> gruppen) {
+	public HashMap<String, String> extrahiereIdUndNameAusGruppen(List<Gruppe> gruppen) {
 		HashMap<String, String> groups = new HashMap<>();
 		for (Gruppe group : gruppen) {
 			groups.put(group.getId(), group.getName());

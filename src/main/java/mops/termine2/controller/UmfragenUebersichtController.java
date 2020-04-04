@@ -77,7 +77,7 @@ public class UmfragenUebersichtController {
 		List<Umfrage> umfrageAbgeschlossen = 
 			umfragenuebersichtService.loadAbgeschlosseneUmfragen(account, selGruppe);
 		
-		HashMap<String, String> groups = gruppeService.extrahiereIdAndNameAusGruppen(gruppen);
+		HashMap<String, String> groups = gruppeService.extrahiereIdUndNameAusGruppen(gruppen);
 		umfrageService.setzeGruppenName(umfrageOffen, groups);
 		umfrageService.setzeGruppenName(umfrageAbgeschlossen, groups);
 		
