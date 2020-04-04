@@ -123,7 +123,7 @@ public class UmfragenAbstimmungController {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
-		UmfrageAntwort antwort = umfrageAntwortService.loadByBenutzerAndLink(account.getName(), link);
+		UmfrageAntwort antwort = umfrageAntwortService.loadByBenutzerUndLink(account.getName(), link);
 		AntwortFormUmfragen antwortForm = new AntwortFormUmfragen();
 		antwortForm.init(antwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
@@ -167,7 +167,7 @@ public class UmfragenAbstimmungController {
 		}
 		
 		List<UmfrageAntwort> antworten = umfrageAntwortService.loadAllByLink(link);
-		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerAndLink(
+		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerUndLink(
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);

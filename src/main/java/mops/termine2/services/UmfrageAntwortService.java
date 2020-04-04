@@ -97,10 +97,10 @@ public class UmfrageAntwortService {
 	 * 
 	 * @return die Antwort des Benutzers für die Umfrage
 	 */	
-	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
+	public UmfrageAntwort loadByBenutzerUndLink(String benutzer, String link) {
 		List<UmfrageAntwortDB> alteAntwort = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
 		List<UmfrageDB> antwortMoeglichkeiten = umfrageRepo.findByLink(link);
-		return buildAntwortForBenutzer(benutzer, alteAntwort, antwortMoeglichkeiten);
+		return baueAntwortFuerBenutzer(benutzer, alteAntwort, antwortMoeglichkeiten);
 	}
 	
 	/**
@@ -115,11 +115,11 @@ public class UmfrageAntwortService {
 			antwortRepo.findAllByUmfrageLink(link);
 		List<UmfrageDB> antwortMoeglichkeiten = umfrageRepo.findByLink(link);
 		
-		return buildAntworten(antwortDBList,
+		return baueAntworten(antwortDBList,
 			antwortMoeglichkeiten);
 	}
 	
-	private List<UmfrageAntwort> buildAntworten(
+	private List<UmfrageAntwort> baueAntworten(
 		List<UmfrageAntwortDB> antwortDBS, List<UmfrageDB> antwortMoeglichkeiten) {
 		
 		List<UmfrageAntwort> umfrageAntworten = new ArrayList<>();
@@ -129,21 +129,18 @@ public class UmfrageAntwortService {
 			for (UmfrageAntwortDB antwortDB : antwortDBS) {
 				String benutzer = antwortDB.getBenutzer();
 				if (!benutzernamen.contains(antwortDB.getBenutzer())) {
-					List<UmfrageAntwortDB> nutzerAntworten = filterAntwortenDbBenutzer(
+					List<UmfrageAntwortDB> nutzerAntworten = filtereAntwortenNachBenutzer(
 						antwortDBS, benutzer);
-					umfrageAntworten.add(buildAntwortForBenutzer(
+					umfrageAntworten.add(baueAntwortFuerBenutzer(
 						benutzer, nutzerAntworten, antwortMoeglichkeiten));
 					benutzernamen.add(benutzer);
-				}
-				
+				}				
 			}
 		}
-		return umfrageAntworten;
-		
-	}
+		return umfrageAntworten;		
+	}	
 	
-	
-	private UmfrageAntwort buildAntwortForBenutzer(
+	private UmfrageAntwort baueAntwortFuerBenutzer(
 		String benutzer, List<UmfrageAntwortDB> alteAntworten,
 		List<UmfrageDB> antwortMoglichkeiten) {
 		
@@ -173,7 +170,7 @@ public class UmfrageAntwortService {
 		return antwort;
 	}
 	
-	private List<UmfrageAntwortDB> filterAntwortenDbBenutzer(
+	private List<UmfrageAntwortDB> filtereAntwortenNachBenutzer(
 		List<UmfrageAntwortDB> antwortDBS, String benutzer) {
 		List<UmfrageAntwortDB> nutzerAntwortenDB = new ArrayList<>();
 		for (UmfrageAntwortDB umfrageAntwortDB : antwortDBS) {

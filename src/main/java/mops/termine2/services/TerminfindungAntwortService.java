@@ -133,12 +133,10 @@ public class TerminfindungAntwortService {
 					terminAntworten.add(baueAntwortFuerBenutzer(
 						benutzer, nutzerAntworten, antwortMoeglichkeiten));
 					benuternamen.add(benutzer);
-				}
-				
+				}				
 			}
 		}
-		return terminAntworten;
-		
+		return terminAntworten;		
 	}
 	
 	private TerminfindungAntwort baueAntwortFuerBenutzer(
@@ -168,8 +166,7 @@ public class TerminfindungAntwortService {
 		
 		antwort.setAntworten(antwortenMap);
 		return antwort;
-	}
-	
+	}	
 	
 	private List<TerminfindungAntwortDB> filtereAntwortenNachBenutzer(
 		List<TerminfindungAntwortDB> antwortDBS, String benutzer) {

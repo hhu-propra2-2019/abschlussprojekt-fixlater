@@ -80,7 +80,7 @@ public class UmfrageAntwortServiceTest {
 			.thenReturn(umfrageAntwortDBs);
 		when(umfrageRepo.findByLink(LINK))
 			.thenReturn(umfrageDBs);
-		UmfrageAntwort ergebnis = antwortService.loadByBenutzerAndLink(BENUTZER1, LINK);
+		UmfrageAntwort ergebnis = antwortService.loadByBenutzerUndLink(BENUTZER1, LINK);
 		UmfrageAntwort erwartet = getBeispielUmfrageAntwort(anzahl, BENUTZER1);
 		
 		assertThat(ergebnis).isEqualTo(erwartet);
