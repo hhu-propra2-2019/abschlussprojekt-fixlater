@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AntwortForm {
+public class AntwortFormTermine {
 	
 	public List<LocalDateTime> termine = new ArrayList<>();
 	
@@ -44,7 +44,8 @@ public class AntwortForm {
 	}
 	
 	
-	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, String nutzer, AntwortForm antwortFrm) {
+	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, 
+		String nutzer, AntwortFormTermine antwortFrm) {
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setKuerzel(nutzer);
 		terminfindungAntwort.setLink(terminf.getLink());

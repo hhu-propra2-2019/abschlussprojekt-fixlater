@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErgebnisForm {
+public class ErgebnisFormTermine {
 	
 	int anzahlAntworten;
 	

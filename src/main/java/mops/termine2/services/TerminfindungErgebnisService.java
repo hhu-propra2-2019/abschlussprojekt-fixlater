@@ -1,6 +1,6 @@
 package mops.termine2.services;
 
-import mops.termine2.controller.formular.ErgebnisForm;
+import mops.termine2.controller.formular.ErgebnisFormTermine;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.enums.Antwort;
@@ -88,12 +88,12 @@ public class TerminfindungErgebnisService {
 	 * 
 	 * @return Die ErgebnisForm der Terminfindung
 	 */
-	public ErgebnisForm baueErgebnisForm(
+	public ErgebnisFormTermine baueErgebnisForm(
 		List<TerminfindungAntwort> antworten,
 		Terminfindung terminfindung,
 		TerminfindungAntwort nutzerAbstimmung) {
 		
-		ErgebnisForm toReturn = new ErgebnisForm();
+		ErgebnisFormTermine toReturn = new ErgebnisFormTermine();
 		int anzahlAntworten;
 		
 		List<LocalDateTime> termine = new ArrayList<>();

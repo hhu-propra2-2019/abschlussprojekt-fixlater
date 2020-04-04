@@ -12,9 +12,9 @@ import javax.annotation.security.RolesAllowed;
 
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
-import mops.termine2.controller.formular.AbstimmungsInfortmationenTermineForm;
-import mops.termine2.controller.formular.AntwortForm;
-import mops.termine2.controller.formular.ErgebnisForm;
+import mops.termine2.controller.formular.AbstimmungsInformationenTermineForm;
+import mops.termine2.controller.formular.AntwortFormTermine;
+import mops.termine2.controller.formular.ErgebnisFormTermine;
 import mops.termine2.models.Kommentar;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
@@ -130,14 +130,14 @@ public class TermineAbstimmungController {
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerUndLink(account.getName(), link);
-		AntwortForm antwortForm = new AntwortForm();
+		AntwortFormTermine antwortForm = new AntwortFormTermine();
 		antwortForm.init(antwort);
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInformationenTermineForm(terminfindung));
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
@@ -182,11 +182,11 @@ public class TermineAbstimmungController {
 		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
 		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerUndLink(
 			account.getName(), link);
-		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten,
+		ErgebnisFormTermine ergebnis = ergebnisService.baueErgebnisForm(antworten,
 			terminfindung, nutzerAntwort);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInformationenTermineForm(terminfindung));
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
@@ -201,7 +201,7 @@ public class TermineAbstimmungController {
 	public String saveAbstimmung(Principal principal,
 		Model model,
 		@PathVariable("link") String link,
-		@ModelAttribute AntwortForm antwortForm) {
+		@ModelAttribute AntwortFormTermine antwortForm) {
 		
 		// Account
 		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
@@ -234,7 +234,7 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link;
 		}
 		
-		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung,
+		TerminfindungAntwort terminfindungAntwort = AntwortFormTermine.mergeToAnswer(terminfindung,
 			account.getName(), antwortForm);
 		
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
