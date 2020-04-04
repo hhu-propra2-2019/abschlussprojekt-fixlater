@@ -12,6 +12,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Bietet Methoden zur Filterung von Umfragen bezüglich der Frist
+ * für einzelne benutzer oder ganze Gruppen
+ */
 @Service
 public class UmfragenUebersichtService {
 	
@@ -33,78 +37,19 @@ public class UmfragenUebersichtService {
 	}
 	
 	/**
-	 * Geht die Umfragen durch und filtert nach offenen die zu einer Gruppe gehören
+	 * Holt alle noch offenen Umfragen zu der Gruppe mit 
+	 * Gruppen-ID {@code gruppeId} aus der Datenbank. 
+	 * Ist {@code gruppe} {@code null} oder hat ID "-1", so werden
+	 * die offenen Umfragen für den Benutzer aus der Datenbank geholt
+	 * ohne Filterung nach einer Gruppe.
+	 * Eine offene Umfrage ist dabei eine Umfrage, deren Frist
+	 * in der Zukunft liegt.
 	 *
-	 * @param account
-	 * @param gruppeId
-	 * @return eine Liste von offenen Umfragen nach Gruppe
+	 * @param account Das Account Objekt des aktuellen Benutzers
+	 * @param gruppe Das Gruppen Objekt der ausgewählten Gruppe
+	 * 
+	 * @return die noch offenen Umfragen für die Gruppe oder den Benutzer
 	 */
-	public List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, String gruppeId) {
-		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
-		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
-		
-		offeneUmfragen = offeneUmfragen.stream()
-			.sorted(Comparator.comparing(Umfrage::getFrist))
-			.collect(Collectors.toList());
-		
-		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
-		
-		return offeneUmfragen;
-	}
-	
-	/**
-	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
-	 *
-	 * @param account
-	 * @param gruppeId
-	 * @return eine Liste von abgeschlossenen Umfragen nach Gruppe
-	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, String gruppeId) {
-		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
-		List<Umfrage> abgeschlosseneUmfragen = filterClosedSurveys(umfragen);
-		
-		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
-		
-		return abgeschlosseneUmfragen;
-	}
-	
-	/**
-	 * Geht die Umfragen durch und filtert nach offenen die zu einem Nutzer gehören
-	 *
-	 * @param account
-	 * @return eine Liste von offenen Umfragen nach Nutzer
-	 */
-	public List<Umfrage> loadOffeneUmfragenFuerBenutzer(Account account) {
-		List<Umfrage> umfragen = getAllUmfragenVonBenutzer(account);
-		List<Umfrage> offeneUmfragen = filterOpenSurveys(umfragen);
-		
-		offeneUmfragen = offeneUmfragen.stream()
-			.sorted(Comparator.comparing(Umfrage::getFrist))
-			.collect(Collectors.toList());
-		
-		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
-		
-		return offeneUmfragen;
-	}
-	
-	
-	/**
-	 * Geht die Umfragen durch und filtert nach abgeschlossenen die zu einem Nutzer gehören
-	 *
-	 * @param account
-	 * @return eine Liste von abgeschlossenen Umfragen nach Nutzer
-	 */
-	public List<Umfrage> loadAbgeschlosseneUmfragenFuerBenutzer(Account account) {
-		List<Umfrage> umfragen = getAllUmfragenVonBenutzer(account);
-		List<Umfrage> abgeschlosseneUmfragen = filterClosedSurveys(umfragen);
-		
-		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
-		
-		return abgeschlosseneUmfragen;
-	}
-	
 	public List<Umfrage> loadOffeneUmfragen(Account account, Gruppe gruppe) {
 		if (gruppe == null || gruppe.getId().equals("-1")) {
 			return loadOffeneUmfragenFuerBenutzer(account);
@@ -112,11 +57,71 @@ public class UmfragenUebersichtService {
 		return loadOffeneUmfragenFuerGruppe(account, gruppe.getId());
 	}
 	
+	/**
+	 * Holt alle schon abgeschlossenen Umfragen zu der Gruppe mit 
+	 * Gruppen-ID {@code gruppeId} aus der Datenbank. 
+	 * Ist {@code gruppe} {@code null} oder hat ID "-1", so werden
+	 * die abgeschlossenen Umfragen für den Benutzer aus der Datenbank geholt
+	 * ohne Filterung nach einer Gruppe.
+	 * Eine abgeschlossene Umfrage ist dabei eine Umfrage, deren Frist
+	 * in der Vergangenheit liegt.
+	 *
+	 * @param account Das Account Objekt des aktuellen Benutzers
+	 * @param gruppe Das Gruppen Objekt der ausgewählten Gruppe
+	 * 
+	 * @return die bereits abgeschlossenen Umfragen für die Gruppe oder den Benutzer
+	 */
 	public List<Umfrage> loadAbgeschlosseneUmfragen(Account account, Gruppe gruppe) {
 		if (gruppe == null || gruppe.getId().equals("-1")) {
 			return loadAbgeschlosseneUmfragenFuerBenutzer(account);
 		}
 		return loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe.getId());
+	}
+	
+	private List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, String gruppeId) {
+		List<Umfrage> umfragen = new ArrayList<>();
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
+		List<Umfrage> offeneUmfragen = filtereOffeneUmfragen(umfragen);
+		
+		offeneUmfragen = offeneUmfragen.stream()
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
+		
+		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
+		
+		return offeneUmfragen;
+	}
+	
+	private List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, String gruppeId) {
+		List<Umfrage> umfragen = new ArrayList<>();
+		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
+		List<Umfrage> abgeschlosseneUmfragen = filtereAbgeschlosseneUmfragen(umfragen);
+		
+		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
+		
+		return abgeschlosseneUmfragen;
+	}
+	
+	private List<Umfrage> loadOffeneUmfragenFuerBenutzer(Account account) {
+		List<Umfrage> umfragen = getAllUmfragenVonBenutzer(account);
+		List<Umfrage> offeneUmfragen = filtereOffeneUmfragen(umfragen);
+		
+		offeneUmfragen = offeneUmfragen.stream()
+			.sorted(Comparator.comparing(Umfrage::getFrist))
+			.collect(Collectors.toList());
+		
+		offeneUmfragen = setTeilgenommen(offeneUmfragen, account);
+		
+		return offeneUmfragen;
+	}
+	
+	private List<Umfrage> loadAbgeschlosseneUmfragenFuerBenutzer(Account account) {
+		List<Umfrage> umfragen = getAllUmfragenVonBenutzer(account);
+		List<Umfrage> abgeschlosseneUmfragen = filtereAbgeschlosseneUmfragen(umfragen);
+		
+		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
+		
+		return abgeschlosseneUmfragen;
 	}
 	
 	private List<Umfrage> getUmfragenVonBenutzer(Account account) {
@@ -130,7 +135,7 @@ public class UmfragenUebersichtService {
 		return umfragen;
 	}
 	
-	private List<Umfrage> filterOpenSurveys(List<Umfrage> umfragen) {
+	private List<Umfrage> filtereOffeneUmfragen(List<Umfrage> umfragen) {
 		List<Umfrage> offeneUmfragen = new ArrayList<>();
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) > 0) {
@@ -140,7 +145,7 @@ public class UmfragenUebersichtService {
 		return offeneUmfragen;
 	}
 	
-	private List<Umfrage> filterClosedSurveys(List<Umfrage> umfragen) {
+	private List<Umfrage> filtereAbgeschlosseneUmfragen(List<Umfrage> umfragen) {
 		List<Umfrage> abgeschlosseneUmfragen = new ArrayList<>();
 		for (Umfrage umfrage : umfragen) {
 			if (umfrage.getFrist().compareTo(LocalDateTime.now()) <= 0) {
@@ -189,12 +194,12 @@ public class UmfragenUebersichtService {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
 		umfragen.addAll(umfrageService.loadAllBenutzerHatAbgestimmtOhneUmfrage(account.getName()));
 		
-		umfragen = distinct(umfragen);
+		umfragen = eindeutigeUmfragenListe(umfragen);
 		
 		return umfragen;
 	}
 	
-	private List<Umfrage> distinct(List<Umfrage> umfragen) {
+	private List<Umfrage> eindeutigeUmfragenListe(List<Umfrage> umfragen) {
 		List<Umfrage> distinct = new ArrayList<>();
 		List<String> links = new ArrayList<>();
 		
@@ -203,8 +208,7 @@ public class UmfragenUebersichtService {
 				links.add(umfrage.getLink());
 				distinct.add(umfrage);
 			}
-		}
-		
+		}		
 		return distinct;
 	}
 }

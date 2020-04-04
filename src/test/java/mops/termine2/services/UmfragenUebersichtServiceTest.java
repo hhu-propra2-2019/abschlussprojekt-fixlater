@@ -6,6 +6,7 @@ import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.database.entities.UmfrageDB;
+import mops.termine2.models.Gruppe;
 import mops.termine2.models.Umfrage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,7 @@ public class UmfragenUebersichtServiceTest {
 			.thenReturn(umfragenDB);
 		
 		List<Umfrage> ergebnis =
-			umfrageuebersichtService.loadOffeneUmfragenFuerBenutzer(account);
+			umfrageuebersichtService.loadOffeneUmfragen(account, null);
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(2), umfragen.get(0)));
 		
@@ -126,7 +127,7 @@ public class UmfragenUebersichtServiceTest {
 			.thenReturn(umfragenDB);
 		
 		List<Umfrage> ergebnis =
-			umfrageuebersichtService.loadAbgeschlosseneUmfragenFuerBenutzer(account);
+			umfrageuebersichtService.loadAbgeschlosseneUmfragen(account, null);
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(1), umfragen.get(3)));
 		
@@ -140,9 +141,9 @@ public class UmfragenUebersichtServiceTest {
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
-		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
-		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId("5");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setName("Gruppe");
+		gruppe.setId("5");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> unfragenDB = new ArrayList<>();
@@ -155,7 +156,7 @@ public class UmfragenUebersichtServiceTest {
 			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
-			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+			if (gruppenIds.get(i).equals(gruppe.getId())) {
 				UmfrageDB umfrageDB = new UmfrageDB();
 				umfrageDB.setLink(days.get(i).toString());
 				umfrageDB.setFrist(ldt.plusDays(days.get(i)));
@@ -163,11 +164,11 @@ public class UmfragenUebersichtServiceTest {
 				unfragenDB.add(umfrageDB);
 			}
 		}
-		when(umfrageRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+		when(umfrageRepository.findByGruppeIdOrderByFristAsc(gruppe.getId()))
 			.thenReturn(unfragenDB);
 		
 		List<Umfrage> ergebnis =
-			umfrageuebersichtService.loadOffeneUmfragenFuerGruppe(account, gruppe.getGruppeId());
+			umfrageuebersichtService.loadOffeneUmfragen(account, gruppe);
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(2), umfragen.get(4)));
 		
@@ -182,9 +183,9 @@ public class UmfragenUebersichtServiceTest {
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
-		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
-		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId("5");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setName("Gruppe");
+		gruppe.setId("5");
 		
 		List<Umfrage> umfragen = new ArrayList<>();
 		List<UmfrageDB> umfragenDB = new ArrayList<>();
@@ -198,7 +199,7 @@ public class UmfragenUebersichtServiceTest {
 			umfrage.setVorschlaege(new ArrayList<>());
 			umfragen.add(umfrage);
 			
-			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+			if (gruppenIds.get(i).equals(gruppe.getId())) {
 				UmfrageDB umfrageDB = new UmfrageDB();
 				umfrageDB.setLink(days.get(i).toString());
 				umfrageDB.setFrist(ldt.plusDays(days.get(i)));
@@ -208,11 +209,11 @@ public class UmfragenUebersichtServiceTest {
 			}
 		}
 		
-		when(umfrageRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+		when(umfrageRepository.findByGruppeIdOrderByFristAsc(gruppe.getId()))
 			.thenReturn(umfragenDB);
 		
 		List<Umfrage> result =
-			umfrageuebersichtService.loadAbgeschlosseneUmfragenFuerGruppe(account, gruppe.getGruppeId());
+			umfrageuebersichtService.loadAbgeschlosseneUmfragen(account, gruppe);
 		List<Umfrage> erwartet =
 			new ArrayList<>(Arrays.asList(umfragen.get(5), umfragen.get(1)));
 		
