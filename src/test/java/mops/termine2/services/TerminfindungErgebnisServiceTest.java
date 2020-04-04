@@ -69,7 +69,7 @@ public class TerminfindungErgebnisServiceTest {
 		)));
 		when(antwortRepo.findAllByTerminfindungLink(any())).thenReturn(beispielAntworten3());
 		
-		LocalDateTime expected = LocalDateTime.of(1, 1, 1, 1, 1);
+		LocalDateTime expected = LocalDateTime.of(1, 1, 1, 1, 2);
 		LocalDateTime ergebnis = ergebnisService.berechneErgebnisTerminfindung(t);
 		
 		assertThat(ergebnis).isEqualTo(expected);
@@ -108,10 +108,10 @@ public class TerminfindungErgebnisServiceTest {
 		String benutzer3 = "3";
 		String benutzer4 = "4";
 		
-		result.addAll(antwortForBenutzer(benutzer1, Antwort.JA, Antwort.NEIN));
+		result.addAll(antwortForBenutzer(benutzer1, Antwort.JA, Antwort.VIELLEICHT));
 		result.addAll(antwortForBenutzer(benutzer2, Antwort.JA, Antwort.JA));
-		result.addAll(antwortForBenutzer(benutzer3, Antwort.VIELLEICHT, Antwort.VIELLEICHT));
-		result.addAll(antwortForBenutzer(benutzer4, Antwort.VIELLEICHT, Antwort.JA));
+		result.addAll(antwortForBenutzer(benutzer3, Antwort.VIELLEICHT, Antwort.JA));
+		result.addAll(antwortForBenutzer(benutzer4, Antwort.NEIN, Antwort.VIELLEICHT));
 		
 		return result;
 	}
@@ -138,4 +138,5 @@ public class TerminfindungErgebnisServiceTest {
 		antwort.add(a2);
 		return antwort;
 	}
+	
 }
