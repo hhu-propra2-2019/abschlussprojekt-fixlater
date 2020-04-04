@@ -80,7 +80,7 @@ public class UmfragenUebersichtService {
 	
 	private List<Umfrage> loadOffeneUmfragenFuerGruppe(Account account, String gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
+		umfragen.addAll(umfrageService.loadByGruppeOhneVorschlaege(gruppeId));
 		List<Umfrage> offeneUmfragen = filtereOffeneUmfragen(umfragen);
 		
 		offeneUmfragen = offeneUmfragen.stream()
@@ -94,7 +94,7 @@ public class UmfragenUebersichtService {
 	
 	private List<Umfrage> loadAbgeschlosseneUmfragenFuerGruppe(Account account, String gruppeId) {
 		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(gruppeId));
+		umfragen.addAll(umfrageService.loadByGruppeOhneVorschlaege(gruppeId));
 		List<Umfrage> abgeschlosseneUmfragen = filtereAbgeschlosseneUmfragen(umfragen);
 		
 		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
@@ -126,11 +126,11 @@ public class UmfragenUebersichtService {
 	
 	private List<Umfrage> getUmfragenVonBenutzer(Account account) {
 		List<Umfrage> umfragen = new ArrayList<>();
-		umfragen.addAll(umfrageService.loadByErstellerOhneUmfragen(account.getName()));
+		umfragen.addAll(umfrageService.loadByErstellerOhneVorschlaege(account.getName()));
 		
 		List<Gruppe> gruppen = gruppeService.loadByBenutzer(account);
 		for (Gruppe g : gruppen) {
-			umfragen.addAll(umfrageService.loadByGruppeOhneUmfragen(g.getId()));
+			umfragen.addAll(umfrageService.loadByGruppeOhneVorschlaege(g.getId()));
 		}
 		return umfragen;
 	}
@@ -192,7 +192,7 @@ public class UmfragenUebersichtService {
 	
 	private List<Umfrage> getAllUmfragenVonBenutzer(Account account) {
 		List<Umfrage> umfragen = getUmfragenVonBenutzer(account);
-		umfragen.addAll(umfrageService.loadAllBenutzerHatAbgestimmtOhneUmfrage(account.getName()));
+		umfragen.addAll(umfrageService.loadAllBenutzerHatAbgestimmtOhneVorschlaege(account.getName()));
 		
 		umfragen = eindeutigeUmfragenListe(umfragen);
 		

@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Der TerminfindungService ist die zentrale Schnittstelle zwischen
+ * der Datenbank und den Controllern für die Terminfindung. Es werden
+ * Methoden zum Speichern, Löschen und Aktualisieren einer
+ * Terminfindung angeboten.
+ */
 @Service
 public class TerminfindungService {
 	
@@ -263,7 +269,7 @@ public class TerminfindungService {
 	 * {@code indexToDelete}. Tritt eine {@link NullPointerException} oder
 	 * {@link IndexOutOfBoundsException} auf, so wird nicht gelöscht.
 	 * 
-	 * @param terminfindung Die Terminfindung, in der der termin gelöscht werden soll
+	 * @param terminfindung Die Terminfindung, in der der Termin gelöscht werden soll
 	 * @param indexToDelete Der index des Termins, der gelöscht werden soll
 	 */
 	public void loescheTermin(Terminfindung terminfindung, int indexToDelete) {
@@ -280,7 +286,7 @@ public class TerminfindungService {
 	 * Liste geschrieben und zurückgegeben. Bei Erfolg ist diese Liste leer.
 	 * 
 	 * @param account Das Account Objekt des aktuellen Benutzers. Wird als Ersteller eingetragen
-	 * @param terminfindung Die terminfindung, deren Attribute aktualisiert werden sollen
+	 * @param terminfindung Die Terminfindung, deren Attribute aktualisiert werden sollen
 	 *
 	 * @return Die Liste von Fehlermeldungen
 	 */

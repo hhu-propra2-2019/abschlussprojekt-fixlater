@@ -75,7 +75,7 @@ public class ErgebnisScheduler {
 				.findByFristBeforeAndErgebnisIsNull(LocalDateTime.now());
 		
 		List<Umfrage> umfragen =
-			umfrageService.getDistinctUmfragen(umfrageDBS);
+			umfrageService.getEindeutigeUmfragen(umfrageDBS);
 		
 		for (Umfrage umfrage : umfragen) {
 			Umfrage aktuelleUmfrage = umfrageService.loadByLinkMitVorschlaegen(umfrage.getLink());

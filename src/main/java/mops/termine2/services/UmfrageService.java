@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Der UmfrageService ist die zentrale Schnittstelle zwischen
+ * der Datenbank und den Controllern für die Umfragen. Es werden
+ * Methoden zum Speichern, Löschen und Aktualisieren einer
+ * Umfrage angeboten.
+ */
 @Service
 public class UmfrageService {
 	
@@ -28,9 +34,10 @@ public class UmfrageService {
 	}
 	
 	/**
-	 * Speichert eine neue Umfrage in der DB
+	 * Speichert eine neue Umfrage in der Datenbank
 	 *
-	 * @param umfrage
+	 * @param umfrage Die Umfrage, 
+	 * 		die in der Datenbank gespeichert werden soll
 	 */
 	@Transactional
 	public void save(Umfrage umfrage) {
@@ -79,24 +86,32 @@ public class UmfrageService {
 	}
 	
 	/**
-	 * Löscht eine Umfrage und zugehörige Antworten nach Link
+	 * Löscht eine Umfrage und zugehörige Antworten 
+	 * zu dem gegebenen Link
 	 *
-	 * @param link
+	 * @param link Der Link, zu dem die Umfrage und Antworten
+	 * 		gelöscht werden sollen
 	 */
-	public void deleteByLink(String link) {
+	public void loescheNachLink(String link) {
 		umfrageAntwortRepository.deleteAllByUmfrageLink(link);
 		umfrageRepository.deleteByLink(link);
 	}
 	
 	/**
-	 * Löscht eine abgelaufene Umfrage und zugehörige Antworten
+	 * Löscht eine Umfrage und zugehörige Antworten 
+	 * der gegebenen Gruppe
 	 *
-	 * @param gruppeId
+	 * @param gruppeId Die Gruppe-ID, deren Umfragen gelöscht werden sollen
 	 */
-	public void deleteByGruppe(String gruppeId) {
+	public void loescheNachGruppe(String gruppeId) {
 		umfrageRepository.deleteByGruppeId(gruppeId);
 	}
 	
+	/**
+	 * Löscht alle abgelaufene Umfragen und zugehörige Antworten.
+	 * Eine abgelaufene Umfrage ist eine Umfrage, deren
+	 * Löschdatum in der Vergangenheit liegt
+	 */
 	@Transactional
 	public void loescheAbgelaufeneUmfragen() {
 		LocalDateTime now = LocalDateTime.now();
@@ -105,6 +120,15 @@ public class UmfrageService {
 		
 	}
 	
+	/**
+	 * Lädt die Umfragen aus der Datenbank mit Link {@code link} aus
+	 * der Datenbank. Dabei werden Vorschläge geladen.
+	 * 
+	 * @param link Der Link der Umfrage, die gesucht werden soll
+	 * 
+	 * @return Die Umfrage mit Link {@code link} oder {@code null}, falls
+	 * 		der Link nicht gefunden wird
+	 */
 	public Umfrage loadByLink(String link) {
 		List<UmfrageDB> umfragenDB = umfrageRepository.findByLink(link);
 		if (umfragenDB != null && !umfragenDB.isEmpty()) {
@@ -130,41 +154,60 @@ public class UmfrageService {
 		return null;
 	}
 	
-	public List<Umfrage> loadByErstellerOhneUmfragen(String ersteller) {
+	/**
+	 * Lädt alle Umfragen aus der Datenbank von dem Benutzer {@code ersteller}
+	 * und gibt diese zurück. Dabei werden keine Vorschläge geladen. 
+	 * 
+	 * @param ersteller Der Benutzer dessen Umfragen gesucht werden sollen
+	 * 
+	 * @return Die Liste der Umfragen, die von dem Benutzer {@code ersteller}
+	 * 		erstellt wurden
+	 */
+	public List<Umfrage> loadByErstellerOhneVorschlaege(String ersteller) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByErstellerOrderByFristAsc(ersteller);
-		return getDistinctUmfragen(umfrageDBs);
+		return getEindeutigeUmfragen(umfrageDBs);
 	}
 	
-	public List<Umfrage> loadByGruppeOhneUmfragen(String gruppeId) {
+	/**
+	 * Lädt alle Umfragen aus der Datenbank für die Gruppe
+	 * mit Gruppen-ID {@code gruppeId} und gibt diese zurück. 
+	 * Dabei werden keine Vorschläge geladen. 
+	 * 
+	 * @param gruppeId Die Gruppe deren Umfragen gesucht werden sollen
+	 * 
+	 * @return Die Liste der Umfragen, die zu der Gruppe mit Gruppen-ID
+	 * 		{@code gruppeId} gehören
+	 */
+	public List<Umfrage> loadByGruppeOhneVorschlaege(String gruppeId) {
 		List<UmfrageDB> umfrageDBs = umfrageRepository.findByGruppeIdOrderByFristAsc(gruppeId);
-		return getDistinctUmfragen(umfrageDBs);
+		return getEindeutigeUmfragen(umfrageDBs);
 	}
 	
+	/**
+	 * Lädt alle Umfragen aus der Datenbank, bei denen der Benutzer
+	 * {@code benutzer} abgestimmt hat und gibt diese zurück. 
+	 * Dabei werden keine Vorschläge geladen. 
+	 * 
+	 * @param benutzer Der Benutzer dessen Umfragen gesucht werden sollen
+	 * 
+	 * @return Die Liste der Umfragen, bei denen der Benutzer
+	 * 		{@code benutzer} abgestimmt hat
+	 */
 	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneVorschlaege(String benutzer) {
 		List<UmfrageDB> umfrageDBs = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
-		List<Umfrage> umfragen = getDistinctUmfragen(umfrageDBs);
+		List<Umfrage> umfragen = getEindeutigeUmfragen(umfrageDBs);
 		return umfragen;
 	}
 	
-	public List<Umfrage> getDistinctUmfragen(List<UmfrageDB> umfrageDBs) {
-		List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
-		List<String> links = new ArrayList<String>();
-		for (UmfrageDB umfragedb : umfrageDBs) {
-			if (!links.contains(umfragedb.getLink())) {
-				distinctUmfrage.add(erstelleUmfrageOhneVorschlaege(umfragedb));
-				links.add(umfragedb.getLink());
-			}
-		}
-		return distinctUmfrage;
-	}
-	
-	public List<Umfrage> loadAllBenutzerHatAbgestimmtOhneUmfrage(String benutzer) {
-		List<UmfrageDB> umfragenDB = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
-		List<Umfrage> umfragen = getDistinctUmfrageList(umfragenDB);
-		
-		return umfragen;
-	}
-	
+	/**
+	 * Lädt die Umfragen aus der Datenbank mit Link {@code link} aus
+	 * der Datenbank. Dabei werden Vorschläge geladen.
+	 * 
+	 * @param link Der Link der Umfrage, die gesucht werden soll
+	 * 
+	 * @return Die Umfrage mit Link {@code link} oder {@code null}, falls
+	 * 		der Link nicht gefunden wird
+	 */
 	public Umfrage loadByLinkMitVorschlaegen(String link) {
 		List<UmfrageDB> vorschlaegeDB = umfrageRepository.findByLink(link);
 		if (vorschlaegeDB != null && !vorschlaegeDB.isEmpty()) {
@@ -191,9 +234,33 @@ public class UmfrageService {
 	}
 	
 	/**
-	 * Erstellt eine leere Umfrage mit Standard Parametern
-	 *
-	 * @return
+	 * Übersetzt eine Liste von UmfrageDB Objekten in eine
+	 * Liste von Umfrage Objekten. Dabei sind die Umfragen 
+	 * nach Link eindeutig.
+	 * 
+	 * @param umfrageDBs Die Liste von UmfrageDB Objekten, 
+	 * die übersetzt werden sollen
+	 * 
+	 * @return Die Liste von Umfrage Objekten, die aus {@code umfrageDBs}
+	 * 		entstand
+	 */
+	public List<Umfrage> getEindeutigeUmfragen(List<UmfrageDB> umfrageDBs) {
+		List<Umfrage> distinctUmfrage = new ArrayList<Umfrage>();
+		List<String> links = new ArrayList<String>();
+		for (UmfrageDB umfragedb : umfrageDBs) {
+			if (!links.contains(umfragedb.getLink())) {
+				distinctUmfrage.add(erstelleUmfrageOhneVorschlaege(umfragedb));
+				links.add(umfragedb.getLink());
+			}
+		}
+		return distinctUmfrage;
+	}
+	
+	/**
+	 * Erstellt ein neues Umfrage Objekt mit einer leeren Vorschlagliste,
+	 * Frist eine Woche in der Zukunft und Löschdatum vier Wochen in der Zukunft
+	 * 
+	 * @return Das erstellte Umfrage Objekt
 	 */
 	public Umfrage createDefaultUmfrage() {
 		Umfrage umfrage = new Umfrage();
@@ -204,6 +271,14 @@ public class UmfrageService {
 		return umfrage;
 	}
 	
+	/**
+	 * Löscht den Vorschlag von {@code umfrage} an der Stelle
+	 * {@code indexToDelete}. Tritt eine {@link NullPointerException} oder
+	 * {@link IndexOutOfBoundsException} auf, so wird nicht gelöscht.
+	 * 
+	 * @param terminfindung Die Umfrage, in der der Vorschlag gelöscht werden soll
+	 * @param indexToDelete Der index des Vorschlags, der gelöscht werden soll
+	 */
 	public void loescheVorschlag(Umfrage umfrage, int indexToDelete) {
 		try {
 			umfrage.getVorschlaege().remove(indexToDelete);
@@ -212,6 +287,16 @@ public class UmfrageService {
 		}
 	}
 	
+	/**
+	 * Aktualisiert eine Umfrage und überprüft die Gültigkeit der Eingaben.
+	 * Sind die Eingaben ungültig, wird die entsprechende Fehlermeldung in eine
+	 * Liste geschrieben und zurückgegeben. Bei Erfolg ist diese Liste leer.
+	 * 
+	 * @param account Das Account Objekt des aktuellen Benutzers. Wird als Ersteller eingetragen
+	 * @param umfrage Die Umfrage, deren Attribute aktualisiert werden sollen
+	 *
+	 * @return Die Liste von Fehlermeldungen
+	 */
 	public List<String> erstelleUmfrage(Account account, Umfrage umfrage) {
 		List<String> fehler = new ArrayList<String>();
 		
@@ -234,6 +319,14 @@ public class UmfrageService {
 		return fehler;
 	}
 	
+	/**
+	 * Setzt den Gruppennamen in einer Liste von Umfragen in Abhängigkeit von der
+	 * Gruppen-ID
+	 * 
+	 * @param umfragen Die Umfragen, deren Gruppennamen gesetzt werden sollen
+	 * @param gruppen Die bekannten Gruppen mit der Gruppen-ID als Schlüssel
+	 * 		und Gruppennamen als Wert
+	 */
 	public void setzeGruppenName(List<Umfrage> umfragen, HashMap<String, String> gruppen) {
 		for (Umfrage umfrage : umfragen) {
 			umfrage.setGruppeName(gruppen.get(umfrage.getGruppeId()));
@@ -265,23 +358,5 @@ public class UmfrageService {
 		umfrage.setErgebnis(umfragedb.getErgebnis());
 		return umfrage;
 	}
-	
-	private List<Umfrage> getDistinctUmfrageList(List<UmfrageDB> umfrageDB) {
-		List<UmfrageDB> distinctUmfrageDB = new ArrayList<>();
-		List<String> links = new ArrayList<>();
-		for (UmfrageDB umfragen : umfrageDB) {
-			if (!links.contains(umfragen.getLink())) {
-				distinctUmfrageDB.add(umfragen);
-				links.add(umfragen.getLink());
-			}
-		}
-		
-		List<Umfrage> umfragen = new ArrayList<>();
-		for (UmfrageDB db : distinctUmfrageDB) {
-			umfragen.add(erstelleUmfrageOhneVorschlaege(db));
-		}
-		
-		return umfragen;
-	}	
 	
 }
