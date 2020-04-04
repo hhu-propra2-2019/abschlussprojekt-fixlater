@@ -35,8 +35,7 @@ public class TerminfindungAntwortService {
 	/**
 	 * Speichert Antworten zu einer Terminabstimmung in der Datenbank
 	 *
-	 * @param antwort Die Antwort des Benutzers für die Abstimmung
-	 * 
+	 * @param antwort Die Antwort des Benutzers für die Abstimmung 
 	 * @param terminfindung Die Terminfindung, bei der abgestimmt wurde
 	 */
 	public void abstimmen(TerminfindungAntwort antwort, Terminfindung terminfindung) {
@@ -72,8 +71,7 @@ public class TerminfindungAntwortService {
 	 */
 	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
 		List<TerminfindungAntwortDB> antworten =
-			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer,
-				link);
+			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
 		return !antworten.isEmpty();
 	}
 	
@@ -93,10 +91,9 @@ public class TerminfindungAntwortService {
 	 * @param benutzer der Benutzer, dessen Antwort gesucht wird
 	 * @param link der Link der Terminfindung
 	 * 
-	 * @return die Antwort des benutzers für die Terminfindung
+	 * @return die Antwort des Benutzers für die Terminfindung
 	 */	
-	public TerminfindungAntwort loadByBenutzerUndLink(String benutzer, String link) {
-		
+	public TerminfindungAntwort loadByBenutzerUndLink(String benutzer, String link) {		
 		List<TerminfindungAntwortDB> alteAntwort =
 			antwortRepo.findByBenutzerAndTerminfindungLink(benutzer, link);
 		List<TerminfindungDB> antwortMoeglichkeiten = terminRepo.findByLink(link);
@@ -109,6 +106,7 @@ public class TerminfindungAntwortService {
 	 * Lädt alle Antworten, die zu der Terminfindung mit Link {@code link} gehören
 	 *
 	 * @param link der Link der Terminfindung
+	 * 
 	 * @return Liste von Antworten zu der Terminfindung
 	 */
 	public List<TerminfindungAntwort> loadAllByLink(String link) {
