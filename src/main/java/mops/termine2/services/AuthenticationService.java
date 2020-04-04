@@ -24,16 +24,16 @@ public class AuthenticationService {
 	 * @return Das Account Objekt des Nutzers beim erfolgreicher Überprüfung,
 	 * 		   oder null bei erfolgloser Überprüfung
 	 */
-	public Account checkLoggedIn(Principal principal, Counter authenticatedAccess) {
+	public Account pruefeEingeloggt(Principal principal, Counter authenticatedAccess) {
 		if (principal != null) {
-			Account account = createAccountFromPrincipal(principal);
+			Account account = erstelleAccountAusPrincipal(principal);
 			authenticatedAccess.increment();
 			return account;
 		}
 		return null;
 	}
 	
-	private Account createAccountFromPrincipal(Principal principal) {
+	private Account erstelleAccountAusPrincipal(Principal principal) {
 		KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) principal;
 		KeycloakPrincipal<?> keycloakToken = (KeycloakPrincipal<?>) token.getPrincipal();
 		return new Account(

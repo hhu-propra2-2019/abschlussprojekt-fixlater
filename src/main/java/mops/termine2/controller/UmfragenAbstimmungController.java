@@ -75,7 +75,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageDetails(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -103,7 +103,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -145,7 +145,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -188,7 +188,7 @@ public class UmfragenAbstimmungController {
 		@PathVariable("link") String link,
 		@ModelAttribute AntwortFormUmfragen antwortForm) {
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -226,7 +226,7 @@ public class UmfragenAbstimmungController {
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}

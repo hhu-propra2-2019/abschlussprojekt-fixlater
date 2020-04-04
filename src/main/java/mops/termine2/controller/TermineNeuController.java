@@ -69,7 +69,7 @@ public class TermineNeuController {
 	public String termineNeu(Principal principal, Model model) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -93,7 +93,7 @@ public class TermineNeuController {
 		Gruppe gruppeSelektiert) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -119,7 +119,7 @@ public class TermineNeuController {
 		final HttpServletRequest request) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -144,7 +144,7 @@ public class TermineNeuController {
 		Gruppe gruppeSelektiert, RedirectAttributes redirectAttributes) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -179,7 +179,7 @@ public class TermineNeuController {
 		Model model, Terminfindung terminfindung, Gruppe gruppeSelektiert) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -216,7 +216,7 @@ public class TermineNeuController {
 		throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}		

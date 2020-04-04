@@ -59,7 +59,7 @@ public class UmfragenUebersichtController {
 		@RequestParam(name = "gruppe", defaultValue = "-1") String gruppeId) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}

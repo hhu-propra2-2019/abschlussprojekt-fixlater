@@ -70,7 +70,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
@@ -86,7 +86,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails2() throws Exception {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
@@ -102,7 +102,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails3() throws Exception {
 		Umfrage umfrage = null;
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
@@ -117,7 +117,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails4() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
@@ -133,7 +133,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails5() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
@@ -151,7 +151,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
@@ -166,7 +166,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet2() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, false);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
@@ -185,7 +185,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageErgebnisGet1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
@@ -202,7 +202,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageErgebnisGet2() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
@@ -219,7 +219,7 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet3() throws Exception {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);

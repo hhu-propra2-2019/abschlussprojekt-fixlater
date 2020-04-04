@@ -77,7 +77,7 @@ public class TermineAbstimmungController {
 	public String termineDetails(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -106,7 +106,7 @@ public class TermineAbstimmungController {
 	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -151,7 +151,7 @@ public class TermineAbstimmungController {
 	public String termineErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -204,7 +204,7 @@ public class TermineAbstimmungController {
 		@ModelAttribute AntwortFormTermine antwortForm) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -248,7 +248,7 @@ public class TermineAbstimmungController {
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}

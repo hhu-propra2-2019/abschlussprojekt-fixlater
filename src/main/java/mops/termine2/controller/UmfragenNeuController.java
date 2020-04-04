@@ -60,7 +60,7 @@ public class UmfragenNeuController {
 	public String neueUmfrage(Principal principal, Model model) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -80,7 +80,7 @@ public class UmfragenNeuController {
 	public String neuerVorschlag(Principal principal, Model model, Umfrage umfrage, Gruppe gruppeSelektiert) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -105,7 +105,7 @@ public class UmfragenNeuController {
 		final HttpServletRequest request) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -130,7 +130,7 @@ public class UmfragenNeuController {
 		RedirectAttributes redirectAttributes) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
