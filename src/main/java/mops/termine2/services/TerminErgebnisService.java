@@ -99,7 +99,7 @@ public class TerminErgebnisService {
 		
 		List<Boolean> isNutzerAntwortVielleicht = new ArrayList<>();
 		
-		List<String> jaAntwortPseud = new ArrayList<>();
+		List<String> jaAntwortPseudo = new ArrayList<>();
 		
 		List<String> vielleichtAntwortPseudo = new ArrayList<>();
 		
@@ -150,7 +150,7 @@ public class TerminErgebnisService {
 			anzahlStimmenJa.add(ja);
 			anzahlStimmenNein.add(nein);
 			anzahlStimmenVielleicht.add(vielleicht);
-			jaAntwortPseud.add(jaAnt);
+			jaAntwortPseudo.add(jaAnt);
 			vielleichtAntwortPseudo.add(vielleichtAnt);
 			neinAntwortPseudo.add(neinAnt);
 			
@@ -178,7 +178,7 @@ public class TerminErgebnisService {
 		toReturn.setAnteilStimmenNein(anteilStimmenNein);
 		toReturn.setIsNutzerAntwortJa(isNutzerAntwortJa);
 		toReturn.setIsNutzerAntwortVielleicht(isNutzerAntwortVielleicht);
-		toReturn.setJaAntwortPseud(jaAntwortPseud);
+		toReturn.setJaAntwortPseudo(jaAntwortPseudo);
 		toReturn.setVielleichtAntwortPseudo(vielleichtAntwortPseudo);
 		toReturn.setNeinAntwortPseudo(neinAntwortPseudo);
 		toReturn.setFristNichtAbgelaufen(fristNichtAbgelaufen);

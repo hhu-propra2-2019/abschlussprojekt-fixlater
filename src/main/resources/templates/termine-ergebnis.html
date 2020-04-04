@@ -9,6 +9,45 @@
 	<title>Terminergebnisse</title>
 	<th:block th:fragment="headcontent">
 		<!-- Links, Scripts, Styles -->
+		
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+		        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		        crossorigin="anonymous"></script>
+		
+		<!-- PopperJS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"
+		        integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8="
+		        crossorigin="anonymous"></script>
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+		      crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		        crossorigin="anonymous"></script>
+		
+		<!-- Font Awesome -->
+		<link rel="stylesheet"
+		      href="/css/all.css">
+		
+		<style>
+			.no-transition {
+				-webkit-transition: height 0.01s !important;
+				-moz-transition:    height 0.01s !important;
+				-ms-transition:     height 0.01s !important;
+				-o-transition:      height 0.01s !important;
+				transition:         height 0.01s !important;
+			}
+		</style>
+		
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+		</script>
 	</th:block>
 </head>
 
@@ -105,206 +144,231 @@
 							<table class="table table-sm" style="text-align: center">
 								<thead>
 									<tr>
-										<!-- blau-gelb-rotes Farbschema für Nutzer mit Sehschwä-
-										     chen: Blau und Gelb lassen sich besser unterschei-
-										     den als Grün und Gelb. -->
-										<th class="col bg-secondary text-white" style="width: 5%"
-										    data-toggle="tooltip" title="meine Antworten">
-											m.An</th>
+										<!-- eigene Antwort -->
+										<th class="col bg-secondary font-weight-bold"
+										    style="width: 1px">
+											<a data-toggle="tooltip" data-placement="bottom"
+											   title="Meine Wahl">
+												MW</a></th>
 										
-										<th class="col bg-secondary" style="width: 8%"></th>
-										
-										<th class="col bg-secondary" style="width: 15%">
+										<!-- Termin -->
+										<th class="col bg-secondary font-weight-bold"
+										    style="width: auto">
 											Termin</th>
 										
-										<th class="col bg-secondary" style="width: 18%"></th>
-										
-										<th class="col bg-secondary" style="width: 6%">
-											Ja</th>
-										
-										<th class="col bg-secondary" style="width: 6%">
-											<div class="progress" style="height: 20px; width: 20px">
-												<div class="progress-bar bg-primary"
-												     style="width: 100%"
-												     role="progressbar" aria-valuenow="100">
+										<!-- Stimmmöglichkeiten -->
+										<th class="col bg-secondary" style="width: 16%">
+											<div class="progress m-1" style="height: 16px">
+												<div class="progress-bar font-weight-bold"
+												     style="width: 100%">
+													Ja
 												</div>
 											</div>
 										</th>
 										
-										<th class="col bg-secondary text-white" style="width: 10%"
-										    data-toggle="tooltip" title="Vielleicht">
-											Vlt.</th>
-										
-										<th class="col bg-secondary" style="width: 6%">
-											<div class="progress" style="height: 20px; width: 20px">
-												<div class="progress-bar bg-warning"
-												     style="width: 100%"
-												     role="progressbar" aria-valuenow="100">
+										<th class="col bg-secondary" style="width: 16%">
+											<div class="progress m-1" style="height: 16px"
+											     data-toggle="tooltip" data-placement="bottom"
+											     title="Vielleicht">
+												<div class="progress-bar font-weight-bold
+												            bg-warning text-black-50"
+												     style="width: 100%">
+													Vlt.
 												</div>
 											</div>
 										</th>
 										
-										<th class="col bg-secondary" style="width: 6%">
-											Nein</th>
-										
-										<th class="col bg-secondary" style="width: 6%">
-											<div class="progress" style="height: 20px; width: 20px">
-												<div class="progress-bar bg-danger"
-												     style="width: 100%"
-												     role="progressbar" aria-valuenow="100">
+										<th class="col bg-secondary" style="width: 16%">
+											<div class="progress m-1" style="height: 16px">
+												<div class="progress-bar font-weight-bold bg-danger"
+												     style="width: 100%">
+													Nein
 												</div>
 											</div>
 										</th>
 										
-										<th class="col bg-secondary" style="width: 14%"></th>
+										<!-- Details-Knopf -->
+										<th class="col bg-secondary" style="width: 1px"></th>
 									</tr>
 								</thead>
-							</table>
-							
-							<details th:each="termin, iter: ${ergebnis.termineString}">
-								<summary>
-									<span class="font-weight-light text-black-50">
-										Für Details klicken</span>
-									
-									<div class="table-responsive">
-										<table class="table table-sm" style="text-align: center">
-											<tbody>
-												<tr>
-													<td class="col font-weight-bold"
-													    style="width: 2%"
-													    th:classappend="${ergebnis
-													                          .getIsNutzerAntwortJa(
-													                           )[__${iter.index}__]}
-													                    ? 'bg-primary text-white'
-													                    : (${ergebnis
-													                  .getIsNutzerAntwortVielleicht(
-													                           )[__${iter.index}__]}
-													                    ? 'bg-warning text-black-50'
-													                    : 'bg-danger text-white')"
-													    th:text="${ergebnis.getIsNutzerAntwortJa(
-													                           )[__${iter.index}__]}
-													             ? 'J'
-													             : (${ergebnis
-													                  .getIsNutzerAntwortVielleicht(
-													                           )[__${iter.index}__]}
-													             ? 'V' : 'N')"></td>
-													
-													<td class="col bg-light font-weight-bold
-													           text-black-50"
-													    style="width: 38%" th:text="${termin}">
-														25.02.2084, 12:15</td>
-													
-													<td class="col bg-light" style="width: 48%">
-														<div class="progress" style="height: 100%">
-															<div class="progress-bar bg-primary
-															            font-weight-bold"
-															     role="progressbar"
-															     th:style="'width: ' + ${ergebnis
-															                    .getAnteilStimmenJa(
-															                   )[__${iter.index}__]}
-															               + '%'"
-															     style="width: 34%"
-															     th:attr="aria-valuenow=${ergebnis
-															                    .getAnzahlStimmenJa(
-															                  )[__${iter.index}__]}"
-															     aria-valuenow="34"
-															     th:text="${ergebnis
-															                    .getAnzahlStimmenJa(
-															                 )[__${iter.index}__]}">
-															</div>
-															
-															<div class="progress-bar bg-warning
-															            font-weight-bold
-															            text-black-50"
-															     role="progressbar"
-															     th:style="'width: ' + ${ergebnis
-															            .getAnteilStimmenVielleicht(
-															                   )[__${iter.index}__]}
-															               + '%'"
-															     style="width: 34%"
-															     th:attr="aria-valuenow=${ergebnis
-															            .getAnzahlStimmenVielleicht(
-															                  )[__${iter.index}__]}"
-															     aria-valuenow="34"
-															     th:text="${ergebnis
-															            .getAnzahlStimmenVielleicht(
-															                 )[__${iter.index}__]}">
-															</div>
-															
-															<div class="progress-bar bg-danger
-															            font-weight-bold"
-															     role="progressbar"
-															     th:style="'width: ' + ${ergebnis
-															                  .getAnteilStimmenNein(
-															                   )[__${iter.index}__]}
-															               + '%'"
-															     style="width: 34%"
-															     th:attr="aria-valuenow=${ergebnis
-															                  .getAnzahlStimmenNein(
-															                  )[__${iter.index}__]}"
-															     aria-valuenow="34"
-															     th:text="${ergebnis
-															                  .getAnzahlStimmenNein(
-															                 )[__${iter.index}__]}">
-															</div>
-														</div>
-													</td>
-													
-													<td class="col bg-light" style="width: 12%">
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</summary>
 								
-								<div class="table-responsive">
-									<table class="table table-sm" style="text-align: center">
-										<thead class="bg-light">
-											<tr>
-												<th class="col text-black-50 font-weight-bold"
-												    style="width: 33%">
-													Zugestimmt</th>
-												
-												<th class="col text-black-50 font-weight-bold"
-												    style="width: 33%">
-													Vielleicht</th>
-												
-												<th class="col text-black-50 font-weight-bold"
-												    style="width: 33%">
-													Abgesagt</th>
-											</tr>
-										</thead>
+								<tbody th:each="termin, iter: ${ergebnis.termineString}">
+									<tr>
+										<!-- eigene Antwort -->
+										<td class="col font-weight-bold"
+										    style="vertical-align: middle; width: 1px"
+										    rowspan="2"
+										    th:classappend="${ergebnis.getIsNutzerAntwortJa(
+										                                        )[__${iter.index}__]
+										                    ? 'bg-primary text-white'
+										                   : (ergebnis.getIsNutzerAntwortVielleicht(
+										                                        )[__${iter.index}__]
+										                    ? 'bg-warning text-black-50'
+										                    : 'bg-danger text-white')}">
+											<a th:text="${ergebnis.getIsNutzerAntwortJa(
+											                                    )[__${iter.index}__]
+											            ? 'J'
+											            : (ergebnis.getIsNutzerAntwortVielleicht(
+											                                    )[__${iter.index}__]
+											            ? 'V'
+											            : 'N')}"
+											   data-toggle="tooltip" data-placement="right"
+											   th:title="${ergebnis.getIsNutzerAntwortJa(
+											                                    )[__${iter.index}__]
+											             ? 'Ja'
+											             : (ergebnis.getIsNutzerAntwortVielleicht(
+											                                    )[__${iter.index}__]
+											             ? 'Vielleicht'
+											             : 'Nein')}">
+												J / V / N</a></td>
 										
-										<tbody>
-											<tr>
-												<td class="col text-black-50 bg-light"
-												    style="width: 33%"
-												    th:text="${ergebnis.getJaAntwortPseud(
+										<!-- Termin -->
+										<td class="col text-secondary font-weight-bold text-wrap"
+										    th:classappend="${iter.count % 2 == 1}
+										                    ? 'bg-white' : 'bg-light'"
+										    style="width: auto"
+										    th:text="${termin}">
+											Datum und Uhrzeit</td>
+										
+										<!-- Gesamtergebnis -->
+										<td class="col" colspan="3"
+										    th:classappend="${iter.count % 2 == 1}
+										                    ? 'bg-white' : 'bg-light'">
+											<div class="progress m-1" style="height: 16px">
+												<div class="progress-bar bg-primary
+												            font-weight-bold"
+												     role="progressbar"
+												     th:if="${ergebnis.getAnzahlStimmenJa(
+												                         )[__${iter.index}__] != 0}"
+												     th:style="'width: '
+												               + ${ergebnis.getAnteilStimmenJa(
+												                               )[__${iter.index}__]}
+												               + '%'"
+												     th:attr="aria-valuenow=
+												              ${ergebnis.getAnzahlStimmenJa(
+												                              )[__${iter.index}__]}"
+												     th:text="${ergebnis.getAnzahlStimmenJa(
 												                             )[__${iter.index}__]}">
-												</td>
+												</div>
 												
-												<td class="col text-black-50 bg-white"
-												    style="width: 33%"
-												    th:text="${ergebnis.getVielleichtAntwortPseudo(
+												<div class="progress-bar bg-warning
+												            font-weight-bold text-black-50"
+												     role="progressbar"
+												     th:if="${ergebnis.getAnzahlStimmenVielleicht(
+												                         )[__${iter.index}__] != 0}"
+												     th:style="'width: '
+												            + ${ergebnis.getAnteilStimmenVielleicht(
+												                               )[__${iter.index}__]}
+												               + '%'"
+												     th:attr="aria-valuenow=
+												              ${ergebnis.getAnzahlStimmenVielleicht(
+												                              )[__${iter.index}__]}"
+												     th:text="${ergebnis.getAnzahlStimmenVielleicht(
 												                             )[__${iter.index}__]}">
-												</td>
+												</div>
 												
-												<td class="col text-black-50 bg-light"
-												    style="width: 33%"
-												    th:text="${ergebnis.getNeinAntwortPseudo(
+												<div class="progress-bar bg-danger font-weight-bold"
+												     role="progressbar"
+												     th:if="${ergebnis.getAnzahlStimmenNein(
+												                         )[__${iter.index}__] != 0}"
+												     th:style="'width: '
+												               + ${ergebnis.getAnteilStimmenNein(
+												                               )[__${iter.index}__]}
+												               + '%'"
+												     th:attr="aria-valuenow=
+												              ${ergebnis.getAnzahlStimmenNein(
+												                              )[__${iter.index}__]}"
+												     th:text="${ergebnis.getAnzahlStimmenNein(
 												                             )[__${iter.index}__]}">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</details>
-						</div>
-						
-						<div class="d-flex justify-content-between align-items-center mb-3">
-							<span class="text-black-50">
-								m.A. = meine Antwort</span>
+												</div>
+											</div>
+										</td>
+										
+										<!-- Details-Knopf -->
+										<td class="col" style="width: 1px"
+										    th:classappend="${iter.count % 2 == 1}
+										                    ? 'bg-white' : 'bg-light'">
+											<div data-toggle="tooltip" data-placement="left"
+											     title="Details">
+												<button class="btn btn-sm btn-info
+												               fa fa-chevron-down"
+												        style="margin-bottom: 0.95px" type="button"
+												        data-toggle="collapse"
+												        th:attr="data-target=
+												                 '#termin' + ${iter.count}"
+												        aria-expanded="false"></button>
+											</div>
+										</td>
+									</tr>
+									
+									<tr style="font-size: small">
+										<td class="col p-0"
+										    th:classappend="${iter.count % 2 == 1}
+										                    ? 'bg-white' : 'bg-light'"
+										    colspan="5" style="width: 1px">
+											<div class="collapse no-transition"
+											     th:id="'termin' + ${iter.count}"
+											     style="padding: 0px 4.8px 0px 4.8px">
+												<div class="table-responsive">
+													<table class="table table-sm mb-0"
+													       style="text-align: left">
+														<tbody>
+															<tr th:class="${iter.count % 2 == 1}
+															              ? 'bg-white'
+															              : 'bg-light'">
+																<td class="col text-primary
+																           font-weight-bold"
+																    style="width: 15%">
+																	Ja</td>
+																
+																<td class="text-secondary"
+																    style="width: 85%"
+																    th:text="${ergebnis
+																             .getJaAntwortPseudo(
+																             )[__${iter.index}__]}">
+																	Studenten, die ‘Ja’ abgestimmt
+																	haben</td>
+															</tr>
+															
+															<tr th:class="${iter.count % 2 == 1}
+															              ? 'bg-white'
+															              : 'bg-light'">
+																<td class="col text-warning
+																           font-weight-bold"
+																    style="width: 15%">
+																	Vielleicht</td>
+																<td class="text-secondary"
+																    style="width: 85%"
+																    th:text="${ergebnis
+																        .getVielleichtAntwortPseudo(
+																             )[__${iter.index}__]}">
+																	Studenten, die ‘Vielleicht’
+																	abgestimmt haben</td>
+															</tr>
+															
+															<tr th:class="${iter.count % 2 == 1}
+															              ? 'bg-white'
+															              : 'bg-light'">
+																<td class="col text-danger
+																           font-weight-bold"
+																    style="width: 15%">
+																	Nein</td>
+																<td class="text-secondary"
+																    style="width: 85%"
+																    th:text="${ergebnis
+																             .getNeinAntwortPseudo(
+																             )[__${iter.index}__]}">
+																	Studenten, die ‘Nein’ abgestimmt
+																	haben</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 						
 						<!-- Abstimmungsstatus -->
