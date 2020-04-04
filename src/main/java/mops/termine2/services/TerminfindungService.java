@@ -92,7 +92,7 @@ public class TerminfindungService {
 	 * 		gelöscht werden sollen
 	 */
 	@Transactional
-	public void loescheByLink(String link) {
+	public void loescheNachLink(String link) {
 		antwortRepo.deleteByTerminfindungLink(link);
 		terminfindungRepo.deleteByLink(link);
 	}
