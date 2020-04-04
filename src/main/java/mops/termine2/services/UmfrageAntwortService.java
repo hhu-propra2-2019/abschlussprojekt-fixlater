@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Der UmfrageAntwortService bietet Methoden zur Abstimmung in einer Umfrage
+ * und bildet die dementsprechende Schnittstelle zwischen Datenbank und Controller
+ */
 @Service
 public class UmfrageAntwortService {
 	
@@ -31,10 +35,10 @@ public class UmfrageAntwortService {
 	}
 	
 	/**
-	 * Speichert Antworten zu einer Umfragenabstimmung
+	 * Speichert Antworten zu einer Umfrage in der Datenbank
 	 *
-	 * @param antwort
-	 * @param umfrage
+	 * @param antwort Die Antwort des Benutzers für die Abstimmung 
+	 * @param terminfindung Die Umfrage, bei der abgestimmt wurde
 	 */
 	public void abstimmen(UmfrageAntwort antwort, Umfrage umfrage) {
 		
@@ -60,20 +64,39 @@ public class UmfrageAntwortService {
 		}
 	}
 	
+	/**
+	 * Löscht alle Antworten der Umfrage mit Link {@code link}
+	 *
+	 * @param link Der Link zu der Umfrage
+	 */
+	public void deleteAllByLink(String link) {
+		antwortRepo.deleteAllByUmfrageLink(link);
+	}
+	
+	/**
+	 * Prüft, ob der Benutzer bei der entsprechenden Umfrage abgestimmt hat
+	 * 
+	 * @param benutzer Der Benutzer, dessen Abstimmungsstatus abgefragt werden soll
+	 * @param link Der Link zu der Umfrage
+	 * 
+	 * @return {@code true}, falls der Benutzer bereits bei der Umfrage abgestimmt hat, 
+	 * ansonsten {@code false}
+	 */
 	public boolean hatNutzerAbgestimmt(String benutzer, String link) {
 		List<UmfrageAntwortDB> antworten =
-			antwortRepo.findByBenutzerAndUmfrageLink(benutzer,
-				link);
+			antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
 		return !antworten.isEmpty();
 	}
 	
 	/**
-	 * Lädt eine Liste von Antworten nach Benutzer und Link
+	 * Lädt die Antwort eines Benutzers {@code benutzer} zu einer Umfrage
+	 * mit Link {@code link}
 	 *
-	 * @param benutzer
-	 * @param link
-	 * @returngibt eine Antwort zu einer Umfrage
-	 */
+	 * @param benutzer der Benutzer, dessen Antwort gesucht wird
+	 * @param link der Link der Umfrage
+	 * 
+	 * @return die Antwort des Benutzers für die Umfrage
+	 */	
 	public UmfrageAntwort loadByBenutzerAndLink(String benutzer, String link) {
 		List<UmfrageAntwortDB> alteAntwort = antwortRepo.findByBenutzerAndUmfrageLink(benutzer, link);
 		List<UmfrageDB> antwortMoeglichkeiten = umfrageRepo.findByLink(link);
@@ -81,12 +104,12 @@ public class UmfrageAntwortService {
 	}
 	
 	/**
-	 * Lädt alle Antworten die zu einem Link gehören
+	 * Lädt alle Antworten, die zu der Umfrage mit Link {@code link} gehören
 	 *
-	 * @param link
-	 * @return eine Liste von Antworten
+	 * @param link der Link der Umfrage
+	 * 
+	 * @return Liste von Antworten zu der Umfrage
 	 */
-	
 	public List<UmfrageAntwort> loadAllByLink(String link) {
 		List<UmfrageAntwortDB> antwortDBList =
 			antwortRepo.findAllByUmfrageLink(link);
@@ -161,9 +184,4 @@ public class UmfrageAntwortService {
 		return nutzerAntwortenDB;
 	}
 	
-	/**
-	 * Löscht alle Antworten nach Link
-	 *
-	 * @param link
-	 */
 }
