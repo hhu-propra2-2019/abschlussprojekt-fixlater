@@ -7,6 +7,7 @@ import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.database.entities.TerminfindungAntwortDB;
 import mops.termine2.database.entities.TerminfindungDB;
+import mops.termine2.models.Gruppe;
 import mops.termine2.models.Terminfindung;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ public class TerminfindungUebersichtServiceTest {
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
-			terminfindunguebersichtService.loadOffeneTerminfindungenFuerBenutzer(account);
+			terminfindunguebersichtService.loadOffeneTerminfindungen(account, null);
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(0)));
 		
@@ -133,7 +134,7 @@ public class TerminfindungUebersichtServiceTest {
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
-			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungen(account, null);
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(3), terminfindungen.get(1)));
 		
@@ -147,9 +148,9 @@ public class TerminfindungUebersichtServiceTest {
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
-		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
-		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId("5");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setName("Gruppe");
+		gruppe.setId("5");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
@@ -163,7 +164,7 @@ public class TerminfindungUebersichtServiceTest {
 			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
-			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+			if (gruppenIds.get(i).equals(gruppe.getId())) {
 				TerminfindungDB terminDB = new TerminfindungDB();
 				terminDB.setLink(days.get(i).toString());
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
@@ -173,12 +174,12 @@ public class TerminfindungUebersichtServiceTest {
 				terminfindungenDB.add(terminDB);
 			}
 		}
-		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getId()))
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> ergebnis =
 			terminfindunguebersichtService
-				.loadOffeneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+				.loadOffeneTerminfindungen(account, gruppe);
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(2), terminfindungen.get(4)));
 		
@@ -193,9 +194,9 @@ public class TerminfindungUebersichtServiceTest {
 		Account account = new Account("studentin", null, null, null);
 		LocalDateTime ldt = LocalDateTime.now();
 		
-		BenutzerGruppeDB gruppe = new BenutzerGruppeDB();
-		gruppe.setGruppe("Gruppe");
-		gruppe.setGruppeId("5");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setName("Gruppe");
+		gruppe.setId("5");
 		
 		List<Terminfindung> terminfindungen = new ArrayList<>();
 		List<TerminfindungDB> terminfindungenDB = new ArrayList<>();
@@ -210,7 +211,7 @@ public class TerminfindungUebersichtServiceTest {
 			termin.setErgebnisVorFrist(true);
 			terminfindungen.add(termin);
 			
-			if (gruppenIds.get(i).equals(gruppe.getGruppeId())) {
+			if (gruppenIds.get(i).equals(gruppe.getId())) {
 				TerminfindungDB terminDB = new TerminfindungDB();
 				terminDB.setLink(days.get(i).toString());
 				terminDB.setFrist(ldt.plusDays(days.get(i)));
@@ -222,12 +223,12 @@ public class TerminfindungUebersichtServiceTest {
 			}
 		}
 		
-		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getGruppeId()))
+		when(terminfindungRepository.findByGruppeIdOrderByFristAsc(gruppe.getId()))
 			.thenReturn(terminfindungenDB);
 		
 		List<Terminfindung> result =
 			terminfindunguebersichtService
-				.loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getGruppeId());
+				.loadAbgeschlosseneTerminfindungen(account, gruppe);
 		List<Terminfindung> erwartet =
 			new ArrayList<>(Arrays.asList(terminfindungen.get(1), terminfindungen.get(5)));
 		

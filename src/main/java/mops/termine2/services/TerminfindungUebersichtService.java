@@ -12,6 +12,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Bietet Methoden zur Filterung von Terminfindungen bezüglich der Frist
+ * für einzelne benutzer oder ganze Gruppen
+ */
 @Service
 public class TerminfindungUebersichtService {
 	
@@ -34,79 +38,19 @@ public class TerminfindungUebersichtService {
 	}
 	
 	/**
-	 * Geht die Termine durch und filtert nach offenen die zu einer Gruppe gehören
+	 * Holt alle noch offenen Terminfindungen zu der Gruppe mit 
+	 * Gruppen-ID {@code gruppeId} aus der Datenbank. 
+	 * Ist {@code gruppe} {@code null} oder hat ID "-1", so werden
+	 * die offenen Terminfindungen für den Benutzer aus der Datenbank geholt
+	 * ohne Filterung nach einer Gruppe.
+	 * Eine offene Terminfindung ist dabei eine Terminfindung, deren Frist
+	 * in der Zukunft liegt.
 	 *
-	 * @param account, gruppe
-	 * @return eine Liste von offenen Terminabstimmungen nach Gruppe
+	 * @param account Das Account Objekt des aktuellen Benutzers
+	 * @param gruppe Das Gruppen Objekt der ausgewählten Gruppe
+	 * 
+	 * @return die noch offenen Terminfindungen für die Gruppe oder den Benutzer
 	 */
-	public List<Terminfindung> loadOffeneTerminfindungenFuerGruppe(Account account, String gruppeId) {
-		List<Terminfindung> termine = new ArrayList<>();
-		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
-		List<Terminfindung> offeneTermine = filterOpenDatePolls(termine);
-		
-		// Nach Frist sortieren
-		offeneTermine = offeneTermine.stream()
-			.sorted(Comparator.comparing(Terminfindung::getFrist))
-			.collect(Collectors.toList());
-		
-		offeneTermine = setTeilgenommen(offeneTermine, account);
-		
-		return offeneTermine;
-	}
-	
-	/**
-	 * Geht die Termine durch und filtert nach abgeschlossenen die zu einer Gruppe gehören
-	 *
-	 * @param account, gruppe
-	 * @return eine Liste von abgeschlossenen Terminabstimmungen nach Gruppe
-	 */
-	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerGruppe(Account account, String gruppeId) {
-		List<Terminfindung> termine = new ArrayList<>();
-		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
-		List<Terminfindung> abgeschlosseneTermine = filterClosedDatePolls(termine);
-		
-		// sortieren
-		abgeschlosseneTermine = sortiereAbgeschlosseneTermine(abgeschlosseneTermine);
-		
-		return abgeschlosseneTermine;
-	}
-	
-	/**
-	 * Geht die Termine durch und filtert nach offenen die zu einem Nutzer gehören
-	 *
-	 * @param account
-	 * @return eine Liste von offenen Terminabstimmungen nach Nutzer
-	 */
-	public List<Terminfindung> loadOffeneTerminfindungenFuerBenutzer(Account account) {
-		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
-		List<Terminfindung> offeneTermine = filterOpenDatePolls(termine);
-		
-		// Nach Frist sortieren
-		offeneTermine = offeneTermine.stream()
-			.sorted(Comparator.comparing(Terminfindung::getFrist))
-			.collect(Collectors.toList());
-		
-		offeneTermine = setTeilgenommen(offeneTermine, account);
-		
-		return offeneTermine;
-	}
-	
-	/**
-	 * Geht die Termine durch und filtert nach abgeschlossenen die zu einem Nutzer gehören
-	 *
-	 * @param account
-	 * @return eine Liste von abgeschlossenen Terminabstimmungen nach Nutzer
-	 */
-	public List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerBenutzer(Account account) {
-		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
-		List<Terminfindung> abgeschlosseneTermine = filterClosedDatePolls(termine);
-		
-		// sortieren
-		abgeschlosseneTermine = sortiereAbgeschlosseneTermine(abgeschlosseneTermine);
-		
-		return abgeschlosseneTermine;
-	}
-	
 	public List<Terminfindung> loadOffeneTerminfindungen(Account account, Gruppe gruppe) {
 		if (gruppe == null || gruppe.getId().equals("-1")) {
 			return loadOffeneTerminfindungenFuerBenutzer(account);
@@ -114,6 +58,20 @@ public class TerminfindungUebersichtService {
 		return loadOffeneTerminfindungenFuerGruppe(account, gruppe.getId());
 	}
 	
+	/**
+	 * Holt alle schon abgeschlossenen Terminfindungen zu der Gruppe mit 
+	 * Gruppen-ID {@code gruppeId} aus der Datenbank. 
+	 * Ist {@code gruppe} {@code null} oder hat ID "-1", so werden
+	 * die abgeschlossenen Terminfindungen für den Benutzer aus der Datenbank geholt
+	 * ohne Filterung nach einer Gruppe.
+	 * Eine abgeschlossene Terminfindung ist dabei eine Terminfindung, deren Frist
+	 * in der Vergangenheit liegt.
+	 *
+	 * @param account Das Account Objekt des aktuellen Benutzers
+	 * @param gruppe Das Gruppen Objekt der ausgewählten Gruppe
+	 * 
+	 * @return die bereits abgeschlossenen Terminfindungen für die Gruppe oder den Benutzer
+	 */
 	public List<Terminfindung> loadAbgeschlosseneTerminfindungen(Account account, Gruppe gruppe) {
 		if (gruppe == null || gruppe.getId().equals("-1")) {
 			return loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
@@ -121,7 +79,57 @@ public class TerminfindungUebersichtService {
 		return loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getId());
 	}
 	
-	private List<Terminfindung> distinct(List<Terminfindung> termine) {
+	private List<Terminfindung> loadOffeneTerminfindungenFuerGruppe(Account account, String gruppeId) {
+		List<Terminfindung> termine = new ArrayList<>();
+		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
+		List<Terminfindung> offeneTermine = filtereOffeneTerminfindungen(termine);
+		
+		// Nach Frist sortieren
+		offeneTermine = offeneTermine.stream()
+			.sorted(Comparator.comparing(Terminfindung::getFrist))
+			.collect(Collectors.toList());
+		
+		offeneTermine = setTeilgenommen(offeneTermine, account);
+		
+		return offeneTermine;
+	}
+	
+	private List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerGruppe(Account account, String gruppeId) {
+		List<Terminfindung> termine = new ArrayList<>();
+		termine.addAll(terminfindungService.loadByGruppeOhneTermine(gruppeId));
+		List<Terminfindung> abgeschlosseneTermine = filtereAbgeschlosseneTerminfindungen(termine);
+		
+		// sortieren
+		abgeschlosseneTermine = sortiereAbgeschlosseneTermine(abgeschlosseneTermine);
+		
+		return abgeschlosseneTermine;
+	}
+	
+	private List<Terminfindung> loadOffeneTerminfindungenFuerBenutzer(Account account) {
+		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
+		List<Terminfindung> offeneTermine = filtereOffeneTerminfindungen(termine);
+		
+		// Nach Frist sortieren
+		offeneTermine = offeneTermine.stream()
+			.sorted(Comparator.comparing(Terminfindung::getFrist))
+			.collect(Collectors.toList());
+		
+		offeneTermine = setTeilgenommen(offeneTermine, account);
+		
+		return offeneTermine;
+	}
+	
+	private List<Terminfindung> loadAbgeschlosseneTerminfindungenFuerBenutzer(Account account) {
+		List<Terminfindung> termine = getAllTerminfindungenVonBenutzer(account);
+		List<Terminfindung> abgeschlosseneTermine = filtereAbgeschlosseneTerminfindungen(termine);
+		
+		// sortieren
+		abgeschlosseneTermine = sortiereAbgeschlosseneTermine(abgeschlosseneTermine);
+		
+		return abgeschlosseneTermine;
+	}
+	
+	private List<Terminfindung> eindeutigeTerminfindungsListe(List<Terminfindung> termine) {
 		List<Terminfindung> distinct = new ArrayList<>();
 		List<String> links = new ArrayList<>();
 		
@@ -140,7 +148,7 @@ public class TerminfindungUebersichtService {
 		termine.addAll(terminfindungService.loadAllBenutzerHatAbgestimmtOhneTermine(account.getName()));
 		
 		// doppelte Termine löschen
-		termine = distinct(termine);
+		termine = eindeutigeTerminfindungsListe(termine);
 		
 		return termine;
 	}
@@ -176,12 +184,6 @@ public class TerminfindungUebersichtService {
 		return terminesortiert;
 	}
 	
-	/**
-	 * Lädt alle Termine zu einem Bestimmten Nutzer
-	 *
-	 * @param account
-	 * @return Liste von Terminen eines Nutzers
-	 */
 	private List<Terminfindung> getTermineVonBenutzer(Account account) {
 		List<Terminfindung> termine = new ArrayList<>();
 		termine.addAll(terminfindungService.loadByErstellerOhneTermine(account.getName()));
@@ -194,7 +196,7 @@ public class TerminfindungUebersichtService {
 		return termine;
 	}
 	
-	private List<Terminfindung> filterOpenDatePolls(List<Terminfindung> termine) {
+	private List<Terminfindung> filtereOffeneTerminfindungen(List<Terminfindung> termine) {
 		List<Terminfindung> offeneTermine = new ArrayList<>();
 		for (Terminfindung termin : termine) {
 			if (termin.getFrist().compareTo(LocalDateTime.now()) > 0) {
@@ -204,7 +206,7 @@ public class TerminfindungUebersichtService {
 		return offeneTermine;
 	}
 	
-	private List<Terminfindung> filterClosedDatePolls(List<Terminfindung> termine) {
+	private List<Terminfindung> filtereAbgeschlosseneTerminfindungen(List<Terminfindung> termine) {
 		List<Terminfindung> abgeschlosseneTermine = new ArrayList<>();
 		for (Terminfindung termin : termine) {
 			if (termin.getFrist().compareTo(LocalDateTime.now()) <= 0) {
