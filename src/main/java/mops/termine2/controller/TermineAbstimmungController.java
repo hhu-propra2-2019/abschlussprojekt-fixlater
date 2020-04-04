@@ -12,9 +12,9 @@ import javax.annotation.security.RolesAllowed;
 
 import mops.termine2.Konstanten;
 import mops.termine2.authentication.Account;
-import mops.termine2.controller.formular.AbstimmungsInfortmationenTermineForm;
-import mops.termine2.controller.formular.AntwortForm;
-import mops.termine2.controller.formular.ErgebnisForm;
+import mops.termine2.controller.formular.AbstimmungsInformationenTermineForm;
+import mops.termine2.controller.formular.AntwortFormTermine;
+import mops.termine2.controller.formular.ErgebnisFormTermine;
 import mops.termine2.models.Kommentar;
 import mops.termine2.models.LinkWrapper;
 import mops.termine2.models.Terminfindung;
@@ -77,7 +77,7 @@ public class TermineAbstimmungController {
 	public String termineDetails(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -90,7 +90,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -106,7 +106,7 @@ public class TermineAbstimmungController {
 	public String termineAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -119,7 +119,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 			
 		}
@@ -129,15 +129,15 @@ public class TermineAbstimmungController {
 		}
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
-		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerAndLink(account.getName(), link);
-		AntwortForm antwortForm = new AntwortForm();
+		TerminfindungAntwort antwort = terminAntwortService.loadByBenutzerUndLink(account.getName(), link);
+		AntwortFormTermine antwortForm = new AntwortFormTermine();
 		antwortForm.init(antwort);
 		
 		LinkWrapper setLink = new LinkWrapper(link);
 		letzteTerminfindung.put(setLink, terminfindung);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInformationenTermineForm(terminfindung));
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_ANTWORT, antwortForm);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
@@ -151,7 +151,7 @@ public class TermineAbstimmungController {
 	public String termineErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -164,7 +164,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -180,13 +180,13 @@ public class TermineAbstimmungController {
 		
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
 		List<TerminfindungAntwort> antworten = terminAntwortService.loadAllByLink(link);
-		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerAndLink(
+		TerminfindungAntwort nutzerAntwort = terminAntwortService.loadByBenutzerUndLink(
 			account.getName(), link);
-		ErgebnisForm ergebnis = ergebnisService.baueErgebnisForm(antworten,
+		ErgebnisFormTermine ergebnis = ergebnisService.baueErgebnisForm(antworten,
 			terminfindung, nutzerAntwort);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInfortmationenTermineForm(terminfindung));
+		model.addAttribute(Konstanten.MODEL_INFO, new AbstimmungsInformationenTermineForm(terminfindung));
 		model.addAttribute(Konstanten.MODEL_TERMINFINDUNG, terminfindung);
 		model.addAttribute(Konstanten.MODEL_ERGEBNIS, ergebnis);
 		model.addAttribute(Konstanten.MODEL_KOMMENTARE, kommentare);
@@ -201,10 +201,10 @@ public class TermineAbstimmungController {
 	public String saveAbstimmung(Principal principal,
 		Model model,
 		@PathVariable("link") String link,
-		@ModelAttribute AntwortForm antwortForm) {
+		@ModelAttribute AntwortFormTermine antwortForm) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -216,7 +216,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -234,7 +234,7 @@ public class TermineAbstimmungController {
 			return "redirect:/termine2/" + link;
 		}
 		
-		TerminfindungAntwort terminfindungAntwort = AntwortForm.mergeToAnswer(terminfindung,
+		TerminfindungAntwort terminfindungAntwort = AntwortFormTermine.mergeToAnswer(terminfindung,
 			account.getName(), antwortForm);
 		
 		terminAntwortService.abstimmen(terminfindungAntwort, terminfindung);
@@ -248,7 +248,7 @@ public class TermineAbstimmungController {
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -261,7 +261,7 @@ public class TermineAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, terminfindung.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, terminfindung.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		

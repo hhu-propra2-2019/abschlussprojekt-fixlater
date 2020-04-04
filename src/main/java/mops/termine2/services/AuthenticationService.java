@@ -7,16 +7,33 @@ import org.springframework.stereotype.Service;
 import io.micrometer.core.instrument.Counter;
 import java.security.Principal;
 
+/**
+ * Bietet Methoden im Bezug auf Login an.
+ */
 @Service
-public class AuthenticationService {
+public class AuthenticationService {	
 	
 	/**
-	 * Generiert einen Account aus einem KeyCloak Token
-	 *
-	 * @param principal Ein java-security Interface welches einen Nutzer representiert
-	 * @return Account
+	 * Prüft, ob der Benutzer eingeloggt ist und erhöht in diesem Fall den
+	 * übergebenen Counter.
+	 * 
+	 * @param principal  Principal Objekt, dessen Account extrahiert werden soll.
+	 * @param authenticatedAccess  Counter Objekt, das bei erfolgreicher Überprüfung
+	 * 		  erhöht werden soll.
+	 * 
+	 * @return Das Account Objekt des Nutzers bei erfolgreicher Überprüfung,
+	 * 		   oder null bei erfolgloser Überprüfung
 	 */
-	public Account createAccountFromPrincipal(Principal principal) {
+	public Account pruefeEingeloggt(Principal principal, Counter authenticatedAccess) {
+		if (principal != null) {
+			Account account = erstelleAccountAusPrincipal(principal);
+			authenticatedAccess.increment();
+			return account;
+		}
+		return null;
+	}
+	
+	private Account erstelleAccountAusPrincipal(Principal principal) {
 		KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) principal;
 		KeycloakPrincipal<?> keycloakToken = (KeycloakPrincipal<?>) token.getPrincipal();
 		return new Account(
@@ -24,14 +41,5 @@ public class AuthenticationService {
 			keycloakToken.getKeycloakSecurityContext().getIdToken().getEmail(),
 			null,
 			token.getAccount().getRoles());
-	}
-
-	public Account checkLoggedIn(Principal principal, Counter authenticatedAccess) {
-		if (principal != null) {
-			Account account = createAccountFromPrincipal(principal);
-			authenticatedAccess.increment();
-			return account;
-		}
-		return null;
 	}
 }

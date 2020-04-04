@@ -60,14 +60,14 @@ public class UmfragenNeuController {
 	public String neueUmfrage(Principal principal, Model model) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
-		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.createDefaultGruppe());
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeService.erstelleStandardGruppe());
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrageService.createDefaultUmfrage());
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
 		
@@ -80,7 +80,7 @@ public class UmfragenNeuController {
 	public String neuerVorschlag(Principal principal, Model model, Umfrage umfrage, Gruppe gruppeSelektiert) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -90,7 +90,7 @@ public class UmfragenNeuController {
 		vorschlaege.add("");
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
@@ -105,7 +105,7 @@ public class UmfragenNeuController {
 		final HttpServletRequest request) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -115,7 +115,7 @@ public class UmfragenNeuController {
 		umfrageService.loescheVorschlag(umfrage, indexToDelete);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
-		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSorted(account));
+		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
 		model.addAttribute(Konstanten.MODEL_GRUPPE_SELEKTIERT, gruppeSelektiert);
 		model.addAttribute(Konstanten.MODEL_UMFRAGE, umfrage);
 		model.addAttribute(Konstanten.MODEL_FEHLER, "");
@@ -130,14 +130,14 @@ public class UmfragenNeuController {
 		RedirectAttributes redirectAttributes) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
 		List<String> fehler = umfrageService.erstelleUmfrage(account,
 			umfrage);
-		fehler.addAll(linkService.setzeLink(umfrage));
+		fehler.addAll(linkService.setzeOderPruefeLink(umfrage));
 		gruppeService.setzeGruppeId(umfrage, gruppeSelektiert);
 		
 		if (fehler.isEmpty()) {

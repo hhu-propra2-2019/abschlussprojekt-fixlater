@@ -53,7 +53,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 		HttpServletRequest request =
 			((ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes()).getRequest();
-		return ((KeycloakPrincipal) request.getUserPrincipal())
+		return ((KeycloakPrincipal<?>) request.getUserPrincipal())
 			.getKeycloakSecurityContext().getToken();
 	}
 	

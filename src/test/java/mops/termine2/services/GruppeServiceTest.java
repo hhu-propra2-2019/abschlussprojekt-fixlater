@@ -96,7 +96,7 @@ public class GruppeServiceTest {
 		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(user);
 		
-		boolean result = gruppeService.accountInGruppe(account, "1");
+		boolean result = gruppeService.pruefeAccountInGruppe(account, "1");
 		
 		assertThat(result).isEqualTo(true);
 	}
@@ -107,7 +107,7 @@ public class GruppeServiceTest {
 		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(null);
 		
-		boolean result = gruppeService.accountInGruppe(account, "1");
+		boolean result = gruppeService.pruefeAccountInGruppe(account, "1");
 		
 		assertThat(result).isEqualTo(false);
 	}
@@ -130,7 +130,7 @@ public class GruppeServiceTest {
 				g1, g2
 			));
 		
-		List<Gruppe> result = gruppeService.sortGroupsByName(input);
+		List<Gruppe> result = gruppeService.sortiereGruppenNachNamen(input);
 		
 		assertThat(result).isEqualTo(expected);		
 	}
@@ -138,14 +138,14 @@ public class GruppeServiceTest {
 	@Test
 	public void testAccessDeniedNull() {
 		Account account = new Account("studentin", "abc@def.de", null, null);
-		boolean result = gruppeService.checkGroupAccessDenied(account, null);
+		boolean result = gruppeService.pruefeGruppenzugriffVerweigert(account, null);
 		assertThat(result).isEqualTo(false);
 	}
 	
 	@Test
 	public void testAccessDeniedMinus1() {
 		Account account = new Account("studentin", "abc@def.de", null, null);
-		boolean result = gruppeService.checkGroupAccessDenied(account, "-1");
+		boolean result = gruppeService.pruefeGruppenzugriffVerweigert(account, "-1");
 		assertThat(result).isEqualTo(false);
 	}
 	
@@ -155,7 +155,7 @@ public class GruppeServiceTest {
 		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(null);
 		
-		boolean result = gruppeService.checkGroupAccessDenied(account, "1");
+		boolean result = gruppeService.pruefeGruppenzugriffVerweigert(account, "1");
 		
 		assertThat(result).isEqualTo(true);
 	}
@@ -171,7 +171,7 @@ public class GruppeServiceTest {
 		when(benutzerGruppeRepository.findByBenutzerAndGruppeId("studentin", "1"))
 			.thenReturn(user);
 		
-		boolean result = gruppeService.checkGroupAccessDenied(account, "1");
+		boolean result = gruppeService.pruefeGruppenzugriffVerweigert(account, "1");
 		
 		assertThat(result).isEqualTo(false);
 	}

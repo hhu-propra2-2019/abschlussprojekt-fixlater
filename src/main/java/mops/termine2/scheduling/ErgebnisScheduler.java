@@ -57,7 +57,7 @@ public class ErgebnisScheduler {
 				.findByFristBeforeAndErgebnisIsNull(LocalDateTime.now());
 		
 		List<Terminfindung> terminfindungen =
-			terminfindungService.getDistinctTerminfindungList(terminfindungDBS);
+			terminfindungService.getEindeutigeTerminfindungen(terminfindungDBS);
 		
 		for (Terminfindung termin : terminfindungen) {
 			Terminfindung aktuellerTermin = terminfindungService.loadByLinkMitTerminen(termin.getLink());
@@ -75,7 +75,7 @@ public class ErgebnisScheduler {
 				.findByFristBeforeAndErgebnisIsNull(LocalDateTime.now());
 		
 		List<Umfrage> umfragen =
-			umfrageService.getDistinctUmfragen(umfrageDBS);
+			umfrageService.getEindeutigeUmfragen(umfrageDBS);
 		
 		for (Umfrage umfrage : umfragen) {
 			Umfrage aktuelleUmfrage = umfrageService.loadByLinkMitVorschlaegen(umfrage.getLink());

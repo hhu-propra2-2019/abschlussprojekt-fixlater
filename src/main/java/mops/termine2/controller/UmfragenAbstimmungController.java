@@ -75,7 +75,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageDetails(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -86,7 +86,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -103,7 +103,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageAbstimmung(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -115,7 +115,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -123,7 +123,7 @@ public class UmfragenAbstimmungController {
 			return "redirect:/termine2/umfragen/" + link + "/ergebnis";
 		}
 		
-		UmfrageAntwort antwort = umfrageAntwortService.loadByBenutzerAndLink(account.getName(), link);
+		UmfrageAntwort antwort = umfrageAntwortService.loadByBenutzerUndLink(account.getName(), link);
 		AntwortFormUmfragen antwortForm = new AntwortFormUmfragen();
 		antwortForm.init(antwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
@@ -145,7 +145,7 @@ public class UmfragenAbstimmungController {
 	public String umfrageErgebnis(Principal principal, Model model, @PathVariable("link") String link) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -157,7 +157,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -167,7 +167,7 @@ public class UmfragenAbstimmungController {
 		}
 		
 		List<UmfrageAntwort> antworten = umfrageAntwortService.loadAllByLink(link);
-		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerAndLink(
+		UmfrageAntwort nutzerAntwort = umfrageAntwortService.loadByBenutzerUndLink(
 			account.getName(), link);
 		ErgebnisFormUmfragen ergebnis = ergebnisService.baueErgebnisForm(antworten, umfrage, nutzerAntwort);
 		List<Kommentar> kommentare = kommentarService.loadByLink(link);
@@ -188,7 +188,7 @@ public class UmfragenAbstimmungController {
 		@PathVariable("link") String link,
 		@ModelAttribute AntwortFormUmfragen antwortForm) {
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -199,7 +199,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
@@ -226,7 +226,7 @@ public class UmfragenAbstimmungController {
 		@PathVariable("link") String link, Kommentar neuerKommentar) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
@@ -237,7 +237,7 @@ public class UmfragenAbstimmungController {
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, umfrage.getGruppeId())) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, umfrage.getGruppeId())) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
