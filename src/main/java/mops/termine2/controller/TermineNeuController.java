@@ -191,7 +191,7 @@ public class TermineNeuController {
 		
 		// If any of the Termine lies before the Frist, then the Frist has to be
 		// updated.
-		terminfindungService.updateFristUndLoeschdatum(terminfindung, termine);
+		terminfindungService.aktualisiereFristUndLoeschdatum(terminfindung, termine);
 		
 		model.addAttribute(Konstanten.MODEL_ACCOUNT, account);
 		model.addAttribute(Konstanten.MODEL_GRUPPEN, gruppeService.loadByBenutzerSortiert(account));
