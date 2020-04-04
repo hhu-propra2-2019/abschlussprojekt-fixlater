@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,8 +126,8 @@ public class UmfrageAntwortServiceTest {
 		return umfrageAntwort;
 	}
 	
-	private HashMap<String, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
-		HashMap<String, Antwort> antworten = new HashMap<>();
+	private LinkedHashMap<String, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
+		LinkedHashMap<String, Antwort> antworten = new LinkedHashMap<>();
 		for (int j = 0; j < anzahl; j++) {
 			String antwort = Integer.toString(j);
 			antworten.put(antwort, Antwort.JA);
@@ -147,7 +147,7 @@ public class UmfrageAntwortServiceTest {
 	
 	private List<UmfrageAntwortDB> getBeispielAntwortDBList(int anzahl, String benutzer) {
 		List<UmfrageAntwortDB> antwortDBs = new ArrayList<>();
-		HashMap<String, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
+		LinkedHashMap<String, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
 		for (String vorschlag : antworten.keySet()) {
 			UmfrageAntwortDB antwortDB = new UmfrageAntwortDB();
 			UmfrageDB umfrageDB = new UmfrageDB();

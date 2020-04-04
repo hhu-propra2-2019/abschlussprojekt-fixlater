@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -82,7 +82,7 @@ public class UmfrageErgebnisService {
 		
 		String ergebnis = "ein Vorschlag";
 		
-		HashMap<String, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
+		LinkedHashMap<String, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
 		vorschlaege = umfrage.getVorschlaege();
 		anzahlAntworten = antworten.size();
 		
@@ -97,7 +97,7 @@ public class UmfrageErgebnisService {
 			
 			nutzerAntworten.add(nutzerAntwortenMap.get(vorschlag));
 			for (UmfrageAntwort antwort : antworten) {
-				HashMap<String, Antwort> antwortMap = antwort.getAntworten();
+				LinkedHashMap<String, Antwort> antwortMap = antwort.getAntworten();
 				Antwort a = antwortMap.get(vorschlag);
 				String pseudonym = antwort.getPseudonym();
 				if (a == Antwort.JA) {
