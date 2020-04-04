@@ -57,7 +57,7 @@ public class ErgebnisScheduler {
 				.findByFristBeforeAndErgebnisIsNull(LocalDateTime.now());
 		
 		List<Terminfindung> terminfindungen =
-			terminfindungService.getDistinctTerminfindungList(terminfindungDBS);
+			terminfindungService.getEindeutigeTerminfindungen(terminfindungDBS);
 		
 		for (Terminfindung termin : terminfindungen) {
 			Terminfindung aktuellerTermin = terminfindungService.loadByLinkMitTerminen(termin.getLink());

@@ -120,7 +120,7 @@ public class TerminfindungService {
 	 */
 	public List<Terminfindung> loadByErstellerOhneTermine(String ersteller) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByErstellerOrderByFristAsc(ersteller);
-		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		List<Terminfindung> terminfindungen = getEindeutigeTerminfindungen(terminfindungDBs);
 		return terminfindungen;
 	}
 	
@@ -136,7 +136,7 @@ public class TerminfindungService {
 	 */
 	public List<Terminfindung> loadByGruppeOhneTermine(String gruppeId) {
 		List<TerminfindungDB> terminfindungDBs = terminfindungRepo.findByGruppeIdOrderByFristAsc(gruppeId);
-		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		List<Terminfindung> terminfindungen = getEindeutigeTerminfindungen(terminfindungDBs);
 		return terminfindungen;
 	}
 	
@@ -152,7 +152,7 @@ public class TerminfindungService {
 	 */
 	public List<Terminfindung> loadAllBenutzerHatAbgestimmtOhneTermine(String benutzer) {
 		List<TerminfindungDB> terminfindungDBs = antwortRepo.findTerminfindungDbByBenutzer(benutzer);
-		List<Terminfindung> terminfindungen = getDistinctTerminfindungList(terminfindungDBs);
+		List<Terminfindung> terminfindungen = getEindeutigeTerminfindungen(terminfindungDBs);
 		return terminfindungen;
 	}
 	
@@ -224,7 +224,7 @@ public class TerminfindungService {
 	 * @return Die Liste von Terminfindung Objekten, die aus {@code terminfindungDBs}
 	 * 		entstand
 	 */
-	public List<Terminfindung> getDistinctTerminfindungList(List<TerminfindungDB> terminfindungDBs) {
+	public List<Terminfindung> getEindeutigeTerminfindungen(List<TerminfindungDB> terminfindungDBs) {
 		List<TerminfindungDB> distinctTerminfindungDBs = new ArrayList<>();
 		List<String> links = new ArrayList<>();
 		for (TerminfindungDB terminfindungdb : terminfindungDBs) {
