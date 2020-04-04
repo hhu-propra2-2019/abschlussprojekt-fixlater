@@ -21,7 +21,7 @@ public class AuthenticationService {
 	 * @param authenticatedAccess  Counter Objekt, das bei erfolgreicher Überprüfung
 	 * 		  erhöht werden soll.
 	 * 
-	 * @return Das Account Objekt des Nutzers beim erfolgreicher Überprüfung,
+	 * @return Das Account Objekt des Nutzers bei erfolgreicher Überprüfung,
 	 * 		   oder null bei erfolgloser Überprüfung
 	 */
 	public Account pruefeEingeloggt(Principal principal, Counter authenticatedAccess) {

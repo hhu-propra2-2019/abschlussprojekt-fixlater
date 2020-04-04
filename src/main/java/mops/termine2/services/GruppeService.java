@@ -126,7 +126,7 @@ public class GruppeService {
 	}
 	
 	/**
-	 * Überprüft, ob der Nutzer des {@code account}s Zugriff aus die Gruppe
+	 * Überprüft, ob der Nutzer des {@code account}s Zugriff auf die Gruppe
 	 * mit Gruppenid {@code id} hat
 	 * 
 	 * @param account Das Account Objekt des Nutzers

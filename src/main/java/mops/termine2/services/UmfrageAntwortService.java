@@ -38,7 +38,7 @@ public class UmfrageAntwortService {
 	 * Speichert Antworten zu einer Umfrage in der Datenbank
 	 *
 	 * @param antwort Die Antwort des Benutzers für die Abstimmung 
-	 * @param terminfindung Die Umfrage, bei der abgestimmt wurde
+	 * @param umfrage Die Umfrage, bei der abgestimmt wurde
 	 */
 	public void abstimmen(UmfrageAntwort antwort, Umfrage umfrage) {
 		

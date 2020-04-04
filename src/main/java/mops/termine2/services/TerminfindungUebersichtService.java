@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * Bietet Methoden zur Filterung von Terminfindungen bezüglich der Frist
- * für einzelne benutzer oder ganze Gruppen
+ * für einzelne Benutzer oder ganze Gruppen
  */
 @Service
 public class TerminfindungUebersichtService {

@@ -121,7 +121,7 @@ public class UmfrageService {
 	}
 	
 	/**
-	 * Lädt die Umfragen aus der Datenbank mit Link {@code link} aus
+	 * Lädt die Umfragen mit Link {@code link} aus
 	 * der Datenbank. Dabei werden Vorschläge geladen.
 	 * 
 	 * @param link Der Link der Umfrage, die gesucht werden soll
@@ -200,7 +200,7 @@ public class UmfrageService {
 	}
 	
 	/**
-	 * Lädt die Umfragen aus der Datenbank mit Link {@code link} aus
+	 * Lädt die Umfragen mit Link {@code link} aus
 	 * der Datenbank. Dabei werden Vorschläge geladen.
 	 * 
 	 * @param link Der Link der Umfrage, die gesucht werden soll

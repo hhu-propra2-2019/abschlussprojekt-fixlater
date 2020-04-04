@@ -163,7 +163,7 @@ public class TerminfindungService {
 	}
 	
 	/**
-	 * Lädt die Terminfindungen aus der Datenbank mit Link {@code link} aus
+	 * Lädt die Terminfindungen mit Link {@code link} aus
 	 * der Datenbank und schaut, ob der Benutzer bereits teilgenommen hat
 	 * oder nicht. Dabei werden Terminvorschläge geladen.
 	 * 
@@ -183,7 +183,7 @@ public class TerminfindungService {
 	}
 	
 	/**
-	 * Lädt die Terminfindungen aus der Datenbank mit Link {@code link} aus
+	 * Lädt die Terminfindungen mit Link {@code link} aus
 	 * der Datenbank. Dabei werden Terminvorschläge geladen.
 	 * 
 	 * @param link Der Link der Terminfindung, die gesucht werden soll
