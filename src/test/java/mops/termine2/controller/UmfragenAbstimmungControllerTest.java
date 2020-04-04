@@ -70,8 +70,8 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
 		
@@ -86,8 +86,8 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails2() throws Exception {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -102,8 +102,8 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails3() throws Exception {
 		Umfrage umfrage = null;
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
 		
@@ -117,10 +117,10 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails4() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/umfragen/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/ergebnis"));
@@ -133,10 +133,10 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageDetails5() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/umfragen/{link}", link)).andExpect(status().is4xxClientError());
 	}
@@ -151,10 +151,10 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
-		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/abstimmung", link)).andExpect(status().isOk());
 	}
@@ -166,10 +166,10 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet2() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, false);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
-		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/ergebnis"));
@@ -185,11 +185,11 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageErgebnisGet1() throws Exception {
 		Umfrage umfrage = initUmfrage(null, false, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(link)).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/abstimmung"));
@@ -202,12 +202,12 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageErgebnisGet2() throws Exception {
 		Umfrage umfrage = initUmfrage("1", true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		when(umfrageAntwortService.loadAllByLink(any())).thenReturn(initAntworten());
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/umfragen/{link}/ergebnis", link)).andExpect(status().is4xxClientError());
 	}
@@ -219,11 +219,11 @@ public class UmfragenAbstimmungControllerTest {
 	void testUmfrageGet3() throws Exception {
 		Umfrage umfrage = initUmfrage(null, true, true);
 		
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(umfrageService.loadByLinkMitVorschlaegen(any())).thenReturn(umfrage);
 		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(umfrageAntwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		
 		mvc.perform(get("/termine2/umfragen/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/abstimmung"));

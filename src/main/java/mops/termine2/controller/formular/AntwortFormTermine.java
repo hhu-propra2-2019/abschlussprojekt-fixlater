@@ -10,13 +10,14 @@ import mops.termine2.util.LocalDateTimeManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AntwortForm {
+public class AntwortFormTermine {
 	
 	public List<LocalDateTime> termine = new ArrayList<>();
 	
@@ -30,7 +31,7 @@ public class AntwortForm {
 	
 	
 	public void init(TerminfindungAntwort terminAbstimmung) {
-		LinkedHashMap<LocalDateTime, Antwort> antwortenMap = terminAbstimmung.getAntworten();
+		HashMap<LocalDateTime, Antwort> antwortenMap = terminAbstimmung.getAntworten();
 		pseudonym = terminAbstimmung.getPseudonym();
 		benutzer = terminAbstimmung.getKuerzel();
 		
@@ -44,7 +45,8 @@ public class AntwortForm {
 	}
 	
 	
-	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, String nutzer, AntwortForm antwortFrm) {
+	public static TerminfindungAntwort mergeToAnswer(Terminfindung terminf, 
+		String nutzer, AntwortFormTermine antwortFrm) {
 		TerminfindungAntwort terminfindungAntwort = new TerminfindungAntwort();
 		terminfindungAntwort.setKuerzel(nutzer);
 		terminfindungAntwort.setLink(terminf.getLink());

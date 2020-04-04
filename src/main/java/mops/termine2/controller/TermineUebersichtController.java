@@ -57,25 +57,25 @@ public class TermineUebersichtController {
 		@RequestParam(name = "gruppe", defaultValue = "-1") String gruppeId) {
 		
 		// Account
-		Account account = authenticationService.checkLoggedIn(principal, authenticatedAccess);
+		Account account = authenticationService.pruefeEingeloggt(principal, authenticatedAccess);
 		if (account == null) {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		if (gruppeService.checkGroupAccessDenied(account, gruppeId)) {
+		if (gruppeService.pruefeGruppenzugriffVerweigert(account, gruppeId)) {
 			throw new AccessDeniedException(Konstanten.ERROR_GROUP_ACCESS_DENIED);
 		}
 		
-		List<Gruppe> gruppen = gruppeService.loadByBenutzerSorted(account);		
+		List<Gruppe> gruppen = gruppeService.loadByBenutzerSortiert(account);		
 		
-		Gruppe selGruppe = gruppeService.loadByGruppeIdOrDefault(gruppeId);
+		Gruppe selGruppe = gruppeService.loadByGruppeIdOderStandard(gruppeId);
 		
 		List<Terminfindung> terminfindungenOffen =
 			terminfindunguebersichtService.loadOffeneTerminfindungen(account, selGruppe);
 		List<Terminfindung> terminfindungenAbgeschlossen =
 			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungen(account, selGruppe);
 		
-		HashMap<String, String> groups = gruppeService.extractIdAndName(gruppen);
+		HashMap<String, String> groups = gruppeService.extrahiereIdAndNameAusGruppen(gruppen);
 		terminfindungService.setzeGruppenName(terminfindungenOffen, groups);
 		terminfindungService.setzeGruppenName(terminfindungenAbgeschlossen, groups);
 		

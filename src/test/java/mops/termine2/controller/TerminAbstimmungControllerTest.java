@@ -69,8 +69,8 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
@@ -83,8 +83,8 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
@@ -98,7 +98,7 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails3() throws Exception {
 		Terminfindung terminfindung = null;
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
@@ -110,9 +110,9 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails4() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
@@ -124,9 +124,9 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineDetails5() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/{link}", link)).andExpect(status().is4xxClientError());
 	}
@@ -141,10 +141,10 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().isOk());
 	}
 	
@@ -154,10 +154,10 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, false);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/abstimmung", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/ergebnis"));
 	}
@@ -172,11 +172,11 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet1() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, false, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}
@@ -187,11 +187,11 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet2() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, true, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().isOk());
 	}
@@ -202,12 +202,12 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineErgebnisGet3() throws Exception {
 		Terminfindung terminfindung = initTerminfindung("1", false, true, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		when(antwortService.loadAllByLink(any())).thenReturn(initAntworten());
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(true);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(true);
 		
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is4xxClientError());
 	}
@@ -218,11 +218,11 @@ public class TerminAbstimmungControllerTest {
 	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
 	void testTermineAbstimmungGet4() throws Exception {
 		Terminfindung terminfindung = initTerminfindung(null, false, false, true, true);
-		when(authenticationService.checkLoggedIn(any(), any())).thenReturn(accountStudentin);
-		when(gruppeService.checkGroupAccessDenied(any(), any())).thenReturn(false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
 		when(terminService.loadByLinkMitTerminenForBenutzer(any(), any())).thenReturn(terminfindung);
 		when(antwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(false);
-		when(antwortService.loadByBenutzerAndLink(any(), any())).thenReturn(initAntwort());
+		when(antwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
 		mvc.perform(get("/termine2/{link}/ergebnis", link)).andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/termine2/" + link + "/abstimmung"));
 	}

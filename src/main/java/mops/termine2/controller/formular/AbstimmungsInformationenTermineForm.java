@@ -4,7 +4,7 @@ import lombok.Getter;
 import mops.termine2.models.Terminfindung;
 
 @Getter
-public class AbstimmungsInfortmationenTermineForm {
+public class AbstimmungsInformationenTermineForm {
 	
 	Boolean einmaligeAbstimmung;
 	
@@ -12,7 +12,7 @@ public class AbstimmungsInfortmationenTermineForm {
 	
 	Boolean teilnahmeMoeglich;
 	
-	public AbstimmungsInfortmationenTermineForm(Terminfindung terminfindung) {
+	public AbstimmungsInformationenTermineForm(Terminfindung terminfindung) {
 		setAbstimmungsBerechtigungNutzer(terminfindung);
 		setEinmaligesAbstimmen(terminfindung);
 		setErgebnisVorFrist(terminfindung);
