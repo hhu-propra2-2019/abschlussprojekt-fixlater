@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +30,7 @@ public class TerminfindungAntwortServiceTest {
 	
 	private transient TerminfindungAntwortRepository antwortRepo;
 	
-	private transient TerminAntwortService antwortService;
+	private transient TerminfindungAntwortService antwortService;
 	
 	private transient TerminfindungRepository terminRepo;
 	
@@ -38,7 +38,7 @@ public class TerminfindungAntwortServiceTest {
 	private void setUp() {
 		antwortRepo = mock(TerminfindungAntwortRepository.class);
 		terminRepo = mock(TerminfindungRepository.class);
-		antwortService = new TerminAntwortService(antwortRepo, terminRepo);
+		antwortService = new TerminfindungAntwortService(antwortRepo, terminRepo);
 	}
 	
 	@Test
@@ -125,8 +125,8 @@ public class TerminfindungAntwortServiceTest {
 		return terminfindungAntwort;
 	}
 	
-	private HashMap<LocalDateTime, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
-		HashMap<LocalDateTime, Antwort> antworten = new HashMap<>();
+	private LinkedHashMap<LocalDateTime, Antwort> getBeispielAntwortenAlleJa(int anzahl) {
+		LinkedHashMap<LocalDateTime, Antwort> antworten = new LinkedHashMap<>();
 		for (int j = 0; j < anzahl; j++) {
 			antworten.put(LocalDateTime.of(1, 1, 1, 1, 1, 1, 1).plusDays(j), Antwort.JA);
 		}
@@ -145,7 +145,7 @@ public class TerminfindungAntwortServiceTest {
 	
 	private List<TerminfindungAntwortDB> getBeispielAntwortDBList(int anzahl, String benutzer) {
 		List<TerminfindungAntwortDB> antwortDBs = new ArrayList<>();
-		HashMap<LocalDateTime, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
+		LinkedHashMap<LocalDateTime, Antwort> antworten = getBeispielAntwortenAlleJa(anzahl);
 		for (LocalDateTime termin : antworten.keySet()) {
 			TerminfindungAntwortDB antwortDB = new TerminfindungAntwortDB();
 			TerminfindungDB terminDB = new TerminfindungDB();

@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UmfrageuebersichtServiceTest {
+public class UmfragenUebersichtServiceTest {
 	
-	private transient UmfragenuebersichtService umfrageuebersichtService;
+	private transient UmfragenUebersichtService umfrageuebersichtService;
 	
 	private transient UmfrageService umfrageService;
 	
@@ -44,7 +44,7 @@ public class UmfrageuebersichtServiceTest {
 		umfrageService = new UmfrageService(umfrageRepository, antwortRepo);
 		umfrageAntwortService = new UmfrageAntwortService(antwortRepo, umfrageRepository);
 		gruppeService = new GruppeService(benutzerGruppeRepository);
-		umfrageuebersichtService = new UmfragenuebersichtService(
+		umfrageuebersichtService = new UmfragenUebersichtService(
 			umfrageService, gruppeService, umfrageAntwortService);
 	}
 	

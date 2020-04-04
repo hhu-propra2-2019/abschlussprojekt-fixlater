@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TerminfindunguebersichtService {
+public class TerminfindungUebersichtService {
 	
 	@Autowired
 	private TerminfindungService terminfindungService;
 	
 	@Autowired
-	private TerminAntwortService terminAntwortService;
+	private TerminfindungAntwortService terminAntwortService;
 	
 	@Autowired
 	private GruppeService gruppeService;
 	
-	public TerminfindunguebersichtService(TerminfindungService terminfindungService,
+	public TerminfindungUebersichtService(TerminfindungService terminfindungService,
 										  GruppeService gruppeService,
-										  TerminAntwortService
+										  TerminfindungAntwortService
 											  terminAntwortService) {
 		this.terminfindungService = terminfindungService;
 		this.gruppeService = gruppeService;
@@ -105,6 +105,20 @@ public class TerminfindunguebersichtService {
 		abgeschlosseneTermine = sortiereAbgeschlosseneTermine(abgeschlosseneTermine);
 		
 		return abgeschlosseneTermine;
+	}
+	
+	public List<Terminfindung> loadOffeneTerminfindungen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadOffeneTerminfindungenFuerBenutzer(account);
+		}
+		return loadOffeneTerminfindungenFuerGruppe(account, gruppe.getId());
+	}
+	
+	public List<Terminfindung> loadAbgeschlosseneTerminfindungen(Account account, Gruppe gruppe) {
+		if (gruppe == null || gruppe.getId().equals("-1")) {
+			return loadAbgeschlosseneTerminfindungenFuerBenutzer(account);
+		}
+		return loadAbgeschlosseneTerminfindungenFuerGruppe(account, gruppe.getId());
 	}
 	
 	private List<Terminfindung> distinct(List<Terminfindung> termine) {

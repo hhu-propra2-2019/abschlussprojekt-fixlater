@@ -10,7 +10,7 @@ import mops.termine2.util.LocalDateTimeManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Data
@@ -30,7 +30,7 @@ public class AntwortForm {
 	
 	
 	public void init(TerminfindungAntwort terminAbstimmung) {
-		HashMap<LocalDateTime, Antwort> antwortenMap = terminAbstimmung.getAntworten();
+		LinkedHashMap<LocalDateTime, Antwort> antwortenMap = terminAbstimmung.getAntworten();
 		pseudonym = terminAbstimmung.getPseudonym();
 		benutzer = terminAbstimmung.getKuerzel();
 		
@@ -62,7 +62,7 @@ public class AntwortForm {
 		}
 		
 		
-		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
+		LinkedHashMap<LocalDateTime, Antwort> antwortenMap = new LinkedHashMap<>();
 		for (int i = 0; i < termine.size(); i++) {
 			antwortenMap.put(termine.get(i), antworten.get(i));
 		}

@@ -1,5 +1,7 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -201,6 +204,42 @@ public class UmfrageService {
 		return umfrage;
 	}
 	
+	public void loescheVorschlag(Umfrage umfrage, int indexToDelete) {
+		try {
+			umfrage.getVorschlaege().remove(indexToDelete);
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
+			return;
+		}
+	}
+	
+	public List<String> erstelleUmfrage(Account account, Umfrage umfrage) {
+		List<String> fehler = new ArrayList<String>();
+		
+		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
+		for (String vorschlag : umfrage.getVorschlaege()) {
+			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
+				gueltigeVorschlaege.add(vorschlag);
+			}
+		}
+		
+		if (gueltigeVorschlaege.isEmpty()) {
+			gueltigeVorschlaege.add("");
+			fehler.add(Konstanten.MESSAGE_KEIN_VORSCHLAG);
+		}
+		
+		umfrage.setVorschlaege(gueltigeVorschlaege);
+		umfrage.setMaxAntwortAnzahl((long) gueltigeVorschlaege.size());
+		umfrage.setErsteller(account.getName());
+		
+		return fehler;
+	}
+	
+	public void setzeGruppenName(List<Umfrage> umfragen, HashMap<String, String> gruppen) {
+		for (Umfrage umfrage : umfragen) {
+			umfrage.setGruppeName(gruppen.get(umfrage.getGruppeId()));
+		}
+	}
+	
 	private void updateOldDB(UmfrageDB umfrage, UmfrageDB toUpdate) {
 		toUpdate.setTitel(umfrage.getTitel());
 		toUpdate.setErsteller(umfrage.getErsteller());
@@ -243,6 +282,6 @@ public class UmfrageService {
 		}
 		
 		return umfragen;
-	}
+	}	
 	
 }

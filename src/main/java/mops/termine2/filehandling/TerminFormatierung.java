@@ -31,12 +31,11 @@ public class TerminFormatierung {
 			.toFormatter();
 	}
 	
-	public Boolean pruefeObGueltigesFormat(
-		List<String[]> termineEingelesen, DateTimeFormatter formatter) {
+	public Boolean pruefeObGueltigesFormat() {
 		try {
 			for (String[] terminEingelesen : termineEingelesen) {
 				LocalDateTime.parse(terminEingelesen[0]
-					+ ", " + terminEingelesen[1], formatter);
+					+ ", " + terminEingelesen[1], dateTimeFormatter);
 			}
 			return true;
 		} catch (Exception ex) {
@@ -44,10 +43,10 @@ public class TerminFormatierung {
 		}
 	}
 	
-	public Boolean pruefeObInZukunft(List<String[]> termineEingelesen, DateTimeFormatter formatter) {
+	public Boolean pruefeObInZukunft() {
 		for (String[] terminEingelesen : termineEingelesen) {
 			LocalDateTime zeit = LocalDateTime.parse(terminEingelesen[0]
-					+ ", " + terminEingelesen[1], formatter);
+					+ ", " + terminEingelesen[1], dateTimeFormatter);
 			if (zeit.isBefore(LocalDateTime.now())) {
 				return false;
 			}
@@ -55,7 +54,7 @@ public class TerminFormatierung {
 		return true;
 	}
 	
-	public Boolean pruefeObGueltigesDatum(List<String[]> termineEingelesen) {
+	public Boolean pruefeObGueltigesDatum() {
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy,HH:mm");
 		format.setLenient(false);
 		
