@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Bietet Methoden zur Berechnung des Ergebnisses einer Umfrage
+ * und zum Erstellen einer Ergebnisübersicht
+ */
 @Service
 public class UmfrageErgebnisService {
 	
@@ -23,6 +27,13 @@ public class UmfrageErgebnisService {
 		this.antwortRepo = antwortRepo;
 	}
 	
+	/**
+	 * Berechnet das Ergebnis einer Umfrage anhand der abgegebenen Antworten
+	 * 
+	 * @param umfrage Die Umfrage deren Ergebnis berechnet werden soll
+	 * 
+	 * @return Das Ergebnis der Umfrage
+	 */
 	public String berechneErgebnisUmfrage(Umfrage umfrage) {
 		List<UmfrageAntwortDB> umfrageAntwortDBS =
 			antwortRepo.findAllByUmfrageLink(umfrage.getLink());
@@ -51,7 +62,16 @@ public class UmfrageErgebnisService {
 		return umfrage.getVorschlaege().get(highest.get(0));
 	}
 	
-	
+	/**
+	 * Erstellt aus den Parametern eine ErgebnisForm, 
+	 * die von dem UI benutzt werden kann
+	 * 
+	 * @param antworten Die zu der Umfrage gehörigen Antworten
+	 * @param umfrage Die Umfrage, deren ErgebnisForm erstellt werden soll
+	 * @param nutzerAbstimmung Die Antwort zu der Umfrage des aktuellen Nutzers
+	 * 
+	 * @return Die ErgebnisForm der Umfrage
+	 */
 	public ErgebnisFormUmfragen baueErgebnisForm(
 		List<UmfrageAntwort> antworten,
 		Umfrage umfrage,
