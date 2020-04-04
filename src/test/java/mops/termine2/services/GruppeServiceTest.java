@@ -2,6 +2,7 @@ package mops.termine2.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import mops.termine2.authentication.Account;
 import mops.termine2.database.BenutzerGruppeRepository;
 import mops.termine2.database.entities.BenutzerGruppeDB;
 import mops.termine2.models.Gruppe;
+import mops.termine2.models.Terminfindung;
+import mops.termine2.models.Umfrage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -174,6 +177,121 @@ public class GruppeServiceTest {
 		boolean result = gruppeService.pruefeGruppenzugriffVerweigert(account, "1");
 		
 		assertThat(result).isEqualTo(false);
+	}
+	
+	@Test
+	public void testExtrahiereNameUndId() {
+		List<Gruppe> gruppen = new ArrayList<Gruppe>();
+		for (int i = 1; i < 5; i++) {
+			Gruppe gruppe = new Gruppe();
+			gruppe.setId(String.valueOf(i));
+			gruppe.setName("Gruppe" + i);
+			gruppen.add(gruppe);
+		}
+		HashMap<String, String> expected = new HashMap<>();
+		expected.put("1", "Gruppe1");
+		expected.put("2", "Gruppe2");
+		expected.put("3", "Gruppe3");
+		expected.put("4", "Gruppe4");
+		
+		HashMap<String, String> result = gruppeService.extrahiereIdUndNameAusGruppen(gruppen);
+		
+		assertThat(result).isEqualTo(expected);
+	}
+	
+	@Test
+	public void setzeGruppenIDTerminfindung() {
+		Terminfindung terminfindung = new Terminfindung();
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("1");
+		gruppe.setName("Test");
+		
+		BenutzerGruppeDB user = new BenutzerGruppeDB();
+		user.setBenutzer("studentin");
+		user.setGruppe("Test");
+		user.setGruppeId("1");
+		user.setId(1L);
+		
+		when(benutzerGruppeRepository.findByGruppeId(gruppe.getId()))
+			.thenReturn(Arrays.asList(user));
+		
+		gruppeService.setzeGruppeId(terminfindung, gruppe);
+		
+		assertThat(terminfindung.getGruppeId()).isEqualTo(gruppe.getId());
+	}
+	
+	@Test
+	public void setzeGruppenIDTerminfindungNichtInDB() {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setGruppeId("0");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("1");
+		gruppe.setName("Test");
+		
+		when(benutzerGruppeRepository.findByGruppeId(gruppe.getId()))
+			.thenReturn(new ArrayList<BenutzerGruppeDB>());
+		
+		gruppeService.setzeGruppeId(terminfindung, gruppe);
+		
+		assertThat(terminfindung.getGruppeId()).isEqualTo("0");
+	}
+	
+	@Test
+	public void setzeGruppenIDTerminfindungIDNull() {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setGruppeId("0");
+		Gruppe gruppe = new Gruppe();		
+		
+		gruppeService.setzeGruppeId(terminfindung, gruppe);
+		
+		assertThat(terminfindung.getGruppeId()).isEqualTo("0");
+	}
+	
+	@Test
+	public void setzeGruppenIDTerminfindungGruppeNull() {
+		Terminfindung terminfindung = new Terminfindung();
+		terminfindung.setGruppeId("0");
+		
+		gruppeService.setzeGruppeId(terminfindung, null);
+		
+		assertThat(terminfindung.getGruppeId()).isEqualTo("0");
+	}
+	
+	@Test
+	public void setzeGruppenIDUmfrage() {
+		Umfrage umfrage = new Umfrage();
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("1");
+		gruppe.setName("Test");
+		
+		BenutzerGruppeDB user = new BenutzerGruppeDB();
+		user.setBenutzer("studentin");
+		user.setGruppe("Test");
+		user.setGruppeId("1");
+		user.setId(1L);
+		
+		when(benutzerGruppeRepository.findByGruppeId(gruppe.getId()))
+			.thenReturn(Arrays.asList(user));
+		
+		gruppeService.setzeGruppeId(umfrage, gruppe);
+		
+		assertThat(umfrage.getGruppeId()).isEqualTo(gruppe.getId());
+	}
+	
+	@Test
+	public void setzeGruppenIDUmfrageNichtInDB() {
+		Umfrage umfrage = new Umfrage();
+		umfrage.setGruppeId("0");
+		Gruppe gruppe = new Gruppe();
+		gruppe.setId("1");
+		gruppe.setName("Test");
+		
+		when(benutzerGruppeRepository.findByGruppeId(gruppe.getId()))
+			.thenReturn(new ArrayList<BenutzerGruppeDB>());
+		
+		gruppeService.setzeGruppeId(umfrage, gruppe);
+		
+		assertThat(umfrage.getGruppeId()).isEqualTo("0");
 	}
 	
 }
