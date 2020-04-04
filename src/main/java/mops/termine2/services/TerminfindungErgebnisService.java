@@ -16,6 +16,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Bietet Methoden zur Berechnung des Ergebnisses einer Terminfindung
+ * und zum Erstellen einer Ergebnisübersicht
+ */
 @Service
 public class TerminfindungErgebnisService {
 	
@@ -23,9 +27,15 @@ public class TerminfindungErgebnisService {
 	
 	public TerminfindungErgebnisService(TerminfindungAntwortRepository antwortRepo) {
 		this.antwortRepo = antwortRepo;
-	}
+	}	
 	
-	
+	/**
+	 * Berechnet das Ergebnis einer Terminfindung anhand der abgegebenen Antworten
+	 * 
+	 * @param terminfindung Die Terminfindung deren Ergebnis berechnet werden soll
+	 * 
+	 * @return Das Ergebnis der Terminfindung
+	 */
 	public LocalDateTime berechneErgebnisTerminfindung(Terminfindung terminfindung) {
 		List<TerminfindungAntwortDB> terminfindungAntwortDBS =
 			antwortRepo.findAllByTerminfindungLink(terminfindung.getLink());
@@ -68,7 +78,16 @@ public class TerminfindungErgebnisService {
 		return terminfindung.getVorschlaege().get(highest.get(0));
 	}
 	
-	
+	/**
+	 * Erstellt aus den Parametern eine ErgebnisForm, 
+	 * die von dem UI benutzt werden kann
+	 * 
+	 * @param antworten Die zu der Terminfindung gehörigen Antworten
+	 * @param terminfindung Die Terminfindung, deren ErgebnisForm erstellt werden soll
+	 * @param nutzerAbstimmung Die Antwort zu der Terminfindung des aktuellen Nutzers
+	 * 
+	 * @return Die ErgebnisForm der Terminfindung
+	 */
 	public ErgebnisForm baueErgebnisForm(
 		List<TerminfindungAntwort> antworten,
 		Terminfindung terminfindung,
