@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -152,11 +152,11 @@ public class TerminfindungAntwortService {
 			antwort.setPseudonym(benutzer);
 		}
 		
-		HashMap<LocalDateTime, Antwort> alteAntwortenMap = new HashMap<>();
+		LinkedHashMap<LocalDateTime, Antwort> alteAntwortenMap = new LinkedHashMap<>();
 		for (TerminfindungAntwortDB alteAntwort : alteAntworten) {
 			alteAntwortenMap.put(alteAntwort.getTerminfindung().getTermin(), alteAntwort.getAntwort());
 		}
-		HashMap<LocalDateTime, Antwort> antwortenMap = new HashMap<>();
+		LinkedHashMap<LocalDateTime, Antwort> antwortenMap = new LinkedHashMap<>();
 		
 		for (TerminfindungDB antwortMoglichkeit : antwortMoglichkeiten) {
 			LocalDateTime termin = antwortMoglichkeit.getTermin();

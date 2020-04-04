@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -126,7 +126,8 @@ public class TerminfindungErgebnisService {
 		
 		boolean fristNichtAbgelaufen = false;
 		
-		HashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
+		LinkedHashMap<LocalDateTime, Antwort> nutzerAntwortenMap = nutzerAbstimmung.getAntworten();
+		
 		termine = terminfindung.getVorschlaege();
 		LocalDateTimeManager.sortTermine(termine);
 		anzahlAntworten = antworten.size();
@@ -148,7 +149,7 @@ public class TerminfindungErgebnisService {
 			
 			nutzerAntworten.add(nutzerAntwortenMap.get(localDateTime));
 			for (TerminfindungAntwort antwort : antworten) {
-				HashMap<LocalDateTime, Antwort> antwortMap = antwort.getAntworten();
+				LinkedHashMap<LocalDateTime, Antwort> antwortMap = antwort.getAntworten();
 				Antwort a = antwortMap.get(localDateTime);
 				String pseudonym = antwort.getPseudonym();
 				if (a == Antwort.JA) {
