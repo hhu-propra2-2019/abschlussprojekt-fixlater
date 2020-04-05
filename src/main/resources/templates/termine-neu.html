@@ -137,7 +137,7 @@
 								<optgroup label="Gruppen">
 									<option th:each="gruppe, iter : ${gruppen}"
 									        th:value="${gruppen[__${iter.index}__].id}"
-									        th:text="${gruppe.name}">
+									        th:text="${gruppe.name} + ' (ID: ' + ${gruppe.id} + ')'">
 										Gruppe
 									</option>
 								</optgroup>

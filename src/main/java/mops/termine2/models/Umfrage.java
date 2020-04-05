@@ -35,8 +35,6 @@ public class Umfrage {
 	
 	private Long maxAntwortAnzahl;
 	
-	private String umfragenErgebnis;
-	
 	private boolean teilgenommen = false;
 	
 	private String ergebnis;
