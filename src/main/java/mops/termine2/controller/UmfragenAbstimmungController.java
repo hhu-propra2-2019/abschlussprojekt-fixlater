@@ -80,7 +80,7 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLink(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
@@ -108,7 +108,7 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLink(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
@@ -150,7 +150,7 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLink(link);
 		
 		if (umfrage == null) {
 			throw new ResponseStatusException(
@@ -193,7 +193,7 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLink(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);
@@ -231,7 +231,7 @@ public class UmfragenAbstimmungController {
 			throw new AccessDeniedException(Konstanten.ERROR_NOT_LOGGED_IN);
 		}
 		
-		Umfrage umfrage = umfrageService.loadByLinkMitVorschlaegen(link);
+		Umfrage umfrage = umfrageService.loadByLink(link);
 		if (umfrage == null) {
 			throw new ResponseStatusException(
 				HttpStatus.NOT_FOUND, Konstanten.ERROR_PAGE_NOT_FOUND);

@@ -143,6 +143,7 @@ public class UmfrageService {
 			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
 			umfrage.setMaxAntwortAnzahl(ersteUmfrage.getMaxAntwortAnzahl());
 			umfrage.setTitel(ersteUmfrage.getTitel());
+			umfrage.setErgebnis(ersteUmfrage.getErgebnis());
 			
 			List<String> vorschlaege = new ArrayList<String>();
 			for (UmfrageDB umfrageDB : umfragenDB) {
@@ -197,40 +198,6 @@ public class UmfrageService {
 		List<UmfrageDB> umfrageDBs = umfrageAntwortRepository.findUmfrageDbByBenutzer(benutzer);
 		List<Umfrage> umfragen = getEindeutigeUmfragen(umfrageDBs);
 		return umfragen;
-	}
-	
-	/**
-	 * Lädt die Umfragen mit Link {@code link} aus
-	 * der Datenbank. Dabei werden Vorschläge geladen.
-	 * 
-	 * @param link Der Link der Umfrage, die gesucht werden soll
-	 * 
-	 * @return Die Umfrage mit Link {@code link} oder {@code null}, falls
-	 * 		der Link nicht gefunden wird
-	 */
-	public Umfrage loadByLinkMitVorschlaegen(String link) {
-		List<UmfrageDB> vorschlaegeDB = umfrageRepository.findByLink(link);
-		if (vorschlaegeDB != null && !vorschlaegeDB.isEmpty()) {
-			Umfrage umfrage = new Umfrage();
-			UmfrageDB ersteUmfrage = vorschlaegeDB.get(0);
-			
-			umfrage.setTitel(ersteUmfrage.getTitel());
-			umfrage.setBeschreibung(ersteUmfrage.getBeschreibung());
-			umfrage.setLoeschdatum(ersteUmfrage.getLoeschdatum());
-			umfrage.setFrist(ersteUmfrage.getFrist());
-			umfrage.setGruppeId(ersteUmfrage.getGruppeId());
-			umfrage.setLink(ersteUmfrage.getLink());
-			umfrage.setErsteller(ersteUmfrage.getErsteller());
-			umfrage.setErgebnis(ersteUmfrage.getErgebnis());
-			
-			List<String> vorschlaege = new ArrayList<>();
-			for (UmfrageDB vorschlag : vorschlaegeDB) {
-				vorschlaege.add(vorschlag.getAuswahlmoeglichkeit());
-			}
-			umfrage.setVorschlaege(vorschlaege);
-			return umfrage;
-		}
-		return null;
 	}
 	
 	/**
