@@ -166,11 +166,16 @@
 										   th:text="${#strings.abbreviate(termin.titel, 38)}">
 											Titel mit Tooltip</a></h3>
 									
-									<div class="col-sm-3 mb-auto text-success"
-									     style="text-align: right"
-									     th:text="'am ' + ${#temporals.format(termin.ergebnis,
-									              'dd.MM.yyyy HH:mm')} + ' Uhr'">
-										am DD.MM.YYYY, HH:MM</div>
+									<div class="col-sm-4 mb-auto text-success"
+									     style="text-align: right">
+										<div th:text="'am ' + ${#temporals.format(termin.ergebnis,
+										              'dd.MM.yyyy')}">
+											am dd.MM.yyyy</div>
+										
+										<div th:text="'um ' + ${#temporals.format(termin.ergebnis,
+										              'HH:mm')} + ' Uhr'">
+											um HH:mm</div>
+									</div>
 								</div>
 								
 								<div class="text-break" style="font-size: large"

@@ -166,11 +166,16 @@
 										   th:text="${#strings.abbreviate(umfrage.titel, 38)}">
 											Titel mit Tooltip</a></h3>
 									
-									<div class="col-sm-3 mb-auto text-secondary"
-									     style="text-align: right"
-									     th:text="'vom ' + ${#temporals.format(umfrage.frist,
-									              'dd.MM.yyyy HH:mm')} + ' Uhr'">
-										vom DD.MM.YYYY, HH:MM</div>
+									<div class="col-sm-4 mb-auto text-secondary"
+									     style="text-align: right">
+										<div th:text="'vom ' + ${#temporals.format(umfrage.frist,
+										              'dd.MM.yyyy')}">
+											vom dd.MM.yyyy</div>
+										
+										<div th:text="'um ' + ${#temporals.format(umfrage.frist,
+										              'HH:mm')} + ' Uhr'">
+											um HH:mm</div>
+									</div>
 								</div>
 								
 								<div style="font-size: large"
