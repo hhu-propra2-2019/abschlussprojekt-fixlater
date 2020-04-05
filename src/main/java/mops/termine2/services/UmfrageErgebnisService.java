@@ -94,7 +94,7 @@ public class UmfrageErgebnisService {
 		
 		List<Boolean> isNutzerAntwortJa = new ArrayList<>();
 		
-		List<String> jaAntwortPseud = new ArrayList<>();
+		List<String> jaAntwortPseudo = new ArrayList<>();
 		
 		List<String> neinAntwortPseudo = new ArrayList<>();
 		
@@ -131,7 +131,7 @@ public class UmfrageErgebnisService {
 			
 			anzahlStimmenJa.add(ja);
 			anzahlStimmenNein.add(nein);
-			jaAntwortPseud.add(jaAnt);
+			jaAntwortPseudo.add(jaAnt);
 			neinAntwortPseudo.add(neinAnt);
 			
 			double jaAnteil = 100 * (ja * 1.) / anzahlAntworten;
@@ -150,7 +150,7 @@ public class UmfrageErgebnisService {
 		toReturn.setAnteilStimmenJa(anteilStimmenJa);
 		toReturn.setAnteilStimmenNein(anteilStimmenNein);
 		toReturn.setIsNutzerAntwortJa(isNutzerAntwortJa);
-		toReturn.setJaAntwortPseud(jaAntwortPseud);
+		toReturn.setJaAntwortPseudo(jaAntwortPseudo);
 		toReturn.setNeinAntwortPseudo(neinAntwortPseudo);
 		toReturn.setFristNichtAbgelaufen(fristNichtAbgelaufen);
 		toReturn.setErgebnis(berechneErgebnisUmfrage(umfrage));

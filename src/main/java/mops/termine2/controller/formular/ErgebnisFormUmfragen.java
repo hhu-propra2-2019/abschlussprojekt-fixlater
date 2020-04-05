@@ -29,7 +29,7 @@ public class ErgebnisFormUmfragen {
 	
 	List<Boolean> isNutzerAntwortJa = new ArrayList<>();
 	
-	List<String> jaAntwortPseud = new ArrayList<>();
+	List<String> jaAntwortPseudo = new ArrayList<>();
 	
 	List<String> neinAntwortPseudo = new ArrayList<>();
 	

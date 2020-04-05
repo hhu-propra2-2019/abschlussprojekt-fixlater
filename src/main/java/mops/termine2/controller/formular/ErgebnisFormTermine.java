@@ -38,7 +38,7 @@ public class ErgebnisFormTermine {
 	
 	List<Boolean> isNutzerAntwortVielleicht = new ArrayList<>();
 	
-	List<String> jaAntwortPseud = new ArrayList<>();
+	List<String> jaAntwortPseudo = new ArrayList<>();
 	
 	List<String> vielleichtAntwortPseudo = new ArrayList<>();
 	
