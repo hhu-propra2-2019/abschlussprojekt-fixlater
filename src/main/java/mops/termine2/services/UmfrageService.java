@@ -301,9 +301,12 @@ public class UmfrageService {
 		List<String> fehler = new ArrayList<String>();
 		
 		ArrayList<String> gueltigeVorschlaege = new ArrayList<String>();
-		for (String vorschlag : umfrage.getVorschlaege()) {
-			if (vorschlag != null && !vorschlag.equals("") && !gueltigeVorschlaege.contains(vorschlag)) {
-				gueltigeVorschlaege.add(vorschlag);
+		if (umfrage.getVorschlaege() != null) {
+			for (String vorschlag : umfrage.getVorschlaege()) {
+				if (vorschlag != null && !vorschlag.equals("") 
+					&& !gueltigeVorschlaege.contains(vorschlag)) {
+					gueltigeVorschlaege.add(vorschlag);
+				}
 			}
 		}
 		
