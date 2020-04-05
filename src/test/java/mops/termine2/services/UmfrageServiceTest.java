@@ -1,5 +1,7 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
 import mops.termine2.database.UmfrageAntwortRepository;
 import mops.termine2.database.UmfrageRepository;
 import mops.termine2.database.entities.UmfrageDB;
@@ -12,12 +14,14 @@ import org.mockito.Mockito;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UmfrageServiceTest {
@@ -59,6 +63,21 @@ public class UmfrageServiceTest {
 		Umfrage umfrage = erstelleBeispielUmfrage(anzahl, 0, 0, 0, 0, 0);
 		service.save(umfrage);
 		Mockito.verify(umfrageRepository, times(1)).saveAll(any());
+	}
+	
+	@Test
+	public void updateUmfrage() {
+		Umfrage umfrage = erstelleBeispielUmfrage(4, 0, 0, 0, 0, 0);
+		List<UmfrageDB> db = erstelleUmfrageDBListeGruppe(5, 0, 0, 0, 0, 0);
+		List<UmfrageDB> expectedToSave = db.subList(0, 4);
+		List<UmfrageDB> expectedToDelete = Arrays.asList(db.get(4));
+		
+		when(umfrageRepository.findByLink(umfrage.getLink())).thenReturn(db);
+		
+		service.save(umfrage);
+		
+		verify(umfrageRepository, times(1)).saveAll(expectedToSave);
+		verify(umfrageRepository, times(1)).deleteAll(expectedToDelete);
 	}
 	
 	@Test
@@ -188,6 +207,101 @@ public class UmfrageServiceTest {
 		
 		Mockito.verify(umfrageAntwortRepository, times(1)).deleteByUmfrageLoeschdatumBefore(any());
 		Mockito.verify(umfrageRepository, times(1)).deleteByLoeschdatumBefore(any());
+	}
+	
+	@Test
+	public void loescheVorschlag() {
+		Umfrage umfrage = erstelleBeispielUmfrage(5, 0, 0, 0, 0, 0);
+		List<String> expected = Arrays.asList(
+				umfrage.getVorschlaege().get(1),
+				umfrage.getVorschlaege().get(2),
+				umfrage.getVorschlaege().get(3),
+				umfrage.getVorschlaege().get(4)
+			);
+		
+		service.loescheVorschlag(umfrage, 0);
+		
+		assertThat(umfrage.getVorschlaege()).isEqualTo(expected);
+	}
+	
+	@Test
+	public void loescheVorschlagNull() {
+		Umfrage umfrage = erstelleBeispielUmfrage(5, 0, 0, 0, 0, 0);
+		umfrage.setVorschlaege(null);
+		
+		service.loescheVorschlag(umfrage, 0);
+		
+		assertThat(umfrage.getVorschlaege()).isNull();
+	}
+	
+	@Test
+	public void loescheVorschlagOutOfBounds() {
+		Umfrage umfrage = erstelleBeispielUmfrage(5, 0, 0, 0, 0, 0);
+		List<String> expected = Arrays.asList(
+				umfrage.getVorschlaege().get(0),
+				umfrage.getVorschlaege().get(1),
+				umfrage.getVorschlaege().get(2),
+				umfrage.getVorschlaege().get(3),
+				umfrage.getVorschlaege().get(4)
+			);
+		
+		service.loescheVorschlag(umfrage, 5);
+		
+		assertThat(umfrage.getVorschlaege()).isEqualTo(expected);
+	}
+	
+	@Test
+	public void setzeGruppenname() {
+		Umfrage u1 = new Umfrage();
+		u1.setGruppeId("1");
+		Umfrage u2 = new Umfrage();
+		u2.setGruppeId("3");
+		List<Umfrage> umfragen = Arrays.asList(u1, u2);
+		
+		HashMap<String, String> gruppen = new HashMap<>();
+		gruppen.put("1", "Gruppe1");
+		gruppen.put("2", "Gruppe2");
+		gruppen.put("3", "Gruppe3");
+		gruppen.put("4", "Gruppe4");
+		
+		service.setzeGruppenName(umfragen, gruppen);
+
+		assertThat(u1.getGruppeName()).isEqualTo("Gruppe1");
+		assertThat(u2.getGruppeName()).isEqualTo("Gruppe3");
+	}
+	
+	@Test
+	public void erstelleUmfrageOhneFehler() {
+		Account user = new Account("user", null, null, null);
+		Umfrage umfrage = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
+		umfrage.setVorschlaege(Arrays.asList(
+				"1", "2", "1", null, ""
+			));	
+		List<String> expectedVorschlaege = Arrays.asList(
+			 	"1", "2"
+			);
+		
+		List<String> result = service.erstelleUmfrage(user, umfrage);
+		
+		assertThat(result).isEqualTo(new ArrayList<String>());
+		assertThat(umfrage.getErsteller()).isEqualTo("user");
+		assertThat(umfrage.getVorschlaege()).isEqualTo(expectedVorschlaege);
+	}
+	
+	@Test
+	public void erstelleUmfrageKeineVorschlaege() {
+		Account user = new Account("user", null, null, null);
+		Umfrage umfrage = erstelleBeispielUmfrage(3, 0, 0, 0, 0, 0);
+		umfrage.setVorschlaege(null);
+		
+		List<String> expectedVorschlaege = new ArrayList<String>();
+		expectedVorschlaege.add("");
+		
+		List<String> result = service.erstelleUmfrage(user, umfrage);
+		
+		assertThat(result).isEqualTo(Arrays.asList(Konstanten.MESSAGE_KEIN_VORSCHLAG));
+		assertThat(umfrage.getErsteller()).isEqualTo("user");
+		assertThat(umfrage.getVorschlaege()).isEqualTo(expectedVorschlaege);
 	}
 	
 	private List<UmfrageDB> erstelleUmfrageDBListeGruppe(
