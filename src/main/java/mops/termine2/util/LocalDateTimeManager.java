@@ -75,9 +75,11 @@ public class LocalDateTimeManager {
 	
 	public static ArrayList<LocalDateTime> filterUngueltigeDaten(List<LocalDateTime> daten) {
 		ArrayList<LocalDateTime> gueltigeVorschlaege = new ArrayList<LocalDateTime>();
-		for (LocalDateTime ldt : daten) {
-			if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
-				gueltigeVorschlaege.add(ldt);
+		if (daten != null) {
+			for (LocalDateTime ldt : daten) {
+				if (ldt != null && !gueltigeVorschlaege.contains(ldt)) {
+					gueltigeVorschlaege.add(ldt);
+				}
 			}
 		}
 		return gueltigeVorschlaege;

@@ -78,7 +78,7 @@ public class ErgebnisScheduler {
 			umfrageService.getEindeutigeUmfragen(umfrageDBS);
 		
 		for (Umfrage umfrage : umfragen) {
-			Umfrage aktuelleUmfrage = umfrageService.loadByLinkMitVorschlaegen(umfrage.getLink());
+			Umfrage aktuelleUmfrage = umfrageService.loadByLink(umfrage.getLink());
 			String ergebnis = umfrageErgebnisService.berechneErgebnisUmfrage(aktuelleUmfrage);
 			aktuelleUmfrage.setErgebnis(ergebnis);
 			

@@ -77,7 +77,7 @@ public class LinkService {
 	 */
 	public List<String> setzeOderPruefeLink(Terminfindung terminfindung) {
 		List<String> fehler = new ArrayList<String>();
-		if (terminfindung.getLink().isEmpty()) {
+		if (terminfindung.getLink() == null || terminfindung.getLink().isEmpty()) {
 			String link = generiereEindeutigenLink();
 			terminfindung.setLink(link);
 		} else {
@@ -104,7 +104,7 @@ public class LinkService {
 	 */
 	public List<String> setzeOderPruefeLink(Umfrage umfrage) {
 		List<String> fehler = new ArrayList<String>();
-		if (umfrage.getLink().isEmpty()) {
+		if (umfrage.getLink() == null || umfrage.getLink().isEmpty()) {
 			String link = generiereEindeutigenLink();
 			umfrage.setLink(link);
 		} else {

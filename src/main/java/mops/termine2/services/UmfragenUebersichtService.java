@@ -97,7 +97,7 @@ public class UmfragenUebersichtService {
 		umfragen.addAll(umfrageService.loadByGruppeOhneVorschlaege(gruppeId));
 		List<Umfrage> abgeschlosseneUmfragen = filtereAbgeschlosseneUmfragen(umfragen);
 		
-		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
+		abgeschlosseneUmfragen = sortiereUmfragenNachFrist(abgeschlosseneUmfragen);
 		
 		return abgeschlosseneUmfragen;
 	}
@@ -119,7 +119,7 @@ public class UmfragenUebersichtService {
 		List<Umfrage> umfragen = getAllUmfragenVonBenutzer(account);
 		List<Umfrage> abgeschlosseneUmfragen = filtereAbgeschlosseneUmfragen(umfragen);
 		
-		abgeschlosseneUmfragen = sortiereAbgeschlosseneUmfragen(abgeschlosseneUmfragen);
+		abgeschlosseneUmfragen = sortiereUmfragenNachFrist(abgeschlosseneUmfragen);
 		
 		return abgeschlosseneUmfragen;
 	}
@@ -163,29 +163,11 @@ public class UmfragenUebersichtService {
 		return umfragen;
 	}
 	
-	private List<Umfrage> sortiereAbgeschlosseneUmfragen(List<Umfrage> umfragen) {
-		List<Umfrage> umfragenInVergangenheit = new ArrayList<>();
-		List<Umfrage> umfragenInZukunft = new ArrayList<>();
+	private List<Umfrage> sortiereUmfragenNachFrist(List<Umfrage> umfragen) {
 		
-		for (Umfrage umfrage : umfragen) {
-			if (umfrage.getFrist().compareTo(LocalDateTime.now()) <= 0) {
-				umfragenInVergangenheit.add(umfrage);
-			} else {
-				umfragenInZukunft.add(umfrage);
-			}
-		}
-		
-		umfragenInVergangenheit = umfragenInVergangenheit.stream()
+		List<Umfrage> umfragenSortiert = umfragen.stream()
 			.sorted(Comparator.comparing(Umfrage::getFrist))
 			.collect(Collectors.toList());
-		
-		umfragenInZukunft = umfragenInZukunft.stream()
-			.sorted(Comparator.comparing(Umfrage::getFrist))
-			.collect(Collectors.toList());
-		
-		List<Umfrage> umfragenSortiert = new ArrayList<>();
-		umfragenSortiert.addAll(umfragenInVergangenheit);
-		umfragenSortiert.addAll(umfragenInZukunft);
 		
 		return umfragenSortiert;
 	}

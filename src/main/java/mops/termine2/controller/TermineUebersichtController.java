@@ -75,7 +75,7 @@ public class TermineUebersichtController {
 		List<Terminfindung> terminfindungenAbgeschlossen =
 			terminfindunguebersichtService.loadAbgeschlosseneTerminfindungen(account, selGruppe);
 		
-		HashMap<String, String> groups = gruppeService.extrahiereIdAndNameAusGruppen(gruppen);
+		HashMap<String, String> groups = gruppeService.extrahiereIdUndNameAusGruppen(gruppen);
 		terminfindungService.setzeGruppenName(terminfindungenOffen, groups);
 		terminfindungService.setzeGruppenName(terminfindungenAbgeschlossen, groups);
 		
