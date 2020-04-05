@@ -121,9 +121,11 @@ public class LinkServiceTest {
 	public void testLinkGenerationWiederholen() {
 		when(terminfindungRepo.findByLink(any()))
 			.thenReturn(Arrays.asList(new TerminfindungDB()))
-			.thenReturn(Arrays.asList(new TerminfindungDB()))
+			.thenReturn(new ArrayList<TerminfindungDB>())
 			.thenReturn(new ArrayList<TerminfindungDB>());
 		when(umfrageRepo.findByLink(any()))
+			.thenReturn(new ArrayList<UmfrageDB>())
+			.thenReturn(Arrays.asList(new UmfrageDB()))
 			.thenReturn(new ArrayList<UmfrageDB>());
 		
 		linkService.generiereEindeutigenLink();

@@ -310,14 +310,10 @@ public class TerminfindungServiceTest {
 		LocalDateTime t2 = now.plusDays(4);
 		LocalDateTime frist = now.plusDays(2);
 		LocalDateTime loeschdatum = t2.plusDays(4);
-		terminfindung.setVorschlaege(Arrays.asList(
-				t1, t2, t1
-			));
+		terminfindung.setVorschlaege(Arrays.asList(t1, t2, t1));
 		terminfindung.setFrist(frist);
 		terminfindung.setLoeschdatum(loeschdatum);		
-		List<LocalDateTime> expectedVorschlaege = Arrays.asList(
-				t1, t2
-			);
+		List<LocalDateTime> expectedVorschlaege = Arrays.asList(t1, t2);
 		
 		List<String> result = service.erstelleTerminfindung(user, terminfindung);
 		
@@ -360,15 +356,11 @@ public class TerminfindungServiceTest {
 		LocalDateTime t2 = now.plusDays(4);
 		LocalDateTime frist = now.plusMinutes(2);
 		LocalDateTime loeschdatum = now.plusDays(4);
-		terminfindung.setVorschlaege(Arrays.asList(
-			t1, t2
-		));
+		terminfindung.setVorschlaege(Arrays.asList(t1, t2));
 		terminfindung.setFrist(frist);
 		terminfindung.setLoeschdatum(loeschdatum);
 		
-		List<LocalDateTime> expectedVorschlaege = Arrays.asList(
-			t1, t2
-		);
+		List<LocalDateTime> expectedVorschlaege = Arrays.asList(t1, t2);
 		
 		List<String> result = service.erstelleTerminfindung(user, terminfindung);
 		
