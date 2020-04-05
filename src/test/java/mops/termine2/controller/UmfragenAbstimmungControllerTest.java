@@ -229,6 +229,21 @@ public class UmfragenAbstimmungControllerTest {
 			.andExpect(redirectedUrl("/termine2/umfragen/" + link + "/abstimmung"));
 	}
 	
+	// FristInVergangenheit ModusLink BereitsTeilgenommen
+	// Erwartet Status OK
+	@Test
+	@WithMockKeycloackAuth(name = Konstanten.STUDENTIN, roles = Konstanten.STUDENTIN)
+	void testUmfrageErgebnisGet3() throws Exception {
+		Umfrage umfrage = initUmfrage(null, true, false);
+		when(authenticationService.pruefeEingeloggt(any(), any())).thenReturn(accountStudentin);
+		when(gruppeService.pruefeGruppenzugriffVerweigert(any(), any())).thenReturn(false);
+		when(umfrageService.loadByLink(any())).thenReturn(umfrage);
+		when(umfrageAntwortService.hatNutzerAbgestimmt(any(), any())).thenReturn(true);
+		when(umfrageAntwortService.loadByBenutzerUndLink(any(), any())).thenReturn(initAntwort());
+		when(umfrageAntwortService.loadAllByLink(any())).thenReturn(initAntworten());
+		mvc.perform(get("/termine2/umfragen/{link}/ergebnis", link)).andExpect(status().isOk());
+	}
+	
 	private Umfrage initUmfrage(String gruppeId, Boolean teilgenommen, Boolean fristInZukunft) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setLink(link);
@@ -259,7 +274,8 @@ public class UmfragenAbstimmungControllerTest {
 	private UmfrageAntwort initAntwort() {
 		UmfrageAntwort antwort = new UmfrageAntwort();
 		LinkedHashMap<String, Antwort> antwortHashMap = new LinkedHashMap<>();
-		antwortHashMap.put("vorschlag", Antwort.JA);
+		antwortHashMap.put("vorschlag1", Antwort.JA);
+		antwortHashMap.put("vorschlag2", Antwort.NEIN);
 		antwort.setAntworten(antwortHashMap);
 		antwort.setPseudonym("pseudonym");
 		antwort.setLink(link);
