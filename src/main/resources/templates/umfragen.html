@@ -97,12 +97,14 @@
 							
 							<i><span class="text-secondary"
 							         th:if="${umfragen.selektierteGruppe.id != '-1'}"
-							         th:text="'(ID: ' + ${umfragen.selektierteGruppe.id} + ')'">
+							         th:text="'(ID: ' + ${#strings.abbreviate(
+							                             umfragen.selektierteGruppe.id, 11)} + ')'">
 								Gruppen-ID</span></i>
 						</button>
 						
 						<!-- Auswählbare Gruppen -->
-						<div class="dropdown-menu" th:if="${umfragen.gruppen.size() != 0}">
+						<div class="dropdown-menu dropdown-menu-right"
+						     th:if="${umfragen.gruppen.size() != 0}">
 							<a class="dropdown-item" th:href="@{/termine2/umfragen}">
 								Alle Gruppen</a>
 							
