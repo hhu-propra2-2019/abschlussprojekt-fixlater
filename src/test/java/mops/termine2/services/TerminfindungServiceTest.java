@@ -1,5 +1,7 @@
 package mops.termine2.services;
 
+import mops.termine2.Konstanten;
+import mops.termine2.authentication.Account;
 import mops.termine2.database.TerminfindungAntwortRepository;
 import mops.termine2.database.TerminfindungRepository;
 import mops.termine2.database.entities.TerminfindungDB;
@@ -14,12 +16,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class TerminfindungServiceTest {
@@ -97,6 +101,21 @@ public class TerminfindungServiceTest {
 		Terminfindung termine = erstelleBeispielTerminfindung(terminAnzahl);
 		service.save(termine);
 		Mockito.verify(terminRepository, times(1)).saveAll(any());
+	}
+	
+	@Test
+	public void updateTerminfindung() {
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(4);
+		List<TerminfindungDB> db = erstelleTerminfindungDBListeFuerEineTerminfindung(0, 5);
+		List<TerminfindungDB> expectedToSave = db.subList(0, 4);
+		List<TerminfindungDB> expectedToDelete = Arrays.asList(db.get(4));
+		
+		when(terminRepository.findByLink(terminfindung.getLink())).thenReturn(db);
+		
+		service.save(terminfindung);
+		
+		verify(terminRepository, times(1)).saveAll(expectedToSave);
+		verify(terminRepository, times(1)).deleteAll(expectedToDelete);
 	}
 	
 	@Test
@@ -239,6 +258,193 @@ public class TerminfindungServiceTest {
 		
 		Mockito.verify(antwortRepository, times(1)).deleteByTerminfindungLoeschdatumBefore(any());
 		Mockito.verify(terminRepository, times(1)).deleteByLoeschdatumBefore(any());
+	}
+	
+	@Test
+	public void loescheTermin() {
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(5);
+		List<LocalDateTime> expected = Arrays.asList(
+				terminfindung.getVorschlaege().get(1),
+				terminfindung.getVorschlaege().get(2),
+				terminfindung.getVorschlaege().get(3),
+				terminfindung.getVorschlaege().get(4)
+			);
+		
+		service.loescheTermin(terminfindung, 0);
+		
+		assertThat(terminfindung.getVorschlaege()).isEqualTo(expected);
+	}
+	
+	@Test
+	public void loescheTerminNPE() {
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(5);
+		terminfindung.setVorschlaege(null);
+		
+		service.loescheTermin(terminfindung, 0);
+		
+		assertThat(terminfindung.getVorschlaege()).isNull();
+	}
+	
+	@Test
+	public void loescheTerminOutOfBounds() {
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(5);
+		List<LocalDateTime> expected = Arrays.asList(
+				terminfindung.getVorschlaege().get(0),
+				terminfindung.getVorschlaege().get(1),
+				terminfindung.getVorschlaege().get(2),
+				terminfindung.getVorschlaege().get(3),
+				terminfindung.getVorschlaege().get(4)
+			);
+		
+		service.loescheTermin(terminfindung, 5);
+		
+		assertThat(terminfindung.getVorschlaege()).isEqualTo(expected);
+	}
+	
+	@Test
+	public void erstelleTerminfindungOhneFehler() {
+		Account user = new Account("user", null, null, null);
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime t1 = now.plusDays(3);
+		LocalDateTime t2 = now.plusDays(4);
+		LocalDateTime frist = now.plusDays(2);
+		LocalDateTime loeschdatum = t2.plusDays(4);
+		terminfindung.setVorschlaege(Arrays.asList(
+				t1, t2, t1
+			));
+		terminfindung.setFrist(frist);
+		terminfindung.setLoeschdatum(loeschdatum);		
+		List<LocalDateTime> expectedVorschlaege = Arrays.asList(
+				t1, t2
+			);
+		
+		List<String> result = service.erstelleTerminfindung(user, terminfindung);
+		
+		assertThat(result).isEqualTo(new ArrayList<String>());
+		assertThat(terminfindung.getErsteller()).isEqualTo("user");
+		assertThat(terminfindung.getVorschlaege()).isEqualTo(expectedVorschlaege);
+		assertThat(terminfindung.getFrist()).isEqualTo(frist);
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatum);
+	}
+	
+	@Test
+	public void erstelleTerminfindungKeineVorschlaege() {
+		Account user = new Account("user", null, null, null);
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime frist = now.plusDays(2);
+		LocalDateTime loeschdatum = now.plusDays(4);
+		terminfindung.setVorschlaege(null);
+		terminfindung.setFrist(frist);
+		terminfindung.setLoeschdatum(loeschdatum);
+		
+		List<LocalDateTime> expectedVorschlaege = new ArrayList<LocalDateTime>();
+		expectedVorschlaege.add(null);
+		
+		List<String> result = service.erstelleTerminfindung(user, terminfindung);
+		
+		assertThat(result).isEqualTo(Arrays.asList(Konstanten.MESSAGE_KEIN_VORSCHLAG));
+		assertThat(terminfindung.getErsteller()).isEqualTo("user");
+		assertThat(terminfindung.getVorschlaege()).isEqualTo(expectedVorschlaege);
+		assertThat(terminfindung.getFrist()).isEqualTo(frist);
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatum);
+	}
+	
+	@Test
+	public void erstelleTerminfindungKurzfristig() {
+		Account user = new Account("user", null, null, null);
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime t1 = now.plusDays(3);
+		LocalDateTime t2 = now.plusDays(4);
+		LocalDateTime frist = now.plusMinutes(2);
+		LocalDateTime loeschdatum = now.plusDays(4);
+		terminfindung.setVorschlaege(Arrays.asList(
+			t1, t2
+		));
+		terminfindung.setFrist(frist);
+		terminfindung.setLoeschdatum(loeschdatum);
+		
+		List<LocalDateTime> expectedVorschlaege = Arrays.asList(
+			t1, t2
+		);
+		
+		List<String> result = service.erstelleTerminfindung(user, terminfindung);
+		
+		assertThat(result).isEqualTo(Arrays.asList(Konstanten.MESSAGE_TERMIN_FRIST_KURZFRISTIG));
+		assertThat(terminfindung.getErsteller()).isEqualTo("user");
+		assertThat(terminfindung.getVorschlaege()).isEqualTo(expectedVorschlaege);
+		assertThat(terminfindung.getFrist()).isEqualTo(frist);
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatum);
+	}
+	
+	@Test
+	public void aktualisiereFristLoeschdatumKeineGueltigenTermine() {
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(1);
+		
+		service.aktualisiereFristUndLoeschdatum(terminfindung, null);
+
+		assertThat(terminfindung.getFrist()).isEqualTo(fristListe.get(0));
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatumListe.get(0));
+	}
+	
+	@Test
+	public void aktualisiereFristLoeschdatumKeinUpdateNoetig() {
+		LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1);
+		LocalDateTime loeschdatum = LocalDateTime.of(2, 1, 1, 1, 1);
+		
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(1);
+		terminfindung.setFrist(frist);
+		terminfindung.setLoeschdatum(loeschdatum);
+		
+		service.aktualisiereFristUndLoeschdatum(terminfindung, 
+			Arrays.asList(
+				frist.plusDays(1),
+				loeschdatum.minusDays(1)
+			));
+
+		assertThat(terminfindung.getFrist()).isEqualTo(frist);
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatum);
+	}
+	
+	@Test
+	public void aktualisiereFristLoeschdatumUpdate() {
+		LocalDateTime frist = LocalDateTime.of(1, 1, 1, 1, 1);
+		LocalDateTime loeschdatum = LocalDateTime.of(2, 1, 1, 1, 1);
+		
+		Terminfindung terminfindung = erstelleBeispielTerminfindung(1);
+		terminfindung.setFrist(frist);
+		terminfindung.setLoeschdatum(loeschdatum);
+		
+		service.aktualisiereFristUndLoeschdatum(terminfindung, 
+			Arrays.asList(
+				frist.minusDays(1),
+				loeschdatum.plusDays(1)
+			));
+
+		assertThat(terminfindung.getFrist()).isEqualTo(frist.minusDays(1));
+		assertThat(terminfindung.getLoeschdatum()).isEqualTo(loeschdatum.plusDays(1).plusWeeks(4));
+	}
+	
+	@Test
+	public void setzeGruppenname() {
+		Terminfindung t1 = new Terminfindung();
+		t1.setGruppeId("1");
+		Terminfindung t2 = new Terminfindung();
+		t2.setGruppeId("3");
+		List<Terminfindung> terminfindungen = Arrays.asList(t1, t2);
+		
+		HashMap<String, String> gruppen = new HashMap<>();
+		gruppen.put("1", "Gruppe1");
+		gruppen.put("2", "Gruppe2");
+		gruppen.put("3", "Gruppe3");
+		gruppen.put("4", "Gruppe4");
+		
+		service.setzeGruppenName(terminfindungen, gruppen);
+
+		assertThat(t1.getGruppeName()).isEqualTo("Gruppe1");
+		assertThat(t2.getGruppeName()).isEqualTo("Gruppe3");
 	}
 	
 	private Terminfindung erstelleBeispielTerminfindung(int dummie, int anzahlTermine) {
