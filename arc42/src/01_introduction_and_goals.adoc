@@ -62,7 +62,7 @@ Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien
 ****
 
  * Schneller als Ilias 
- * Übersichtliches Desing und Funktion
+ * Übersichtliches Design und Funktion
  * Wartbarkeit
 
 === Stakeholder

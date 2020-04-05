@@ -42,10 +42,13 @@ Eine mögliche (nicht aber notwendige!) Untergliederung dieses Abschnittes könn
 
 image:08-Crosscutting-Concepts-Structure-DE.png["Possible topics for crosscutting concepts"]
 
-=== _<Konzept 1>_
+****
+=== Gestaltung der Programmteile Terminfindung und Umfrage
 
-_<Erklärung>_
+Die beiden Teile des Systems wurden analog zueinander aufgebaut, um eine bessere Wartbarkeit zu erhalten. Darunter zählen beispielsweise die Methoden, die zu beiden Teilen in den jeweiligen Services geschrieben wurden. Die Unterschiede der Methoden besteht darin, dass angepasst wurde, ob es sich um einen Terminvorschlag oder um einen Umfragevorschlag handelt.
 
+[role="arc42help"]
+****
 === _<Konzept 2>_
 
 _<Erklärung>_
