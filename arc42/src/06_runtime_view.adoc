@@ -34,15 +34,19 @@ Nutzen Sie beispielsweise:
 * ...
 ****
 
-=== _<Bezeichnung Laufzeitszenario 1>_
+=== Terminfindung erstellen
 
-*  <hier Laufzeitdiagramm oder Ablaufbeschreibung einfügen>
-*  <hier Besonderheiten bei dem Zusammenspiel der Bausteine in diesem Szenario erläutern>
+Der Nutzer klickt auf der Übersichtsseite auf einen Button und wird zum Erstellen einer neuen Terminfindung weitergeleitet. Dort kann der Nutzer wichtige Informationen, wie den Titel oder den Ort eingeben. Desweiteren muss der Benutzer mindestens einen Terminvorschlag eingeben und kann optionale Einstellungen wählen. Mit einem Klick auf erstellen wird die Terminabstimmung erstellt und der Benutzer auf die Übersichtseite weitergeleitet.
 
-=== _<Bezeichnung Laufzeitszenario 2>_
+=== Details bzw. Ergebnis einer Terminfindung anzeigen
 
-...
+image::../ourimages/tag14/get-details.jpg[]
+image::../ourimages/tag14/get-termine-ergebnis.jpg[]
 
-=== _<Bezeichnung Laufzeitszenario n>_
+=== Abstimmen
 
-...
+Mit einem Klick auf Abstimmen auf der Übersichtsseite wird der Benutzer zur Abstimmungsseite geleitet. Sort kann er zu jedem Vorschlag eine Stimme abgeben. Er kann zwischen "ich habe Zeit", "ich habe vielleicht Zeit" und "ich kann nicht" wählen.
+Sobald er für alle Vorschläge eine Stimme abgegeben hat, kann er mit einem Klick auf Abstimmen seine Eingaben speichern und bekommt das Ergebnis der Abstimmung angezeigt.
+
+image::../ourimages/tag14/get-termine-abstimmung.jpg[]
+image::../ourimages/tag14/post-termine-abstimmung.jpg[]

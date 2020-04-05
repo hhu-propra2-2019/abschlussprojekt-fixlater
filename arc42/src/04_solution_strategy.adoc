@@ -21,3 +21,6 @@ Fassen Sie die zentralen Entwurfsentscheidungen *kurz* zusammen.
 Motivieren Sie, ausgehend von Aufgabenstellung, Qualitätszielen und Randbedingungen, was Sie entschieden haben und warum Sie so entschieden haben.
 Vermeiden Sie redundante Beschreibungen und verweisen Sie eher auf weitere Ausführungen in Folgeabschnitten.
 ****
+
+Alle Klassen, die Logik enthalten, weden mit JUnit Tests abgedeckt, sodass Fehler schnell erkannt und behoben werden können.
+Es wird eine mySQL Datenbank verwendet, auf welche per Spring Data JPA zugegriffen wird. Die Architektur der Datenbank wird so gewählt, dass alle Anfragen schnell durchgeführt werden können. Dabei werden Redundanzen entstehen, die aber für einen schnelleren Zugriff in Kauf genommen werden.

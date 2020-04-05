@@ -14,7 +14,17 @@ Dazu gehören:
 * relevante Stakeholder und deren Erwartungshaltung.
 ****
 
-Einfache und schnelle Terminfindungs und Umfragetool
+Mit einem Klick auf die Sidebar auf der MOPS Startseite erreicht man die Übersicht der Terminfindung, wo entweder alle Terminabstimmungen (offene und fertige), welche für Mitglieder der jeweiligen Gruppen sichtbar sind, oder die Terminabstimmungen, welchen der Nutzer per Link beigetreten ist, angezeigt werden. Dadurch ist es schnell und praktisch, Gruppentreffen zu organisieren.
+
+Zusätzlich dazu gibt es eine Seite für generelle Abstimmungen bzw. Umfragen, die auch erreichbar ist. Das Erstellen von Terminen und Umfragen ist schnell und intuitiv.
+
+Die Gruppen, welche in einem anderen System erstellt werden können, können für die Abstimmungen direkt verwendet werden. Alternativ ist auch ein Zugang über Link möglich, sodass Abstimmungen unabhängig von Gruppen sein können.
+
+Import und Export von Terminabstimmungen/Umfragen ermöglicht einfaches Kopieren der Daten.
+
+Sowohl Termine und Umfragen, als auch die Antworten können im Nachhinein noch geändert werden. Das Ergebnis einer Abstimmung liefert beispielsweise einen Termin, an welchem sich eine Gruppe treffen kann, wo die meisten Mitglieder Zeit haben.
+
+Das Web-Element der Umfrage ist für bessere Übersicht, entsprechend den Entscheidungsmöglichkeiten, gefärbt. Die Farben sind so gewählt, dass sich Menschen mit Sehschwäche beser damit zurechtfinden.
 
 === Aufgabenstellung
 
@@ -34,6 +44,8 @@ Sofern vorhanden, sollte die Aufgabenstellung Verweise auf die entsprechenden An
 Halten Sie diese Auszüge so knapp wie möglich und wägen Sie Lesbarkeit und Redundanzfreiheit gegeneinander ab.
 ****
 
+include::../anforderung.adoc[]
+
 === Qualitätsziele
 
 [role="arc42help"]
@@ -50,7 +62,7 @@ Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien
 ****
 
  * Schneller als Ilias 
- * Übersichtliches Desing und Funktion
+ * Übersichtliches Design und Funktion
  * Wartbarkeit
 
 === Stakeholder
@@ -72,7 +84,6 @@ Diese Stakeholder bestimmen unter anderem Umfang und Detaillierungsgrad der von 
 
 .Form
 Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung bezüglich der Architektur und deren Dokumentation.
-****
 
 [cols="1,1,2" options="header"]
 |===
@@ -80,10 +91,11 @@ Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung bezüglich
 | _<Rolle-1>_ | _<Kontakt-1>_ | _<Erwartung-1>_
 | _<Rolle-2>_ | _<Kontakt-2>_ | _<Erwartung-2>_ 
 |===
+****
 
 [cols="1,1,2" options="header"]
 |===
 |Rolle |Kontakt |Erwartungshaltung
-| _Organisatoren_ | _Jens_ | Es muss Multiuserfähig sein
-| _Studenten_ | _<Kontakt-2>_ | Intuitive Bedienung 
+| _Organisatoren_ | _Jens_ | Es muss Multiuserfähig und schnell sein
+| _Studenten_ |  | Intuitive Bedienung 
 |===

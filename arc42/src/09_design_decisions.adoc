@@ -21,3 +21,23 @@ Verschiedene Möglichkeiten:
 * ausführlicher in Form einzelner Unterkapitel je Entscheidung
 * ADR (http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions[Architecture Decision Record]) für jede wichtige Entscheidung
 ****
+
+=== Wahl des Datenbankmodells
+
+Wir haben uns dazu entschieden, viele Daten in einer Tabelle zu speichern und auch Redundanz zu erhalten, damit die Zugriffe sehr schnell erfolgen, wenige Joins gemacht werden müssen und somit keine große Latenz entsteht. Ein weiterer Vorteil war, dass die Objekte in der Geschäftslogik gut verwendet werden konnten.
+
+=== Userinterface
+
+Bei der Gestaltung des Userinterfaces war es uns wichtig, dass die relevanten Daten für den Nutzer schnell ersichtlich sind und insgesamt eine userfreundliche Benutzung ermöglicht wird. Auch die Möglichkeit nach Gruppen zu filtern soll es einfacher machen, Terminfindungen oder Umfragen nur für eine Gruppe zu sehen bzw. auch erstellen zu können. 
+
+=== Database Initializer
+
+Wir haben uns dazu entschieden, einen Database Initializer zu schreiben, damit wir bei Programmstart bereits Dummy-Daten in der Datenbank haben und somit einige Sachen anzeigen lassen können bzw. neue Terminfindungen und Umfragen einfacher erstellen können.
+
+=== Schnittstelle zu Gruppenbildung
+
+Anstatt die Objekte aus der Anfrage direkt zu übernehmen, haben wir die Entscheidung getroffen, eigene Objekte aus den erhaltenen Daten zu konstruieren. Der Vorteil für uns war der, dass wir nicht alle Daten benötigen und so direkt filtern konnten bzw. auch die Zugriffe auf die Gruppen wieder besser erfolgen können. 
+
+=== Allgemeine Anmerkungen
+
+Detailliertere Entscheidungen und Begründungen sind in unserer anderen Dokumentation für die jeweiligen Tage und Teile des Programms einsehbar.

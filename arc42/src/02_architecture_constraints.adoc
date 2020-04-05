@@ -17,7 +17,6 @@ Bei Bedarf unterscheiden Sie technische, organisatorische und politische Randbed
 ****
 
 - Wir müssen uns an den StyleGuide halten
-- Employbar per Docker
+- Das System soll per Docker Image ausgeliefert werden
 - Implementierung in Java 
-- Schnittstelle 
-- 
+- API der Gruppenbildung beachten

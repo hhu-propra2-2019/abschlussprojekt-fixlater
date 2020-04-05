@@ -472,7 +472,7 @@ Die Frage, die uns danach kam, war, inwieweit wir diesen Löschscheduler testen 
 Mit den Tutoren haben wir dann besprochen, wie man SQL Queries mit JPA testen kann, und wie wir allgemein vermeiden könnten, eigene Logik einzubringen.
 Zu diesem Zeitpunkt war allerdings die Arbeitszeit vorbei, weswegen wir uns entschieden haben, das Problem am nächsten Tag anzugehen.
 
-== Kommentare/ Import (Julia, Kathi)
+=== Kommentare/ Import (Julia, Kathi)
 Die termin-ergebnis.html und der Controller wurden so bearbeitet, dass Kommentare auch auf der Ergebnisseite von Terminfindungen angezeigt werden. Das Erstellungsdatum wird auf der Ergebnisseite und der Abstimmungsseite im schönen Format angezeigt.
 Außerdem wurde das Erstellen eines Kommentars auf der Abstimmungsseite und der Ergebnisseite ermöglicht.
 Beim Import wurden Abfragen eingebaut, damit keine vergangenen Daten oder nicht existente Daten eingelesen werden.
@@ -526,8 +526,10 @@ CSV-Datei exportiert werden. Das Format entspricht dem für den Upload, sodass b
 diese Datei hochgeladen werden kann.
 
 === Controller Tests, Scheduler (Thomas, Marcel)
+Bisher wurden die Ergebnisse der Abstimmungen nicht berechnet, sondern nur durch den Database Initializer erstellt. Deshalb wurde jetzt ein Scheduler hinzugefügt, der zu jeder vollen Minute alle noch ausstehenden Ergebnisse von Abstimmungen, bei denen die Frist abgelaufen ist, berechnet. Es werden zuerst alle Vorschläge gesucht, die die meisten "Ja" Stimmen haben. Falls es zwei oder mehr Vorschläge mit der selben Anzahl an "Ja" Stimmen gibt, werden die "Vielleicht" Stimmen herangezogen.
 
-=== UI Warnung (Jan)
+=== UI Informationen (Jan)
+Das anzeigen Wichtiger funktionen für den Nutzer bei der Abstimmung wurde Implementiert . Dies ist wichtig, da der Nutzer dann sieht wie die Regeln einer Abstimmung sind.
 
 === URL Auslagerung (Leon)
 In der Videokonferenz hatte Leon gefragt, unter welcher URL das System der Gruppenbildung zu finden ist, da dieses System von dem Gruppescheduler angesprochen wird.
@@ -554,11 +556,21 @@ Ergebnis jede minute berechnet. Bugfixing. Refactoring
 Revamps, Fixes
 
 === Tests (Julia, Kathi)
-Tests für filehandling, Pullrequests
+Am Vortag hat Julia noch Kleinigkeiten an den Kommentaren geändert, sodass nun keine leeren Kommentare
+abgeschickt werden können und der Name des Kommentarautors direkt auf den Benutzernamen gesetzt wird,
+wenn kein Pseudonym übergeben wird. An diesem Tag wurden dann noch von Kathi und Julia fehlende Tests für
+das filehandling-Package geschrieben (für die Klassen, die das Format prüfen bzw. ändern beim Import bzw. Export).
+Außerdem wurden diverse pull requests bearbeitet, um auch die restlichen Änderungen in den master
+zu bringen. Zudem hat Julia noch Tests für den UmfragenAbstimmungsController geschrieben.
 
-=== Refactoring von Controllern (Leon)
-Code ausControllern rausgenommen der nicht rein sollte
-Debugging (NPE, Fehler)
-Tests
+=== Refactoring und Debugging (Leon)
+Am Anfang hatte sich Leon darum gekümmert, dass einige Controller dünner werden, was die Logik betrifft. Dabei wurde so einiger Code aus den Controllern in verschiedene Services gelegt oder sonstige Util klassen. Der einzige Stolperstein hier war, dass dann die bestehenden Controllertests ein etwas anderes Mocking brauchten, da andere methoden verwendet wurden an einige Stellen. Dies war aber auch schnell gelöst.
+
+Anschließend ist aufgefallen, dass, da bei der Erstellung der Datenbank nicht mehr die Ergebnisse reingeschrieben werden, eine Nullpointer Exception geworfen wird, wenn man die Übersichtsseite aufruft, bevor der Ergebnisscheduler aufgerufen wird. Dies wurde auch behoben, indem man den Ergebnisscheduler in den DatabaseInitializer injectet hat und am Ende des Initializers den ErgebnisScheduler einmal aufgerufen hat, damit die Ergebnisse berechnet werden, bevor die Webseite erreichbar ist.
+Dazu gehörte auch, dass ein Termin in der Terminfindung nicht zu kurzfristig sein darf, da sonst die Frist auf diesen Termin gesetzt wird, was dafür sorgt, dass, wenn der Termin die aktuelle Zeit ist, die Frist auf den jetzigen Zeitpunkt gesetzt wird (da diese vor dem ersten Termin gesetzt werden soll). Beim Abschicken der Terminfindung ist also im programm die Terminfindung bereits abgeschlossen, aber noch kein Ergebnis berechnet, was ebenfalls eine NPE wirft. Dies wurde so behoben, dass der früheste Termin mindestens 15 Minuten in der Zukunft liegen muss, sonst wird die Terminfindung nicht gespeichert.
+
+Danach ist aufgefallen, dass womöglich beim Refactoring ein Fehler passiert ist, da man nun einen Fehler erhielt, wenn man versucht eine CSV Datei zu importieren, wenn man keine Datei ausgewählt hat. Dies hat daran gelegen, dass ein paar benötigte ModelAttributes nicht gesetzt wurden, wenn man keine Datei hochlädt. Das ist entstanden, da beim Refactoring eine Klammer falsch gesetzt wurde, also war dies auch schnell behoben. Ebenfalls beim Refactoring wurde eine Kleinigkeit übersehen, sodass eine Methode, die keinen Fehler wirft, mit `throws` deklariert wurde. Dies wurde auch entfernt.
+
+Den Rest des Tages wurden Tests für den LocalDateTimeManager und GruppeService geschrieben, wobei auffiel, dass der LocalDateTimeManager falsche Wochentage berechnet hat. Dies wurde auch behoben.
 
 
